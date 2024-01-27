@@ -65,7 +65,7 @@ public class PlayerCamera : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = new Ray(this.transform.position, this.transform.forward);
-            Debug.DrawRay(ray.origin, ray.direction, Color.red);
+            Debug.DrawRay(ray.origin, ray.direction * 20.0f, Color.red, 10.0f);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit) == true) // もしRayを投射して何らかのコライダーに衝突したら
             {
