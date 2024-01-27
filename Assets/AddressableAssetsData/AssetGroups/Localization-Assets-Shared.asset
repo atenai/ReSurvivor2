@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-Assets-Shared
+  m_EditorClassIdentifier: 
+  m_GroupName: Localization-Assets-Shared
+  m_Data:
+    m_SerializedData: []
+  m_GUID: ca98b267e97c55a4ead279df5936909f
+  m_SerializeEntries:
+  - m_GUID: 59cfa7403d10e2446aedd8751bbb7bff
+    m_Address: Assets/Localization/KashiwabaraTable Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+  - m_GUID: 991ce4811f21ea848abb7350632277e2
+    m_Address: Assets/Localization/TextTable Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+  - m_GUID: 492803693f302524a8b30cb72f3b156a
+    m_Address: Assets/Localization/AssetPathTable Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 3c7100df495b1ec4a8793581fb7e423a, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 32509fdc0a6399a4eb0fe8ea8462d127, type: 2}
+    - {fileID: 11400000, guid: 5385ca696fa54f44c9d6dfa4f8932338, type: 2}
