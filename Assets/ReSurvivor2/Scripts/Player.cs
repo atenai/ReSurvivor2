@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
     //引数名は「_小文字」から始める（_test）
     //アニメーション変数名は「型の最初の文字の_小文字から始める」（f_test）
 
+    [Tooltip("プレイヤーカメラ")]
+    [SerializeField] GameObject playerCamera;
+    [SerializeField] Animator animator;
     [SerializeField] Rigidbody rb;
     [SerializeField] float normalMoveSpeed = 1.0f;
     public float NormalMoveSpeed => normalMoveSpeed;
@@ -25,19 +28,18 @@ public class Player : MonoBehaviour
     [SerializeField] Transform spine_03;
     [Tooltip("キャラクターの脊椎ボーンの初期値")]
     float spine_03_InitEulerAnglesX;
-    [Tooltip("プレイヤーカメラ")]
-    [SerializeField] GameObject playerCamera;
-    [SerializeField] Animator animator;
+    [Tooltip("キャラクターの右肩ボーン")]
+    [SerializeField] Transform upperarm_r;
 
     void Start()
     {
-        InitSpine03Bone();
+        InitBoneSpine03();
     }
 
     /// <summary>
     /// キャラクターの脊椎ボーンの初期化処理
     /// </summary> 
-    void InitSpine03Bone()
+    void InitBoneSpine03()
     {
         //キャラクターの脊椎ボーンの初期値を取得する（真正面に戻す際に必要なため）
         spine_03_InitEulerAnglesX = spine_03.eulerAngles.x;
@@ -71,25 +73,46 @@ public class Player : MonoBehaviour
     void LateUpdate()
     {
         //ボーンを曲げる際は必ずLateUpdateに書く必要がある！（これいつかメモする！）
-        RotateSpine03Bone();
+        RotateBoneSpine03();
+        RotateBoneUpperArmR();
     }
 
     /// <summary>
     /// キャラクターの脊椎ボーンを曲げる
     /// </summary> 
-    void RotateSpine03Bone()
+    void RotateBoneSpine03()
     {
         if (isAim == true)
         {
             //エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値（アニメーション問題が解消されたらこの処理は消す！）
-            const float aimAnimationRot = 12.5f;
+            const float aimAnimationRotX = 12.5f;
             //腰のボーンの角度をカメラの向きにする
-            spine_03.rotation = Quaternion.Euler(playerCamera.transform.localEulerAngles.x + aimAnimationRot, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
+            spine_03.rotation = Quaternion.Euler(playerCamera.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
         }
         else if (isAim == false)
         {
             //腰のボーンの角度を真正面（初期値）にする
             spine_03.rotation = Quaternion.Euler(spine_03_InitEulerAnglesX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
+        }
+    }
+
+    /// <summary>
+    /// キャラクターの右肩ボーンを曲げる
+    /// </summary> 
+    void RotateBoneUpperArmR()
+    {
+        if (isAim == true)
+        {
+            //エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値（アニメーション問題が解消されたらこの処理は消す！）
+            const float aimAnimationRotX = 12.5f;
+            const float aimAnimationRotY = 12.5f;
+            //右肩のボーンの角度をカメラの向きにする
+            upperarm_r.rotation = Quaternion.Euler(playerCamera.transform.localEulerAngles.x + aimAnimationRotX, upperarm_r.eulerAngles.y + aimAnimationRotY, upperarm_r.eulerAngles.z);
+        }
+        else if (isAim == false)
+        {
+            //右肩のボーンの角度を真正面（初期値）にする
+            upperarm_r.rotation = Quaternion.Euler(upperarm_r.eulerAngles.x, upperarm_r.eulerAngles.y, upperarm_r.eulerAngles.z);
         }
     }
 
