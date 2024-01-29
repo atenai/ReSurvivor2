@@ -29,7 +29,7 @@ public class CanChaseColliderConditional : Conditional
         {
             if (this.GetComponent<EnemyCollider>().IsHit == true)
             {
-                Debug.Log("<color=orange>ビヘイビアデザイナーの当たり判定に当たった！</color>");
+                //Debug.Log("<color=orange>ビヘイビアデザイナーの当たり判定に当たった！</color>");
                 enemyController.CountTime = enemyController.ChaseTime;
             }
 
@@ -38,8 +38,8 @@ public class CanChaseColliderConditional : Conditional
             {
                 enemyController.IsChase = false;
             }
-            Debug.Log("<color=blue>enemyController.IsChase : " + enemyController.IsChase + "</color>");
-            Debug.Log("<color=red>countTime : " + enemyController.CountTime + "</color>");
+            //Debug.Log("<color=blue>enemyController.IsChase : " + enemyController.IsChase + "</color>");
+            //Debug.Log("<color=red>countTime : " + enemyController.CountTime + "</color>");
 
             enemyController.Alert.gameObject.SetActive(true);//アラートのイメージを表示
             return TaskStatus.Success;//プレイヤーを発見した

@@ -22,10 +22,10 @@ public class CanFindPlayerRayCastConditional : Conditional
     {
         if (Eyesight() == true)
         {
-            Debug.Log("<color=orange>ビヘイビアデザイナーの当たり判定に当たった！</color>");
+            //Debug.Log("<color=orange>ビヘイビアデザイナーの当たり判定に当たった！</color>");
             enemyController.IsChase = true;
             enemyController.CountTime = enemyController.ChaseTime;
-            Debug.Log("<color=cyan>countTime : " + enemyController.CountTime + "</color>");
+            //Debug.Log("<color=cyan>countTime : " + enemyController.CountTime + "</color>");
             enemyController.Alert.gameObject.SetActive(true);//アラートのイメージを表示
             //プレイヤーを発見した
             return TaskStatus.Success;
@@ -47,7 +47,7 @@ public class CanFindPlayerRayCastConditional : Conditional
             Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.yellow, 1);
             if (hit.collider.tag == "Player")
             {
-                Debug.Log("<color=yellow>プレイヤーを発見!</color>");
+                //Debug.Log("<color=yellow>プレイヤーを発見!</color>");
                 return true;
             }
         }
