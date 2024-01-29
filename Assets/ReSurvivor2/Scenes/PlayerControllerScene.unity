@@ -1317,14 +1317,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8035b9fea06e67409088c5beee94130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCamera: {fileID: 1203924008}
+  animator: {fileID: 540214401}
   rb: {fileID: 910668653}
   normalMoveSpeed: 5
   weaponMoveSpeed: 3
   spine_03: {fileID: 1037408232}
-  playerCamera: {fileID: 1203924008}
-  animator: {fileID: 540214401}
   upperarm_r: {fileID: 1090986105}
-  upperarm_l: {fileID: 1106050609}
 --- !u!136 &910668652
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1373,7 +1372,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!1 &915256167
 GameObject:
@@ -1937,7 +1936,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &1088958011
 MonoBehaviour:
@@ -2072,11 +2071,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1105380590}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1106050609 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2379261457025652818, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
-  m_PrefabInstance: {fileID: 540214400}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1200101372
 GameObject:
   m_ObjectHideFlags: 0
@@ -3056,7 +3050,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &1571170941
 CapsuleCollider:
@@ -4257,7 +4251,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &2020796057
 CapsuleCollider:
