@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 399ba0ad0d622944c965faa52e2d4b49
+guid: 578f75a0d5c2f99468ce4e9174d0065e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -458,7 +458,7 @@ ModelImporter:
     second: MotusMan_v55
   - first:
       74: 7400000
-    second: W2_Stand_Aim_To_Jog_Aim_F_IPC
+    second: W2_Stand_Relaxed_To_Run_F_IPC
   - first:
       95: 9500000
     second: //RootNode
@@ -495,11 +495,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: W2_Stand_Aim_To_Jog_Aim_F_IPC
-      takeName: W2_Stand_Aim_To_Jog_Aim_F_IPC
+      name: W2_Stand_Relaxed_To_Run_F_IPC
+      takeName: W2_Stand_Relaxed_To_Run_F_IPC
       internalID: 0
-      firstFrame: 0
-      lastFrame: 27
+      firstFrame: 15
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -531,7 +531,7 @@ ModelImporter:
     addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
-    importPhysicalCameras: 1
+    importPhysicalCameras: 0
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1

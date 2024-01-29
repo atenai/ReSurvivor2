@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
     float spine_03_InitEulerAnglesX;
     [Tooltip("キャラクターの右肩ボーン")]
     [SerializeField] Transform upperarm_r;
+    bool isAnimationRotInit = false;
 
     void Start()
     {
@@ -88,11 +89,17 @@ public class Player : MonoBehaviour
             const float aimAnimationRotX = 12.5f;
             //腰のボーンの角度をカメラの向きにする
             spine_03.rotation = Quaternion.Euler(playerCamera.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
+            isAnimationRotInit = true;
         }
         else if (isAim == false)
         {
-            //腰のボーンの角度を真正面（初期値）にする
-            spine_03.rotation = Quaternion.Euler(spine_03_InitEulerAnglesX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
+            if (isAnimationRotInit == true)
+            {
+                //腰のボーンの角度を真正面（初期値）にする
+                spine_03.rotation = Quaternion.Euler(spine_03_InitEulerAnglesX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
+                isAnimationRotInit = false;
+            }
+
         }
     }
 
