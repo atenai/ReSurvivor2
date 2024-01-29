@@ -222,22 +222,22 @@ public class Player : MonoBehaviour
         styleBlack.normal = styleStateBlack;
 
         GUI.Box(new Rect(10, 0, 100, 50), "inputHorizontal", styleGreen);
-        GUI.Box(new Rect(300, 0, 100, 50), inputHorizontal.ToString(), styleGreen);
+        GUI.Box(new Rect(350, 0, 100, 50), inputHorizontal.ToString(), styleGreen);
         GUI.Box(new Rect(10, 50, 100, 50), "inputVertical", styleGreen);
-        GUI.Box(new Rect(300, 50, 100, 50), inputVertical.ToString(), styleGreen);
+        GUI.Box(new Rect(350, 50, 100, 50), inputVertical.ToString(), styleGreen);
         GUI.Box(new Rect(10, 100, 100, 50), "normalMoveSpeed", styleGreen);
-        GUI.Box(new Rect(300, 100, 100, 50), normalMoveSpeed.ToString(), styleGreen);
+        GUI.Box(new Rect(350, 100, 100, 50), normalMoveSpeed.ToString(), styleGreen);
         GUI.Box(new Rect(10, 150, 100, 50), "weaponMoveSpeed", styleGreen);
-        GUI.Box(new Rect(300, 150, 100, 50), weaponMoveSpeed.ToString(), styleGreen);
+        GUI.Box(new Rect(350, 150, 100, 50), weaponMoveSpeed.ToString(), styleGreen);
         GUI.Box(new Rect(10, 200, 100, 50), "rb.velocity", styleRed);
-        GUI.Box(new Rect(300, 200, 100, 50), rb.velocity.ToString(), styleRed);
+        GUI.Box(new Rect(350, 200, 100, 50), rb.velocity.ToString(), styleRed);
         GUI.Box(new Rect(10, 250, 100, 50), "moveForward", styleRed);
-        GUI.Box(new Rect(300, 250, 100, 50), moveForward.ToString(), styleRed);
+        GUI.Box(new Rect(350, 250, 100, 50), moveForward.ToString(), styleRed);
         GUI.Box(new Rect(10, 300, 100, 50), "cameraForward", styleRed);
-        GUI.Box(new Rect(300, 300, 100, 50), cameraForward.ToString(), styleRed);
+        GUI.Box(new Rect(350, 300, 100, 50), cameraForward.ToString(), styleRed);
         GUI.Box(new Rect(10, 350, 100, 50), "isAim", styleBlack);
-        GUI.Box(new Rect(300, 350, 100, 50), isAim.ToString(), styleBlack);
+        GUI.Box(new Rect(350, 350, 100, 50), isAim.ToString(), styleBlack);
         GUI.Box(new Rect(10, 500, 100, 50), "spine_03.eulerAngles", styleBlack);
-        GUI.Box(new Rect(300, 500, 100, 50), spine_03.eulerAngles.ToString(), styleBlack);
+        GUI.Box(new Rect(350, 500, 100, 50), spine_03.eulerAngles.ToString(), styleBlack);
     }
 }

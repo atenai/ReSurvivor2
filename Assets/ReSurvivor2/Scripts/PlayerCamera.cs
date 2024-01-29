@@ -169,8 +169,8 @@ public class PlayerCamera : MonoBehaviour
         styleYellow.normal = styleStateYellow;
 
         GUI.Box(new Rect(10, 400, 100, 50), "cameraPos", styleRed);
-        GUI.Box(new Rect(300, 400, 100, 50), this.transform.position.ToString(), styleRed);
+        GUI.Box(new Rect(350, 400, 100, 50), this.transform.position.ToString(), styleRed);
         GUI.Box(new Rect(10, 450, 100, 50), "hitName", styleRed);
-        GUI.Box(new Rect(300, 450, 100, 50), hitName, styleRed);
+        GUI.Box(new Rect(350, 450, 100, 50), hitName, styleRed);
     }
 }
