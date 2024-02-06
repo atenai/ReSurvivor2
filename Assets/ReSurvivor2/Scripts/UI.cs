@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class UI : MonoBehaviour
 {
     [SerializeField] GameObject player;
-    [SerializeField] Image imageReticle;
+    [SerializeField] Image imageCrosshair;
 
     void Start()
     {
@@ -18,11 +18,11 @@ public class UI : MonoBehaviour
     {
         if (player.GetComponent<Player>().IsAim == false)
         {
-            imageReticle.gameObject.SetActive(false);
+            imageCrosshair.gameObject.SetActive(false);
         }
         else
         {
-            imageReticle.gameObject.SetActive(true);
+            imageCrosshair.gameObject.SetActive(true);
         }
     }
 }

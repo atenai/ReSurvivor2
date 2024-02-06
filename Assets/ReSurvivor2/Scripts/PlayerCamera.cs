@@ -17,6 +17,10 @@ public class PlayerCamera : MonoBehaviour
     [Range(0.001f, 0.1f)] public float deadZoneY = 0.1f;
 
     string hitName = "";
+    [Tooltip("レイの長さ")]
+    [SerializeField] float range = 100.0f;
+
+    [SerializeField] float Damage = 10.0f;
 
 #if UNITY_EDITOR
     bool isActiveDebug = false;//エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用
@@ -34,7 +38,14 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
+        if (player.GetComponent<Player>().IsAim == false)
+        {
 
+        }
+        else
+        {
+            Shoot();
+        }
     }
 
     void FixedUpdate()
@@ -54,22 +65,27 @@ public class PlayerCamera : MonoBehaviour
         else
         {
             CameraWeaponMove();
-            Shot();
         }
 
         CameraRot();
     }
 
-    void Shot()
+    void Shoot()
     {
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = new Ray(this.transform.position, this.transform.forward);
             Debug.DrawRay(ray.origin, ray.direction * 20.0f, Color.red, 10.0f);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit) == true) // もしRayを投射して何らかのコライダーに衝突したら
+            if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
             {
                 hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
+
+                Target target = hit.transform.GetComponent<Target>();
+                if (target != null)
+                {
+                    target.TakeDamage(Damage);
+                }
             }
         }
     }
