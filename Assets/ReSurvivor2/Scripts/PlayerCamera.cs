@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Knife.Effects;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -19,8 +20,13 @@ public class PlayerCamera : MonoBehaviour
     string hitName = "";
     [Tooltip("レイの長さ")]
     [SerializeField] float range = 100.0f;
-
+    [Tooltip("銃のダメージ")]
     [SerializeField] float Damage = 10.0f;
+
+    [Tooltip("マズルフラッシュ")]
+    [SerializeField] ParticleGroupEmitter[] shotEmitters;
+    [Tooltip("硝煙")]
+    [SerializeField] ParticleGroupPlayer afterFireSmoke;
 
 #if UNITY_EDITOR
     bool isActiveDebug = false;//エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用
@@ -74,6 +80,9 @@ public class PlayerCamera : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            MuzzleFlash();
+            Smoke();
+
             Ray ray = new Ray(this.transform.position, this.transform.forward);
             Debug.DrawRay(ray.origin, ray.direction * 20.0f, Color.red, 10.0f);
             RaycastHit hit;
@@ -88,6 +97,21 @@ public class PlayerCamera : MonoBehaviour
                 }
             }
         }
+    }
+
+    void MuzzleFlash()
+    {
+        if (shotEmitters != null)
+        {
+            foreach (var e in shotEmitters)
+                e.Emit(1);
+        }
+    }
+
+    void Smoke()
+    {
+        if (afterFireSmoke != null)
+            afterFireSmoke.Play();
     }
 
     void CameraNormalMove()
