@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Knife.Effects;
+using Unity.Mathematics;
 
 public class PlayerCamera : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] ParticleGroupEmitter[] shotEmitters;
     [Tooltip("硝煙")]
     [SerializeField] ParticleGroupPlayer afterFireSmoke;
+
+    [SerializeField] GameObject impactEffect;
 
 #if UNITY_EDITOR
     bool isActiveDebug = false;//エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用
@@ -95,6 +98,8 @@ public class PlayerCamera : MonoBehaviour
                 {
                     target.TakeDamage(Damage);
                 }
+
+                Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
             }
         }
     }
