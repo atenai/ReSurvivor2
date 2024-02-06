@@ -30,8 +30,8 @@ public class FlyingEnemy : MonoBehaviour
             //Debug.Log("<color=red>プレイヤーを発見!1</color>");
             flyingEnemyController.IsHit1 = true;
 
-            flyingEnemyController.IsMoveForward = true;
-            //flyingEnemyController.IsMoveBack = true;
+            //flyingEnemyController.IsMoveForward = true;
+            flyingEnemyController.IsMoveBack = true;
         }
     }
 

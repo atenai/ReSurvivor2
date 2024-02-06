@@ -4,14 +4,14 @@ using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// フライングエネミーがプレイヤーを直線追尾するタスク
+/// フライングエネミーがプレイヤーを動的追尾するタスク
 /// </summary>
 [TaskCategory("FlyingEnemy")]
-public class FlyingEnemyStraightLineTrackingAction1 : Action
+public class FlyingEnemyDynamicTrackingAction2 : Action
 {
     FlyingEnemyController flyingEnemyController;
 
-    [UnityEngine.Tooltip("ターゲットの座標位置")]
+    //ターゲット座標位置の変数
     Vector3 targetPos;
 
 #if UNITY_EDITOR
@@ -21,21 +21,32 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
     //回転処理系の変数
     float t = 0.0f;
     Quaternion lookRotation;
-    bool isRotEnd = false;
+    [UnityEngine.Tooltip("エネミーがターゲットを向くスピード")]
+    [SerializeField][Range(1.0f, 4.0f)] float rotSpeed = 2.0f;
 
-    //移動処理系の変数
+    //移動処理の変数
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
     [SerializeField] float stopPos = 0.1f;
     bool isMoveEnd = false;
+
+    [UnityEngine.Tooltip("エネミーがターゲット座標位置を再度取得するまでの時間")]
+    [SerializeField][Range(0.1f, 0.5f)] float reTargetTime = 0.5f;
+    float reTargetCount = 0.0f;
+
+    [UnityEngine.Tooltip("エネミーの向きとターゲットの向きの内積")]
+    float dot = 1.0f;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
         flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
 
+        InitMove();
         TargetPos();
         InitRotateToDirectionTarget();
-        InitMove();
+        isMoveEnd = false;
+
+        reTargetCount = 0.0f;
     }
 
     void TargetPos()
@@ -46,14 +57,13 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
         targetPos = new Vector3(xPos, yPos, zPos);
 
 #if UNITY_EDITOR
-        GameObject debugGameObject = UnityEngine.Object.Instantiate(obj, targetPos, Quaternion.identity);
-        UnityEngine.GameObject.Destroy(debugGameObject, 5.0f);
+        GameObject debugGameObject = UnityEngine.Object.Instantiate(obj, targetPos, Quaternion.identity);//プレハブを元に、インスタンスを生成（デバッグ用）
+        UnityEngine.Object.Destroy(debugGameObject, 5.0f);// 5秒後にゲームオブジェクトを削除
 #endif
     }
 
     void InitRotateToDirectionTarget()
     {
-        isRotEnd = false;
         t = 0.0f;
         //対象オブジェクトの位置 – 自分のオブジェクトの位置 = 対象オブジェクトの向きベクトルが求められる
         Vector3 direction = targetPos - this.transform.position;
@@ -67,7 +77,6 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
     void InitMove()
     {
-        isMoveEnd = false;
         flyingEnemyController.Rigidbody.velocity = Vector3.zero;
     }
 
@@ -88,39 +97,55 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
     public override void OnFixedUpdate()
     {
-        base.OnFixedUpdate();
+        PutDirectionInInnerProduct();
+        ReTarget();
+        RotateToDirectionTarget();
+        Move();
+    }
 
-        if (isRotEnd == false)
+    /// <summary>
+    /// 内積を使いエネミーの向きとプレイヤーの方向のコサイン数値を調べる
+    /// </summary>
+    void PutDirectionInInnerProduct()
+    {
+        Vector3 targetDir = targetPos - this.transform.position;
+        dot = Vector3.Dot(this.transform.forward, targetDir);
+#if UNITY_EDITOR
+        Ray playerRay = new Ray(this.transform.position, this.transform.forward);
+        Debug.DrawRay(playerRay.origin, playerRay.direction * 2.0f, Color.red);
+        Ray targetRay = new Ray(this.transform.position, targetDir);
+        Debug.DrawRay(targetRay.origin, targetRay.direction * 2.0f, Color.blue);
+#endif
+    }
+
+    void ReTarget()
+    {
+        reTargetCount = reTargetCount + Time.deltaTime;
+
+        if (reTargetTime <= reTargetCount)
         {
-            //Debug.Log("<color=orange>回転中</color>");
-            RotateToDirectionTarget();
-        }
-        else if (isRotEnd == true)
-        {
-            //回転し終えた
-            Move();
+            InitMove();
+            TargetPos();
+            InitRotateToDirectionTarget();
+            reTargetCount = 0.0f;
         }
     }
 
     void RotateToDirectionTarget()
     {
         //Time.deltaTimeは0.1f
-        t = t + Time.deltaTime;
+        t = t + (Time.deltaTime * rotSpeed);
         //↑で求めたどのくらい回転させれば良いのか？の数値を元に回転させる(Lerpのtは0～1)
         this.transform.rotation = Quaternion.Lerp(this.transform.rotation, lookRotation, t);
-
-        const float endRot = 1.0f;
-        if (endRot <= t)
-        {
-            isRotEnd = true;
-        }
     }
 
     void Move()
     {
-        float currentDistance = Vector3.SqrMagnitude(targetPos - this.transform.position);
-        if (currentDistance <= stopPos)
+        float sqrCurrentDistance = Vector3.SqrMagnitude(targetPos - this.transform.position);
+
+        if (sqrCurrentDistance <= stopPos)
         {
+            Debug.Log("<color=red>移動の終了</color>");
             flyingEnemyController.Rigidbody.velocity = Vector3.zero;
             isMoveEnd = true;
             return;

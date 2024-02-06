@@ -4,14 +4,14 @@ using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// フライングエネミーがプレイヤーを直線追尾するタスク
+/// フライングエネミーがランダムに移動するタスク
 /// </summary>
 [TaskCategory("FlyingEnemy")]
-public class FlyingEnemyStraightLineTrackingAction1 : Action
+public class FlyingEnemyRandomMoveAction1 : Action
 {
     FlyingEnemyController flyingEnemyController;
 
-    [UnityEngine.Tooltip("ターゲットの座標位置")]
+    //ターゲット座標位置の変数
     Vector3 targetPos;
 
 #if UNITY_EDITOR
@@ -26,7 +26,14 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
     //移動処理系の変数
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
     [SerializeField] float stopPos = 0.1f;
+    [UnityEngine.Tooltip("エネミーがx軸で移動するランダム座標位置の範囲")]
+    [SerializeField] int xMoveRange = 2;
+    [UnityEngine.Tooltip("エネミーがy軸で移動するランダム座標位置の範囲")]
+    [SerializeField] int yMoveRange = 2;
+    [UnityEngine.Tooltip("エネミーがy軸で移動するランダム座標位置の範囲")]
+    [SerializeField] int zMoveRange = 2;
     bool isMoveEnd = false;
+
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
@@ -40,14 +47,15 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
     void TargetPos()
     {
-        float xPos = flyingEnemyController.Target.transform.position.x;
-        float yPos = flyingEnemyController.Target.transform.position.y;
-        float zPos = flyingEnemyController.Target.transform.position.z;
-        targetPos = new Vector3(xPos, yPos, zPos);
+        int xPos = UnityEngine.Random.Range(-xMoveRange, xMoveRange);
+        //int yPos = UnityEngine.Random.Range(-yMoveRange, yMoveRange);
+        int yPos = 0;
+        int zPos = UnityEngine.Random.Range(-zMoveRange, zMoveRange); ;
+        targetPos = new Vector3(this.transform.position.x + xPos, this.transform.position.y + yPos, this.transform.position.z + zPos);
 
 #if UNITY_EDITOR
-        GameObject debugGameObject = UnityEngine.Object.Instantiate(obj, targetPos, Quaternion.identity);
-        UnityEngine.GameObject.Destroy(debugGameObject, 5.0f);
+        GameObject debugGameObject = UnityEngine.Object.Instantiate(obj, targetPos, Quaternion.identity);//プレハブを元に、インスタンスを生成（デバッグ用）
+        UnityEngine.Object.Destroy(debugGameObject, 5.0f);// 5秒後にゲームオブジェクトを削除
 #endif
     }
 
@@ -67,8 +75,8 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
     void InitMove()
     {
-        isMoveEnd = false;
         flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+        isMoveEnd = false;
     }
 
     // 更新時に呼ばれる
@@ -88,8 +96,6 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
     public override void OnFixedUpdate()
     {
-        base.OnFixedUpdate();
-
         if (isRotEnd == false)
         {
             //Debug.Log("<color=orange>回転中</color>");
@@ -98,7 +104,7 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
         else if (isRotEnd == true)
         {
             //回転し終えた
-            Move();
+            RandomMove();
         }
     }
 
@@ -116,11 +122,13 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
         }
     }
 
-    void Move()
+    void RandomMove()
     {
-        float currentDistance = Vector3.SqrMagnitude(targetPos - this.transform.position);
-        if (currentDistance <= stopPos)
+        float sqrCurrentDistance = Vector3.SqrMagnitude(targetPos - this.transform.position);
+
+        if (sqrCurrentDistance <= stopPos)
         {
+            //Debug.Log("<color=red>移動の終了</color>");
             flyingEnemyController.Rigidbody.velocity = Vector3.zero;
             isMoveEnd = true;
             return;

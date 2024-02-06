@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// フライングエネミーがターゲットから離れるタスク
 /// </summary>
-[TaskCategory("Kashiwabara")]
+[TaskCategory("FlyingEnemy")]
 public class FlyingEnemyMoveBackAction : Action
 {
     FlyingEnemyController flyingEnemyController;
