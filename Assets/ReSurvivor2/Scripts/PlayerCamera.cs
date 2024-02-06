@@ -24,12 +24,13 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("銃のダメージ")]
     [SerializeField] float Damage = 10.0f;
 
-    [Tooltip("マズルフラッシュ")]
+    [Tooltip("マズルフラッシュ、薬莢")]
     [SerializeField] ParticleGroupEmitter[] shotEmitters;
     [Tooltip("硝煙")]
     [SerializeField] ParticleGroupPlayer afterFireSmoke;
     [Tooltip("着弾エフェクト")]
     [SerializeField] GameObject impactEffect;
+    [Tooltip("着弾した物体を後ろに押す")]
     [SerializeField] float impactForce = 30.0f;
 
 #if UNITY_EDITOR
@@ -94,12 +95,14 @@ public class PlayerCamera : MonoBehaviour
             {
                 hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 
+                //ダメージ
                 Target target = hit.transform.GetComponent<Target>();
                 if (target != null)
                 {
                     target.TakeDamage(Damage);
                 }
 
+                //着弾した物体を後ろに押す
                 if (hit.rigidbody != null)
                 {
                     hit.rigidbody.AddForce(-hit.normal * impactForce);
