@@ -28,8 +28,9 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] ParticleGroupEmitter[] shotEmitters;
     [Tooltip("硝煙")]
     [SerializeField] ParticleGroupPlayer afterFireSmoke;
-
+    [Tooltip("着弾エフェクト")]
     [SerializeField] GameObject impactEffect;
+    [SerializeField] float impactForce = 30.0f;
 
 #if UNITY_EDITOR
     bool isActiveDebug = false;//エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用
@@ -99,7 +100,14 @@ public class PlayerCamera : MonoBehaviour
                     target.TakeDamage(Damage);
                 }
 
-                Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                if (hit.rigidbody != null)
+                {
+                    hit.rigidbody.AddForce(-hit.normal * impactForce);
+                }
+
+                //着弾エフェクト
+                GameObject impactGameObject = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(impactGameObject, 2.0f);
             }
         }
     }
@@ -109,14 +117,18 @@ public class PlayerCamera : MonoBehaviour
         if (shotEmitters != null)
         {
             foreach (var e in shotEmitters)
+            {
                 e.Emit(1);
+            }
         }
     }
 
     void Smoke()
     {
         if (afterFireSmoke != null)
+        {
             afterFireSmoke.Play();
+        }
     }
 
     void CameraNormalMove()
