@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -135,9 +135,9 @@ GameObject:
   - component: {fileID: 61359425}
   - component: {fileID: 61359424}
   - component: {fileID: 61359423}
-  - component: {fileID: 61359422}
+  - component: {fileID: 61359426}
   m_Layer: 0
-  m_Name: Cube_Collider1
+  m_Name: Cube_ColliderFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,63 +158,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2020796055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &61359422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 61359420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f427d7c15d865da4b9cb95d830b0df84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnTriggerEnterHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerEnterHit1
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTriggerStayHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerStayHit1
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTriggerExitHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerExitHit1
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!65 &61359423
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -286,6 +229,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 61359420}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &61359426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61359420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6786ccd2b8488044ca2611264a339d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  self: {fileID: 61359423}
 --- !u!1 &108845526
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,9 +254,9 @@ GameObject:
   - component: {fileID: 108845531}
   - component: {fileID: 108845530}
   - component: {fileID: 108845529}
-  - component: {fileID: 108845528}
+  - component: {fileID: 108845532}
   m_Layer: 0
-  m_Name: Cube_Collider2
+  m_Name: Cube_ColliderUnder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -321,63 +277,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2020796055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &108845528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 108845526}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f427d7c15d865da4b9cb95d830b0df84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnTriggerEnterHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerEnterHit2
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTriggerStayHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerStayHit2
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTriggerExitHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerExitHit2
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!65 &108845529
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -449,6 +348,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 108845526}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &108845532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108845526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6786ccd2b8488044ca2611264a339d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  self: {fileID: 108845529}
 --- !u!1 &208909654
 GameObject:
   m_ObjectHideFlags: 0
@@ -2429,6 +2341,7 @@ MonoBehaviour:
   - {fileID: 1720375918}
   afterFireSmoke: {fileID: 432052236}
   impactEffect: {fileID: 1245417074158469956, guid: f950286ed3ac28a44812aed065adb549, type: 3}
+  impactForce: 30
 --- !u!1 &1245628006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2524,9 +2437,9 @@ GameObject:
   - component: {fileID: 1358164324}
   - component: {fileID: 1358164323}
   - component: {fileID: 1358164322}
-  - component: {fileID: 1358164321}
+  - component: {fileID: 1358164325}
   m_Layer: 0
-  m_Name: Cube_Collider3
+  m_Name: Cube_ColliderUP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2547,63 +2460,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2020796055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1358164321
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1358164319}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f427d7c15d865da4b9cb95d830b0df84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnTriggerEnterHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerEnterHit3
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTriggerStayHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerStayHit3
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTriggerExitHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerExitHit3
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!65 &1358164322
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2675,6 +2531,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1358164319}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1358164325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358164319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6786ccd2b8488044ca2611264a339d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  self: {fileID: 1358164322}
 --- !u!1 &1363804291
 GameObject:
   m_ObjectHideFlags: 0
@@ -3763,9 +3632,9 @@ GameObject:
   - component: {fileID: 1829325101}
   - component: {fileID: 1829325100}
   - component: {fileID: 1829325099}
-  - component: {fileID: 1829325098}
+  - component: {fileID: 1829325102}
   m_Layer: 0
-  m_Name: Cube_Collider4
+  m_Name: Cube_ColliderBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3786,63 +3655,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2020796055}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1829325098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1829325096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f427d7c15d865da4b9cb95d830b0df84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnTriggerEnterHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerEnterHit4
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTriggerStayHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerStayHit4
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTriggerExitHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2020796060}
-        m_TargetAssemblyTypeName: FlyingEnemy, Assembly-CSharp
-        m_MethodName: OnTriggerExitHit4
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!65 &1829325099
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3914,6 +3726,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1829325096}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1829325102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829325096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6786ccd2b8488044ca2611264a339d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  self: {fileID: 1829325099}
 --- !u!1 &1889687210
 GameObject:
   m_ObjectHideFlags: 0
@@ -4683,6 +4508,11 @@ MonoBehaviour:
   flyingEnemyController:
     target: {fileID: 910668649}
     rb: {fileID: 2020796056}
+  colliders:
+  - {fileID: 61359426}
+  - {fileID: 108845532}
+  - {fileID: 1358164325}
+  - {fileID: 1829325102}
 --- !u!114 &2020796061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4711,13 +4541,13 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(131.812363,-90.75422)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(1.81236267,119.245781)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-3.220108,120.819046)"},"ID":2,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(50,170)"},"ID":3,"Name":"Sequence","Instant":true,"AbortTypeabortType":"LowerPriority","Children":[{"Type":"CanFlyingEnemyMoveBackConditional","NodeData":{"Offset":"(-83.79425,139.620514)"},"ID":4,"Name":"Can
-        Flying Enemy Move Back Conditional","Instant":true},{"Type":"FlyingEnemyMoveBackAction1","NodeData":{"Offset":"(152.6984,153.269348)"},"ID":5,"Name":"Flying
-        Enemy Move Back Action 1","Instant":true,"SinglestopPos":0.1,"GameObjectobj":0},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(335.743958,160)"},"ID":6,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(620,160)"},"ID":7,"Name":"Sequence","Instant":true,"AbortTypeabortType":"LowerPriority","Children":[{"Type":"CanFlyingEnemyRotateToDirectionPlayerConditional","NodeData":{"Offset":"(-30.347168,146.067444)"},"ID":8,"Name":"Can
-        Flying Enemy Rotate To Direction Player Conditional","Instant":true},{"Type":"FlyingEnemyRotateToDirectionPlayerAction","NodeData":{"Offset":"(220.422058,146.067474)"},"ID":9,"Name":"Flying
-        Enemy Rotate To Direction Player Action","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(397.5432,158.40802)"},"ID":10,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}]}]}]},"DetachedTasks":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-400,300)"},"ID":11,"Name":"Sequence","Instant":true,"AbortTypeabortType":"LowerPriority","Children":[{"Type":"CanFlyingEnemyMoveForwardConditional","NodeData":{"Offset":"(-147.04686,154.0348)"},"ID":12,"Name":"Can
-        Flying Enemy Move Forward Conditional","Instant":true},{"Type":"FlyingEnemyMoveForwardAction1","NodeData":{"Offset":"(96.43326,155.777374)"},"ID":13,"Name":"Flying
-        Enemy Move Forward Action 1","Instant":true,"SinglestopPos":0.1,"GameObjectobj":1},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(285.866943,158.912384)"},"ID":14,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(2143.618,286.9574)"},"ID":15,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"FlyingEnemyRandomMoveAction1","NodeData":{"Offset":"(-84.10028,155.275391)"},"ID":16,"Name":"Flying
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(131.812363,-90.75422)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(1.81236267,119.245781)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-3.220108,120.819046)"},"ID":2,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-530,150)"},"ID":3,"Name":"Sequence","Instant":true,"AbortTypeabortType":"LowerPriority","Children":[{"Type":"CanFlyingEnemyMoveForwardConditional","NodeData":{"Offset":"(-147.04686,154.0348)"},"ID":4,"Name":"Can
+        Flying Enemy Move Forward Conditional","Instant":true,"Int32checkCollisionIndex":0},{"Type":"FlyingEnemyMoveForwardAction1","NodeData":{"Offset":"(96.43326,155.777374)"},"ID":5,"Name":"Flying
+        Enemy Move Forward Action 1","Instant":true,"SinglestopPos":0.1,"GameObjectobj":0},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(285.866943,158.912384)"},"ID":6,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(50,170)"},"ID":7,"Name":"Sequence","Instant":true,"AbortTypeabortType":"LowerPriority","Children":[{"Type":"CanFlyingEnemyMoveBackConditional","NodeData":{"Offset":"(-83.79425,139.620514)"},"ID":8,"Name":"Can
+        Flying Enemy Move Back Conditional","Instant":true,"Int32checkCollisionIndex":2},{"Type":"FlyingEnemyMoveBackAction1","NodeData":{"Offset":"(152.6984,153.269348)"},"ID":9,"Name":"Flying
+        Enemy Move Back Action 1","Instant":true,"SinglestopPos":0.1,"GameObjectobj":1},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(335.743958,160)"},"ID":10,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(620,160)"},"ID":11,"Name":"Sequence","Instant":true,"AbortTypeabortType":"LowerPriority","Children":[{"Type":"CanFlyingEnemyRotateToDirectionPlayerConditional","NodeData":{"Offset":"(-30.347168,146.067444)"},"ID":12,"Name":"Can
+        Flying Enemy Rotate To Direction Player Conditional","Instant":true,"Int32checkCollisionIndex":3},{"Type":"FlyingEnemyRotateToDirectionPlayerAction","NodeData":{"Offset":"(220.422058,146.067474)"},"ID":13,"Name":"Flying
+        Enemy Rotate To Direction Player Action","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(397.5432,158.40802)"},"ID":14,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}]}]}]},"DetachedTasks":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(2143.618,286.9574)"},"ID":15,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"FlyingEnemyRandomMoveAction1","NodeData":{"Offset":"(-84.10028,155.275391)"},"ID":16,"Name":"Flying
         Enemy Random Move Action 1","Instant":true,"GameObjectobj":2,"SinglestopPos":0.1,"Int32xMoveRange":2,"Int32yMoveRange":2,"Int32zMoveRange":2},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(106.740517,155.13356)"},"ID":17,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(2493.615,276.9574)"},"ID":18,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"FlyingEnemySwayWaitAction1","NodeData":{"Offset":"(-47.0587158,177.717224)"},"ID":19,"Name":"Flying
         Enemy Sway Wait Action 1","Instant":true,"GameObjectoriginPosObj":3,"GameObjecttargetPosObj":4,"SinglestopPos":0.001,"SinglexMoveRange":0.5,"SingleyMoveRange":0.5,"SinglezMoveRange":0.5},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(140,175.294128)"},"ID":20,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0.01},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(1784.51709,291.160034)"},"ID":21,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"FlyingEnemyDynamicTrackingAction2","NodeData":{"Offset":"(-83.85449,172.232483)"},"ID":22,"Name":"Flying
         Enemy Dynamic Tracking Action 2","Instant":true,"GameObjectobj":5,"SinglerotSpeed":2,"SinglestopPos":0.1,"SinglereTargetTime":0.5},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(100,170)"},"ID":23,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(1420,290)"},"ID":24,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"FlyingEnemyStraightLineTrackingAction1","NodeData":{"Offset":"(-83.53223,169.638962)"},"ID":25,"Name":"Flying
