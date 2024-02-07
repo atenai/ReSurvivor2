@@ -6,7 +6,7 @@ using UnityEngine.Events;
 /// <summary>
 /// ビヘイビアデザイナーに当たり判定の情報を送る為のクラス
 /// </summary>
-public class EnemyRayColliderCheck : MonoBehaviour
+public class EnemyColliderCheck : MonoBehaviour
 {
     public UnityEvent<Collider> OnTriggerEnterHit;
     public UnityEvent<Collider> OnTriggerStayHit;
