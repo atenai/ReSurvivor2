@@ -23,6 +23,10 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] float range = 100.0f;
     [Tooltip("銃のダメージ")]
     [SerializeField] float Damage = 10.0f;
+    [Tooltip("何秒間隔で撃つか")]
+    [SerializeField] float fireRate = 0.2f;
+    [Tooltip("時間カウント用のタイマー")]
+    float countTimer = 0.0f;
 
     [Tooltip("マズルフラッシュ、薬莢")]
     [SerializeField] ParticleGroupEmitter[] shotEmitters;
@@ -53,9 +57,20 @@ public class PlayerCamera : MonoBehaviour
         {
 
         }
-        else
+        else if (player.GetComponent<Player>().IsAim == true)
         {
-            Shoot();
+            if (Input.GetMouseButton(0) && countTimer <= 0.0f)//カウントタイマーが0以下かつ左クリックをしている場合は中身を実行する
+            {
+                Shoot();
+                countTimer = fireRate;//カウントタイマーに射撃を待つ時間を入れる
+            }
+        }
+
+        //カウントタイマーが0以上なら中身を実行する
+        if (0.0f < countTimer)
+        {
+            //カウントタイマーを減らす
+            countTimer = countTimer - Time.deltaTime;
         }
     }
 
@@ -73,7 +88,7 @@ public class PlayerCamera : MonoBehaviour
         {
             CameraNormalMove();
         }
-        else
+        else if (player.GetComponent<Player>().IsAim == true)
         {
             CameraWeaponMove();
         }
@@ -81,40 +96,43 @@ public class PlayerCamera : MonoBehaviour
         CameraRot();
     }
 
+    /// <summary>
+    /// 射撃
+    /// </summary> 
     void Shoot()
     {
-        if (Input.GetMouseButtonDown(0))
+        MuzzleFlash();
+        Smoke();
+
+        Ray ray = new Ray(this.transform.position, this.transform.forward);
+        Debug.DrawRay(ray.origin, ray.direction * 20.0f, Color.red, 10.0f);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
         {
-            MuzzleFlash();
-            Smoke();
+            hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 
-            Ray ray = new Ray(this.transform.position, this.transform.forward);
-            Debug.DrawRay(ray.origin, ray.direction * 20.0f, Color.red, 10.0f);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
+            //ダメージ
+            Target target = hit.transform.GetComponent<Target>();
+            if (target != null)
             {
-                hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
-
-                //ダメージ
-                Target target = hit.transform.GetComponent<Target>();
-                if (target != null)
-                {
-                    target.TakeDamage(Damage);
-                }
-
-                //着弾した物体を後ろに押す
-                if (hit.rigidbody != null)
-                {
-                    hit.rigidbody.AddForce(-hit.normal * impactForce);
-                }
-
-                //着弾エフェクト
-                GameObject impactGameObject = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                Destroy(impactGameObject, 2.0f);
+                target.TakeDamage(Damage);
             }
+
+            //着弾した物体を後ろに押す
+            if (hit.rigidbody != null)
+            {
+                hit.rigidbody.AddForce(-hit.normal * impactForce);
+            }
+
+            //着弾エフェクト
+            GameObject impactGameObject = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            Destroy(impactGameObject, 2.0f);
         }
     }
 
+    /// <summary>
+    /// マズルフラッシュのエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
+    /// </summary>
     void MuzzleFlash()
     {
         if (shotEmitters != null)
@@ -126,6 +144,9 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
+    /// </summary>
     void Smoke()
     {
         if (afterFireSmoke != null)
@@ -134,6 +155,9 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 通常カメラ
+    /// </summary>
     void CameraNormalMove()
     {
         //通常のカメラ位置をプレイヤーの座標位置から計算
@@ -142,6 +166,9 @@ public class PlayerCamera : MonoBehaviour
         this.transform.position = Vector3.Lerp(transform.position, cameraPos, player.GetComponent<Player>().NormalMoveSpeed * 10 * Time.deltaTime);
     }
 
+    /// <summary>
+    /// 肩越しカメラ
+    /// </summary>
     void CameraWeaponMove()
     {
         //通常のカメラ位置をプレイヤーの座標位置から計算
@@ -150,6 +177,9 @@ public class PlayerCamera : MonoBehaviour
         this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, player.GetComponent<Player>().WeaponMoveSpeed * 10 * Time.deltaTime);
     }
 
+    /// <summary>
+    /// カメラの回転
+    /// </summary> 
     void CameraRot()
     {
         // マウスの移動量を取得
