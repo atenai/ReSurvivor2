@@ -37,7 +37,8 @@ public class UI : MonoBehaviour
         else
         {
             imageCrosshair.gameObject.SetActive(true);
-            if (PlayerCamera.singletonInstance.isTargethit == true)
+
+            if (PlayerCamera.singletonInstance.IsTargethit == true)
             {
                 imageCrosshair.color = new Color32(255, 0, 0, 150);
             }

@@ -2547,7 +2547,7 @@ GameObject:
   - component: {fileID: 1176276777}
   - component: {fileID: 1176276776}
   m_Layer: 6
-  m_Name: Capsule
+  m_Name: Capsule_Target
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2885,6 +2885,7 @@ MonoBehaviour:
   cameraSpeedY: 50
   deadZoneX: 0.1
   deadZoneY: 0.1
+  isTargethit: 0
   range: 100
   Damage: 10
   fireRate: 0.1
@@ -2894,7 +2895,6 @@ MonoBehaviour:
   afterFireSmoke: {fileID: 432052236}
   impactEffect: {fileID: 1245417074158469956, guid: f950286ed3ac28a44812aed065adb549, type: 3}
   impactForce: 30
-  isTargethit: 0
 --- !u!1 &1245628006
 GameObject:
   m_ObjectHideFlags: 0

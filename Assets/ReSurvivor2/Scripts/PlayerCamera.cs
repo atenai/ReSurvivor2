@@ -11,24 +11,31 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] GameObject player;
 
     [Tooltip("X軸のカメラの回転スピード")]
-    [Range(50, 150)] public float cameraSpeedX = 100;
+    [Range(50, 150)][SerializeField] float normalCameraSpeedX = 100;
     [Tooltip("Y軸のカメラの回転スピード")]
-    [Range(50, 150)] public float cameraSpeedY = 50;
+    [Range(25, 125)][SerializeField] float normalCameraSpeedY = 50;
+
+    [Tooltip("X軸のカメラの回転スピード")]
+    [Range(50, 150)][SerializeField] float aimCameraSpeedX = 50;
+    [Tooltip("Y軸のカメラの回転スピード")]
+    [Range(25, 125)][SerializeField] float aimCameraSpeedY = 25;
 
     [Tooltip("X軸のカメラの入力デッドゾーン")]
-    [Range(0.001f, 0.1f)] public float deadZoneX = 0.1f;
+    [Range(0.001f, 0.1f)][SerializeField] float deadZoneX = 0.1f;
     [Tooltip("Y軸のカメラの入力デッドゾーン")]
-    [Range(0.001f, 0.1f)] public float deadZoneY = 0.1f;
+    [Range(0.001f, 0.1f)][SerializeField] float deadZoneY = 0.1f;
 
     [Tooltip("レティクルの中心点（レイキャスト）にターゲットがヒットしてるか？")]
-    public bool isTargethit = false;
+    bool isTargethit = false;
+    public bool IsTargethit => isTargethit;
     [Tooltip("ローカルで計算する為のX軸のカメラの回転スピード")]
     float localCameraSpeedX;
     [Tooltip("ローカルで計算する為のY軸のカメラの回転スピード")]
     float localCameraSpeedY;
     [Tooltip("カメラのスピードを遅くする")]
-    float slowDownCameraSpeed = 4;
+    [Range(1.0f, 4.0f)] float slowDownCameraSpeed = 2.0f;
 
+    [Tooltip("ヒットしたオブジェクトの名前")]
     string hitName = "";
     [Tooltip("レイの長さ")]
     [SerializeField] float range = 100.0f;
@@ -38,15 +45,17 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] float fireRate = 0.1f;
     [Tooltip("時間カウント用のタイマー")]
     float countTimer = 0.0f;
+    [Tooltip("着弾した物体を後ろに押す")]
+    [SerializeField] float impactForce = 30.0f;
 
+    //↓アセットストアのプログラム↓//
     [Tooltip("マズルフラッシュ、薬莢")]
     [SerializeField] ParticleGroupEmitter[] shotEmitters;
     [Tooltip("硝煙")]
     [SerializeField] ParticleGroupPlayer afterFireSmoke;
     [Tooltip("着弾エフェクト")]
     [SerializeField] GameObject impactEffect;
-    [Tooltip("着弾した物体を後ろに押す")]
-    [SerializeField] float impactForce = 30.0f;
+    //↑アセットストアのプログラム↑//
 
 #if UNITY_EDITOR
     bool isActiveDebug = false;//エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用
@@ -210,30 +219,31 @@ public class PlayerCamera : MonoBehaviour
         float x_Rotation = Input.GetAxis("Mouse X");
         float y_Rotation = Input.GetAxis("Mouse Y");
 
-        localCameraSpeedX = cameraSpeedX;
-        localCameraSpeedY = cameraSpeedY;
-
         if (Player.singletonInstance.IsAim == true)
         {
+            localCameraSpeedX = aimCameraSpeedX;
+            localCameraSpeedY = aimCameraSpeedY;
+            isTargethit = false;
+
             //ターゲットにあたった際にカメラを遅くする処理
             Ray ray = new Ray(this.transform.position, this.transform.forward);
             Debug.DrawRay(ray.origin, ray.direction * 20.0f, Color.gray, 1.0f);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
             {
-                isTargethit = false;
-
                 if (hit.collider.gameObject.CompareTag("Enemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
                 {
                     //カメラの速さを遅くする
-                    localCameraSpeedX = cameraSpeedX / slowDownCameraSpeed;
-                    localCameraSpeedY = cameraSpeedY / slowDownCameraSpeed;
+                    localCameraSpeedX = aimCameraSpeedX / slowDownCameraSpeed;
+                    localCameraSpeedY = aimCameraSpeedY / slowDownCameraSpeed;
                     isTargethit = true;
                 }
             }
         }
         else if (Player.singletonInstance.IsAim == false)
         {
+            localCameraSpeedX = normalCameraSpeedX;
+            localCameraSpeedY = normalCameraSpeedY;
             isTargethit = false;
         }
 
