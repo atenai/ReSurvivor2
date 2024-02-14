@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 61359424}
   - component: {fileID: 61359423}
   - component: {fileID: 61359426}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_ColliderFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -451,7 +451,7 @@ GameObject:
   - component: {fileID: 108845530}
   - component: {fileID: 108845529}
   - component: {fileID: 108845532}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_ColliderUnder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -568,7 +568,7 @@ GameObject:
   - component: {fileID: 208909655}
   - component: {fileID: 208909657}
   - component: {fileID: 208909656}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_Beak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -651,7 +651,7 @@ GameObject:
   - component: {fileID: 247362331}
   - component: {fileID: 247362333}
   - component: {fileID: 247362332}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image_Alert
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -729,7 +729,7 @@ GameObject:
   - component: {fileID: 248078868}
   - component: {fileID: 248078867}
   - component: {fileID: 248078872}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -874,7 +874,7 @@ GameObject:
   - component: {fileID: 339324684}
   - component: {fileID: 339324683}
   - component: {fileID: 339324682}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1200,7 +1200,7 @@ GameObject:
   - component: {fileID: 620634293}
   - component: {fileID: 620634295}
   - component: {fileID: 620634294}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image_Alert
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1485,7 +1485,7 @@ GameObject:
   - component: {fileID: 714519132}
   - component: {fileID: 714519134}
   - component: {fileID: 714519133}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_PatrolPoints3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1566,7 +1566,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 785784344}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EnemyRayCast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1935,7 +1935,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ce64a716cce9a48af808cd0af79346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 910668649}
   imageCrosshair: {fileID: 1630503015}
 --- !u!114 &968781464
 MonoBehaviour:
@@ -2000,7 +1999,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1039043129}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EnemyCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2140,7 +2139,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1088188715}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FlyingEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2179,7 +2178,7 @@ GameObject:
   - component: {fileID: 1088958009}
   - component: {fileID: 1088958011}
   - component: {fileID: 1088958012}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EnemyByRayCast
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -2746,6 +2745,7 @@ MonoBehaviour:
   afterFireSmoke: {fileID: 432052236}
   impactEffect: {fileID: 1245417074158469956, guid: f950286ed3ac28a44812aed065adb549, type: 3}
   impactForce: 30
+  isTargethit: 0
 --- !u!1 &1245628006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2757,7 +2757,7 @@ GameObject:
   - component: {fileID: 1245628007}
   - component: {fileID: 1245628009}
   - component: {fileID: 1245628008}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2842,7 +2842,7 @@ GameObject:
   - component: {fileID: 1358164323}
   - component: {fileID: 1358164322}
   - component: {fileID: 1358164325}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_ColliderUP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2959,7 +2959,7 @@ GameObject:
   - component: {fileID: 1363804292}
   - component: {fileID: 1363804294}
   - component: {fileID: 1363804293}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3042,7 +3042,7 @@ GameObject:
   - component: {fileID: 1369376201}
   - component: {fileID: 1369376200}
   - component: {fileID: 1369376199}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3127,7 +3127,7 @@ GameObject:
   - component: {fileID: 1458951209}
   - component: {fileID: 1458951208}
   - component: {fileID: 1458951211}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BoxCollider_ObjectFind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3398,7 +3398,7 @@ GameObject:
   - component: {fileID: 1571170939}
   - component: {fileID: 1571170945}
   - component: {fileID: 1571170946}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EnemyByCollider
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -3658,7 +3658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.5882353}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5882353}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3830,7 +3830,7 @@ GameObject:
   - component: {fileID: 1694283952}
   - component: {fileID: 1694283955}
   - component: {fileID: 1694283954}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4102,7 +4102,7 @@ GameObject:
   - component: {fileID: 1774981315}
   - component: {fileID: 1774981314}
   - component: {fileID: 1774981313}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_PatrolPoints2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4187,7 +4187,7 @@ GameObject:
   - component: {fileID: 1829325100}
   - component: {fileID: 1829325099}
   - component: {fileID: 1829325102}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_ColliderBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4306,7 +4306,7 @@ GameObject:
   - component: {fileID: 1889687214}
   - component: {fileID: 1889687213}
   - component: {fileID: 1889687216}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BoxCollider_PlayerFind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4723,7 +4723,7 @@ GameObject:
   - component: {fileID: 1947682163}
   - component: {fileID: 1947682165}
   - component: {fileID: 1947682164}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_PatrolPoints4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4806,7 +4806,7 @@ GameObject:
   - component: {fileID: 1969040027}
   - component: {fileID: 1969040026}
   - component: {fileID: 1969040025}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube_PatrolPoints1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4996,7 +4996,7 @@ GameObject:
   - component: {fileID: 2020796061}
   - component: {fileID: 2020796060}
   - component: {fileID: 2020796062}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FlyingEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -5331,7 +5331,7 @@ GameObject:
   - component: {fileID: 2131422801}
   - component: {fileID: 2131422800}
   - component: {fileID: 2131422799}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

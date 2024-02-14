@@ -39,6 +39,10 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("着弾した物体を後ろに押す")]
     [SerializeField] float impactForce = 30.0f;
 
+    public bool isTargethit = false;
+    float localCameraSpeedX;
+    float localCameraSpeedY;
+
 #if UNITY_EDITOR
     bool isActiveDebug = false;//エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用
 #endif
@@ -201,6 +205,33 @@ public class PlayerCamera : MonoBehaviour
         float x_Rotation = Input.GetAxis("Mouse X");
         float y_Rotation = Input.GetAxis("Mouse Y");
 
+        localCameraSpeedX = cameraSpeedX;
+        localCameraSpeedY = cameraSpeedY;
+
+        if (Player.singletonInstance.IsAim == true)
+        {
+            //ターゲットにあたった際にカメラを遅くする処理
+            Ray ray = new Ray(this.transform.position, this.transform.forward);
+            Debug.DrawRay(ray.origin, ray.direction * 20.0f, Color.gray, 1.0f);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
+            {
+                isTargethit = false;
+
+                if (hit.collider.gameObject.tag == "Enemy")
+                {
+                    //半分の速さにする
+                    localCameraSpeedX = cameraSpeedX / 2;
+                    localCameraSpeedY = cameraSpeedY / 2;
+                    isTargethit = true;
+                }
+            }
+        }
+        else
+        {
+            isTargethit = false;
+        }
+
         //Mathf.Absは絶対値を返す(例)Mathf.Abs(10)なら10、Mathf.Abs(-10)なら10と+だろうが-だろうがプラスの値を返す
         //RotateAround(中心となるワールド座標, 回転軸, 回転角度(度数))関数は、指定の座標を中心にオブジェクトを回転させる関数
 
@@ -208,7 +239,7 @@ public class PlayerCamera : MonoBehaviour
         if (deadZoneX < Mathf.Abs(x_Rotation))
         {
             // 回転軸はワールド座標のY軸
-            this.transform.RotateAround(player.transform.position, Vector3.up, x_Rotation * Time.deltaTime * cameraSpeedX);
+            this.transform.RotateAround(player.transform.position, Vector3.up, x_Rotation * Time.deltaTime * localCameraSpeedX);
         }
 
         // Y方向に一定量移動していれば縦回転
@@ -220,7 +251,7 @@ public class PlayerCamera : MonoBehaviour
             if (324 < cameraAngles && cameraAngles < lookingUpLimit || -10 < cameraAngles && cameraAngles < lookingDownLimit)//ここの各左の数字を変えればカメラの上下の止まる限界値が変わる
             {
                 // 回転軸はカメラ自身のX軸
-                this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * cameraSpeedY);
+                this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
             }
             else
             {
@@ -229,7 +260,7 @@ public class PlayerCamera : MonoBehaviour
                     if (Input.GetAxis("Mouse Y") < 0)
                     {
                         //マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
-                        this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * cameraSpeedY);
+                        this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
 
                     }
                 }
@@ -238,7 +269,7 @@ public class PlayerCamera : MonoBehaviour
                     if (0 < Input.GetAxis("Mouse Y"))
                     {
                         //マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
-                        this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * cameraSpeedY);
+                        this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
 
                     }
 
@@ -277,5 +308,9 @@ public class PlayerCamera : MonoBehaviour
         GUI.Box(new Rect(350, 400, 100, 50), this.transform.position.ToString(), styleRed);
         GUI.Box(new Rect(10, 450, 100, 50), "hitName", styleRed);
         GUI.Box(new Rect(350, 450, 100, 50), hitName, styleRed);
+        GUI.Box(new Rect(10, 550, 100, 50), "localCameraSpeedX", styleRed);
+        GUI.Box(new Rect(350, 550, 100, 50), localCameraSpeedX.ToString(), styleRed);
+        GUI.Box(new Rect(10, 600, 100, 50), "localCameraSpeedY", styleRed);
+        GUI.Box(new Rect(350, 600, 100, 50), localCameraSpeedY.ToString(), styleRed);
     }
 }

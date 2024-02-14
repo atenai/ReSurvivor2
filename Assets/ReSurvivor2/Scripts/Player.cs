@@ -13,8 +13,6 @@ public class Player : MonoBehaviour
     //シングルトンで作成（ゲーム中に１つのみにする）
     public static Player singletonInstance = null;
 
-    [Tooltip("プレイヤーカメラ")]
-    //[SerializeField] GameObject playerCamera;
     [SerializeField] Animator animator;
     [SerializeField] Rigidbody rb;
     [SerializeField] float normalMoveSpeed = 1.0f;
