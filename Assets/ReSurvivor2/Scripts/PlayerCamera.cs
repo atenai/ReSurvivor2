@@ -20,6 +20,15 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("Y軸のカメラの入力デッドゾーン")]
     [Range(0.001f, 0.1f)] public float deadZoneY = 0.1f;
 
+    [Tooltip("レティクルの中心点（レイキャスト）にターゲットがヒットしてるか？")]
+    public bool isTargethit = false;
+    [Tooltip("ローカルで計算する為のX軸のカメラの回転スピード")]
+    float localCameraSpeedX;
+    [Tooltip("ローカルで計算する為のY軸のカメラの回転スピード")]
+    float localCameraSpeedY;
+    [Tooltip("カメラのスピードを遅くする")]
+    float slowDownCameraSpeed = 4;
+
     string hitName = "";
     [Tooltip("レイの長さ")]
     [SerializeField] float range = 100.0f;
@@ -38,10 +47,6 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] GameObject impactEffect;
     [Tooltip("着弾した物体を後ろに押す")]
     [SerializeField] float impactForce = 30.0f;
-
-    public bool isTargethit = false;
-    float localCameraSpeedX;
-    float localCameraSpeedY;
 
 #if UNITY_EDITOR
     bool isActiveDebug = false;//エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用
@@ -218,16 +223,16 @@ public class PlayerCamera : MonoBehaviour
             {
                 isTargethit = false;
 
-                if (hit.collider.gameObject.tag == "Enemy")
+                if (hit.collider.gameObject.CompareTag("Enemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
                 {
-                    //半分の速さにする
-                    localCameraSpeedX = cameraSpeedX / 2;
-                    localCameraSpeedY = cameraSpeedY / 2;
+                    //カメラの速さを遅くする
+                    localCameraSpeedX = cameraSpeedX / slowDownCameraSpeed;
+                    localCameraSpeedY = cameraSpeedY / slowDownCameraSpeed;
                     isTargethit = true;
                 }
             }
         }
-        else
+        else if (Player.singletonInstance.IsAim == false)
         {
             isTargethit = false;
         }
@@ -261,7 +266,6 @@ public class PlayerCamera : MonoBehaviour
                     {
                         //マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
                         this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
-
                     }
                 }
                 else
@@ -270,7 +274,6 @@ public class PlayerCamera : MonoBehaviour
                     {
                         //マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
                         this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
-
                     }
 
                 }
