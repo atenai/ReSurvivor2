@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Knife.Effects;
-using Unity.Mathematics;
 
 public class PlayerCamera : MonoBehaviour
 {
+    //シングルトンで作成（ゲーム中に１つのみにする）
+    public static PlayerCamera singletonInstance = null;
+
     [SerializeField] GameObject player;
 
     [Tooltip("X軸のカメラの回転スピード")]
@@ -24,7 +26,7 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("銃のダメージ")]
     [SerializeField] float Damage = 10.0f;
     [Tooltip("何秒間隔で撃つか")]
-    [SerializeField] float fireRate = 0.2f;
+    [SerializeField] float fireRate = 0.1f;
     [Tooltip("時間カウント用のタイマー")]
     float countTimer = 0.0f;
 
@@ -41,6 +43,19 @@ public class PlayerCamera : MonoBehaviour
     bool isActiveDebug = false;//エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用
 #endif
 
+    void Awake()
+    {
+        //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
+        if (singletonInstance == null)
+        {
+            singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、Playerのインスタンスという意味になります。
+        }
+        else
+        {
+            Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
+        }
+    }
+
     IEnumerator Start()
     {
 #if UNITY_EDITOR
@@ -53,11 +68,11 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
-        if (player.GetComponent<Player>().IsAim == false)
+        if (Player.singletonInstance.IsAim == false)
         {
 
         }
-        else if (player.GetComponent<Player>().IsAim == true)
+        else if (Player.singletonInstance.IsAim == true)
         {
             if (Input.GetMouseButton(0) && countTimer <= 0.0f)//カウントタイマーが0以下かつ左クリックをしている場合は中身を実行する
             {
@@ -84,11 +99,11 @@ public class PlayerCamera : MonoBehaviour
 #endif
 
         //SRT
-        if (player.GetComponent<Player>().IsAim == false)
+        if (Player.singletonInstance.IsAim == false)
         {
             CameraNormalMove();
         }
-        else if (player.GetComponent<Player>().IsAim == true)
+        else if (Player.singletonInstance.IsAim == true)
         {
             CameraWeaponMove();
         }
@@ -163,7 +178,7 @@ public class PlayerCamera : MonoBehaviour
         //通常のカメラ位置をプレイヤーの座標位置から計算
         Vector3 cameraPos = player.transform.position + (Vector3.up * 2) + (this.transform.forward * -5);
         //カメラの位置を移動させる
-        this.transform.position = Vector3.Lerp(transform.position, cameraPos, player.GetComponent<Player>().NormalMoveSpeed * 10 * Time.deltaTime);
+        this.transform.position = Vector3.Lerp(transform.position, cameraPos, Player.singletonInstance.NormalMoveSpeed * 10 * Time.deltaTime);
     }
 
     /// <summary>
@@ -174,7 +189,7 @@ public class PlayerCamera : MonoBehaviour
         //通常のカメラ位置をプレイヤーの座標位置から計算
         Vector3 cameraPos = player.transform.position + (player.transform.right * 0.5f) + (Vector3.up * 1.6f) + (this.transform.forward * -0.5f);
         //カメラの位置を移動させる
-        this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, player.GetComponent<Player>().WeaponMoveSpeed * 10 * Time.deltaTime);
+        this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, Player.singletonInstance.WeaponMoveSpeed * 10 * Time.deltaTime);
     }
 
     /// <summary>

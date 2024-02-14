@@ -10,8 +10,11 @@ public class Player : MonoBehaviour
     //引数名は「_小文字」から始める（_test）
     //アニメーション変数名は「型の最初の文字の_小文字から始める」（f_test）
 
+    //シングルトンで作成（ゲーム中に１つのみにする）
+    public static Player singletonInstance = null;
+
     [Tooltip("プレイヤーカメラ")]
-    [SerializeField] GameObject playerCamera;
+    //[SerializeField] GameObject playerCamera;
     [SerializeField] Animator animator;
     [SerializeField] Rigidbody rb;
     [SerializeField] float normalMoveSpeed = 1.0f;
@@ -31,6 +34,19 @@ public class Player : MonoBehaviour
     [Tooltip("キャラクターの右肩ボーン")]
     [SerializeField] Transform upperarm_r;
     bool isAnimationRotInit = false;
+
+    void Awake()
+    {
+        //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
+        if (singletonInstance == null)
+        {
+            singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、Playerのインスタンスという意味になります。
+        }
+        else
+        {
+            Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
+        }
+    }
 
     void Start()
     {
@@ -88,7 +104,7 @@ public class Player : MonoBehaviour
             //エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値（アニメーション問題が解消されたらこの処理は消す！）
             const float aimAnimationRotX = 12.5f;
             //腰のボーンの角度をカメラの向きにする
-            spine_03.rotation = Quaternion.Euler(playerCamera.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
+            spine_03.rotation = Quaternion.Euler(PlayerCamera.singletonInstance.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
             isAnimationRotInit = true;
         }
         else if (isAim == false)
@@ -114,7 +130,7 @@ public class Player : MonoBehaviour
             const float aimAnimationRotX = 12.5f;
             const float aimAnimationRotY = 12.5f;
             //右肩のボーンの角度をカメラの向きにする
-            upperarm_r.rotation = Quaternion.Euler(playerCamera.transform.localEulerAngles.x + aimAnimationRotX, upperarm_r.eulerAngles.y + aimAnimationRotY, upperarm_r.eulerAngles.z);
+            upperarm_r.rotation = Quaternion.Euler(PlayerCamera.singletonInstance.transform.localEulerAngles.x + aimAnimationRotX, upperarm_r.eulerAngles.y + aimAnimationRotY, upperarm_r.eulerAngles.z);
         }
         else if (isAim == false)
         {

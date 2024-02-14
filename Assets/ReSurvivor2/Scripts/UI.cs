@@ -16,7 +16,7 @@ public class UI : MonoBehaviour
 
     void Update()
     {
-        if (player.GetComponent<Player>().IsAim == false)
+        if (Player.singletonInstance.IsAim == false)
         {
             imageCrosshair.gameObject.SetActive(false);
         }
