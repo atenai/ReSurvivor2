@@ -1,6 +1,6 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] Animator animator;
     [SerializeField] Rigidbody rb;
+
+    [Header("キャラクターの移動")]
     [SerializeField] float normalMoveSpeed = 1.0f;
     public float NormalMoveSpeed => normalMoveSpeed;
     [SerializeField] float weaponMoveSpeed = 1.0f;
@@ -25,13 +27,15 @@ public class Player : MonoBehaviour
     Vector3 cameraForward;
     bool isAim = false;
     public bool IsAim => isAim;
+
+    [Header("キャラクターモデル")]
     [Tooltip("キャラクターの脊椎ボーン")]
     [SerializeField] Transform spine_03;
     [Tooltip("キャラクターの脊椎ボーンの初期値")]
     float spine_03_InitEulerAnglesX;
+    bool isAnimationRotInit = false;
     [Tooltip("キャラクターの右肩ボーン")]
     [SerializeField] Transform upperarm_r;
-    bool isAnimationRotInit = false;
 
     void Awake()
     {

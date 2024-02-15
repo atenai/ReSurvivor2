@@ -68,7 +68,7 @@ public class PlayerCamera : MonoBehaviour
         //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
         if (singletonInstance == null)
         {
-            singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、Playerのインスタンスという意味になります。
+            singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、PlayerCameraのインスタンスという意味になります。
         }
         else
         {
@@ -170,11 +170,10 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// 着弾エフェクト
     /// </summary> 
     void AssaultRifleImpactEffect(RaycastHit _hit)
     {
-        //着弾エフェクト
         GameObject impactGameObject = Instantiate(assaultRifleImpactEffect, _hit.point, Quaternion.LookRotation(_hit.normal));
         Destroy(impactGameObject, 2.0f);
     }
