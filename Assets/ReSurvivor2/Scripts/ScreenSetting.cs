@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class ScreenSetting : MonoBehaviour
 {
-    private void Awake()
+    void Awake()
     {
 #if UNITY_ANDROID//端末がAndroidだった場合の処理
 
@@ -26,8 +26,8 @@ public class ScreenSetting : MonoBehaviour
     void Update()
     {
 #if UNITY_EDITOR//Unityエディター上での処理
-        //Cキーでマウスカーソルを出す
-        if (Input.GetKeyDown(KeyCode.C))
+        //Tキーでマウスカーソルを出す
+        if (Input.GetKeyDown(KeyCode.T))
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;

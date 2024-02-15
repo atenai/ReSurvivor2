@@ -1139,6 +1139,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ReSurvivorPlayerModel2
       objectReference: {fileID: 0}
+    - target: {fileID: 3928207666627217745, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4451839722221229035, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
