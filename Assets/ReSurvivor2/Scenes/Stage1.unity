@@ -1137,7 +1137,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3928207666627217745, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
       propertyPath: m_Name
-      value: ReSurvivorPlayer
+      value: ReSurvivorPlayerModel2
       objectReference: {fileID: 0}
     - target: {fileID: 4451839722221229035, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1600,14 +1600,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 910668650}
     m_Modifications:
-    - target: {fileID: 4386617064795287657, guid: 7259ac001a3ad0f4299033c2cefb3f27, type: 3}
-      propertyPath: m_Name
-      value: WeaponScar
-      objectReference: {fileID: 0}
-    - target: {fileID: 5146968937711718076, guid: 7259ac001a3ad0f4299033c2cefb3f27, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5146968937711718076, guid: 7259ac001a3ad0f4299033c2cefb3f27, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1650,27 +1642,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5150965353703834954, guid: 7259ac001a3ad0f4299033c2cefb3f27, type: 3}
       propertyPath: m_Name
-      value: PlayerModel
+      value: ReSurvivorPlayerModel1
       objectReference: {fileID: 0}
     - target: {fileID: 5150965353703834954, guid: 7259ac001a3ad0f4299033c2cefb3f27, type: 3}
       propertyPath: m_IsActive
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6568100302447000229, guid: 7259ac001a3ad0f4299033c2cefb3f27, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.010359719
-      objectReference: {fileID: 0}
-    - target: {fileID: 6568100302447000229, guid: 7259ac001a3ad0f4299033c2cefb3f27, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.09774822
-      objectReference: {fileID: 0}
-    - target: {fileID: 6821100108899823997, guid: 7259ac001a3ad0f4299033c2cefb3f27, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.010359727
-      objectReference: {fileID: 0}
-    - target: {fileID: 6821100108899823997, guid: 7259ac001a3ad0f4299033c2cefb3f27, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.09774822
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2896,11 +2872,6 @@ MonoBehaviour:
   - {fileID: 1720375918}
   assaultRifleAfterFireSmoke: {fileID: 432052236}
   assaultRifleImpactEffect: {fileID: 1245417074158469956, guid: f950286ed3ac28a44812aed065adb549, type: 3}
-  shotEmitters:
-  - {fileID: 2035212891}
-  - {fileID: 1720375918}
-  afterFireSmoke: {fileID: 432052236}
-  impactEffect: {fileID: 1245417074158469956, guid: f950286ed3ac28a44812aed065adb549, type: 3}
 --- !u!1 &1245628006
 GameObject:
   m_ObjectHideFlags: 0
@@ -5046,7 +5017,7 @@ GameObject:
   - component: {fileID: 2018336411}
   - component: {fileID: 2018336410}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: PlayerCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
