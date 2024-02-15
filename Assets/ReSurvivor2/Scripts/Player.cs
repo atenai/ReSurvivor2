@@ -99,7 +99,6 @@ public class Player : MonoBehaviour
     {
         if (isAim == true)
         {
-            //エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値（アニメーション問題が解消されたらこの処理は消す！）
             const float aimAnimationRotX = 12.5f;
             //腰のボーンの角度をカメラの向きにする
             spine_03.rotation = Quaternion.Euler(PlayerCamera.singletonInstance.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
@@ -140,7 +139,7 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         NormalMove();
-        WeaponMove();
+        AimMove();
     }
 
     /// プレイヤーの移動はフルスクラッチする、何故ならTPSで通常カメラと肩越しカメラとで移動やアニメーションを切り替える必要がある為
@@ -181,7 +180,7 @@ public class Player : MonoBehaviour
     /// <summary>
     /// 構えた状態移動
     /// </summary>
-    void WeaponMove()
+    void AimMove()
     {
         if (isAim == false)
         {

@@ -10,6 +10,9 @@ public class PlayerCamera : MonoBehaviour
 
     [SerializeField] GameObject player;
 
+    [Header("カメラ")]
+    [Tooltip("エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用")]
+    bool isActiveCamera = false;
     [Tooltip("X軸のカメラの回転スピード")]
     [Range(50, 150)][SerializeField] float normalCameraSpeedX = 100;
     [Tooltip("Y軸のカメラの回転スピード")]
@@ -35,31 +38,30 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("カメラのスピードを遅くする")]
     [Range(1.0f, 4.0f)] float slowDownCameraSpeed = 2.0f;
 
+    [Header("レイキャスト")]
     [Tooltip("ヒットしたオブジェクトの名前")]
     string hitName = "";
     [Tooltip("レイの長さ")]
     [SerializeField] float range = 100.0f;
     [Tooltip("銃のダメージ")]
     [SerializeField] float Damage = 10.0f;
-    [Tooltip("何秒間隔で撃つか")]
-    [SerializeField] float fireRate = 0.1f;
-    [Tooltip("時間カウント用のタイマー")]
-    float countTimer = 0.0f;
     [Tooltip("着弾した物体を後ろに押す")]
     [SerializeField] float impactForce = 30.0f;
 
-    //↓アセットストアのプログラム↓//
-    [Tooltip("マズルフラッシュ、薬莢")]
-    [SerializeField] ParticleGroupEmitter[] shotEmitters;
-    [Tooltip("硝煙")]
-    [SerializeField] ParticleGroupPlayer afterFireSmoke;
-    [Tooltip("着弾エフェクト")]
-    [SerializeField] GameObject impactEffect;
-    //↑アセットストアのプログラム↑//
+    [Header("アサルトライフル")]
+    [Tooltip("アサルトライフルを何秒間隔で撃つか")]
+    [SerializeField] float assaultRifleFireRate = 0.1f;
+    [Tooltip("アサルトライフルの射撃間隔の時間カウント用のタイマー")]
+    float assaultRifleCountTimer = 0.0f;
 
-#if UNITY_EDITOR
-    bool isActiveDebug = false;//エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用
-#endif
+    //↓アセットストアのプログラム↓//
+    [Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
+    [SerializeField] ParticleGroupEmitter[] assaultRifleShotEmitters;
+    [Tooltip("アサルトライフルの硝煙")]
+    [SerializeField] ParticleGroupPlayer assaultRifleAfterFireSmoke;
+    [Tooltip("アサルトライフルの着弾エフェクト")]
+    [SerializeField] GameObject assaultRifleImpactEffect;
+    //↑アセットストアのプログラム↑//
 
     void Awake()
     {
@@ -76,66 +78,47 @@ public class PlayerCamera : MonoBehaviour
 
     IEnumerator Start()
     {
-#if UNITY_EDITOR
+        //起動時のロードの際にマウスの入力でカメラが思わぬ方向に動いてしまうので、1秒間カメラ操作を受け付けなくする（ここの処理をごまかす為、ゲーム開始時にフェードイン・フェードアウトを行う）
         yield return new WaitForSeconds(1.0f);
-        isActiveDebug = true;
-#endif
+        isActiveCamera = true;
 
         yield return null;
     }
 
     void Update()
     {
-        if (Player.singletonInstance.IsAim == false)
-        {
+        AssaultRifleShoot();
+    }
 
-        }
-        else if (Player.singletonInstance.IsAim == true)
+    /// <summary>
+    /// アサルトライフルで射撃
+    /// </summary> 
+    void AssaultRifleShoot()
+    {
+        if (Player.singletonInstance.IsAim == true)
         {
-            if (Input.GetMouseButton(0) && countTimer <= 0.0f)//カウントタイマーが0以下かつ左クリックをしている場合は中身を実行する
+            if (Input.GetMouseButton(0) && assaultRifleCountTimer <= 0.0f)//カウントタイマーが0以下かつ左クリックをしている場合は中身を実行する
             {
-                Shoot();
-                countTimer = fireRate;//カウントタイマーに射撃を待つ時間を入れる
+                AssaultRifleFire();
+                assaultRifleCountTimer = assaultRifleFireRate;//カウントタイマーに射撃を待つ時間を入れる
             }
         }
 
         //カウントタイマーが0以上なら中身を実行する
-        if (0.0f < countTimer)
+        if (0.0f < assaultRifleCountTimer)
         {
             //カウントタイマーを減らす
-            countTimer = countTimer - Time.deltaTime;
+            assaultRifleCountTimer = assaultRifleCountTimer - Time.deltaTime;
         }
-    }
-
-    void FixedUpdate()
-    {
-#if UNITY_EDITOR
-        if (isActiveDebug == false)
-        {
-            return;
-        }
-#endif
-
-        //SRT
-        if (Player.singletonInstance.IsAim == false)
-        {
-            CameraNormalMove();
-        }
-        else if (Player.singletonInstance.IsAim == true)
-        {
-            CameraWeaponMove();
-        }
-
-        CameraRot();
     }
 
     /// <summary>
-    /// 射撃
+    /// 弾を発射
     /// </summary> 
-    void Shoot()
+    void AssaultRifleFire()
     {
-        MuzzleFlash();
-        Smoke();
+        AssaultRifleMuzzleFlash();
+        AssaultRifleSmoke();
 
         Ray ray = new Ray(this.transform.position, this.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * 20.0f, Color.red, 10.0f);
@@ -157,20 +140,18 @@ public class PlayerCamera : MonoBehaviour
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
             }
 
-            //着弾エフェクト
-            GameObject impactGameObject = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-            Destroy(impactGameObject, 2.0f);
+            AssaultRifleImpactEffect(hit);
         }
     }
 
     /// <summary>
     /// マズルフラッシュのエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
     /// </summary>
-    void MuzzleFlash()
+    void AssaultRifleMuzzleFlash()
     {
-        if (shotEmitters != null)
+        if (assaultRifleShotEmitters != null)
         {
-            foreach (var e in shotEmitters)
+            foreach (var e in assaultRifleShotEmitters)
             {
                 e.Emit(1);
             }
@@ -180,12 +161,42 @@ public class PlayerCamera : MonoBehaviour
     /// <summary>
     /// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
     /// </summary>
-    void Smoke()
+    void AssaultRifleSmoke()
     {
-        if (afterFireSmoke != null)
+        if (assaultRifleAfterFireSmoke != null)
         {
-            afterFireSmoke.Play();
+            assaultRifleAfterFireSmoke.Play();
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary> 
+    void AssaultRifleImpactEffect(RaycastHit _hit)
+    {
+        //着弾エフェクト
+        GameObject impactGameObject = Instantiate(assaultRifleImpactEffect, _hit.point, Quaternion.LookRotation(_hit.normal));
+        Destroy(impactGameObject, 2.0f);
+    }
+
+    void FixedUpdate()
+    {
+        if (isActiveCamera == false)
+        {
+            return;
+        }
+
+        //SRT
+        if (Player.singletonInstance.IsAim == false)
+        {
+            CameraNormalMove();
+        }
+        else if (Player.singletonInstance.IsAim == true)
+        {
+            CameraAimMove();
+        }
+
+        CameraRot();
     }
 
     /// <summary>
@@ -202,10 +213,10 @@ public class PlayerCamera : MonoBehaviour
     /// <summary>
     /// 肩越しカメラ
     /// </summary>
-    void CameraWeaponMove()
+    void CameraAimMove()
     {
         //通常のカメラ位置をプレイヤーの座標位置から計算
-        Vector3 cameraPos = player.transform.position + (player.transform.right * 0.5f) + (Vector3.up * 1.6f) + (this.transform.forward * -0.5f);
+        Vector3 cameraPos = player.transform.position + (player.transform.right * 0.5f) + (Vector3.up * 1.6f) + (this.transform.forward * -0.6f);
         //カメラの位置を移動させる
         this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, Player.singletonInstance.WeaponMoveSpeed * 10 * Time.deltaTime);
     }

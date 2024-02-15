@@ -2881,20 +2881,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 910668649}
-  cameraSpeedX: 100
-  cameraSpeedY: 50
+  normalCameraSpeedX: 100
+  normalCameraSpeedY: 50
+  aimCameraSpeedX: 50
+  aimCameraSpeedY: 25
   deadZoneX: 0.1
   deadZoneY: 0.1
-  isTargethit: 0
   range: 100
   Damage: 10
-  fireRate: 0.1
+  impactForce: 30
+  assaultRifleFireRate: 0.1
+  assaultRifleShotEmitters:
+  - {fileID: 2035212891}
+  - {fileID: 1720375918}
+  assaultRifleAfterFireSmoke: {fileID: 432052236}
+  assaultRifleImpactEffect: {fileID: 1245417074158469956, guid: f950286ed3ac28a44812aed065adb549, type: 3}
   shotEmitters:
   - {fileID: 2035212891}
   - {fileID: 1720375918}
   afterFireSmoke: {fileID: 432052236}
   impactEffect: {fileID: 1245417074158469956, guid: f950286ed3ac28a44812aed065adb549, type: 3}
-  impactForce: 30
 --- !u!1 &1245628006
 GameObject:
   m_ObjectHideFlags: 0
