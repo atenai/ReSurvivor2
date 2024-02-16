@@ -215,7 +215,10 @@ public class PlayerCamera : MonoBehaviour
     void CameraAimMove()
     {
         //通常のカメラ位置をプレイヤーの座標位置から計算
-        Vector3 cameraPos = player.transform.position + (player.transform.right * 0.5f) + (Vector3.up * 1.6f) + (this.transform.forward * -0.6f);
+        const float aimRightPos = 0.6f;
+        const float aimUpPos = 1.6f;
+        const float aimForwardPos = -0.6f;
+        Vector3 cameraPos = player.transform.position + (player.transform.right * aimRightPos) + (Vector3.up * aimUpPos) + (this.transform.forward * aimForwardPos);
         //カメラの位置を移動させる
         this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, Player.singletonInstance.WeaponMoveSpeed * 10 * Time.deltaTime);
     }
