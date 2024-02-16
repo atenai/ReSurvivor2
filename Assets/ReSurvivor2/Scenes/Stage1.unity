@@ -1146,6 +1146,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 910668650}
     m_Modifications:
+    - target: {fileID: 642769308812135902, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2121356204759683240, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3928207666627217745, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
       propertyPath: m_Name
       value: ReSurvivorPlayerModel2
