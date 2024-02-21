@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -37,6 +38,13 @@ public class Player : MonoBehaviour
     [Tooltip("キャラクターの右肩ボーン")]
     [SerializeField] Transform upperarm_r;
 
+    //HP
+    float currentHp = 100.0f;
+    [SerializeField] float maxHp = 100.0f;
+    [SerializeField] Canvas canvasPlayer;
+    [SerializeField] Slider sliderHp;
+    Vector3 canvasBaseLocalScale;
+
     void Awake()
     {
         //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -53,6 +61,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         InitBoneSpine03();
+        InitHP();
     }
 
     /// <summary>
@@ -62,6 +71,13 @@ public class Player : MonoBehaviour
     {
         //キャラクターの脊椎ボーンの初期値を取得する（真正面に戻す際に必要なため）
         spine_03_InitEulerAnglesX = spine_03.eulerAngles.x;
+    }
+
+    void InitHP()
+    {
+        canvasBaseLocalScale = canvasPlayer.transform.localScale;
+        sliderHp.value = 1;
+        currentHp = maxHp;
     }
 
     void Update()
@@ -80,6 +96,17 @@ public class Player : MonoBehaviour
         }
 
         NormalMoveAnimation();
+
+        if (isAim == false)
+        {
+            //常にキャンバスをメインカメラの方を向かせる
+            canvasPlayer.transform.rotation = Camera.main.transform.rotation;
+        }
+        else if (isAim == true)
+        {
+            //常にキャンバスをメインカメラの方を向かせる
+            canvasPlayer.transform.rotation = Camera.main.transform.rotation;
+        }
     }
 
     void NormalMoveAnimation()
@@ -216,6 +243,28 @@ public class Player : MonoBehaviour
     {
         Ray debugRayVelocity = new Ray(this.transform.position, rb.velocity);
         Debug.DrawRay(debugRayVelocity.origin, debugRayVelocity.direction, Color.magenta);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag == "Enemy" || collision.collider.tag == "FlyingEnemy" || collision.collider.tag == "GroundEnemy")
+        {
+            TakeDamage(10.0f);
+        }
+    }
+
+    /// <summary>
+    /// ダメージ処理
+    /// </summary>
+    public void TakeDamage(float amount)
+    {
+        currentHp = currentHp - amount;
+        Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
+        sliderHp.value = (float)currentHp / (float)maxHp;
+        if (currentHp <= 0.0f)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     void OnGUI()

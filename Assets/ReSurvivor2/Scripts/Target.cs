@@ -19,9 +19,12 @@ public class Target : MonoBehaviour
     void Update()
     {
         //常にキャンバスをメインカメラの方を向かせる
-        canvas.transform.LookAt(Camera.main.transform);
+        canvas.transform.rotation = Camera.main.transform.rotation;
     }
 
+    /// <summary>
+    /// ダメージ処理
+    /// </summary>
     public void TakeDamage(float amount)
     {
         currentHp = currentHp - amount;
