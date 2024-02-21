@@ -127,17 +127,20 @@ public class PlayerCamera : MonoBehaviour
         {
             hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 
-            //ダメージ
-            Target target = hit.transform.GetComponent<Target>();
-            if (target != null)
+            if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
             {
-                target.TakeDamage(Damage);
-            }
+                //ダメージ
+                Target target = hit.transform.GetComponent<Target>();
+                if (target != null)
+                {
+                    target.TakeDamage(Damage);
+                }
 
-            //着弾した物体を後ろに押す
-            if (hit.rigidbody != null)
-            {
-                hit.rigidbody.AddForce(-hit.normal * impactForce);
+                //着弾した物体を後ろに押す
+                if (hit.rigidbody != null)
+                {
+                    hit.rigidbody.AddForce(-hit.normal * impactForce);
+                }
             }
 
             AssaultRifleImpactEffect(hit);
@@ -244,7 +247,7 @@ public class PlayerCamera : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
             {
-                if (hit.collider.gameObject.CompareTag("Enemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+                if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
                 {
                     //カメラの速さを遅くする
                     localCameraSpeedX = aimCameraSpeedX / slowDownCameraSpeed;

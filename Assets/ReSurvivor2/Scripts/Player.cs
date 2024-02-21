@@ -43,7 +43,6 @@ public class Player : MonoBehaviour
     [SerializeField] float maxHp = 100.0f;
     [SerializeField] Canvas canvasPlayer;
     [SerializeField] Slider sliderHp;
-    Vector3 canvasBaseLocalScale;
 
     void Awake()
     {
@@ -75,7 +74,6 @@ public class Player : MonoBehaviour
 
     void InitHP()
     {
-        canvasBaseLocalScale = canvasPlayer.transform.localScale;
         sliderHp.value = 1;
         currentHp = maxHp;
     }
