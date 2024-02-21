@@ -257,11 +257,11 @@ public class Player : MonoBehaviour
     public void TakeDamage(float amount)
     {
         currentHp = currentHp - amount;
-        Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
+        //Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
         sliderHp.value = (float)currentHp / (float)maxHp;
         if (currentHp <= 0.0f)
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
         }
     }
 
