@@ -29,7 +29,7 @@ public class UI : MonoBehaviour
 
     void Update()
     {
-        if (Player.singletonInstance.IsAim == false)
+        if (Player.SingletonInstance.IsAim == false)
         {
             imageCrosshair.gameObject.SetActive(false);
         }

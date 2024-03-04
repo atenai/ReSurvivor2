@@ -95,7 +95,7 @@ public class PlayerCamera : MonoBehaviour
     /// </summary> 
     void AssaultRifleShoot()
     {
-        if (Player.singletonInstance.IsAim == true)
+        if (Player.SingletonInstance.IsAim == true)
         {
             if (Input.GetMouseButton(0) && assaultRifleCountTimer <= 0.0f)//カウントタイマーが0以下かつ左クリックをしている場合は中身を実行する
             {
@@ -189,11 +189,11 @@ public class PlayerCamera : MonoBehaviour
         }
 
         //SRT
-        if (Player.singletonInstance.IsAim == false)
+        if (Player.SingletonInstance.IsAim == false)
         {
             CameraNormalMove();
         }
-        else if (Player.singletonInstance.IsAim == true)
+        else if (Player.SingletonInstance.IsAim == true)
         {
             CameraAimMove();
         }
@@ -209,7 +209,7 @@ public class PlayerCamera : MonoBehaviour
         //通常のカメラ位置をプレイヤーの座標位置から計算
         Vector3 cameraPos = player.transform.position + (Vector3.up * 2) + (this.transform.forward * -5);
         //カメラの位置を移動させる
-        this.transform.position = Vector3.Lerp(transform.position, cameraPos, Player.singletonInstance.NormalMoveSpeed * 10 * Time.deltaTime);
+        this.transform.position = Vector3.Lerp(transform.position, cameraPos, Player.SingletonInstance.NormalMoveSpeed * 10 * Time.deltaTime);
     }
 
     /// <summary>
@@ -223,7 +223,7 @@ public class PlayerCamera : MonoBehaviour
         const float aimForwardPos = -0.6f;
         Vector3 cameraPos = player.transform.position + (player.transform.right * aimRightPos) + (Vector3.up * aimUpPos) + (this.transform.forward * aimForwardPos);
         //カメラの位置を移動させる
-        this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, Player.singletonInstance.WeaponMoveSpeed * 10 * Time.deltaTime);
+        this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, Player.SingletonInstance.WeaponMoveSpeed * 10 * Time.deltaTime);
     }
 
     /// <summary>
@@ -235,7 +235,7 @@ public class PlayerCamera : MonoBehaviour
         float x_Rotation = Input.GetAxis("Mouse X");
         float y_Rotation = Input.GetAxis("Mouse Y");
 
-        if (Player.singletonInstance.IsAim == true)
+        if (Player.SingletonInstance.IsAim == true)
         {
             localCameraSpeedX = aimCameraSpeedX;
             localCameraSpeedY = aimCameraSpeedY;
@@ -256,7 +256,7 @@ public class PlayerCamera : MonoBehaviour
                 }
             }
         }
-        else if (Player.singletonInstance.IsAim == false)
+        else if (Player.SingletonInstance.IsAim == false)
         {
             localCameraSpeedX = normalCameraSpeedX;
             localCameraSpeedY = normalCameraSpeedY;

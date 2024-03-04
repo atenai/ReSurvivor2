@@ -12,7 +12,8 @@ public class Player : MonoBehaviour
     //アニメーション変数名は「型の最初の文字の_小文字から始める」（f_test）
 
     //シングルトンで作成（ゲーム中に１つのみにする）
-    public static Player singletonInstance = null;
+    static Player singletonInstance = null;
+    public static Player SingletonInstance => singletonInstance;
 
     [SerializeField] Animator animator;
     [SerializeField] Rigidbody rb;
