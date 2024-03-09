@@ -435,9 +435,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7bf7a95e26172f4483d5975fc1c48ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel_Loading: {fileID: 349603459}
   slider_Loading: {fileID: 2098206477}
   sceneName: Stage2
+  spawnPos: {fileID: 0}
 --- !u!1 &108845526
 GameObject:
   m_ObjectHideFlags: 0
@@ -2283,6 +2283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageCrosshair: {fileID: 1630503015}
+  panelLoading: {fileID: 349603459}
 --- !u!114 &968781464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2705,7 +2706,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyController:
-    target: {fileID: 0}
     moveSpeed: 2
     rotationSpeed: 1
     rb: {fileID: 1088958010}
@@ -3400,7 +3400,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ca4427f9bce6134a9edbb25a5ede12d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
   normalCameraSpeedX: 100
   normalCameraSpeedY: 50
   aimCameraSpeedX: 50
@@ -4830,7 +4829,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyController:
-    target: {fileID: 0}
     moveSpeed: 2
     rotationSpeed: 1
     rb: {fileID: 1571170940}
@@ -6665,9 +6663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7754e0f3451b14ba0fa1e0f5e36f0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flyingEnemyController:
-    target: {fileID: 0}
-    rb: {fileID: 2020796056}
+  rb: {fileID: 2020796056}
   colliders:
   - {fileID: 61359426}
   - {fileID: 108845532}

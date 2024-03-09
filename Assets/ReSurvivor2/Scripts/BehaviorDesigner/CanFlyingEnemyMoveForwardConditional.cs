@@ -8,7 +8,6 @@ using UnityEngine;
 public class CanFlyingEnemyMoveForwardConditional : Conditional
 {
     FlyingEnemy flyingEnemy;
-    FlyingEnemyController flyingEnemyController;
 
     [UnityEngine.Tooltip("配列に設定したコライダーのどの番数目を当たり判定に使うか？を指定する数値")]
     [SerializeField] int checkCollisionIndex = default;
@@ -17,7 +16,6 @@ public class CanFlyingEnemyMoveForwardConditional : Conditional
     public override void OnStart()
     {
         flyingEnemy = this.GetComponent<FlyingEnemy>();
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
     }
 
     // 更新時に呼ばれる
@@ -28,10 +26,10 @@ public class CanFlyingEnemyMoveForwardConditional : Conditional
             // 成功
             Debug.Log("<color=orange>" + checkCollisionIndex + "</color>");
 
-            flyingEnemyController.IsMoveForward = true;
+            flyingEnemy.IsMoveForward = true;
         }
 
-        if (flyingEnemyController.IsMoveForward == true)
+        if (flyingEnemy.IsMoveForward == true)
         {
             //成功
             return TaskStatus.Success;

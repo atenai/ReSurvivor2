@@ -9,18 +9,18 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyRotateToDirectionPlayerAction : Action
 {
-    FlyingEnemyController flyingEnemyController;
+    FlyingEnemy flyingEnemy;
     float t = 0.0f;
     Quaternion lookRotation;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
+        flyingEnemy = this.GetComponent<FlyingEnemy>();
         //Debug.Log("<color=blue>OnStart</color>");
         t = 0.0f;
         //対象オブジェクトの位置 – 自分のオブジェクトの位置 = 対象オブジェクトの向きベクトルが求められる
-        Vector3 direction = flyingEnemyController.Target.transform.position - this.transform.position;
+        Vector3 direction = flyingEnemy.Target.transform.position - this.transform.position;
         //単純に左右だけを見るようにしたいので、y軸の数値を0にする
         direction.y = 0;
         //2点間の角度を求める
@@ -42,7 +42,7 @@ public class FlyingEnemyRotateToDirectionPlayerAction : Action
         const float endRot = 1.0f;
         if (endRot <= t)
         {
-            flyingEnemyController.IsRotateToDirectionPlayer = false;
+            flyingEnemy.IsRotateToDirectionPlayer = false;
             return TaskStatus.Success;
         }
 

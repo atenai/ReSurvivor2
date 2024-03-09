@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyMoveBackAction1 : Action
 {
-    FlyingEnemyController flyingEnemyController;
+    FlyingEnemy flyingEnemy;
 
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
     [SerializeField] float stopPos = 0.1f;
@@ -23,7 +23,7 @@ public class FlyingEnemyMoveBackAction1 : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
+        flyingEnemy = this.GetComponent<FlyingEnemy>();
 
         TargetPos();
         InitMove();
@@ -31,10 +31,10 @@ public class FlyingEnemyMoveBackAction1 : Action
 
     void TargetPos()
     {
-        Vector3 heading = flyingEnemyController.Target.transform.position - this.transform.position;
+        Vector3 heading = flyingEnemy.Target.transform.position - this.transform.position;
         heading.y = 0;
         Vector3 oppositePosition = this.transform.position - heading;
-        oppositePosition.y = flyingEnemyController.Target.transform.position.y;
+        oppositePosition.y = flyingEnemy.Target.transform.position.y;
         targetPos = oppositePosition;//ターゲットの当たった座標位置を取得し保持
 #if UNITY_EDITOR
         GameObject debugGameObject = UnityEngine.Object.Instantiate(obj, targetPos, Quaternion.identity);//プレハブを元に、インスタンスを生成（デバッグ用）
@@ -44,7 +44,7 @@ public class FlyingEnemyMoveBackAction1 : Action
 
     public void InitMove()
     {
-        flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+        flyingEnemy.Rigidbody.velocity = Vector3.zero;
         isMoveEnd = false;
     }
 
@@ -74,12 +74,12 @@ public class FlyingEnemyMoveBackAction1 : Action
 
         if (sqrCurrentDistance <= stopPos)
         {
-            flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+            flyingEnemy.Rigidbody.velocity = Vector3.zero;
             isMoveEnd = true;
-            flyingEnemyController.IsMoveBack = false;
+            flyingEnemy.IsMoveBack = false;
             return;
         }
 
-        flyingEnemyController.Rigidbody.velocity = targetPos - this.transform.position;
+        flyingEnemy.Rigidbody.velocity = targetPos - this.transform.position;
     }
 }

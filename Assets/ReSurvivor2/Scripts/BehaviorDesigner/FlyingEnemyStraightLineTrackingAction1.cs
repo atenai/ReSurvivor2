@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyStraightLineTrackingAction1 : Action
 {
-    FlyingEnemyController flyingEnemyController;
+    FlyingEnemy flyingEnemy;
 
     [UnityEngine.Tooltip("ターゲットの座標位置")]
     Vector3 targetPos;
@@ -31,7 +31,7 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
+        flyingEnemy = this.GetComponent<FlyingEnemy>();
 
         TargetPos();
         InitRotateToDirectionTarget();
@@ -40,9 +40,9 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
     void TargetPos()
     {
-        float xPos = flyingEnemyController.Target.transform.position.x;
-        float yPos = flyingEnemyController.Target.transform.position.y;
-        float zPos = flyingEnemyController.Target.transform.position.z;
+        float xPos = flyingEnemy.Target.transform.position.x;
+        float yPos = flyingEnemy.Target.transform.position.y;
+        float zPos = flyingEnemy.Target.transform.position.z;
         targetPos = new Vector3(xPos, yPos, zPos);
 
 #if UNITY_EDITOR
@@ -68,7 +68,7 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
     void InitMove()
     {
         isMoveEnd = false;
-        flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+        flyingEnemy.Rigidbody.velocity = Vector3.zero;
     }
 
     // 更新時に呼ばれる
@@ -121,11 +121,11 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
         float currentDistance = Vector3.SqrMagnitude(targetPos - this.transform.position);
         if (currentDistance <= stopPos)
         {
-            flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+            flyingEnemy.Rigidbody.velocity = Vector3.zero;
             isMoveEnd = true;
             return;
         }
 
-        flyingEnemyController.Rigidbody.velocity = targetPos - this.transform.position;
+        flyingEnemy.Rigidbody.velocity = targetPos - this.transform.position;
     }
 }

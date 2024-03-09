@@ -5,11 +5,39 @@ using UnityEngine;
 
 public class FlyingEnemy : MonoBehaviour
 {
-    [SerializeField] FlyingEnemyController flyingEnemyController;
-    public FlyingEnemyController FlyingEnemyController
+    GameObject target;
+    public GameObject Target
     {
-        get { return flyingEnemyController; }
-        private set { flyingEnemyController = value; }
+        get { return target; }
+        private set { target = value; }
+    }
+
+    [SerializeField] Rigidbody rb;
+    public Rigidbody Rigidbody
+    {
+        get { return rb; }
+        private set { rb = value; }
+    }
+
+    bool isRotateToDirectionPlayer = false;
+    public bool IsRotateToDirectionPlayer
+    {
+        get { return isRotateToDirectionPlayer; }
+        set { isRotateToDirectionPlayer = value; }
+    }
+
+    bool isMoveForward = false;
+    public bool IsMoveForward
+    {
+        get { return isMoveForward; }
+        set { isMoveForward = value; }
+    }
+
+    bool isMoveBack = false;
+    public bool IsMoveBack
+    {
+        get { return isMoveBack; }
+        set { isMoveBack = value; }
     }
 
     //センサーコライダー用の変数
@@ -27,7 +55,7 @@ public class FlyingEnemy : MonoBehaviour
             i.OnTriggerExitEvent.AddListener(OnTriggerExitHit);
         }
 
-        flyingEnemyController.Target = Player.SingletonInstance.gameObject;
+        target = Player.SingletonInstance.gameObject;
     }
 
     void Update()

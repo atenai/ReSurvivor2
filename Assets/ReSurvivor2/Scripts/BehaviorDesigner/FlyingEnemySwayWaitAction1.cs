@@ -10,7 +10,7 @@ using UnityEngine.Events;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemySwayWaitAction1 : Action
 {
-    FlyingEnemyController flyingEnemyController;
+    FlyingEnemy flyingEnemy;
 
     //ターゲット座標位置の変数系
     Vector3 targetPos;
@@ -36,7 +36,7 @@ public class FlyingEnemySwayWaitAction1 : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
+        flyingEnemy = this.GetComponent<FlyingEnemy>();
 
         TargetPos();
         InitMove();
@@ -66,7 +66,7 @@ public class FlyingEnemySwayWaitAction1 : Action
 
     public void InitMove()
     {
-        flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+        flyingEnemy.Rigidbody.velocity = Vector3.zero;
         isOriginMove = false;
         isEnd = false;
     }
@@ -105,11 +105,11 @@ public class FlyingEnemySwayWaitAction1 : Action
         if (sqrCurrentDistance <= stopPos)
         {
             //Debug.Log("<color=green>目的座標によって止まる</color>");
-            flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+            flyingEnemy.Rigidbody.velocity = Vector3.zero;
             unityAction.Invoke();
         }
 
-        flyingEnemyController.Rigidbody.velocity = pos - this.transform.position;
+        flyingEnemy.Rigidbody.velocity = pos - this.transform.position;
     }
 
     void NextInitializingProcess()

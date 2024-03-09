@@ -10,7 +10,7 @@ using UnityEngine.Events;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemySwayWaitAction : Action
 {
-    FlyingEnemyController flyingEnemyController;
+    FlyingEnemy flyingEnemy;
 
     [UnityEngine.Tooltip("加速度")]
     [SerializeField] float acceleration = 0.001f;
@@ -58,10 +58,10 @@ public class FlyingEnemySwayWaitAction : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
+        flyingEnemy = this.GetComponent<FlyingEnemy>();
         //Debug.Log("<color=blue>OnStart</color>");
         velocity = Vector3.zero;
-        flyingEnemyController.Rigidbody.velocity = velocity;
+        flyingEnemy.Rigidbody.velocity = velocity;
         TargetPos();
         InitMove(targetPos);
         isOriginMove = false;
@@ -246,7 +246,7 @@ public class FlyingEnemySwayWaitAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -259,7 +259,7 @@ public class FlyingEnemySwayWaitAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (0 < velocity.x)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -279,7 +279,7 @@ public class FlyingEnemySwayWaitAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -292,7 +292,7 @@ public class FlyingEnemySwayWaitAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (velocity.x < 0)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -312,7 +312,7 @@ public class FlyingEnemySwayWaitAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -325,7 +325,7 @@ public class FlyingEnemySwayWaitAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (0 < velocity.y)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -345,7 +345,7 @@ public class FlyingEnemySwayWaitAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -358,7 +358,7 @@ public class FlyingEnemySwayWaitAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (velocity.y < 0)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -378,7 +378,7 @@ public class FlyingEnemySwayWaitAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -391,7 +391,7 @@ public class FlyingEnemySwayWaitAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (0 < velocity.x && 0 < velocity.y)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -411,7 +411,7 @@ public class FlyingEnemySwayWaitAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -424,7 +424,7 @@ public class FlyingEnemySwayWaitAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (velocity.x < 0 && 0 < velocity.y)//キャラクターの向きが左を向いているとマイナスになる
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -444,7 +444,7 @@ public class FlyingEnemySwayWaitAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -457,7 +457,7 @@ public class FlyingEnemySwayWaitAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (0 < velocity.x && velocity.y < 0)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -477,7 +477,7 @@ public class FlyingEnemySwayWaitAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -490,7 +490,7 @@ public class FlyingEnemySwayWaitAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (velocity.x < 0 && velocity.y < 0)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -510,7 +510,7 @@ public class FlyingEnemySwayWaitAction : Action
     {
         //Debug.Log("<color=green>velocity.xで止まる</color>");
         velocity = Vector3.zero;
-        flyingEnemyController.Rigidbody.velocity = velocity;
+        flyingEnemy.Rigidbody.velocity = velocity;
         isOriginMove = true;
         InitMove(originPos);
     }
@@ -519,7 +519,7 @@ public class FlyingEnemySwayWaitAction : Action
     {
         //Debug.Log("<color=green>velocity.xで止まる</color>");
         velocity = Vector3.zero;
-        flyingEnemyController.Rigidbody.velocity = velocity;
+        flyingEnemy.Rigidbody.velocity = velocity;
         isEnd = true;
     }
 }

@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyRandomMoveAction1 : Action
 {
-    FlyingEnemyController flyingEnemyController;
+    FlyingEnemy flyingEnemy;
 
     //ターゲット座標位置の変数
     Vector3 targetPos;
@@ -38,7 +38,7 @@ public class FlyingEnemyRandomMoveAction1 : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
+        flyingEnemy = this.GetComponent<FlyingEnemy>();
 
         TargetPos();
         InitRotateToDirectionTarget();
@@ -75,7 +75,7 @@ public class FlyingEnemyRandomMoveAction1 : Action
 
     void InitMove()
     {
-        flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+        flyingEnemy.Rigidbody.velocity = Vector3.zero;
         isMoveEnd = false;
     }
 
@@ -129,11 +129,11 @@ public class FlyingEnemyRandomMoveAction1 : Action
         if (sqrCurrentDistance <= stopPos)
         {
             //Debug.Log("<color=red>移動の終了</color>");
-            flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+            flyingEnemy.Rigidbody.velocity = Vector3.zero;
             isMoveEnd = true;
             return;
         }
 
-        flyingEnemyController.Rigidbody.velocity = targetPos - this.transform.position;
+        flyingEnemy.Rigidbody.velocity = targetPos - this.transform.position;
     }
 }

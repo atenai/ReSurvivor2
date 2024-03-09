@@ -8,7 +8,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyMoveForwardAction : Action
 {
-    FlyingEnemyController flyingEnemyController;
+    FlyingEnemy flyingEnemy;
 
     [SerializeField] float acceleration = 0.1f;//加速度
     [SerializeField] float stopPos = 1.5f;//エネミーが止まってほしい座標の位置
@@ -24,13 +24,13 @@ public class FlyingEnemyMoveForwardAction : Action
 
     public override void OnStart()
     {
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
+        flyingEnemy = this.GetComponent<FlyingEnemy>();
         MoveForwardStart();
     }
 
     public void MoveForwardStart()
     {
-        hitPos = flyingEnemyController.Target.transform.position;
+        hitPos = flyingEnemy.Target.transform.position;
 #if UNITY_EDITOR
         UnityEngine.Object.Instantiate(obj, hitPos, Quaternion.identity);//プレハブを元に、インスタンスを生成（デバッグ用）
 #endif
@@ -62,8 +62,8 @@ public class FlyingEnemyMoveForwardAction : Action
         {
             //Debug.Log("<color=green>目的座標によって止まる</color>");
             velocity = Vector3.zero;
-            flyingEnemyController.Rigidbody.velocity = velocity;
-            flyingEnemyController.IsMoveForward = false;
+            flyingEnemy.Rigidbody.velocity = velocity;
+            flyingEnemy.IsMoveForward = false;
             return true;
         }
 
@@ -71,8 +71,8 @@ public class FlyingEnemyMoveForwardAction : Action
         {
             //Debug.Log("<color=green>目的座標を通りこしてしまった場合のスペアの座標距離で止まる</color>");
             velocity = Vector3.zero;
-            flyingEnemyController.Rigidbody.velocity = velocity;
-            flyingEnemyController.IsMoveForward = false;
+            flyingEnemy.Rigidbody.velocity = velocity;
+            flyingEnemy.IsMoveForward = false;
             return true;
         }
 
@@ -80,24 +80,24 @@ public class FlyingEnemyMoveForwardAction : Action
         if (halfDistance < currentDistance)
         {
             Debug.Log("<color=red>前に加速を追加</color>");
-            velocity = velocity + (flyingEnemyController.Rigidbody.transform.forward * acceleration);
-            flyingEnemyController.Rigidbody.velocity = velocity;
+            velocity = velocity + (flyingEnemy.Rigidbody.transform.forward * acceleration);
+            flyingEnemy.Rigidbody.velocity = velocity;
         }
         else if (currentDistance <= halfDistance)
         {
             Debug.Log("<color=blue>減速</color>");
-            velocity = velocity + (flyingEnemyController.Rigidbody.transform.forward * -acceleration);
+            velocity = velocity + (flyingEnemy.Rigidbody.transform.forward * -acceleration);
             //減速する際に速度がマイナスになって後進してほしくない為
             if (0 < velocity.z)
             {
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else
             {
                 //Debug.Log("<color=green>velocity.yで止まる</color>");
                 velocity = Vector3.zero;
-                flyingEnemyController.Rigidbody.velocity = velocity;
-                flyingEnemyController.IsMoveForward = false;
+                flyingEnemy.Rigidbody.velocity = velocity;
+                flyingEnemy.IsMoveForward = false;
                 return true;
             }
         }

@@ -7831,9 +7831,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7754e0f3451b14ba0fa1e0f5e36f0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flyingEnemyController:
-    target: {fileID: 910668649}
-    rb: {fileID: 2020796056}
+  target: {fileID: 0}
+  rb: {fileID: 2020796056}
   colliders:
   - {fileID: 61359426}
   - {fileID: 108845532}

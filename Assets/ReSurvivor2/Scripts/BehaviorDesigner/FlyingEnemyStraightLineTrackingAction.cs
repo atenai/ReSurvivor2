@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyStraightLineTrackingAction : Action
 {
-    FlyingEnemyController flyingEnemyController;
+    FlyingEnemy flyingEnemy;
 
     [UnityEngine.Tooltip("加速度")]
     [SerializeField] float acceleration = 0.001f;
@@ -61,10 +61,10 @@ public class FlyingEnemyStraightLineTrackingAction : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
+        flyingEnemy = this.GetComponent<FlyingEnemy>();
         //Debug.Log("<color=blue>ランダム移動のOnStart</color>");
         velocity = Vector3.zero;
-        flyingEnemyController.Rigidbody.velocity = velocity;
+        flyingEnemy.Rigidbody.velocity = velocity;
         TargetPos();
         InitRotateToDirectionTarget();
         InitMove(endPos);
@@ -74,9 +74,9 @@ public class FlyingEnemyStraightLineTrackingAction : Action
 
     void TargetPos()
     {
-        float xPos = flyingEnemyController.Target.transform.position.x;
+        float xPos = flyingEnemy.Target.transform.position.x;
         //Debug.Log("<color=red>xPos : " + xPos + "</color>");
-        float yPos = flyingEnemyController.Target.transform.position.y;
+        float yPos = flyingEnemy.Target.transform.position.y;
         //Debug.Log("<color=blue>yPos : " + yPos + "</color>");
         float zPos = 0.0f;
         //Debug.Log("<color=yellow>zPos : " + zPos + "</color>");
@@ -300,7 +300,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -313,7 +313,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (0 < velocity.x)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -333,7 +333,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -346,7 +346,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (velocity.x < 0)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -366,7 +366,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -379,7 +379,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (0 < velocity.y)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -399,7 +399,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -412,7 +412,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (velocity.y < 0)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -432,7 +432,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -445,7 +445,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (0 < velocity.x && 0 < velocity.y)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -465,7 +465,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -478,7 +478,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (velocity.x < 0 && 0 < velocity.y)//キャラクターの向きが左を向いているとflyingEnemy.Rigidbody.transform.forwardはマイナスになる
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -498,7 +498,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -511,7 +511,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (0 < velocity.x && velocity.y < 0)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -531,7 +531,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 Vector3 moveDirectionAcceleration = moveDirection * acceleration;
                 velocity = velocity + moveDirectionAcceleration;
 
-                flyingEnemyController.Rigidbody.velocity = velocity;
+                flyingEnemy.Rigidbody.velocity = velocity;
             }
             else if (currentDistance <= halfDistance)//初期距離の半分より現在の距離が小さい場合は減速する
             {
@@ -544,7 +544,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
                 //減速する際に速度がマイナスになって後進してほしくない為
                 if (velocity.x < 0 && velocity.y < 0)
                 {
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                 }
                 else
                 {
@@ -564,7 +564,7 @@ public class FlyingEnemyStraightLineTrackingAction : Action
     {
         //Debug.Log("<color=cyan>移動の終了</color>");
         velocity = Vector3.zero;
-        flyingEnemyController.Rigidbody.velocity = velocity;
+        flyingEnemy.Rigidbody.velocity = velocity;
         isMoveEnd = true;
     }
 }

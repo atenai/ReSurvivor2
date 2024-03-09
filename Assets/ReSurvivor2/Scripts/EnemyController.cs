@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class EnemyController
 {
-    [SerializeField] GameObject target;
+    GameObject target;
     public GameObject Target
     {
         get { return target; }

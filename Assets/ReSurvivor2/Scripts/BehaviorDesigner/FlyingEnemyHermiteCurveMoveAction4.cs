@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyHermiteCurveMoveAction4 : Action
 {
-    FlyingEnemyController flyingEnemyController;
+    FlyingEnemy flyingEnemy;
     GameObject target;
 
     [UnityEngine.Tooltip("スタート地点")]
@@ -78,9 +78,9 @@ public class FlyingEnemyHermiteCurveMoveAction4 : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
+        flyingEnemy = this.GetComponent<FlyingEnemy>();
 
-        target = flyingEnemyController.Target;
+        target = flyingEnemy.Target;
 
         //periodRatio = 1.0f ÷ 0.5f = 2.0f
         periodRatio = 1.0f / period;
@@ -254,7 +254,7 @@ public class FlyingEnemyHermiteCurveMoveAction4 : Action
                 {
                     //Debug.Log("<color=purple>6</color>");
                     Vector3 velocity = Vector3.zero;
-                    flyingEnemyController.Rigidbody.velocity = velocity;
+                    flyingEnemy.Rigidbody.velocity = velocity;
                     //isEnd = true;//エルミート移動の処理を終了する
                     //return;
                     SameDirection();
@@ -375,12 +375,12 @@ public class FlyingEnemyHermiteCurveMoveAction4 : Action
         {
             //Debug.Log("<color=red>丸め値、移動</color>");
             Vector3 roundNumber = TargetVector(nextHermitePos).normalized * moveLimit;
-            flyingEnemyController.Rigidbody.velocity = roundNumber;
+            flyingEnemy.Rigidbody.velocity = roundNumber;
         }
         else
         {
             //Debug.Log("<color=blue>通常値、移動</color>");
-            flyingEnemyController.Rigidbody.velocity = TargetVector(nextHermitePos) / Time.fixedDeltaTime;//目標地点に即座に移動してほしい為にTime.fixedDeltaTimeで割る;
+            flyingEnemy.Rigidbody.velocity = TargetVector(nextHermitePos) / Time.fixedDeltaTime;//目標地点に即座に移動してほしい為にTime.fixedDeltaTimeで割る;
         }
     }
 

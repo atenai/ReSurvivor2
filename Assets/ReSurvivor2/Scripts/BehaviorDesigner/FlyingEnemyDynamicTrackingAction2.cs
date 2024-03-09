@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyDynamicTrackingAction2 : Action
 {
-    FlyingEnemyController flyingEnemyController;
+    FlyingEnemy flyingEnemy;
 
     //ターゲット座標位置の変数
     Vector3 targetPos;
@@ -39,7 +39,7 @@ public class FlyingEnemyDynamicTrackingAction2 : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemyController = this.GetComponent<FlyingEnemy>().FlyingEnemyController;
+        flyingEnemy = this.GetComponent<FlyingEnemy>();
 
         InitMove();
         TargetPos();
@@ -51,9 +51,9 @@ public class FlyingEnemyDynamicTrackingAction2 : Action
 
     void TargetPos()
     {
-        float xPos = flyingEnemyController.Target.transform.position.x;
-        float yPos = flyingEnemyController.Target.transform.position.y;
-        float zPos = flyingEnemyController.Target.transform.position.z;
+        float xPos = flyingEnemy.Target.transform.position.x;
+        float yPos = flyingEnemy.Target.transform.position.y;
+        float zPos = flyingEnemy.Target.transform.position.z;
         targetPos = new Vector3(xPos, yPos, zPos);
 
 #if UNITY_EDITOR
@@ -77,7 +77,7 @@ public class FlyingEnemyDynamicTrackingAction2 : Action
 
     void InitMove()
     {
-        flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+        flyingEnemy.Rigidbody.velocity = Vector3.zero;
     }
 
     // 更新時に呼ばれる
@@ -146,11 +146,11 @@ public class FlyingEnemyDynamicTrackingAction2 : Action
         if (sqrCurrentDistance <= stopPos)
         {
             Debug.Log("<color=red>移動の終了</color>");
-            flyingEnemyController.Rigidbody.velocity = Vector3.zero;
+            flyingEnemy.Rigidbody.velocity = Vector3.zero;
             isMoveEnd = true;
             return;
         }
 
-        flyingEnemyController.Rigidbody.velocity = targetPos - this.transform.position;
+        flyingEnemy.Rigidbody.velocity = targetPos - this.transform.position;
     }
 }
