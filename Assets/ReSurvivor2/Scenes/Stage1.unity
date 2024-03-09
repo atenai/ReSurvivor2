@@ -437,6 +437,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider_Loading: {fileID: 2098206477}
   sceneName: Stage2
+  spawnPos: {fileID: 0}
 --- !u!1 &108845526
 GameObject:
   m_ObjectHideFlags: 0
@@ -3171,7 +3172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageCrosshair: {fileID: 1630503015}
-  panel_Loading: {fileID: 349603459}
+  panelLoading: {fileID: 349603459}
 --- !u!114 &968781464
 MonoBehaviour:
   m_ObjectHideFlags: 0

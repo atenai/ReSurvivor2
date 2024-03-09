@@ -8,7 +8,7 @@ public class UI : MonoBehaviour
     //シングルトンで作成（ゲーム中に１つのみにする）
     public static UI singletonInstance = null;
     [SerializeField] Image imageCrosshair;
-    [SerializeField] public GameObject panel_Loading;
+    [SerializeField] public GameObject panelLoading;
 
     void Awake()
     {
@@ -30,6 +30,14 @@ public class UI : MonoBehaviour
     }
 
     void Update()
+    {
+        Crosshair();
+    }
+
+    /// <summary>
+    /// クロスヘア（レティクル）のオン/オフかつ色の切り替え
+    /// </summary>
+    void Crosshair()
     {
         if (Player.SingletonInstance.IsAim == false)
         {

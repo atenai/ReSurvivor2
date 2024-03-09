@@ -41,7 +41,7 @@ public class LoadingScene : MonoBehaviour
         //スライダーの値を最低にする
         slider_Loading.value = float.MinValue;
         //ロードUIをOnにする
-        UI.singletonInstance.panel_Loading.SetActive(true);
+        UI.singletonInstance.panelLoading.SetActive(true);
 
         //シーンをロード
         AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
@@ -63,7 +63,7 @@ public class LoadingScene : MonoBehaviour
                 yield return new WaitForEndOfFrame();
 
                 //ロードUIをOffにする
-                UI.singletonInstance.panel_Loading.SetActive(false);
+                UI.singletonInstance.panelLoading.SetActive(false);
                 //シーンを切り替える
                 async.allowSceneActivation = true;
             }
