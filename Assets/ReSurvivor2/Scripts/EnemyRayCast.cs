@@ -13,7 +13,7 @@ public class EnemyRayCast : MonoBehaviour
 
     void Start()
     {
-
+        enemyController.Target = Player.SingletonInstance.gameObject;
     }
 
 

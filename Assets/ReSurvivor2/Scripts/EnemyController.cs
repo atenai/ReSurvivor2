@@ -10,7 +10,7 @@ public class EnemyController
     public GameObject Target
     {
         get { return target; }
-        private set { target = value; }
+        set { target = value; }
     }
 
     [SerializeField] float moveSpeed = 2.0f;

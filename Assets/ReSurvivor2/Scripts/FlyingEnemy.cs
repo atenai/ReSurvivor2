@@ -26,6 +26,8 @@ public class FlyingEnemy : MonoBehaviour
             i.OnTriggerEnterEvent.AddListener(OnTriggerEnterHit);
             i.OnTriggerExitEvent.AddListener(OnTriggerExitHit);
         }
+
+        flyingEnemyController.Target = Player.SingletonInstance.gameObject;
     }
 
     void Update()

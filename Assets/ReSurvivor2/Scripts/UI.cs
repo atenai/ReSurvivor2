@@ -8,6 +8,7 @@ public class UI : MonoBehaviour
     //シングルトンで作成（ゲーム中に１つのみにする）
     public static UI singletonInstance = null;
     [SerializeField] Image imageCrosshair;
+    [SerializeField] public GameObject panel_Loading;
 
     void Awake()
     {
@@ -15,6 +16,7 @@ public class UI : MonoBehaviour
         if (singletonInstance == null)
         {
             singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、UIのインスタンスという意味になります。
+            DontDestroyOnLoad(this.gameObject);//シーンを切り替えた時に破棄しない
         }
         else
         {

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 public class EnemyCollider : MonoBehaviour
@@ -24,7 +26,7 @@ public class EnemyCollider : MonoBehaviour
 
     void Start()
     {
-
+        enemyController.Target = Player.SingletonInstance.gameObject;
     }
 
 

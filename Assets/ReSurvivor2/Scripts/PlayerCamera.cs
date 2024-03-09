@@ -8,8 +8,6 @@ public class PlayerCamera : MonoBehaviour
     //シングルトンで作成（ゲーム中に１つのみにする）
     public static PlayerCamera singletonInstance = null;
 
-    [SerializeField] GameObject player;
-
     [Header("カメラ")]
     [Tooltip("エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用")]
     bool isActiveCamera = false;
@@ -69,6 +67,7 @@ public class PlayerCamera : MonoBehaviour
         if (singletonInstance == null)
         {
             singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、PlayerCameraのインスタンスという意味になります。
+            DontDestroyOnLoad(this.gameObject);//シーンを切り替えた時に破棄しない
         }
         else
         {
@@ -210,7 +209,7 @@ public class PlayerCamera : MonoBehaviour
     void CameraNormalMove()
     {
         //通常のカメラ位置をプレイヤーの座標位置から計算
-        Vector3 cameraPos = player.transform.position + (Vector3.up * 2) + (this.transform.forward * -5);
+        Vector3 cameraPos = Player.SingletonInstance.transform.position + (Vector3.up * 2) + (this.transform.forward * -5);
         //カメラの位置を移動させる
         this.transform.position = Vector3.Lerp(transform.position, cameraPos, Player.SingletonInstance.NormalMoveSpeed * 10 * Time.deltaTime);
     }
@@ -224,7 +223,7 @@ public class PlayerCamera : MonoBehaviour
         const float aimRightPos = 0.6f;
         const float aimUpPos = 1.6f;
         const float aimForwardPos = -0.6f;
-        Vector3 cameraPos = player.transform.position + (player.transform.right * aimRightPos) + (Vector3.up * aimUpPos) + (this.transform.forward * aimForwardPos);
+        Vector3 cameraPos = Player.SingletonInstance.transform.position + (Player.SingletonInstance.transform.right * aimRightPos) + (Vector3.up * aimUpPos) + (this.transform.forward * aimForwardPos);
         //カメラの位置を移動させる
         this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, Player.SingletonInstance.WeaponMoveSpeed * 10 * Time.deltaTime);
     }
@@ -273,7 +272,7 @@ public class PlayerCamera : MonoBehaviour
         if (deadZoneX < Mathf.Abs(x_Rotation))
         {
             // 回転軸はワールド座標のY軸
-            this.transform.RotateAround(player.transform.position, Vector3.up, x_Rotation * Time.deltaTime * localCameraSpeedX);
+            this.transform.RotateAround(Player.SingletonInstance.transform.position, Vector3.up, x_Rotation * Time.deltaTime * localCameraSpeedX);
         }
 
         // Y方向に一定量移動していれば縦回転
@@ -285,7 +284,7 @@ public class PlayerCamera : MonoBehaviour
             if (324 < cameraAngles && cameraAngles < lookingUpLimit || -10 < cameraAngles && cameraAngles < lookingDownLimit)//ここの各左の数字を変えればカメラの上下の止まる限界値が変わる
             {
                 // 回転軸はカメラ自身のX軸
-                this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
+                this.transform.RotateAround(Player.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
             }
             else
             {
@@ -294,7 +293,7 @@ public class PlayerCamera : MonoBehaviour
                     if (Input.GetAxis("Mouse Y") < 0)
                     {
                         //マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
-                        this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
+                        this.transform.RotateAround(Player.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
                     }
                 }
                 else
@@ -302,7 +301,7 @@ public class PlayerCamera : MonoBehaviour
                     if (0 < Input.GetAxis("Mouse Y"))
                     {
                         //マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
-                        this.transform.RotateAround(player.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
+                        this.transform.RotateAround(Player.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
                     }
 
                 }

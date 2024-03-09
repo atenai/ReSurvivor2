@@ -435,7 +435,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7bf7a95e26172f4483d5975fc1c48ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel_Loading: {fileID: 349603459}
   slider_Loading: {fileID: 2098206477}
   sceneName: Stage2
 --- !u!1 &108845526
@@ -3172,6 +3171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageCrosshair: {fileID: 1630503015}
+  panel_Loading: {fileID: 349603459}
 --- !u!114 &968781464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4299,7 +4299,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ca4427f9bce6134a9edbb25a5ede12d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 910668649}
   normalCameraSpeedX: 100
   normalCameraSpeedY: 50
   aimCameraSpeedX: 50
