@@ -7,21 +7,35 @@ public class LoadingScene : MonoBehaviour
 {
     [SerializeField] Slider slider_Loading;
     [SerializeField] string sceneName;
+    [SerializeField] GameObject spawnPos;
 
     void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Player")
         {
-            collider.gameObject.transform.position = new Vector3(0, 1, 0);
-            LoadNextScene();
+            SetPlayerSpawnPos(collider);
+            StartCoroutine(LoadScene());
         }
     }
 
-    void LoadNextScene()
+    /// <summary>
+    /// シーン遷移した際にプレイヤーのスポーン位置を設定
+    /// </summary>
+    void SetPlayerSpawnPos(Collider collider)
     {
-        StartCoroutine(LoadScene());
+        if (spawnPos != null)
+        {
+            collider.gameObject.transform.position = spawnPos.transform.position;
+        }
+        else
+        {
+            collider.gameObject.transform.position = new Vector3(0, 1, 0);
+        }
     }
 
+    /// <summary>
+    /// シーンをロードする
+    /// </summary>
     IEnumerator LoadScene()
     {
         //スライダーの値を最低にする
@@ -54,6 +68,7 @@ public class LoadingScene : MonoBehaviour
                 async.allowSceneActivation = true;
             }
 
+            //1フレーム待つ
             yield return null;
         }
     }
