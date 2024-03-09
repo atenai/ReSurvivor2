@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 61359424}
   - component: {fileID: 61359423}
   - component: {fileID: 61359426}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube_ColliderFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -451,7 +451,7 @@ GameObject:
   - component: {fileID: 108845530}
   - component: {fileID: 108845529}
   - component: {fileID: 108845532}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube_ColliderUnder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4536,7 +4536,7 @@ GameObject:
   - component: {fileID: 1358164323}
   - component: {fileID: 1358164322}
   - component: {fileID: 1358164325}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube_ColliderUP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5135,7 +5135,7 @@ GameObject:
   - component: {fileID: 1458951209}
   - component: {fileID: 1458951208}
   - component: {fileID: 1458951211}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BoxCollider_ObjectFind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6717,7 +6717,7 @@ GameObject:
   - component: {fileID: 1829325100}
   - component: {fileID: 1829325099}
   - component: {fileID: 1829325102}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube_ColliderBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6836,7 +6836,7 @@ GameObject:
   - component: {fileID: 1889687214}
   - component: {fileID: 1889687213}
   - component: {fileID: 1889687216}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BoxCollider_PlayerFind
   m_TagString: Untagged
   m_Icon: {fileID: 0}

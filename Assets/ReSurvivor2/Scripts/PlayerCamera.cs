@@ -97,10 +97,13 @@ public class PlayerCamera : MonoBehaviour
     {
         if (Player.SingletonInstance.IsAim == true)
         {
-            if (Input.GetMouseButton(0) && assaultRifleCountTimer <= 0.0f)//カウントタイマーが0以下かつ左クリックをしている場合は中身を実行する
+            if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return))//左クリックまたはEnterを押している場合に中身を実行する
             {
-                AssaultRifleFire();
-                assaultRifleCountTimer = assaultRifleFireRate;//カウントタイマーに射撃を待つ時間を入れる
+                if (assaultRifleCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
+                {
+                    AssaultRifleFire();
+                    assaultRifleCountTimer = assaultRifleFireRate;//カウントタイマーに射撃を待つ時間を入れる
+                }
             }
         }
 

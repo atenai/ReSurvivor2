@@ -84,8 +84,8 @@ public class Player : MonoBehaviour
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
 
-        //右ボタンが押されていたら実行
-        if (Input.GetMouseButton(1))
+        //右ボタンまたはレフトシフトが押されていたら中身を実行
+        if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftShift))
         {
             isAim = true;
         }
