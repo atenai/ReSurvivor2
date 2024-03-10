@@ -428,7 +428,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3479429945737930563}
   m_Layer: 8
-  m_Name: GroundEnemyCollider
+  m_Name: EnemyCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1163,7 +1163,7 @@ GameObject:
   - component: {fileID: 1918511131649270807}
   - component: {fileID: 1887056555931274725}
   m_Layer: 8
-  m_Name: GroundEnemyByCollider
+  m_Name: EnemyByCollider
   m_TagString: GroundEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
