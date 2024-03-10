@@ -4,15 +4,15 @@ using UnityEngine;
 /// <summary>
 /// コリジョンを使いエネミーがプレイヤーを視認しているか？を判別するタスク
 /// </summary> 
-[TaskCategory("Kashiwabara")]
+[TaskCategory("EnemyCollider")]
 public class CanFindPlayerColliderConditional : Conditional
 {
-    EnemyController enemyController;
+    EnemyCollider enemyCollider;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        enemyController = this.GetComponent<EnemyCollider>().EnemyController;
+        enemyCollider = this.GetComponent<EnemyCollider>();
     }
 
     // 更新時に呼ばれる
@@ -21,16 +21,16 @@ public class CanFindPlayerColliderConditional : Conditional
         if (this.GetComponent<EnemyCollider>().IsHit == true)
         {
             //Debug.Log("<color=orange>ビヘイビアデザイナーの当たり判定に当たった！</color>");
-            enemyController.IsChase = true;
-            enemyController.CountTime = enemyController.ChaseTime;
+            enemyCollider.IsChase = true;
+            enemyCollider.CountTime = enemyCollider.ChaseTime;
             //Debug.Log("<color=cyan>countTime : " + enemyController.CountTime + "</color>");
-            enemyController.Alert.gameObject.SetActive(true);//アラートのイメージを表示
+            enemyCollider.Alert.gameObject.SetActive(true);//アラートのイメージを表示
             //プレイヤーを発見した
             return TaskStatus.Success;
         }
         else
         {
-            enemyController.Alert.gameObject.SetActive(false);//アラートのイメージを非表示
+            enemyCollider.Alert.gameObject.SetActive(false);//アラートのイメージを非表示
             //プレイヤーを発見していない
             return TaskStatus.Failure;
         }

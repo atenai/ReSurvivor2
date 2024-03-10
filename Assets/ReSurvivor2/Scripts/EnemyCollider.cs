@@ -6,16 +6,85 @@ using UnityEngine;
 
 public class EnemyCollider : MonoBehaviour
 {
-    [SerializeField] EnemyController enemyController;
-    public EnemyController EnemyController
+    GameObject target;
+    public GameObject Target
     {
-        get { return enemyController; }
-        set { enemyController = value; }
+        get { return target; }
+        set { target = value; }
+    }
+
+    [SerializeField] float moveSpeed = 2.0f;
+    public float MoveSpeed
+    {
+        get { return moveSpeed; }
+        private set { moveSpeed = value; }
+    }
+
+    [SerializeField] float rotationSpeed = 1.0f;
+    public float RotationSpeed
+    {
+        get { return rotationSpeed; }
+        private set { rotationSpeed = value; }
+    }
+
+    [SerializeField] Rigidbody rb;
+    public Rigidbody Rigidbody
+    {
+        get { return rb; }
+        private set { rb = value; }
+    }
+
+    [SerializeField] float jumpForce = 250.0f;
+    public float JumpForce
+    {
+        get { return jumpForce; }
+        private set { jumpForce = value; }
+    }
+
+    [SerializeField] GameObject[] patrolPoints;
+    public GameObject[] PatrolPoints
+    {
+        get { return patrolPoints; }
+        private set { patrolPoints = value; }
+    }
+
+    [SerializeField] GameObject alert;
+    public GameObject Alert
+    {
+        get { return alert; }
+        private set { alert = value; }
+    }
+
+    bool isChase = false;
+    public bool IsChase
+    {
+        get { return isChase; }
+        set { isChase = value; }
+    }
+
+    [SerializeField] float chaseTime = 100.0f;
+    public float ChaseTime
+    {
+        get { return chaseTime; }
+        private set { chaseTime = value; }
+    }
+
+    float countTime;
+    public float CountTime
+    {
+        get { return countTime; }
+        set { countTime = value; }
+    }
+
+    [SerializeField] GameObject centerPos;
+    public GameObject CenterPos
+    {
+        get { return centerPos; }
+        private set { centerPos = value; }
     }
 
     float count = 0;
     bool isOnce = false;
-    float jumpForce = 250.0f;
 
     bool isHit;
     public bool IsHit
@@ -26,7 +95,7 @@ public class EnemyCollider : MonoBehaviour
 
     void Start()
     {
-        enemyController.Target = Player.SingletonInstance.gameObject;
+        target = Player.SingletonInstance.gameObject;
     }
 
 
@@ -42,7 +111,7 @@ public class EnemyCollider : MonoBehaviour
         if (collider.tag == "Object")
         {
             //Debug.Log("<color=red>オブジェクトを発見! count : " + count + "</color>");
-            enemyController.Rigidbody.AddForce(new Vector3(0, jumpForce, 0));
+            Rigidbody.AddForce(new Vector3(0, jumpForce, 0));
         }
     }
 
@@ -58,7 +127,7 @@ public class EnemyCollider : MonoBehaviour
             {
                 //Debug.Log("<color=blue>ジャンプ！</color>");
                 isOnce = true;
-                enemyController.Rigidbody.AddForce(new Vector3(0, jumpForce * 2, 0));
+                Rigidbody.AddForce(new Vector3(0, jumpForce * 2, 0));
                 //将来的には次の巡回ポイントに移動する処理を呼び出す方が良いと思われる
             }
 

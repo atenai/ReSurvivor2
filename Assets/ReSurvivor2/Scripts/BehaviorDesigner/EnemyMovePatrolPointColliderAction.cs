@@ -5,10 +5,10 @@ using UnityEngine;
 /// <summary>
 /// コリジョンを使い指定座標をパトロールするタスク
 /// </summary>
-[TaskCategory("Kashiwabara")]
+[TaskCategory("EnemyCollider")]
 public class EnemyMovePatrolPointColliderAction : Action
 {
-    EnemyController enemyController;
+    EnemyCollider enemyCollider;
     bool isActiveOnce = false;
 
     private int pointNumber = 0;
@@ -24,7 +24,7 @@ public class EnemyMovePatrolPointColliderAction : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        enemyController = this.GetComponent<EnemyCollider>().EnemyController;
+        enemyCollider = this.GetComponent<EnemyCollider>();
 
         if (isActiveOnce == false)
         {
@@ -44,15 +44,15 @@ public class EnemyMovePatrolPointColliderAction : Action
     void NextPatrolPoint()
     {
         //巡回地点が設定されていなければ
-        if (enemyController.PatrolPoints.Length == 0)
+        if (enemyCollider.PatrolPoints.Length == 0)
         {
             //切り上げる
             return;
         }
         //現在選択されている配列の座標を巡回地点の座標に代入
-        patrolPointPos = enemyController.PatrolPoints[pointNumber].transform.position;
+        patrolPointPos = enemyCollider.PatrolPoints[pointNumber].transform.position;
         //配列の中から次の巡回地点を選択（必要に応じて繰り返し）
-        pointNumber = (pointNumber + 1) % enemyController.PatrolPoints.Length;
+        pointNumber = (pointNumber + 1) % enemyCollider.PatrolPoints.Length;
     }
 
     void MovePatrolPoint()
@@ -65,9 +65,9 @@ public class EnemyMovePatrolPointColliderAction : Action
         //第一引数に向きたい方向の向きベクトルを入れてあげる、それによってどのくらい回転させれば良いのか？の数値を求めることができる
         var lookRotation = Quaternion.LookRotation(direction, Vector3.up);
         //↑で求めたどのくらい回転させれば良いのか？の数値を元に回転させる
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, lookRotation, Time.deltaTime * enemyController.RotationSpeed * 10f);
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, lookRotation, Time.deltaTime * enemyCollider.RotationSpeed * 10f);
 
-        this.transform.Translate(Vector3.forward * enemyController.MoveSpeed * Time.deltaTime);
+        this.transform.Translate(Vector3.forward * enemyCollider.MoveSpeed * Time.deltaTime);
 
         float distanceToTarget = Vector3.SqrMagnitude(this.transform.position - patrolPointPos);
 

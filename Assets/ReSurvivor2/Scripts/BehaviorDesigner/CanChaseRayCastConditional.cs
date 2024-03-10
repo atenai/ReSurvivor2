@@ -4,10 +4,10 @@ using UnityEngine;
 /// <summary>
 /// エネミーがプレイヤーを追跡中か？を判別するタスク
 /// </summary>
-[TaskCategory("Kashiwabara")]
+[TaskCategory("EnemyRayCast")]
 public class CanChaseRayCastConditional : Conditional
 {
-    EnemyController enemyController;
+    EnemyRayCast enemyRayCast;
     float rayDistance = 5.0f;
 
     // Taskが処理される直前に呼ばれる
@@ -15,39 +15,35 @@ public class CanChaseRayCastConditional : Conditional
     {
         if (this.GetComponent<EnemyRayCast>() == true)
         {
-            enemyController = this.GetComponent<EnemyRayCast>().EnemyController;
-        }
-        else if (this.GetComponent<EnemyCollider>() == true)
-        {
-            enemyController = this.GetComponent<EnemyCollider>().EnemyController;
+            enemyRayCast = this.GetComponent<EnemyRayCast>();
         }
     }
 
     // 更新時に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (enemyController.IsChase == true)
+        if (enemyRayCast.IsChase == true)
         {
             if (Eyesight() == true)
             {
                 //Debug.Log("<color=orange>ビヘイビアデザイナーの当たり判定に当たった！</color>");
-                enemyController.CountTime = enemyController.ChaseTime;
+                enemyRayCast.CountTime = enemyRayCast.ChaseTime;
             }
 
-            enemyController.CountTime = enemyController.CountTime - (10.0f * Time.deltaTime);
-            if (enemyController.CountTime <= 0.0f)
+            enemyRayCast.CountTime = enemyRayCast.CountTime - (10.0f * Time.deltaTime);
+            if (enemyRayCast.CountTime <= 0.0f)
             {
-                enemyController.IsChase = false;
+                enemyRayCast.IsChase = false;
             }
             //Debug.Log("<color=blue>enemyController.IsChase : " + enemyController.IsChase + "</color>");
             //Debug.Log("<color=red>countTime : " + enemyController.CountTime + "</color>");
 
-            enemyController.Alert.gameObject.SetActive(true);//アラートのイメージを表示
+            enemyRayCast.Alert.gameObject.SetActive(true);//アラートのイメージを表示
             return TaskStatus.Success;//プレイヤーを発見した
         }
         else
         {
-            enemyController.Alert.gameObject.SetActive(false);//アラートのイメージを非表示
+            enemyRayCast.Alert.gameObject.SetActive(false);//アラートのイメージを非表示
             return TaskStatus.Failure;//プレイヤーを発見していない
         }
     }

@@ -5,16 +5,16 @@ using UnityEngine;
 /// <summary>
 /// コリジョンを使いプレイヤーを追跡するタスク
 /// </summary>
-[TaskCategory("Kashiwabara")]
+[TaskCategory("EnemyCollider")]
 public class EnemyMoveTargetColliderAction : Action
 {
-    EnemyController enemyController;
+    EnemyCollider enemyCollider;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
         //Debug.Log("<color=red>" + "ビヘイビアデザイナーのカスタムタスクのStart" + "</color>");
-        enemyController = this.GetComponent<EnemyCollider>().EnemyController;
+        enemyCollider = this.GetComponent<EnemyCollider>();
     }
 
     // 更新時に呼ばれる
@@ -36,7 +36,7 @@ public class EnemyMoveTargetColliderAction : Action
 
     bool Move()
     {
-        float distanceToTarget = Vector3.SqrMagnitude(this.transform.position - enemyController.Target.transform.position);
+        float distanceToTarget = Vector3.SqrMagnitude(this.transform.position - enemyCollider.Target.transform.position);
 
         if (distanceToTarget < 2.5f)
         {
@@ -45,16 +45,16 @@ public class EnemyMoveTargetColliderAction : Action
 
         //Debug.Log("<color=red>回転!</color>");
         //対象オブジェクトの位置 – 自分のオブジェクトの位置 = 対象オブジェクトの向きベクトルが求められる
-        var direction = enemyController.Target.transform.position - this.transform.position;
+        var direction = enemyCollider.Target.transform.position - this.transform.position;
         //単純に左右だけを見るようにしたいので、y軸の数値を0にする
         direction.y = 0;
 
         //第一引数に向きたい方向の向きベクトルを入れてあげる、それによってどのくらい回転させれば良いのか？の数値を求めることができる
         var lookRotation = Quaternion.LookRotation(direction, Vector3.up);
         //↑で求めたどのくらい回転させれば良いのか？の数値を元に回転させる
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, lookRotation, Time.deltaTime * enemyController.RotationSpeed * 10f);
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, lookRotation, Time.deltaTime * enemyCollider.RotationSpeed * 10f);
 
-        this.transform.Translate(Vector3.forward * enemyController.MoveSpeed * Time.deltaTime);
+        this.transform.Translate(Vector3.forward * enemyCollider.MoveSpeed * Time.deltaTime);
 
         return true;
     }

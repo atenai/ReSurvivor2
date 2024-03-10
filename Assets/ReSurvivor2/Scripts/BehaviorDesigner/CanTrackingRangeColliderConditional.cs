@@ -4,24 +4,19 @@ using UnityEngine;
 /// <summary>
 /// エネミーが追跡範囲内か？を調べるタスク
 /// </summary>
-[TaskCategory("Kashiwabara")]
-public class CanTrackingRangeConditional : Conditional
+[TaskCategory("EnemyCollider")]
+public class CanTrackingRangeColliderConditional : Conditional
 {
-    [SerializeField] Transform centerPos;
-    [SerializeField] float range;
+    [SerializeField] float range = 40.0f;
 
-    EnemyController enemyController;
+    EnemyCollider enemyCollider;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        if (this.GetComponent<EnemyRayCast>() == true)
+        if (this.GetComponent<EnemyCollider>() == true)
         {
-            enemyController = this.GetComponent<EnemyRayCast>().EnemyController;
-        }
-        else if (this.GetComponent<EnemyCollider>() == true)
-        {
-            enemyController = this.GetComponent<EnemyCollider>().EnemyController;
+            enemyCollider = this.GetComponent<EnemyCollider>();
         }
     }
 
@@ -29,7 +24,7 @@ public class CanTrackingRangeConditional : Conditional
     public override TaskStatus OnUpdate()
     {
         //距離を求める
-        float distance = Vector3.SqrMagnitude(this.transform.position - centerPos.position);
+        float distance = Vector3.SqrMagnitude(this.transform.position - enemyCollider.CenterPos.transform.position);
         //↑で求めた距離の絶対値を求める
         float absoluteValue = Mathf.Abs(distance);
 
@@ -38,8 +33,8 @@ public class CanTrackingRangeConditional : Conditional
         //↑の絶対値が特定の範囲以上だとfalse範囲以内だとtrue
         if (range < absoluteValue)
         {
-            enemyController.IsChase = false;
-            enemyController.Alert.gameObject.SetActive(false);//アラートのイメージを非表示
+            enemyCollider.IsChase = false;
+            enemyCollider.Alert.gameObject.SetActive(false);//アラートのイメージを非表示
             //false
             return TaskStatus.Failure;
         }
