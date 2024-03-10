@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class LoadingScene : MonoBehaviour
 {
-    [SerializeField] Slider slider_Loading;
     [SerializeField] string sceneName;
     [SerializeField] GameObject spawnPos;
 
@@ -39,7 +38,7 @@ public class LoadingScene : MonoBehaviour
     IEnumerator LoadScene()
     {
         //スライダーの値を最低にする
-        slider_Loading.value = float.MinValue;
+        UI.singletonInstance.sliderLoading.value = float.MinValue;
         //ロードUIをOnにする
         UI.singletonInstance.panelLoading.SetActive(true);
 
@@ -51,13 +50,13 @@ public class LoadingScene : MonoBehaviour
         while (async.isDone == false)
         {
             //ロード数値をスライダーに反映
-            slider_Loading.value = async.progress;
+            UI.singletonInstance.sliderLoading.value = async.progress;
 
             //ロード数値が0.9より同じかそれ以上大きくなったら中身を実行する
             if (0.9f <= async.progress)
             {
                 //スライダーの値を最大にする
-                slider_Loading.value = float.MaxValue;
+                UI.singletonInstance.sliderLoading.value = float.MaxValue;
 
                 //フレームのラストまで待つ
                 yield return new WaitForEndOfFrame();

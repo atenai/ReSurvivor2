@@ -9,6 +9,7 @@ public class UI : MonoBehaviour
     public static UI singletonInstance = null;
     [SerializeField] Image imageCrosshair;
     [SerializeField] public GameObject panelLoading;
+    [SerializeField] public Slider sliderLoading;
 
     void Awake()
     {
