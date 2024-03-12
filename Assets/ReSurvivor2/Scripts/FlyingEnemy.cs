@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 空中敵
+/// </summary>
 public class FlyingEnemy : MonoBehaviour
 {
     GameObject target;
@@ -19,6 +22,14 @@ public class FlyingEnemy : MonoBehaviour
         private set { rb = value; }
     }
 
+    //センサーコライダー用の変数
+    [SerializeField] ColliderEventHandler[] colliders = default;
+    private bool[] hits;
+    public bool GetHit(int index) => hits[index];
+    private Collider hitCollider = null;
+    public Collider HitCollider => hitCollider;
+
+    //ビヘイビアデザイナー用変数
     bool isRotateToDirectionPlayer = false;
     public bool IsRotateToDirectionPlayer
     {
@@ -40,10 +51,9 @@ public class FlyingEnemy : MonoBehaviour
         set { isMoveBack = value; }
     }
 
-    //センサーコライダー用の変数
-    [SerializeField] ColliderEventHandler[] colliders = default;
-    private bool[] hits;
-    public bool GetHit(int index) => hits[index];
+    [SerializeField] GameObject alert;
+    public GameObject Alert => alert;
+    //ビヘイビアデザイナー用変数
 
     void Start()
     {
@@ -55,7 +65,35 @@ public class FlyingEnemy : MonoBehaviour
             i.OnTriggerExitEvent.AddListener(OnTriggerExitHit);
         }
 
-        target = Player.SingletonInstance.gameObject;
+        Initialize();
+    }
+
+    /// <summary>
+    /// リスポーンした際の初期化処理
+    /// </summary>
+    void Initialize()
+    {
+        if (target == null)
+        {
+            target = Player.SingletonInstance.gameObject;
+        }
+
+        if (rb == null)
+        {
+            rb = this.GetComponent<Rigidbody>();
+        }
+
+        //コライダーが何も当たっていない状態にする
+        if (hits != null)
+        {
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                hits[i] = false;
+            }
+        }
+        hitCollider = null;
+
+        alert.gameObject.SetActive(false);
     }
 
     void Update()
@@ -68,8 +106,14 @@ public class FlyingEnemy : MonoBehaviour
     /// </summary>
     void OnTriggerEnterHit(ColliderEventHandler self, Collider collider)
     {
-        if (collider.tag == "Player")
+        if (collider.tag == "Player" || collider.tag == "Object")
         {
+            if (collider != null)
+            {
+                //Debug.Log("<color=blue>プレイヤーを発見!2</color>");
+                hitCollider = collider;
+            }
+
             int index = 0;
             for (int i = 0; i < colliders.Length; i++)
             {
@@ -79,7 +123,6 @@ public class FlyingEnemy : MonoBehaviour
                 }
             }
 
-            // 当たったのはi番目のコリジョンだよ
             hits[index] = true;
         }
     }
@@ -89,8 +132,13 @@ public class FlyingEnemy : MonoBehaviour
     /// </summary>
     void OnTriggerExitHit(ColliderEventHandler self, Collider collider)
     {
-        if (collider.tag == "Player")
+        if (collider.tag == "Player" || collider.tag == "Object")
         {
+            if (collider != null)
+            {
+                hitCollider = collider;
+            }
+
             int index = 0;
             for (int i = 0; i < colliders.Length; i++)
             {
@@ -100,7 +148,6 @@ public class FlyingEnemy : MonoBehaviour
                 }
             }
 
-            // 当たったのはi番目のコリジョンだよ
             hits[index] = false;
         }
     }

@@ -16,6 +16,7 @@ public class GroundEnemy : MonoBehaviour
     [SerializeField] Rigidbody rb;
     public Rigidbody Rigidbody => rb;
 
+    //センサーコライダー用の変数
     [SerializeField] ColliderEventHandler[] colliders = default;
     private bool[] hits;
     public bool GetHit(int index) => hits[index];
