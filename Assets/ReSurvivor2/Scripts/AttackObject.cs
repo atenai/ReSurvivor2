@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -12,6 +13,7 @@ public class AttackObject : MonoBehaviour
         if (collider.gameObject.CompareTag("Player"))
         {
             Debug.Log("プレイヤーに攻撃！");
+            Destroy(this.gameObject);
         }
     }
 }

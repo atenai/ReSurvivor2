@@ -31,7 +31,7 @@ public class GroundEnemyAttackAction : Action
 
             // キャラクターの前方にオブジェクトを生成
             Vector3 spawnPosition = transform.position + transform.forward * spawnDistance;
-            GameObject localGameObject = UnityEngine.Object.Instantiate(attackGameObjectPrefab, spawnPosition, Quaternion.identity);
+            GameObject localGameObject = UnityEngine.Object.Instantiate(attackGameObjectPrefab, spawnPosition, this.transform.rotation);
             UnityEngine.Object.Destroy(localGameObject, 0.5f);
         }
 

@@ -10,13 +10,19 @@ using UnityEngine.AddressableAssets;
 /// </summary>
 public class GroundEnemy : MonoBehaviour
 {
+    GameObject target;
+    public GameObject Target => target;
+
+    [SerializeField] Rigidbody rb;
+    public Rigidbody Rigidbody => rb;
+
     [SerializeField] ColliderEventHandler[] colliders = default;
     private bool[] hits;
     public bool GetHit(int index) => hits[index];
     private Collider hitCollider = null;
     public Collider HitCollider => hitCollider;
 
-    //ビヘイビアデザイナーの条件判定用変数
+    //ビヘイビアデザイナー用変数
     bool isChase = false;
     public bool IsChase
     {
@@ -36,9 +42,7 @@ public class GroundEnemy : MonoBehaviour
 
     [SerializeField] GameObject alert;
     public GameObject Alert => alert;
-    //ビヘイビアデザイナーの条件判定用変数
 
-    //ビヘイビアデザイナーのアクション用変数
     [UnityEngine.Tooltip("現在のパトロールポイントのナンバー")]
     int patrolPointNumber = 0;
     public int PatrolPointNumber
@@ -49,7 +53,10 @@ public class GroundEnemy : MonoBehaviour
 
     [SerializeField] List<GameObject> patrolPoints = new List<GameObject>();
     public List<GameObject> PatrolPoints => patrolPoints;
-    //ビヘイビアデザイナーのアクション用変数
+
+    [SerializeField] GameObject centerPos;
+    public GameObject CenterPos => centerPos;
+    //ビヘイビアデザイナー用変数
 
 #if UNITY_EDITOR
     [SerializeField] TextMeshProUGUI debugText0;
@@ -59,15 +66,6 @@ public class GroundEnemy : MonoBehaviour
     [SerializeField] TextMeshProUGUI debugText4;
     [SerializeField] TextMeshProUGUI debugText5;
 #endif
-
-    public GameObject centerPos;
-    public GameObject CenterPos => centerPos;
-
-    GameObject target;
-    public GameObject Target => target;
-
-    [SerializeField] Rigidbody rb;
-    public Rigidbody Rigidbody => rb;
 
     void Start()
     {

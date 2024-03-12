@@ -36,7 +36,7 @@ public class GroundEnemyJumpObjectAction1 : Action
     {
         if (isJump == false)
         {
-            groundEnemy.Rigidbody.AddForce(jumpForce * groundEnemy.Rigidbody.mass, ForceMode.Force);
+            groundEnemy.Rigidbody.AddForce(jumpForce, ForceMode.Force);
             isJump = true;
         }
     }
