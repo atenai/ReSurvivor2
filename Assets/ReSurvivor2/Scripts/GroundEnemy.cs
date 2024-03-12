@@ -95,8 +95,7 @@ public class GroundEnemy : MonoBehaviour
             rb = this.GetComponent<Rigidbody>();
         }
 
-        //Debug.Log("<color=green>Enemy.Initialize2</color>");
-
+        //コライダーが何も当たっていない状態にする
         if (hits != null)
         {
             for (int i = 0; i < colliders.Length; i++)

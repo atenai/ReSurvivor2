@@ -2478,7 +2478,7 @@ GameObject:
   - component: {fileID: 2376099711980363014}
   - component: {fileID: 5753026984286541561}
   m_Layer: 0
-  m_Name: Center
+  m_Name: CenterPosOfTrackingRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3726,6 +3726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fdcdbb3a7f89cd44b0612ff0c7f221d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 2238789402213070985}
   colliders:
   - {fileID: 8242769387041464319}
   - {fileID: 5631853089656959289}
@@ -3734,14 +3735,13 @@ MonoBehaviour:
   patrolPoints:
   - {fileID: 3040756031480147086}
   - {fileID: 2348603028577461396}
+  centerPos: {fileID: 1058401895797402679}
   debugText0: {fileID: 1608843513}
   debugText1: {fileID: 1010448719}
   debugText2: {fileID: 56717336}
   debugText3: {fileID: 1066205738}
   debugText4: {fileID: 27463223}
   debugText5: {fileID: 1544318220}
-  centerPos: {fileID: 1058401895797402679}
-  rb: {fileID: 2238789402213070985}
 --- !u!4 &8242769387041464318
 Transform:
   m_ObjectHideFlags: 0
