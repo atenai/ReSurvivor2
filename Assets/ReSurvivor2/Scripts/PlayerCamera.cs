@@ -311,10 +311,7 @@ public class PlayerCamera : MonoBehaviour
             {
                 if (shotGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
                 {
-                    for (int i = 0; i < shotGunBullet; i++)
-                    {
-                        ShotGunFire();
-                    }
+                    ShotGunFire();
                     shotGunCountTimer = shotGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
                 }
             }
@@ -336,34 +333,37 @@ public class PlayerCamera : MonoBehaviour
         AssaultRifleMuzzleFlash();
         AssaultRifleSmoke();
 
-        Vector3 direction = this.transform.forward;
-        direction = Quaternion.AngleAxis(Random.Range(-shotGunRandomAngle, shotGunRandomAngle), this.transform.up) * direction;
-        direction = Quaternion.AngleAxis(Random.Range(-shotGunRandomAngle, shotGunRandomAngle), this.transform.right) * direction;
-
-        Ray ray = new Ray(this.transform.position, direction);
-        Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
+        for (int i = 0; i < shotGunBullet; i++)
         {
-            hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
+            Vector3 direction = this.transform.forward;
+            direction = Quaternion.AngleAxis(Random.Range(-shotGunRandomAngle, shotGunRandomAngle), this.transform.up) * direction;
+            direction = Quaternion.AngleAxis(Random.Range(-shotGunRandomAngle, shotGunRandomAngle), this.transform.right) * direction;
 
-            if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+            Ray ray = new Ray(this.transform.position, direction);
+            Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
             {
-                //ダメージ
-                Target target = hit.transform.GetComponent<Target>();
-                if (target != null)
+                hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
+
+                if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
                 {
-                    target.TakeDamage(Damage);
+                    //ダメージ
+                    Target target = hit.transform.GetComponent<Target>();
+                    if (target != null)
+                    {
+                        target.TakeDamage(Damage);
+                    }
+
+                    //着弾した物体を後ろに押す
+                    if (hit.rigidbody != null)
+                    {
+                        hit.rigidbody.AddForce(-hit.normal * impactForce);
+                    }
                 }
 
-                //着弾した物体を後ろに押す
-                if (hit.rigidbody != null)
-                {
-                    hit.rigidbody.AddForce(-hit.normal * impactForce);
-                }
+                AssaultRifleImpactEffect(hit);
             }
-
-            AssaultRifleImpactEffect(hit);
         }
     }
 
