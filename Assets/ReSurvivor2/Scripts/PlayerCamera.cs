@@ -46,6 +46,12 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("着弾した物体を後ろに押す")]
     [SerializeField] float impactForce = 30.0f;
 
+    [Header("ハンドガン")]
+    [Tooltip("ハンドガンを何秒間隔で撃つか")]
+    [SerializeField] float handGunFireRate = 0.1f;
+    [Tooltip("ハンドガンの射撃間隔の時間カウント用のタイマー")]
+    float handGunCountTimer = 0.0f;
+
     [Header("アサルトライフル")]
     [Tooltip("アサルトライフルを何秒間隔で撃つか")]
     [SerializeField] float assaultRifleFireRate = 0.1f;
@@ -75,9 +81,9 @@ public class PlayerCamera : MonoBehaviour
 
     enum GunTYPE
     {
-        AssaultRifle = 0,    // グー
-        ShotGun = 1,  // チョキ
-        HandGun = 2,    // パー
+        HandGun = 1,
+        AssaultRifle = 2,
+        ShotGun = 3,
     }
     [SerializeField] GunTYPE gunTYPE = GunTYPE.AssaultRifle;
 
@@ -106,17 +112,93 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("ハンドガン");
+            gunTYPE = GunTYPE.HandGun;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("アサルトライフル");
+            gunTYPE = GunTYPE.AssaultRifle;
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Debug.Log("ショットガン");
+            gunTYPE = GunTYPE.ShotGun;
+        }
+
         switch (gunTYPE)
         {
+            case GunTYPE.HandGun:
+                HandGunShoot();
+                break;
             case GunTYPE.AssaultRifle:
                 AssaultRifleShoot();
                 break;
             case GunTYPE.ShotGun:
                 ShotGunShoot();
                 break;
-            case GunTYPE.HandGun:
+        }
+    }
 
-                break;
+    /// <summary>
+    /// ハンドガンで射撃
+    /// </summary> 
+    void HandGunShoot()
+    {
+        if (Player.SingletonInstance.IsAim == true)
+        {
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return))//左クリックまたはEnterを押している場合に中身を実行する
+            {
+                if (handGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
+                {
+                    HandGunFire();
+                    handGunCountTimer = handGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
+                }
+            }
+        }
+
+        //カウントタイマーが0以上なら中身を実行する
+        if (0.0f < handGunCountTimer)
+        {
+            //カウントタイマーを減らす
+            handGunCountTimer = handGunCountTimer - Time.deltaTime;
+        }
+    }
+
+    /// <summary>
+    /// 弾を発射
+    /// </summary> 
+    void HandGunFire()
+    {
+        AssaultRifleMuzzleFlash();
+        AssaultRifleSmoke();
+
+        Ray ray = new Ray(this.transform.position, this.transform.forward);
+        Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
+        {
+            hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
+
+            if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+            {
+                //ダメージ
+                Target target = hit.transform.GetComponent<Target>();
+                if (target != null)
+                {
+                    target.TakeDamage(Damage);
+                }
+
+                //着弾した物体を後ろに押す
+                if (hit.rigidbody != null)
+                {
+                    hit.rigidbody.AddForce(-hit.normal * impactForce);
+                }
+            }
+
+            AssaultRifleImpactEffect(hit);
         }
     }
 

@@ -114,6 +114,7 @@ MonoBehaviour:
   range: 100
   Damage: 10
   impactForce: 30
+  handGunFireRate: 0.1
   assaultRifleFireRate: 0.1
   assaultRifleRandomAngle: 1
   assaultRifleShotEmitters:
@@ -124,4 +125,4 @@ MonoBehaviour:
   shotGunFireRate: 0.1
   shotGunRandomAngle: 5
   shotGunBullet: 10
-  gunTYPE: 0
+  gunTYPE: 1
