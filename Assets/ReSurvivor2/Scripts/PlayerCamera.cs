@@ -51,6 +51,8 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] float assaultRifleFireRate = 0.1f;
     [Tooltip("アサルトライフルの射撃間隔の時間カウント用のタイマー")]
     float assaultRifleCountTimer = 0.0f;
+    [Tooltip("アサルトライフルの散乱角度")]
+    [SerializeField] float assaultRifleRandomAngle = 1.0f;
 
     //↓アセットストアのプログラム↓//
     [Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
@@ -60,6 +62,24 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("アサルトライフルの着弾エフェクト")]
     [SerializeField] GameObject assaultRifleImpactEffect;
     //↑アセットストアのプログラム↑//
+
+    [Header("ショットガン")]
+    [Tooltip("ショットガンを何秒間隔で撃つか")]
+    [SerializeField] float shotGunFireRate = 0.1f;
+    [Tooltip("ショットガンの射撃間隔の時間カウント用のタイマー")]
+    float shotGunCountTimer = 0.0f;
+    [Tooltip("ショットガンの散乱角度")]
+    [SerializeField] float shotGunRandomAngle = 5.0f;
+    [Tooltip("ショットガンが一度で出る弾の数")]
+    [SerializeField] int shotGunBullet = 10;
+
+    enum GunTYPE
+    {
+        AssaultRifle = 0,    // グー
+        ShotGun = 1,  // チョキ
+        HandGun = 2,    // パー
+    }
+    [SerializeField] GunTYPE gunTYPE = GunTYPE.AssaultRifle;
 
     void Awake()
     {
@@ -86,7 +106,18 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
-        AssaultRifleShoot();
+        switch (gunTYPE)
+        {
+            case GunTYPE.AssaultRifle:
+                AssaultRifleShoot();
+                break;
+            case GunTYPE.ShotGun:
+                ShotGunShoot();
+                break;
+            case GunTYPE.HandGun:
+
+                break;
+        }
     }
 
     /// <summary>
@@ -122,8 +153,12 @@ public class PlayerCamera : MonoBehaviour
         AssaultRifleMuzzleFlash();
         AssaultRifleSmoke();
 
-        Ray ray = new Ray(this.transform.position, this.transform.forward);
-        Debug.DrawRay(ray.origin, ray.direction * 20.0f, Color.red, 10.0f);
+        Vector3 direction = this.transform.forward;
+        direction = Quaternion.AngleAxis(Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), this.transform.up) * direction;
+        direction = Quaternion.AngleAxis(Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), this.transform.right) * direction;
+
+        Ray ray = new Ray(this.transform.position, direction);
+        Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
         {
@@ -181,6 +216,73 @@ public class PlayerCamera : MonoBehaviour
     {
         GameObject impactGameObject = Instantiate(assaultRifleImpactEffect, _hit.point, Quaternion.LookRotation(_hit.normal));
         Destroy(impactGameObject, 2.0f);
+    }
+
+    /// <summary>
+    /// ショットガンで射撃
+    /// </summary> 
+    void ShotGunShoot()
+    {
+        if (Player.SingletonInstance.IsAim == true)
+        {
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return))//左クリックまたはEnterを押している場合に中身を実行する
+            {
+                if (shotGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
+                {
+                    for (int i = 0; i < shotGunBullet; i++)
+                    {
+                        ShotGunFire();
+                    }
+                    shotGunCountTimer = shotGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
+                }
+            }
+        }
+
+        //カウントタイマーが0以上なら中身を実行する
+        if (0.0f < shotGunCountTimer)
+        {
+            //カウントタイマーを減らす
+            shotGunCountTimer = shotGunCountTimer - Time.deltaTime;
+        }
+    }
+
+    /// <summary>
+    /// 弾を発射
+    /// </summary> 
+    void ShotGunFire()
+    {
+        AssaultRifleMuzzleFlash();
+        AssaultRifleSmoke();
+
+        Vector3 direction = this.transform.forward;
+        direction = Quaternion.AngleAxis(Random.Range(-shotGunRandomAngle, shotGunRandomAngle), this.transform.up) * direction;
+        direction = Quaternion.AngleAxis(Random.Range(-shotGunRandomAngle, shotGunRandomAngle), this.transform.right) * direction;
+
+        Ray ray = new Ray(this.transform.position, direction);
+        Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
+        {
+            hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
+
+            if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+            {
+                //ダメージ
+                Target target = hit.transform.GetComponent<Target>();
+                if (target != null)
+                {
+                    target.TakeDamage(Damage);
+                }
+
+                //着弾した物体を後ろに押す
+                if (hit.rigidbody != null)
+                {
+                    hit.rigidbody.AddForce(-hit.normal * impactForce);
+                }
+            }
+
+            AssaultRifleImpactEffect(hit);
+        }
     }
 
     void FixedUpdate()
@@ -245,7 +347,7 @@ public class PlayerCamera : MonoBehaviour
 
             //ターゲットにあたった際にカメラを遅くする処理
             Ray ray = new Ray(this.transform.position, this.transform.forward);
-            Debug.DrawRay(ray.origin, ray.direction * 20.0f, Color.gray, 1.0f);
+            Debug.DrawRay(ray.origin, ray.direction * range, Color.gray, 1.0f);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
             {
