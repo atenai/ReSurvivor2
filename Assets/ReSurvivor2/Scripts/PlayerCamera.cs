@@ -527,5 +527,7 @@ public class PlayerCamera : MonoBehaviour
         GUI.Box(new Rect(350, 550, 100, 50), localCameraSpeedX.ToString(), styleRed);
         GUI.Box(new Rect(10, 600, 100, 50), "localCameraSpeedY", styleRed);
         GUI.Box(new Rect(350, 600, 100, 50), localCameraSpeedY.ToString(), styleRed);
+        GUI.Box(new Rect(10, 650, 100, 50), "gunTYPE", styleRed);
+        GUI.Box(new Rect(350, 650, 100, 50), gunTYPE.ToString(), styleRed);
     }
 }

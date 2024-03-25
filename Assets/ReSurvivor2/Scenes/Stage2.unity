@@ -1019,11 +1019,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1037243691}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1562502877 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7126498337926300050, guid: 1e9fb7ed26d8d6b439791711123a56b3, type: 3}
-  m_PrefabInstance: {fileID: 5192482069242847709}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1707447935
 GameObject:
   m_ObjectHideFlags: 0
@@ -1735,10 +1730,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8064469496346956863, guid: 1e9fb7ed26d8d6b439791711123a56b3, type: 3}
-      propertyPath: alert
-      value: 
-      objectReference: {fileID: 1562502877}
     - target: {fileID: 8770465991782172537, guid: 1e9fb7ed26d8d6b439791711123a56b3, type: 3}
       propertyPath: m_Name
       value: FlyingEnemy
