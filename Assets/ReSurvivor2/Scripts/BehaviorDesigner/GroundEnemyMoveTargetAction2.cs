@@ -111,7 +111,7 @@ public class GroundEnemyMoveTargetAction2 : Action
     void VectorSpeed()
     {
         Vector3 localTargetPos = groundEnemy.Target.transform.position;
-        localTargetPos.y = 0.0f;
+        localTargetPos.y = groundEnemy.transform.position.y;
         groundEnemy.Rigidbody.velocity = localTargetPos - groundEnemy.transform.position;
     }
 
@@ -121,7 +121,7 @@ public class GroundEnemyMoveTargetAction2 : Action
     void ConstantSpeed()
     {
         Vector3 localTargetPos = groundEnemy.Target.transform.position;
-        localTargetPos.y = 0.0f;
+        localTargetPos.y = groundEnemy.transform.position.y;
         //向きベクトル
         Vector3 moveDirection = localTargetPos - groundEnemy.transform.position;
 #if UNITY_EDITOR

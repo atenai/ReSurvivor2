@@ -10,7 +10,8 @@ public class GroundEnemyJumpObjectAction1 : Action
 {
     GroundEnemy groundEnemy;
 
-    Vector3 jumpForce = new Vector3(10, 200, 0);
+    float forwardJumpForce = 25.0f;
+    float upJumpForce = 200.0f;
     bool isJump = false;
 
     public override void OnStart()
@@ -36,7 +37,8 @@ public class GroundEnemyJumpObjectAction1 : Action
     {
         if (isJump == false)
         {
-            groundEnemy.Rigidbody.AddForce(jumpForce, ForceMode.Force);
+            groundEnemy.Rigidbody.AddForce(this.transform.forward * forwardJumpForce, ForceMode.Force);
+            groundEnemy.Rigidbody.AddForce(this.transform.up * upJumpForce, ForceMode.Force);
             isJump = true;
         }
     }

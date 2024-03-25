@@ -26,9 +26,11 @@ public class CanGroundEnemyFindObjectConditional : Conditional
             return TaskStatus.Failure;
         }
 
-        if (groundEnemy.GetHit(checkCollisionIndex) == true && groundEnemy.HitCollider.tag == "Object")
+        if (groundEnemy.GetHit(checkCollisionIndex) == true && groundEnemy.HitCollider.tag == "Object" && groundEnemy.IsGrounded == true)
         {
             //Debug.Log("<color=red>オブジェクトを発見!</color>");
+
+            groundEnemy.jumpWaitCount = 0.0f;
 
             //プレイヤーを発見した
             return TaskStatus.Success;
