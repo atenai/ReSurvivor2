@@ -114,17 +114,17 @@ public class PlayerCamera : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("ハンドガン");
+            //Debug.Log("ハンドガン");
             gunTYPE = GunTYPE.HandGun;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Debug.Log("アサルトライフル");
+            //Debug.Log("アサルトライフル");
             gunTYPE = GunTYPE.AssaultRifle;
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            Debug.Log("ショットガン");
+            //Debug.Log("ショットガン");
             gunTYPE = GunTYPE.ShotGun;
         }
 

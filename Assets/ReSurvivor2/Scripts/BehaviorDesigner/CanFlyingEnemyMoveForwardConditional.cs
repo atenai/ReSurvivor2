@@ -24,7 +24,7 @@ public class CanFlyingEnemyMoveForwardConditional : Conditional
         if (flyingEnemy.GetHit(checkCollisionIndex) == true)
         {
             // 成功
-            Debug.Log("<color=orange>" + checkCollisionIndex + "</color>");
+            //Debug.Log("<color=orange>" + checkCollisionIndex + "</color>");
 
             flyingEnemy.IsMoveForward = true;
         }
