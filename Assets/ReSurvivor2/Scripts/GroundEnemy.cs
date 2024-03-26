@@ -64,6 +64,9 @@ public class GroundEnemy : MonoBehaviour
     bool isGrounded = false;
     public bool IsGrounded => isGrounded;
 
+    List<GameObject> cliffList = new List<GameObject>();
+    public bool IsCliff => cliffList.Count == 0;
+
     [NonSerialized] public float jumpWaitCount = 0.0f;
     //ビヘイビアデザイナー用変数
 
@@ -76,9 +79,21 @@ public class GroundEnemy : MonoBehaviour
     [SerializeField] TextMeshProUGUI debugText5;
     [SerializeField] TextMeshProUGUI debugText6;
     [SerializeField] TextMeshProUGUI debugText7;
+    [SerializeField] TextMeshProUGUI debugText8;
+    [SerializeField] TextMeshProUGUI debugText9;
 #endif
 
     void Start()
+    {
+        InitSensorCollider();
+
+        Initialize();
+    }
+
+    /// <summary>
+    /// センサーコライダーの初期化処理
+    /// </summary> 
+    void InitSensorCollider()
     {
         hits = new bool[colliders.Length];
 
@@ -87,8 +102,6 @@ public class GroundEnemy : MonoBehaviour
             i.OnTriggerEnterEvent.AddListener(OnTriggerEnterHit);
             i.OnTriggerExitEvent.AddListener(OnTriggerExitHit);
         }
-
-        Initialize();
     }
 
     /// <summary>
@@ -120,6 +133,8 @@ public class GroundEnemy : MonoBehaviour
         alert.gameObject.SetActive(false);
 
         GroundCheck();
+
+        InitCliff();
     }
 
     /// <summary>
@@ -132,6 +147,9 @@ public class GroundEnemy : MonoBehaviour
         isGrounded = centerChecker;
     }
 
+    /// <summary>
+    /// 地面に接触しているか？を可視化する関数
+    /// </summary>
     void OnDrawGizmosSelected()
     {
         if (isGrounded == true)
@@ -150,6 +168,14 @@ public class GroundEnemy : MonoBehaviour
         Gizmos.DrawSphere(new Vector3(groundCheckCenter.transform.position.x, groundCheckCenter.transform.position.y, groundCheckCenter.transform.position.z), groundedRadius);
     }
 
+    /// <summary>
+    /// 崖リストの初期化
+    /// </summary>
+    void InitCliff()
+    {
+        cliffList.Clear();
+    }
+
     void Update()
     {
         GroundCheck();
@@ -159,8 +185,21 @@ public class GroundEnemy : MonoBehaviour
 #endif
     }
 
+    /// <summary>
+    /// 吹っ飛ばされた際などで足場を離れた際は、リストを空にする
+    /// </summary>
+    void CliffCheck()
+    {
+        if (isGrounded == false)
+        {
+            cliffList.Clear();
+        }
+    }
+
     void DebugText()
     {
+        debugText9.text = "cliffList : " + string.Join(" , ", cliffList);
+        debugText8.text = "IsCliff : " + IsCliff.ToString();
         debugText7.text = "jumpWaitCount : " + jumpWaitCount.ToString();
         debugText6.text = "isGrounded : " + isGrounded.ToString();
         debugText5.text = "hits[1] : " + hits[1].ToString();
@@ -240,6 +279,32 @@ public class GroundEnemy : MonoBehaviour
         if (collision.collider.tag == "Player")
         {
 
+        }
+    }
+
+    /// <summary>
+    /// 地面に接触しているか？を判別する当たり判定(触れた時)
+    /// </summary>
+    public void OnTriggerEnterHitCliff(Collider collider)
+    {
+        //Debug.Log("<color=red>OnTriggerEnterHitGround</color>");
+
+        if (collider.tag == "Default" || collider.tag == "Object" || collider.tag == "Ground")
+        {
+            cliffList.Add(collider.gameObject);
+        }
+    }
+
+    /// <summary>
+    /// 地面に接触しているか？を判別する当たり判定(離れた時)
+    /// </summary>
+    public void OnTriggerExitHitCliff(Collider collider)
+    {
+        //Debug.Log("<color=green>OnTriggerExitHitGround</color>");
+
+        if (collider.tag == "Default" || collider.tag == "Object" || collider.tag == "Ground")
+        {
+            cliffList.Remove(collider.gameObject);
         }
     }
 }
