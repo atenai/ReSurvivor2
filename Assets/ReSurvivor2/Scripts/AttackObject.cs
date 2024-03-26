@@ -8,11 +8,14 @@ using UnityEngine;
 /// </summary>
 public class AttackObject : MonoBehaviour
 {
+    [SerializeField] public float damage = 30.0f;
+
     void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.CompareTag("Player"))
         {
-            Debug.Log("プレイヤーに攻撃！");
+            Debug.Log("プレイヤーにダメージ！");
+            collider.gameObject.GetComponent<Player>().TakeDamage(damage);
             Destroy(this.gameObject);
         }
     }
