@@ -43,7 +43,9 @@ public class Player : MonoBehaviour
     float currentHp = 100.0f;
     [SerializeField] float maxHp = 100.0f;
     [SerializeField] Canvas canvasPlayer;
+    [SerializeField] Image imageBG;
     [SerializeField] Slider sliderHp;
+
 
     void Awake()
     {
@@ -97,16 +99,7 @@ public class Player : MonoBehaviour
 
         NormalMoveAnimation();
 
-        if (isAim == false)
-        {
-            //常にキャンバスをメインカメラの方を向かせる
-            canvasPlayer.transform.rotation = Camera.main.transform.rotation;
-        }
-        else if (isAim == true)
-        {
-            //常にキャンバスをメインカメラの方を向かせる
-            canvasPlayer.transform.rotation = Camera.main.transform.rotation;
-        }
+        PlayerUI();
     }
 
     void NormalMoveAnimation()
@@ -114,6 +107,29 @@ public class Player : MonoBehaviour
         animator.SetFloat("f_moveSpeedX", inputHorizontal);
         animator.SetFloat("f_moveSpeedY", inputVertical);
         animator.SetBool("b_isAim", isAim);
+    }
+
+    /// <summary>
+    /// プレイヤーキャラクターの右横にある3DのUI
+    /// </summary> 
+    void PlayerUI()
+    {
+        if (isAim == false)
+        {
+            //常にキャンバスをメインカメラの方を向かせる
+            canvasPlayer.transform.rotation = Camera.main.transform.rotation;
+            //SRT(スケール→トランスフォーム→ローテーション)
+            imageBG.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+            imageBG.transform.localPosition = new Vector3(120.0f, 100.0f, 0.0f);
+        }
+        else if (isAim == true)
+        {
+            //常にキャンバスをメインカメラの方を向かせる
+            canvasPlayer.transform.rotation = Camera.main.transform.rotation;
+            //SRT(スケール→トランスフォーム→ローテーション)
+            imageBG.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
+            imageBG.transform.localPosition = new Vector3(100.0f, 150.0f, 0.0f);
+        }
     }
 
     void LateUpdate()
