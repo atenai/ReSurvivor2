@@ -39,10 +39,11 @@ public class Player : MonoBehaviour
     [Tooltip("キャラクターの右肩ボーン")]
     [SerializeField] Transform upperarm_r;
 
-    //HP
+    [Tooltip("HP")]
     float currentHp = 100.0f;
     [SerializeField] float maxHp = 100.0f;
     [SerializeField] Canvas canvasPlayer;
+    [SerializeField] Image imageBG;
     [SerializeField] Slider sliderHp;
 
     void Awake()
@@ -97,16 +98,7 @@ public class Player : MonoBehaviour
 
         NormalMoveAnimation();
 
-        if (isAim == false)
-        {
-            //常にキャンバスをメインカメラの方を向かせる
-            canvasPlayer.transform.rotation = Camera.main.transform.rotation;
-        }
-        else if (isAim == true)
-        {
-            //常にキャンバスをメインカメラの方を向かせる
-            canvasPlayer.transform.rotation = Camera.main.transform.rotation;
-        }
+        PlayerUI();
     }
 
     void NormalMoveAnimation()
@@ -114,6 +106,35 @@ public class Player : MonoBehaviour
         animator.SetFloat("f_moveSpeedX", inputHorizontal);
         animator.SetFloat("f_moveSpeedY", inputVertical);
         animator.SetBool("b_isAim", isAim);
+    }
+
+    /// <summary>
+    /// プレイヤーキャラクターの右横にある3DのUI
+    /// </summary> 
+    void PlayerUI()
+    {
+        if (isAim == false)
+        {
+            //常にキャンバスをメインカメラの方を向かせる
+            canvasPlayer.transform.rotation = Camera.main.transform.rotation;
+            //キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
+            canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(this.transform.position.x, this.transform.position.y + PlayerCamera.singletonInstance.NormalUpPos, this.transform.position.z);
+            //SRT(スケール→トランスフォーム→ローテーション)
+            imageBG.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+            imageBG.transform.localRotation = Quaternion.Euler(0.0f, 0.1f, 0.0f);
+            imageBG.transform.localPosition = new Vector3(150.0f, -100.0f, 0.0f);
+        }
+        else if (isAim == true)
+        {
+            //常にキャンバスをメインカメラの方を向かせる
+            canvasPlayer.transform.rotation = Camera.main.transform.rotation;
+            //キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
+            canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(this.transform.position.x, this.transform.position.y + PlayerCamera.singletonInstance.AimUpPos, this.transform.position.z);
+            //SRT(スケール→トランスフォーム→ローテーション)
+            imageBG.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
+            imageBG.transform.localRotation = Quaternion.Euler(0.0f, 0.1f, 0.0f);
+            imageBG.transform.localPosition = new Vector3(95.0f, -20.0f, 0.0f);
+        }
     }
 
     void LateUpdate()
