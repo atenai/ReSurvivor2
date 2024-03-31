@@ -36,6 +36,20 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("カメラのスピードを遅くする")]
     [Range(1.0f, 4.0f)] float slowDownCameraSpeed = 2.0f;
 
+    [Tooltip("通常カメラのy位置")]
+    const float normalUpPos = 2.0f;
+    public float NormalUpPos => normalUpPos;
+    [Tooltip("通常カメラのz位置")]
+    const float normalForwardPos = -5.0f;
+
+    [Tooltip("肩越しカメラのx位置")]
+    const float aimRightPos = 0.6f;
+    [Tooltip("肩越しカメラのy位置")]
+    const float aimUpPos = 1.6f;
+    public float AimUpPos => aimUpPos;
+    [Tooltip("肩越しカメラのz位置")]
+    const float aimForwardPos = -0.6f;
+
     [Header("レイキャスト")]
     [Tooltip("ヒットしたオブジェクトの名前")]
     string hitName = "";
@@ -392,8 +406,8 @@ public class PlayerCamera : MonoBehaviour
     /// </summary>
     void CameraNormalMove()
     {
-        //通常のカメラ位置をプレイヤーの座標位置から計算
-        Vector3 cameraPos = Player.SingletonInstance.transform.position + (Vector3.up * 2) + (this.transform.forward * -5);
+        //通常カメラ位置をプレイヤーの座標位置から計算
+        Vector3 cameraPos = Player.SingletonInstance.transform.position + (Vector3.up * normalUpPos) + (this.transform.forward * normalForwardPos);
         //カメラの位置を移動させる
         this.transform.position = Vector3.Lerp(transform.position, cameraPos, Player.SingletonInstance.NormalMoveSpeed * 10 * Time.deltaTime);
     }
@@ -403,10 +417,7 @@ public class PlayerCamera : MonoBehaviour
     /// </summary>
     void CameraAimMove()
     {
-        //通常のカメラ位置をプレイヤーの座標位置から計算
-        const float aimRightPos = 0.6f;
-        const float aimUpPos = 1.6f;
-        const float aimForwardPos = -0.6f;
+        //肩越しカメラ位置をプレイヤーの座標位置から計算
         Vector3 cameraPos = Player.SingletonInstance.transform.position + (Player.SingletonInstance.transform.right * aimRightPos) + (Vector3.up * aimUpPos) + (this.transform.forward * aimForwardPos);
         //カメラの位置を移動させる
         this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, Player.SingletonInstance.WeaponMoveSpeed * 10 * Time.deltaTime);
