@@ -38,6 +38,12 @@ public class Player : MonoBehaviour
     bool isAnimationRotInit = false;
     [Tooltip("キャラクターの右肩ボーン")]
     [SerializeField] Transform upperarm_r;
+    [Tooltip("キャラクターの手に持っているハンドガンのモデル")]
+    [SerializeField] GameObject handGunModel;
+    [Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
+    [SerializeField] GameObject assaultRifleModel;
+    [Tooltip("キャラクターの手に持っているショットガンのモデル")]
+    [SerializeField] GameObject shotGunModel;
 
     [Tooltip("HP")]
     float currentHp = 100.0f;
@@ -98,6 +104,8 @@ public class Player : MonoBehaviour
 
         NormalMoveAnimation();
 
+        SwitchWeaponModel();
+
         PlayerUI();
     }
 
@@ -106,6 +114,28 @@ public class Player : MonoBehaviour
         animator.SetFloat("f_moveSpeedX", inputHorizontal);
         animator.SetFloat("f_moveSpeedY", inputVertical);
         animator.SetBool("b_isAim", isAim);
+    }
+
+    void SwitchWeaponModel()
+    {
+        switch (PlayerCamera.singletonInstance.gunTYPE)
+        {
+            case PlayerCamera.GunTYPE.HandGun:
+                handGunModel.SetActive(true);
+                assaultRifleModel.SetActive(false);
+                shotGunModel.SetActive(false);
+                break;
+            case PlayerCamera.GunTYPE.AssaultRifle:
+                handGunModel.SetActive(false);
+                assaultRifleModel.SetActive(true);
+                shotGunModel.SetActive(false);
+                break;
+            case PlayerCamera.GunTYPE.ShotGun:
+                handGunModel.SetActive(false);
+                assaultRifleModel.SetActive(false);
+                shotGunModel.SetActive(true);
+                break;
+        }
     }
 
     /// <summary>

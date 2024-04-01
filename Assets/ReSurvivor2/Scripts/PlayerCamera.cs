@@ -93,13 +93,13 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("ショットガンが一度で出る弾の数")]
     [SerializeField] int shotGunBullet = 10;
 
-    enum GunTYPE
+    public enum GunTYPE
     {
         HandGun = 1,
         AssaultRifle = 2,
         ShotGun = 3,
     }
-    [SerializeField] GunTYPE gunTYPE = GunTYPE.AssaultRifle;
+    public GunTYPE gunTYPE = GunTYPE.AssaultRifle;
 
     void Awake()
     {
