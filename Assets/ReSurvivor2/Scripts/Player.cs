@@ -18,15 +18,18 @@ public class Player : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] Rigidbody rb;
 
-    [Header("キャラクターの移動")]
+    [Header("プレイヤーキャラクターの移動関連")]
+    [Tooltip("プレイヤーキャラクターの通常移動速度")]
     [SerializeField] float normalMoveSpeed = 1.0f;
     public float NormalMoveSpeed => normalMoveSpeed;
+    [Tooltip("プレイヤーキャラクターのエイム中移動速度")]
     [SerializeField] float weaponMoveSpeed = 1.0f;
     public float WeaponMoveSpeed => weaponMoveSpeed;
     float inputHorizontal;
     float inputVertical;
     Vector3 moveForward;
     Vector3 cameraForward;
+    [Tooltip("エイムしているか？")]
     bool isAim = false;
     public bool IsAim => isAim;
 
@@ -45,8 +48,9 @@ public class Player : MonoBehaviour
     [Tooltip("キャラクターの手に持っているショットガンのモデル")]
     [SerializeField] GameObject shotGunModel;
 
-    [Tooltip("HP")]
+    [Tooltip("現在のHP")]
     float currentHp = 100.0f;
+    [Tooltip("HPの最大値")]
     [SerializeField] float maxHp = 100.0f;
     [SerializeField] Canvas canvasPlayer;
     [SerializeField] Image imageBG;
@@ -81,6 +85,9 @@ public class Player : MonoBehaviour
         spine_03_InitEulerAnglesX = spine_03.eulerAngles.x;
     }
 
+    /// <summary>
+    /// HPの初期化処理
+    /// </summary>
     void InitHP()
     {
         sliderHp.value = 1;
@@ -109,6 +116,9 @@ public class Player : MonoBehaviour
         PlayerUI();
     }
 
+    /// <summary>
+    /// 移動アニメーション
+    /// </summary>
     void NormalMoveAnimation()
     {
         animator.SetFloat("f_moveSpeedX", inputHorizontal);
@@ -116,6 +126,9 @@ public class Player : MonoBehaviour
         animator.SetBool("b_isAim", isAim);
     }
 
+    /// <summary>
+    /// 銃のモデルを切り替え
+    /// </summary>
     void SwitchWeaponModel()
     {
         switch (PlayerCamera.singletonInstance.gunTYPE)

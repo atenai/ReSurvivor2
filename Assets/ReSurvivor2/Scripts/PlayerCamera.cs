@@ -126,6 +126,14 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
+        SwitchWeapon();
+    }
+
+    /// <summary>
+    /// 武器の切り替え
+    /// </summary> 
+    void SwitchWeapon()
+    {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             //Debug.Log("ハンドガン");
