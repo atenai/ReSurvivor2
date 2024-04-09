@@ -2102,6 +2102,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
+      propertyPath: rockImpactEffect
+      value: 
+      objectReference: {fileID: 9025620440509115272, guid: 67ee14f1e2b7cbf44b97f7f8d26782bc, type: 3}
+    - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
+      propertyPath: bloodImpactEffect
+      value: 
+      objectReference: {fileID: 258580847482720398, guid: 907189bb1273a83499f4581146d101a5, type: 3}
+    - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
       propertyPath: handGunImpactEffect
       value: 
       objectReference: {fileID: 1245417074158469956, guid: f950286ed3ac28a44812aed065adb549, type: 3}
@@ -2117,6 +2125,10 @@ PrefabInstance:
       propertyPath: shotGunAfterFireSmoke
       value: 
       objectReference: {fileID: 1473701676328951863}
+    - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
+      propertyPath: assaultRifleImpactEffect
+      value: 
+      objectReference: {fileID: 9025620440509115272, guid: 67ee14f1e2b7cbf44b97f7f8d26782bc, type: 3}
     - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
       propertyPath: assaultRifleAfterFireSmoke
       value: 

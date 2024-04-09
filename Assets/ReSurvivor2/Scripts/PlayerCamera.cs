@@ -71,8 +71,6 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] ParticleGroupEmitter[] handGunShotEmitters;
     [Tooltip("ハンドガンの硝煙")]
     [SerializeField] ParticleGroupPlayer handGunAfterFireSmoke;
-    [Tooltip("ハンドガンの着弾エフェクト")]
-    [SerializeField] GameObject handGunImpactEffect;
     //↑アセットストアのプログラム↑//
 
     [Header("アサルトライフル")]
@@ -88,8 +86,6 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] ParticleGroupEmitter[] assaultRifleShotEmitters;
     [Tooltip("アサルトライフルの硝煙")]
     [SerializeField] ParticleGroupPlayer assaultRifleAfterFireSmoke;
-    [Tooltip("アサルトライフルの着弾エフェクト")]
-    [SerializeField] GameObject assaultRifleImpactEffect;
     //↑アセットストアのプログラム↑//
 
     [Header("ショットガン")]
@@ -107,9 +103,14 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] ParticleGroupEmitter[] shotGunShotEmitters;
     [Tooltip("ショットガンの硝煙")]
     [SerializeField] ParticleGroupPlayer shotGunAfterFireSmoke;
-    [Tooltip("ショットガンの着弾エフェクト")]
-    [SerializeField] GameObject shotGunImpactEffect;
     //↑アセットストアのプログラム↑//
+
+    [Header("着弾エフェクト")]
+    //パス(Assets/Knife/PRO Effects FPS Muzzle flashes & Impacts/Particles/Prefabs/Impacts)
+    [Tooltip("血の着弾エフェクト")]
+    [SerializeField] GameObject bloodImpactEffect;
+    [Tooltip("煙の着弾エフェクト")]
+    [SerializeField] GameObject rockImpactEffect;
 
     public enum GunTYPE
     {
@@ -238,7 +239,7 @@ public class PlayerCamera : MonoBehaviour
                 }
             }
 
-            HandGunImpactEffect(hit);
+            ImpactEffect(hit);
         }
     }
 
@@ -265,15 +266,6 @@ public class PlayerCamera : MonoBehaviour
         {
             handGunAfterFireSmoke.Play();
         }
-    }
-
-    /// <summary>
-    /// 着弾エフェクト
-    /// </summary> 
-    void HandGunImpactEffect(RaycastHit hit)
-    {
-        GameObject impactGameObject = Instantiate(handGunImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-        Destroy(impactGameObject, 2.0f);
     }
 
     /// <summary>
@@ -336,7 +328,7 @@ public class PlayerCamera : MonoBehaviour
                 }
             }
 
-            AssaultRifleImpactEffect(hit);
+            ImpactEffect(hit);
         }
     }
 
@@ -363,15 +355,6 @@ public class PlayerCamera : MonoBehaviour
         {
             assaultRifleAfterFireSmoke.Play();
         }
-    }
-
-    /// <summary>
-    /// 着弾エフェクト
-    /// </summary> 
-    void AssaultRifleImpactEffect(RaycastHit hit)
-    {
-        GameObject impactGameObject = Instantiate(assaultRifleImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-        Destroy(impactGameObject, 2.0f);
     }
 
     /// <summary>
@@ -436,7 +419,7 @@ public class PlayerCamera : MonoBehaviour
                     }
                 }
 
-                ShotGunImpactEffect(hit);
+                ImpactEffect(hit);
             }
         }
     }
@@ -469,10 +452,18 @@ public class PlayerCamera : MonoBehaviour
     /// <summary>
     /// 着弾エフェクト
     /// </summary> 
-    void ShotGunImpactEffect(RaycastHit hit)
+    void ImpactEffect(RaycastHit hit)
     {
-        GameObject impactGameObject = Instantiate(shotGunImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-        Destroy(impactGameObject, 2.0f);
+        if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+        {
+            GameObject impactGameObject = Instantiate(bloodImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            Destroy(impactGameObject, 2.0f);
+        }
+        else
+        {
+            GameObject impactGameObject = Instantiate(rockImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+            Destroy(impactGameObject, 2.0f);
+        }
     }
 
     void FixedUpdate()
