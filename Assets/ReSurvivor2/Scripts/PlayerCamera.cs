@@ -66,6 +66,15 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("ハンドガンの射撃間隔の時間カウント用のタイマー")]
     float handGunCountTimer = 0.0f;
 
+    //↓アセットストアのプログラム↓//
+    [Tooltip("ハンドガンのマズルフラッシュと薬莢")]
+    [SerializeField] ParticleGroupEmitter[] handGunShotEmitters;
+    [Tooltip("ハンドガンの硝煙")]
+    [SerializeField] ParticleGroupPlayer handGunAfterFireSmoke;
+    [Tooltip("ハンドガンの着弾エフェクト")]
+    [SerializeField] GameObject handGunImpactEffect;
+    //↑アセットストアのプログラム↑//
+
     [Header("アサルトライフル")]
     [Tooltip("アサルトライフルを何秒間隔で撃つか")]
     [SerializeField] float assaultRifleFireRate = 0.1f;
@@ -92,6 +101,15 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] float shotGunRandomAngle = 5.0f;
     [Tooltip("ショットガンが一度で出る弾の数")]
     [SerializeField] int shotGunBullet = 10;
+
+    //↓アセットストアのプログラム↓//
+    [Tooltip("ショットガンのマズルフラッシュと薬莢")]
+    [SerializeField] ParticleGroupEmitter[] shotGunShotEmitters;
+    [Tooltip("ショットガンの硝煙")]
+    [SerializeField] ParticleGroupPlayer shotGunAfterFireSmoke;
+    [Tooltip("ショットガンの着弾エフェクト")]
+    [SerializeField] GameObject shotGunImpactEffect;
+    //↑アセットストアのプログラム↑//
 
     public enum GunTYPE
     {
@@ -194,8 +212,8 @@ public class PlayerCamera : MonoBehaviour
     /// </summary> 
     void HandGunFire()
     {
-        AssaultRifleMuzzleFlash();
-        AssaultRifleSmoke();
+        HandGunMuzzleFlashAndShell();
+        HandGunSmoke();
 
         Ray ray = new Ray(this.transform.position, this.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
@@ -220,8 +238,42 @@ public class PlayerCamera : MonoBehaviour
                 }
             }
 
-            AssaultRifleImpactEffect(hit);
+            HandGunImpactEffect(hit);
         }
+    }
+
+    /// <summary>
+    /// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
+    /// </summary>
+    void HandGunMuzzleFlashAndShell()
+    {
+        if (handGunShotEmitters != null)
+        {
+            foreach (var effect in handGunShotEmitters)
+            {
+                effect.Emit(1);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
+    /// </summary>
+    void HandGunSmoke()
+    {
+        if (handGunAfterFireSmoke != null)
+        {
+            handGunAfterFireSmoke.Play();
+        }
+    }
+
+    /// <summary>
+    /// 着弾エフェクト
+    /// </summary> 
+    void HandGunImpactEffect(RaycastHit hit)
+    {
+        GameObject impactGameObject = Instantiate(handGunImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+        Destroy(impactGameObject, 2.0f);
     }
 
     /// <summary>
@@ -254,7 +306,7 @@ public class PlayerCamera : MonoBehaviour
     /// </summary> 
     void AssaultRifleFire()
     {
-        AssaultRifleMuzzleFlash();
+        AssaultRifleMuzzleFlashAndShell();
         AssaultRifleSmoke();
 
         Vector3 direction = this.transform.forward;
@@ -289,15 +341,15 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// マズルフラッシュのエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
+    /// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
     /// </summary>
-    void AssaultRifleMuzzleFlash()
+    void AssaultRifleMuzzleFlashAndShell()
     {
         if (assaultRifleShotEmitters != null)
         {
-            foreach (var e in assaultRifleShotEmitters)
+            foreach (var effect in assaultRifleShotEmitters)
             {
-                e.Emit(1);
+                effect.Emit(1);
             }
         }
     }
@@ -352,8 +404,8 @@ public class PlayerCamera : MonoBehaviour
     /// </summary> 
     void ShotGunFire()
     {
-        AssaultRifleMuzzleFlash();
-        AssaultRifleSmoke();
+        ShotGunMuzzleFlashAndShell();
+        ShotGunSmoke();
 
         for (int i = 0; i < shotGunBullet; i++)
         {
@@ -384,9 +436,43 @@ public class PlayerCamera : MonoBehaviour
                     }
                 }
 
-                AssaultRifleImpactEffect(hit);
+                ShotGunImpactEffect(hit);
             }
         }
+    }
+
+    /// <summary>
+    /// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
+    /// </summary>
+    void ShotGunMuzzleFlashAndShell()
+    {
+        if (shotGunShotEmitters != null)
+        {
+            foreach (var effect in shotGunShotEmitters)
+            {
+                effect.Emit(1);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
+    /// </summary>
+    void ShotGunSmoke()
+    {
+        if (shotGunAfterFireSmoke != null)
+        {
+            shotGunAfterFireSmoke.Play();
+        }
+    }
+
+    /// <summary>
+    /// 着弾エフェクト
+    /// </summary> 
+    void ShotGunImpactEffect(RaycastHit hit)
+    {
+        GameObject impactGameObject = Instantiate(shotGunImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+        Destroy(impactGameObject, 2.0f);
     }
 
     void FixedUpdate()

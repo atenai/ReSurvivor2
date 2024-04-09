@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &188399872392208515
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8852387724558227300}
+    m_Modifications:
+    - target: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7958611645855860114, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+      propertyPath: m_Name
+      value: Pistol Silencer SmokeEmitter
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+--- !u!4 &4643546224053505664 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4822339388056432131, guid: 450c45a3a6df0dd4588e00392426c70f, type: 3}
+  m_PrefabInstance: {fileID: 188399872392208515}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2822917370757566881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74,6 +136,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1750075617723322681, guid: e96cd991dc6176347a1cf0af036f4f77, type: 3}
   m_PrefabInstance: {fileID: 2822917370757566881}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8520622603827240417
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8852387724558227302}
+    m_Modifications:
+    - target: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.007
+      objectReference: {fileID: 0}
+    - target: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2675361803976091013, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+      propertyPath: m_Name
+      value: Pistol Silencer ShellEmitter
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+--- !u!4 &8325528031664624734 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 411343515342342591, guid: bc81207e5c516234083d7c9ba0b39b50, type: 3}
+  m_PrefabInstance: {fileID: 8520622603827240417}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8852387724558355950
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -133,13 +257,89 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 400008, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8325528031664624734}
     - targetCorrespondingSourceObject: {fileID: 400010, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4567917642797564056}
+    - targetCorrespondingSourceObject: {fileID: 400010, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4643546224053505664}
+    - targetCorrespondingSourceObject: {fileID: 400010, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2744751045154065268}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
 --- !u!4 &8852387724558227300 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400010, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
   m_PrefabInstance: {fileID: 8852387724558355950}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8852387724558227302 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400008, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
+  m_PrefabInstance: {fileID: 8852387724558355950}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8996453247085396547
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8852387724558227300}
+    m_Modifications:
+    - target: {fileID: 5461235559503581967, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_Name
+      value: Pistol Silencer AfterfireSmoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+--- !u!4 &2744751045154065268 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6543310350851574071, guid: bd9397d892a79a247bb43ea5cdfa8599, type: 3}
+  m_PrefabInstance: {fileID: 8996453247085396547}
   m_PrefabAsset: {fileID: 0}
