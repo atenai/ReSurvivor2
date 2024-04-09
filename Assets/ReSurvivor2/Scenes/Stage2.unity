@@ -1674,6 +1674,72 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
+--- !u!114 &1473701676328951859 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1310077616222079729, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
+  m_PrefabInstance: {fileID: 1473701676328951858}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd23736960bd2a48beef6c615cd7607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1473701676328951860 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1659506650312461092, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
+  m_PrefabInstance: {fileID: 1473701676328951858}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd23736960bd2a48beef6c615cd7607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1473701676328951861 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1710036457472732261, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
+  m_PrefabInstance: {fileID: 1473701676328951858}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd23736960bd2a48beef6c615cd7607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1473701676328951862 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8465305933632905666, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
+  m_PrefabInstance: {fileID: 1473701676328951858}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd23736960bd2a48beef6c615cd7607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1473701676328951863 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4097646641142865863, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
+  m_PrefabInstance: {fileID: 1473701676328951858}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d569c6b0df9c5fe4b9bf4a81c86fb4e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1473701676328951864 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7783815465028223272, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
+  m_PrefabInstance: {fileID: 1473701676328951858}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d569c6b0df9c5fe4b9bf4a81c86fb4e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5192482069242847709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2036,9 +2102,33 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
+      propertyPath: handGunAfterFireSmoke
+      value: 
+      objectReference: {fileID: 1473701676328951864}
+    - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
+      propertyPath: shotGunAfterFireSmoke
+      value: 
+      objectReference: {fileID: 1473701676328951863}
+    - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
       propertyPath: assaultRifleAfterFireSmoke
       value: 
       objectReference: {fileID: 403809961}
+    - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
+      propertyPath: handGunShotEmitters.Array.data[0]
+      value: 
+      objectReference: {fileID: 1473701676328951862}
+    - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
+      propertyPath: handGunShotEmitters.Array.data[1]
+      value: 
+      objectReference: {fileID: 1473701676328951861}
+    - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
+      propertyPath: shotGunShotEmitters.Array.data[0]
+      value: 
+      objectReference: {fileID: 1473701676328951860}
+    - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
+      propertyPath: shotGunShotEmitters.Array.data[1]
+      value: 
+      objectReference: {fileID: 1473701676328951859}
     - target: {fileID: 1170313334443602608, guid: f4bc8bc0f8b0d9f469f2d9e567d8659e, type: 3}
       propertyPath: assaultRifleShotEmitters.Array.data[0]
       value: 

@@ -115,14 +115,23 @@ MonoBehaviour:
   Damage: 10
   impactForce: 30
   handGunFireRate: 0.1
+  handGunShotEmitters:
+  - {fileID: 0}
+  - {fileID: 0}
+  handGunAfterFireSmoke: {fileID: 0}
   assaultRifleFireRate: 0.1
   assaultRifleRandomAngle: 1
   assaultRifleShotEmitters:
   - {fileID: 0}
   - {fileID: 0}
   assaultRifleAfterFireSmoke: {fileID: 0}
-  assaultRifleImpactEffect: {fileID: 1245417074158469956, guid: f950286ed3ac28a44812aed065adb549, type: 3}
   shotGunFireRate: 0.1
   shotGunRandomAngle: 5
   shotGunBullet: 10
+  shotGunShotEmitters:
+  - {fileID: 0}
+  - {fileID: 0}
+  shotGunAfterFireSmoke: {fileID: 0}
+  bloodImpactEffect: {fileID: 258580847482720398, guid: 907189bb1273a83499f4581146d101a5, type: 3}
+  rockImpactEffect: {fileID: 9025620440509115272, guid: 67ee14f1e2b7cbf44b97f7f8d26782bc, type: 3}
   gunTYPE: 1
