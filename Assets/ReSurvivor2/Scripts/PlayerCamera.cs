@@ -316,9 +316,9 @@ public class PlayerCamera : MonoBehaviour
     /// <summary>
     /// 着弾エフェクト
     /// </summary> 
-    void AssaultRifleImpactEffect(RaycastHit _hit)
+    void AssaultRifleImpactEffect(RaycastHit hit)
     {
-        GameObject impactGameObject = Instantiate(assaultRifleImpactEffect, _hit.point, Quaternion.LookRotation(_hit.normal));
+        GameObject impactGameObject = Instantiate(assaultRifleImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
         Destroy(impactGameObject, 2.0f);
     }
 
