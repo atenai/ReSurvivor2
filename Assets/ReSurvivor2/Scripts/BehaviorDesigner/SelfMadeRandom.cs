@@ -83,6 +83,10 @@ public class SelfMadeRandom : Composite//Compositeにより複数の子タスク
         selectedChildIndex = -1;
     }
 
+    /// <summary>
+    /// ビヘイビアツリーエディタで「リセット」ボタンを押したときに呼び出されます。
+    /// Unityのプレイモードを終了すると、タスクがリセットされ、OnResetが呼ばれます。
+    /// </summary>
     public override void OnReset()
     {
         probabilitiesList.Clear();
