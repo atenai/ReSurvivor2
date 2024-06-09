@@ -5,7 +5,7 @@ using UnityEngine;
 /// エネミーがターゲットから特定の距離離れているか？を調べるクラス
 /// </summary>
 [TaskCategory("GroundEnemy")]
-public class CanGroundEnemyAwayFromTheTargetConditional : Conditional
+public class CanGroundEnemyWithinSpecificDistanceConditional : Conditional
 {
     GroundEnemy groundEnemy;
 
@@ -29,10 +29,10 @@ public class CanGroundEnemyAwayFromTheTargetConditional : Conditional
         if (sqrCurrentDistance < range * range)
         {
             //範囲以内
-            return TaskStatus.Failure;
+            return TaskStatus.Success;
         }
 
         //範囲以上
-        return TaskStatus.Success;
+        return TaskStatus.Failure;
     }
 }

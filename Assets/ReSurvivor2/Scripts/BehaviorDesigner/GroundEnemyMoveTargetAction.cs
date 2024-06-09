@@ -12,7 +12,8 @@ public class GroundEnemyMoveTargetAction : Action
 
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
     [SerializeField] float endPos = 2.5f;
-    float moveSpeed = 2.0f;
+    [UnityEngine.Tooltip("エネミーの移動スピード")]
+    [SerializeField] float moveSpeed = 2.0f;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()

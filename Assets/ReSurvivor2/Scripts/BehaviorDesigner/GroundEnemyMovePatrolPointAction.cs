@@ -14,7 +14,8 @@ public class GroundEnemyMovePatrolPointAction : Action
     [SerializeField] float endPos = 0.5f;
     Vector3 patrolPointPos;
     bool isMoveEnd = false;
-    float moveSpeed = 2.0f;
+    [UnityEngine.Tooltip("エネミーの移動スピード")]
+    [SerializeField] float moveSpeed = 2.0f;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()

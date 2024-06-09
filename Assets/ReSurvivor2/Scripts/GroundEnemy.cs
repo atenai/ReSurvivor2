@@ -181,7 +181,6 @@ public class GroundEnemy : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, rayDistance))
         {
-            Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red, 1);
             if (hit.collider.tag == "Player")
             {
                 //Debug.Log("<color=red>プレイヤーを発見!</color>");
@@ -189,6 +188,7 @@ public class GroundEnemy : MonoBehaviour
                 chaseCountTime = chaseTime;
             }
         }
+        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red, 1);
     }
 
     /// <summary>
