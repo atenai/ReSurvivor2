@@ -18,7 +18,7 @@ public class CanGroundEnemyMovePatrolPointConditional : Conditional
     // 更新時に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (groundEnemy.IsChase == false && groundEnemy.IsGrounded == true)
+        if (groundEnemy.IsGrounded == true)
         {
             //プレイヤーを発見していない
             return TaskStatus.Success;

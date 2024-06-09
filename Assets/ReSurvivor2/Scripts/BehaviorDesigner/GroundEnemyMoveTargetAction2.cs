@@ -12,8 +12,6 @@ public class GroundEnemyMoveTargetAction2 : Action
 
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
     [SerializeField] float endPos = 2.5f;
-    [UnityEngine.Tooltip("エネミーの移動する方法を加減速にするか？一定スピードにするか？")]
-    [SerializeField] bool isChangeMove = false;
     float moveSpeed = 2.0f;
 
     // Taskが処理される直前に呼ばれる
@@ -57,7 +55,6 @@ public class GroundEnemyMoveTargetAction2 : Action
         if (groundEnemy.ChaseCountTime <= minTimer)
         {
             groundEnemy.IsChase = false;
-            groundEnemy.Alert.gameObject.SetActive(false);
         }
     }
 
@@ -95,24 +92,7 @@ public class GroundEnemyMoveTargetAction2 : Action
             return;
         }
 
-        if (isChangeMove == true)
-        {
-            VectorSpeed();
-        }
-        else if (isChangeMove == false)
-        {
-            ConstantSpeed();
-        }
-    }
-
-    /// <summary>
-    /// ベクトルの距離による速さの移動（加減速による移動）
-    /// </summary>
-    void VectorSpeed()
-    {
-        Vector3 localTargetPos = groundEnemy.Target.transform.position;
-        localTargetPos.y = groundEnemy.transform.position.y;
-        groundEnemy.Rigidbody.velocity = localTargetPos - groundEnemy.transform.position;
+        ConstantSpeed();
     }
 
     /// <summary>

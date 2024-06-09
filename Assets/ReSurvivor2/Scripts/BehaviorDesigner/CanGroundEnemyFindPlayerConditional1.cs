@@ -21,18 +21,12 @@ public class CanGroundEnemyFindPlayerConditional1 : Conditional
     // 更新時に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (groundEnemy.HitCollider == null)
-        {
-            return TaskStatus.Failure;
-        }
-
         if (groundEnemy.GetHit(checkCollisionIndex) == true && groundEnemy.HitCollider.tag == "Player")
         {
             //Debug.Log("<color=green>プレイヤーを発見!3</color>");
 
             groundEnemy.IsChase = true;
             groundEnemy.ChaseCountTime = groundEnemy.ChaseTime;
-            groundEnemy.Alert.gameObject.SetActive(true);
             //プレイヤーを発見した
             return TaskStatus.Success;
         }

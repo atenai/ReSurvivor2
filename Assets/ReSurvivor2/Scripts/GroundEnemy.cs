@@ -42,7 +42,6 @@ public class GroundEnemy : MonoBehaviour
     }
 
     [SerializeField] GameObject alert;
-    public GameObject Alert => alert;
 
     [UnityEngine.Tooltip("現在のパトロールポイントのナンバー")]
     int patrolPointNumber = 0;
@@ -64,10 +63,6 @@ public class GroundEnemy : MonoBehaviour
     bool isGrounded = false;
     public bool IsGrounded => isGrounded;
 
-    List<GameObject> cliffList = new List<GameObject>();
-    public bool IsCliff => cliffList.Count == 0;
-
-    [NonSerialized] public float jumpWaitCount = 0.0f;
     //ビヘイビアデザイナー用変数
 
 #if UNITY_EDITOR
@@ -119,6 +114,21 @@ public class GroundEnemy : MonoBehaviour
             rb = this.GetComponent<Rigidbody>();
         }
 
+        ResetSensorCollider();
+
+        //各種パラメーターを初期化
+        isChase = false;
+        patrolPointNumber = 0;
+        isGrounded = false;
+
+        GroundCheck();
+    }
+
+    /// <summary>
+    /// センサーコライダーの状態をリセットする
+    /// </summary>
+    void ResetSensorCollider()
+    {
         //コライダーが何も当たっていない状態にする
         if (hits != null)
         {
@@ -128,13 +138,6 @@ public class GroundEnemy : MonoBehaviour
             }
         }
         hitCollider = null;
-
-        isChase = false;
-        alert.gameObject.SetActive(false);
-
-        GroundCheck();
-
-        InitCliff();
     }
 
     /// <summary>
@@ -168,53 +171,35 @@ public class GroundEnemy : MonoBehaviour
         Gizmos.DrawSphere(new Vector3(groundCheckCenter.transform.position.x, groundCheckCenter.transform.position.y, groundCheckCenter.transform.position.z), groundedRadius);
     }
 
-    /// <summary>
-    /// 崖リストの初期化
-    /// </summary>
-    void InitCliff()
-    {
-        cliffList.Clear();
-    }
-
     void Update()
     {
         GroundCheck();
+        alert.gameObject.SetActive(isChase);
+
 
 #if UNITY_EDITOR
         DebugText();
 #endif
     }
 
-    /// <summary>
-    /// 吹っ飛ばされた際などで足場を離れた際は、リストを空にする
-    /// </summary>
-    void CliffCheck()
-    {
-        if (isGrounded == false)
-        {
-            cliffList.Clear();
-        }
-    }
-
     void DebugText()
     {
-        debugText9.text = "cliffList : " + string.Join(" , ", cliffList);
-        debugText8.text = "IsCliff : " + IsCliff.ToString();
-        debugText7.text = "jumpWaitCount : " + jumpWaitCount.ToString();
-        debugText6.text = "isGrounded : " + isGrounded.ToString();
-        debugText5.text = "hits[1] : " + hits[1].ToString();
-        debugText4.text = "hits[0] : " + hits[0].ToString();
+        debugText5.text = "chaseCountTime : " + chaseCountTime.ToString();
+        debugText4.text = "isChase : " + isChase.ToString();
+
+        debugText3.text = "patrolPointNumber : " + patrolPointNumber.ToString();
+        debugText2.text = "isGrounded : " + isGrounded.ToString();
+
+
         if (hitCollider != null)
         {
-            debugText3.text = "hitCollider : " + hitCollider.ToString();
+            debugText1.text = "hitCollider : " + hitCollider.ToString();
         }
         else
         {
-            debugText3.text = "hitCollider : " + "null";
+            debugText1.text = "hitCollider : " + "null";
         }
-        debugText2.text = "chaseCountTime : " + chaseCountTime.ToString();
-        debugText1.text = "isChase : " + isChase.ToString();
-        debugText0.text = "patrolPointNumber : " + patrolPointNumber.ToString();
+        debugText0.text = "hits[0] : " + hits[0].ToString();
     }
 
     void FixedUpdate()
@@ -227,7 +212,7 @@ public class GroundEnemy : MonoBehaviour
     /// </summary>
     void OnTriggerEnterHit(ColliderEventHandler self, Collider collider)
     {
-        if (collider.tag == "Player" || collider.tag == "Object")
+        if (collider.tag == "Player")
         {
             if (collider != null)
             {
@@ -253,7 +238,7 @@ public class GroundEnemy : MonoBehaviour
     /// </summary>
     void OnTriggerExitHit(ColliderEventHandler self, Collider collider)
     {
-        if (collider.tag == "Player" || collider.tag == "Object")
+        if (collider.tag == "Player")
         {
             if (collider != null)
             {
@@ -276,10 +261,6 @@ public class GroundEnemy : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         //Debug.Log("Hit");
-        if (collision.collider.tag == "Player")
-        {
-
-        }
     }
 
     /// <summary>
@@ -288,11 +269,6 @@ public class GroundEnemy : MonoBehaviour
     public void OnTriggerEnterHitCliff(Collider collider)
     {
         //Debug.Log("<color=red>OnTriggerEnterHitGround</color>");
-
-        if (collider.tag == "Default" || collider.tag == "Object" || collider.tag == "Ground")
-        {
-            cliffList.Add(collider.gameObject);
-        }
     }
 
     /// <summary>
@@ -301,10 +277,5 @@ public class GroundEnemy : MonoBehaviour
     public void OnTriggerExitHitCliff(Collider collider)
     {
         //Debug.Log("<color=green>OnTriggerExitHitGround</color>");
-
-        if (collider.tag == "Default" || collider.tag == "Object" || collider.tag == "Ground")
-        {
-            cliffList.Remove(collider.gameObject);
-        }
     }
 }

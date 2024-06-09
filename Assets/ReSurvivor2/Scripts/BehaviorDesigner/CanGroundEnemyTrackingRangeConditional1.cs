@@ -29,7 +29,6 @@ public class CanGroundEnemyTrackingRangeConditional1 : Conditional
         if (range * range < sqrCurrentDistance)
         {
             groundEnemy.IsChase = false;
-            groundEnemy.Alert.gameObject.SetActive(false);
             //範囲以上
             return TaskStatus.Failure;
         }

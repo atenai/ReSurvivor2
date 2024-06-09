@@ -11,6 +11,7 @@ using UnityEngine.AddressableAssets;
 [TaskCategory("GroundEnemy")]
 public class GroundEnemyShootAction : Action
 {
+    GroundEnemy groundEnemy;
     [SerializeField] GameObject shootGameObjectPrefab;
     [SerializeField] float spawnDistance = 1.0f; // キャラクターからの距離
     [SerializeField] float shootTime = 2.0f;
@@ -20,7 +21,7 @@ public class GroundEnemyShootAction : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-
+        groundEnemy = this.GetComponent<GroundEnemy>();
     }
 
     // Tick毎に呼ばれる
@@ -44,6 +45,21 @@ public class GroundEnemyShootAction : Action
 
     public override void OnFixedUpdate()
     {
+        RotateToDirectionTarget();
+    }
 
+    /// <summary>
+    /// ターゲットの方を向く
+    /// </summary> 
+    void RotateToDirectionTarget()
+    {
+        //対象オブジェクトの位置 – 自分のオブジェクトの位置 = 対象オブジェクトの向きベクトルが求められる
+        Vector3 direction = groundEnemy.Target.transform.position - groundEnemy.transform.position;
+        //単純に左右だけを見るようにしたいので、y軸の数値を0にする
+        direction.y = 0;
+        //第一引数に向きたい方向の向きベクトルを入れてあげる、それによってどのくらい回転させれば良いのか？の数値を求めることができる
+        Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
+        //↑で求めたどのくらい回転させれば良いのか？の数値を元に回転させる
+        groundEnemy.transform.rotation = Quaternion.Lerp(groundEnemy.transform.rotation, lookRotation, Time.deltaTime * 10f);
     }
 }

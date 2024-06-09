@@ -12,11 +12,13 @@ public class GroundEnemyMovePatrolPointAction3 : Action
 
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
     [SerializeField] float endPos = 0.5f;
-    [UnityEngine.Tooltip("エネミーの移動する方法を加減速にするか？一定スピードにするか？")]
-    [SerializeField] bool isChangeMove = false;
     Vector3 patrolPointPos;
     bool isMoveEnd = false;
     float moveSpeed = 2.0f;
+
+
+    [UnityEngine.Tooltip("配列に設定したコライダーのどの番数目を当たり判定に使うか？を指定する数値")]
+    [SerializeField] int checkCollisionIndex = default;
 
 #if UNITY_EDITOR
     [SerializeField] GameObject targetPosObj;//プレハブをGameObject型で取得（デバッグ用）
@@ -64,13 +66,20 @@ public class GroundEnemyMovePatrolPointAction3 : Action
     // Tick毎に呼ばれる
     public override TaskStatus OnUpdate()
     {
+        if (groundEnemy.GetHit(checkCollisionIndex) == true && groundEnemy.HitCollider.tag == "Player")
+        {
+            groundEnemy.IsChase = true;
+            groundEnemy.ChaseCountTime = groundEnemy.ChaseTime;
+            //プレイヤーを発見した
+            return TaskStatus.Success;
+        }
+
         if (isMoveEnd == true)
         {
             //目的地にたどりついた
             return TaskStatus.Success;
         }
 
-        //Debug.Log("<color=red>移動中</color>");
         //移動実行中
         return TaskStatus.Running;
     }
@@ -112,14 +121,7 @@ public class GroundEnemyMovePatrolPointAction3 : Action
             return;
         }
 
-        if (isChangeMove == true)
-        {
-            VectorSpeed();
-        }
-        else if (isChangeMove == false)
-        {
-            ConstantSpeed();
-        }
+        ConstantSpeed();
     }
 
     /// <summary>
@@ -129,16 +131,6 @@ public class GroundEnemyMovePatrolPointAction3 : Action
     {
         //配列の中から次の巡回地点を選択（必要に応じて繰り返し）
         groundEnemy.PatrolPointNumber = (groundEnemy.PatrolPointNumber + 1) % groundEnemy.PatrolPoints.Count;
-    }
-
-    /// <summary>
-    /// ベクトルの距離による速さの移動（加減速による移動）
-    /// </summary>
-    void VectorSpeed()
-    {
-        Vector3 localTargetPos = patrolPointPos;
-        localTargetPos.y = 0.0f;
-        groundEnemy.Rigidbody.velocity = localTargetPos - groundEnemy.transform.position;
     }
 
     /// <summary>
