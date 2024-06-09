@@ -650,14 +650,13 @@ MonoBehaviour:
       variableStartIndex: 
       JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(153,-2.627901)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(0,111.7647)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(3.88845825,96.561615)"},"ID":2,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanTestConditional","NodeData":{"Offset":"(-178.1012,147.341766)"},"ID":3,"Name":"Can
         Test Conditional","Instant":true,"BooleanisTest":true},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(0,146.33136)"},"ID":4,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-247.5409,152.4591)"},"ID":5,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyChaseConditional","NodeData":{"Offset":"(-419.999756,151.4281)"},"ID":6,"Name":"Can
-        Ground Enemy Chase Conditional","Instant":true},{"Type":"CanGroundEnemyTrackingRangeConditional1","NodeData":{"Offset":"(-183.959686,146.576843)"},"ID":7,"Name":"Can
-        Ground Enemy Tracking Range Conditional 1","Instant":true,"Singlerange":50},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-1.18015289,145.714355)"},"ID":8,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-249.5178,197.577637)"},"ID":9,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyAwayFromTheTargetConditional","NodeData":{"Offset":"(-175.684814,147.278)"},"ID":10,"Name":"Can
-        Ground Enemy Away From The Target Conditional","Instant":true},{"Type":"GroundEnemyMoveTargetAction2","NodeData":{"Offset":"(76.4328,147.094238)"},"ID":11,"Name":"Ground
-        Enemy Move Target Action 2","Instant":true,"SingleendPos":2.5}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(104.19622,195.403809)"},"ID":12,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"GroundEnemyShootAction","NodeData":{"Offset":"(-0.760215759,159.6489)"},"ID":13,"Name":"Ground
+        Ground Enemy Chase Conditional","Instant":true},{"Type":"CanGroundEnemyTrackingRangeConditional","NodeData":{"Offset":"(-182.950531,153.009338)"},"ID":7,"Name":"Can
+        Ground Enemy Tracking Range Conditional","Instant":true,"Singlerange":40},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-1.18015289,145.714355)"},"ID":8,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-249.5178,197.577637)"},"ID":9,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyAwayFromTheTargetConditional","NodeData":{"Offset":"(-175.684814,147.278)"},"ID":10,"Name":"Can
+        Ground Enemy Away From The Target Conditional","Instant":true},{"Type":"GroundEnemyMoveTargetAction","NodeData":{"Offset":"(68.13437,153.269043)"},"ID":11,"Name":"Ground
+        Enemy Move Target Action","Instant":true,"SingleendPos":2.5}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(104.19622,195.403809)"},"ID":12,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"GroundEnemyShootAction","NodeData":{"Offset":"(-0.760215759,159.6489)"},"ID":13,"Name":"Ground
         Enemy Shoot Action","Instant":true,"GameObjectshootGameObjectPrefab":0,"SinglespawnDistance":1,"SingleshootTime":2,"SinglelifeTime":3}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(204.478546,152.66272)"},"ID":14,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(4.88408661,146.750259)"},"ID":15,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyMovePatrolPointConditional","NodeData":{"Offset":"(-130.734467,153.934875)"},"ID":16,"Name":"Can
-        Ground Enemy Move Patrol Point Conditional","Instant":true},{"Type":"GroundEnemyMovePatrolPointAction3","NodeData":{"Offset":"(126.843964,154.357)"},"ID":17,"Name":"Ground
-        Enemy Move Patrol Point Action 3","Instant":true,"SingleendPos":0.5,"GameObjecttargetPosObj":1}]}]}]}]}]},"DetachedTasks":[{"Type":"CanGroundEnemyFindPlayerConditional1","NodeData":{"Offset":"(-760,660)"},"ID":18,"Name":"Can
-        Ground Enemy Find Player Conditional 1","Instant":true,"Int32checkCollisionIndex":0}]}'
+        Ground Enemy Move Patrol Point Conditional","Instant":true},{"Type":"GroundEnemyMovePatrolPointAction","NodeData":{"Offset":"(119.045959,147.767883)"},"ID":17,"Name":"Ground
+        Enemy Move Patrol Point Action","Instant":true,"SingleendPos":0.5}]}]}]}]}]}}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -665,7 +664,6 @@ MonoBehaviour:
         dataPosition: 
         unityObjects:
         - {fileID: 620000636386115142, guid: a6c7746162f95b7419f4a5c2600b5719, type: 3}
-        - {fileID: 5105230360257206846, guid: e4c797b862596ff4083de2ee16c96364, type: 3}
         byteData: 
         byteDataArray: 
       Version: 1.7.7
@@ -712,16 +710,17 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   groundedRadius: 0.2
-  debugText0: {fileID: 2514668074816785207}
-  debugText1: {fileID: 8008100074515245927}
-  debugText2: {fileID: 1398111171246214498}
-  debugText3: {fileID: 4041593190132997117}
-  debugText4: {fileID: 1883166210255055053}
-  debugText5: {fileID: 1322214279738845588}
-  debugText6: {fileID: 4221823880102708325}
-  debugText7: {fileID: 6378023485585695793}
-  debugText8: {fileID: 4035609857402855981}
-  debugText9: {fileID: 4707985101283041136}
+  debugText:
+  - {fileID: 2514668074816785207}
+  - {fileID: 8008100074515245927}
+  - {fileID: 1398111171246214498}
+  - {fileID: 4041593190132997117}
+  - {fileID: 1883166210255055053}
+  - {fileID: 1322214279738845588}
+  - {fileID: 4221823880102708325}
+  - {fileID: 6378023485585695793}
+  - {fileID: 4035609857402855981}
+  - {fileID: 4707985101283041136}
 --- !u!1 &3670975031483052608
 GameObject:
   m_ObjectHideFlags: 0

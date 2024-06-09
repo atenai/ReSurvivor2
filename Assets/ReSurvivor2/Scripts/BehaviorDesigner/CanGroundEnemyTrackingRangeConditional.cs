@@ -10,7 +10,7 @@ public class CanGroundEnemyTrackingRangeConditional : Conditional
 {
     GroundEnemy groundEnemy;
 
-    [SerializeField] float range = 5.0f;
+    [SerializeField] float range = 40.0f;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()

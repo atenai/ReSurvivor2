@@ -65,19 +65,8 @@ public class GroundEnemy : MonoBehaviour
     bool isGrounded = false;
     public bool IsGrounded => isGrounded;
 
-    //ビヘイビアデザイナー用変数
-
 #if UNITY_EDITOR
-    [SerializeField] TextMeshProUGUI debugText0;
-    [SerializeField] TextMeshProUGUI debugText1;
-    [SerializeField] TextMeshProUGUI debugText2;
-    [SerializeField] TextMeshProUGUI debugText3;
-    [SerializeField] TextMeshProUGUI debugText4;
-    [SerializeField] TextMeshProUGUI debugText5;
-    [SerializeField] TextMeshProUGUI debugText6;
-    [SerializeField] TextMeshProUGUI debugText7;
-    [SerializeField] TextMeshProUGUI debugText8;
-    [SerializeField] TextMeshProUGUI debugText9;
+    [SerializeField] List<TextMeshProUGUI> debugText = new List<TextMeshProUGUI>();
 #endif
 
     void Start()
@@ -220,22 +209,22 @@ public class GroundEnemy : MonoBehaviour
 
     void DebugText()
     {
-        debugText5.text = "chaseCountTime : " + chaseCountTime.ToString();
-        debugText4.text = "isChase : " + isChase.ToString();
+        debugText[5].text = "chaseCountTime : " + chaseCountTime.ToString();
+        debugText[4].text = "isChase : " + isChase.ToString();
 
-        debugText3.text = "patrolPointNumber : " + patrolPointNumber.ToString();
-        debugText2.text = "isGrounded : " + isGrounded.ToString();
+        debugText[3].text = "patrolPointNumber : " + patrolPointNumber.ToString();
+        debugText[2].text = "isGrounded : " + isGrounded.ToString();
 
 
         if (hitCollider != null)
         {
-            debugText1.text = "hitCollider : " + hitCollider.ToString();
+            debugText[1].text = "hitCollider : " + hitCollider.ToString();
         }
         else
         {
-            debugText1.text = "hitCollider : " + "null";
+            debugText[1].text = "hitCollider : " + "null";
         }
-        debugText0.text = "hits[0] : " + hits[0].ToString();
+        debugText[0].text = "hits[0] : " + hits[0].ToString();
     }
 
     void FixedUpdate()
