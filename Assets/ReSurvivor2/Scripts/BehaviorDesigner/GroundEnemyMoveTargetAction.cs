@@ -6,7 +6,7 @@ using UnityEngine;
 /// プレイヤーを追跡するタスク
 /// </summary>
 [TaskCategory("GroundEnemy")]
-public class GroundEnemyMoveTargetAction2 : Action
+public class GroundEnemyMoveTargetAction : Action
 {
     GroundEnemy groundEnemy;
 

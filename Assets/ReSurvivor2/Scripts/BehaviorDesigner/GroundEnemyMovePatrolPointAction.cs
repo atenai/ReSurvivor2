@@ -6,7 +6,7 @@ using UnityEngine;
 /// 指定座標をパトロールするタスク
 /// </summary>
 [TaskCategory("GroundEnemy")]
-public class GroundEnemyMovePatrolPointAction3 : Action
+public class GroundEnemyMovePatrolPointAction : Action
 {
     GroundEnemy groundEnemy;
 
@@ -15,10 +15,6 @@ public class GroundEnemyMovePatrolPointAction3 : Action
     Vector3 patrolPointPos;
     bool isMoveEnd = false;
     float moveSpeed = 2.0f;
-
-#if UNITY_EDITOR
-    [SerializeField] GameObject targetPosObj;//プレハブをGameObject型で取得（デバッグ用）
-#endif
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
@@ -48,15 +44,11 @@ public class GroundEnemyMovePatrolPointAction3 : Action
         if (groundEnemy.PatrolPoints.Count == 0)
         {
             //Debug.Log("<color=red>パトロールポイントが無い</color>");
-            //切り上げる
             return;
         }
+
         //現在選択されている配列の座標を巡回地点の座標に代入
         patrolPointPos = groundEnemy.PatrolPoints[groundEnemy.PatrolPointNumber].transform.position;
-        //Debug.Log("<color=red>patrolPointPos : " + patrolPointPos + "</color>");
-#if UNITY_EDITOR
-        GameObject debugGameObject1 = UnityEngine.Object.Instantiate(targetPosObj, patrolPointPos, Quaternion.identity);
-#endif
     }
 
     // Tick毎に呼ばれる

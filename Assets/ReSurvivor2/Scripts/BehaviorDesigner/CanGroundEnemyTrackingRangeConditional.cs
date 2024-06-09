@@ -6,7 +6,7 @@ using UnityEngine;
 /// 追跡範囲を指定(追跡範囲の中心にオブジェクトを置いて、そこからエネミーとの距離を測り、距離が一定以上になった場合は追跡を切り上げるという形にする)
 /// </summary>
 [TaskCategory("GroundEnemy")]
-public class CanGroundEnemyTrackingRangeConditional1 : Conditional
+public class CanGroundEnemyTrackingRangeConditional : Conditional
 {
     GroundEnemy groundEnemy;
 

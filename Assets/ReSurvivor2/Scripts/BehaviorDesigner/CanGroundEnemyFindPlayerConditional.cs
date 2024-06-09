@@ -5,7 +5,7 @@ using UnityEngine;
 /// エネミーがプレイヤーを視認しているか？を判別するタスク
 /// </summary>
 [TaskCategory("GroundEnemy")]
-public class CanGroundEnemyFindPlayerConditional1 : Conditional
+public class CanGroundEnemyFindPlayerConditional : Conditional
 {
     GroundEnemy groundEnemy;
 
