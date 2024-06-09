@@ -43,6 +43,8 @@ public class GroundEnemy : MonoBehaviour
 
     [SerializeField] GameObject alert;
 
+    float rayDistance = 3.5f;
+
     [UnityEngine.Tooltip("現在のパトロールポイントのナンバー")]
     int patrolPointNumber = 0;
     public int PatrolPointNumber
@@ -174,12 +176,46 @@ public class GroundEnemy : MonoBehaviour
     void Update()
     {
         GroundCheck();
-        alert.gameObject.SetActive(isChase);
 
+        Eyesight();
+        alert.gameObject.SetActive(isChase);
+        ChasePlayer();
 
 #if UNITY_EDITOR
         DebugText();
 #endif
+    }
+
+    void Eyesight()
+    {
+        Ray ray = new Ray(this.transform.position, this.transform.forward);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, rayDistance))
+        {
+            Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red, 1);
+            if (hit.collider.tag == "Player")
+            {
+                //Debug.Log("<color=red>プレイヤーを発見!</color>");
+                isChase = true;
+                chaseCountTime = chaseTime;
+            }
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーを追跡中の処理
+    /// </summary>
+    void ChasePlayer()
+    {
+        if (isChase == true)
+        {
+            chaseCountTime -= Time.deltaTime;
+            const float minTimer = 0.0f;
+            if (chaseCountTime <= minTimer)
+            {
+                isChase = false;
+            }
+        }
     }
 
     void DebugText()

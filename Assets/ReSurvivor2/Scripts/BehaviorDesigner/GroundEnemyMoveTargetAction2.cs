@@ -35,27 +35,12 @@ public class GroundEnemyMoveTargetAction2 : Action
     {
         if (groundEnemy.IsChase == true)
         {
-            ChasePlayer();
-
             //移動実行中
             return TaskStatus.Running;
         }
 
         //目的地にたどりついた
         return TaskStatus.Success;
-    }
-
-    /// <summary>
-    /// プレイヤーを追跡中の処理
-    /// </summary>
-    void ChasePlayer()
-    {
-        groundEnemy.ChaseCountTime -= Time.deltaTime;
-        const float minTimer = 0.0f;
-        if (groundEnemy.ChaseCountTime <= minTimer)
-        {
-            groundEnemy.IsChase = false;
-        }
     }
 
     public override void OnFixedUpdate()

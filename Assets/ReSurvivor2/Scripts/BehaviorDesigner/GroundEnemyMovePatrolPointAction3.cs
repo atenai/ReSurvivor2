@@ -16,10 +16,6 @@ public class GroundEnemyMovePatrolPointAction3 : Action
     bool isMoveEnd = false;
     float moveSpeed = 2.0f;
 
-
-    [UnityEngine.Tooltip("配列に設定したコライダーのどの番数目を当たり判定に使うか？を指定する数値")]
-    [SerializeField] int checkCollisionIndex = default;
-
 #if UNITY_EDITOR
     [SerializeField] GameObject targetPosObj;//プレハブをGameObject型で取得（デバッグ用）
 #endif
@@ -66,10 +62,8 @@ public class GroundEnemyMovePatrolPointAction3 : Action
     // Tick毎に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (groundEnemy.GetHit(checkCollisionIndex) == true && groundEnemy.HitCollider.tag == "Player")
+        if (groundEnemy.IsChase == true)
         {
-            groundEnemy.IsChase = true;
-            groundEnemy.ChaseCountTime = groundEnemy.ChaseTime;
             //プレイヤーを発見した
             return TaskStatus.Success;
         }
