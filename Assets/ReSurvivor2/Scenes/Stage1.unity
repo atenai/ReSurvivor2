@@ -134,11 +134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d569c6b0df9c5fe4b9bf4a81c86fb4e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &438160773 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8801732448745914156, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
-  m_PrefabInstance: {fileID: 1473701676328951858}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &483294296 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6414372265491876301, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
@@ -1348,10 +1343,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4094981230853522424, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
-      propertyPath: leftHand
-      value: 
-      objectReference: {fileID: 438160773}
     - target: {fileID: 4450498621194525165, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

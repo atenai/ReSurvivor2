@@ -6,20 +6,41 @@ public class HandIK : MonoBehaviour
 {
     [Tooltip("アニメーター")]
     [SerializeField] Animator animator;
-    [Tooltip("左手の位置")]
-    [SerializeField] Transform leftHand;
+    [Tooltip("ハンドガンの左手の位置")]
+    [SerializeField] Transform handGunLeftHandPos;
+    [Tooltip("アサルトライフルの左手の位置")]
+    [SerializeField] Transform assaultRifleLeftHandPos;
+    [Tooltip("ショットガンの左手の位置")]
+    [SerializeField] Transform shotGunLeftHandPos;
 
     /// <summary>
     /// IK用のUnity標準の関数
     /// </summary> 
     void OnAnimatorIK()
     {
-        //キャラクターの左手の位置と角度を合わせる
-
-        animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-        animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
-
-        animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHand.position);
-        animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHand.rotation);
+        if (PlayerCamera.singletonInstance.gunTYPE == PlayerCamera.GunTYPE.HandGun)
+        {
+            //キャラクターの左手の位置と角度を合わせる
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand, handGunLeftHandPos.position);
+            animator.SetIKRotation(AvatarIKGoal.LeftHand, handGunLeftHandPos.rotation);
+        }
+        else if (PlayerCamera.singletonInstance.gunTYPE == PlayerCamera.GunTYPE.AssaultRifle)
+        {
+            //キャラクターの左手の位置と角度を合わせる
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand, assaultRifleLeftHandPos.position);
+            animator.SetIKRotation(AvatarIKGoal.LeftHand, assaultRifleLeftHandPos.rotation);
+        }
+        else if (PlayerCamera.singletonInstance.gunTYPE == PlayerCamera.GunTYPE.ShotGun)
+        {
+            //キャラクターの左手の位置と角度を合わせる
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand, shotGunLeftHandPos.position);
+            animator.SetIKRotation(AvatarIKGoal.LeftHand, shotGunLeftHandPos.rotation);
+        }
     }
 }
