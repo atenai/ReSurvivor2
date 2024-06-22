@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7098762237062426177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6797495713959621423}
+  m_Layer: 0
+  m_Name: HandGunLeftHandPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6797495713959621423
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7098762237062426177}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.0259, z: -0.0655}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8852387724558227304}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &188399872392208515
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -257,6 +288,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 400006, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6797495713959621423}
     - targetCorrespondingSourceObject: {fileID: 400008, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8325528031664624734}
@@ -279,6 +313,11 @@ Transform:
 --- !u!4 &8852387724558227302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400008, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
+  m_PrefabInstance: {fileID: 8852387724558355950}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8852387724558227304 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400006, guid: c59d5d5ee70dc0544a946b651abbf0a2, type: 3}
   m_PrefabInstance: {fileID: 8852387724558355950}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8996453247085396547

@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandIK : MonoBehaviour
+/// <summary>
+/// 参考サイト
+/// https://gametukurikata.com/letstrymakeit/fps/gunik
+/// </summary>
+public class HandIKTest : MonoBehaviour
 {
-    [Tooltip("アニメーター")]
-    [SerializeField] Animator animator;
-    [Tooltip("左手の位置")]
+    //左手の位置
     [SerializeField] Transform leftHand;
+    Animator animator;
 
-    /// <summary>
-    /// IK用のUnity標準の関数
-    /// </summary> 
+    void Start()
+    {
+        animator = this.GetComponent<Animator>();
+    }
+
     void OnAnimatorIK()
     {
         //キャラクターの左手の位置と角度を合わせる
