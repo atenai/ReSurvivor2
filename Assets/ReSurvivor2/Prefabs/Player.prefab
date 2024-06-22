@@ -104,6 +104,7 @@ MonoBehaviour:
   weaponMoveSpeed: 3
   spine_03: {fileID: 8951071322393462715}
   upperarm_r: {fileID: 3247915256232972873}
+  upperarm_l: {fileID: 7338203176264424074}
   handGunModel: {fileID: 1805156889620345343}
   assaultRifleModel: {fileID: 6458952836186968688}
   shotGunModel: {fileID: 171608272400192684}
@@ -720,6 +721,11 @@ Animator:
 --- !u!1 &6458952836186968688 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2121356204759683240, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
+  m_PrefabInstance: {fileID: 4959128775433945816}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7338203176264424074 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2379261457025652818, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
   m_PrefabInstance: {fileID: 4959128775433945816}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8726359775497998643 stripped
