@@ -220,9 +220,10 @@ public class Player : MonoBehaviour
         {
             //エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値（アニメーション問題が解消されたらこの処理は消す！）
             const float aimAnimationRotX = 12.5f;
-            const float aimAnimationRotY = 12.5f;
+            const float aimAnimationRotY = 17.5f;
             //右肩のボーンの角度をカメラの向きにする
-            upperarm_r.rotation = Quaternion.Euler(PlayerCamera.singletonInstance.transform.localEulerAngles.x + aimAnimationRotX, upperarm_r.eulerAngles.y + aimAnimationRotY, upperarm_r.eulerAngles.z);
+            //upperarm_r.rotation = Quaternion.Euler(PlayerCamera.singletonInstance.transform.localEulerAngles.x + aimAnimationRotX, upperarm_r.eulerAngles.y + aimAnimationRotY, upperarm_r.eulerAngles.z);
+            upperarm_r.rotation = Quaternion.Euler(upperarm_r.eulerAngles.x + aimAnimationRotX, upperarm_r.eulerAngles.y + aimAnimationRotY, upperarm_r.eulerAngles.z);
         }
         else if (isAim == false)
         {
