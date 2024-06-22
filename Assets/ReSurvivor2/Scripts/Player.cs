@@ -41,12 +41,12 @@ public class Player : MonoBehaviour
     bool isAnimationRotInit = false;
     [Tooltip("キャラクターの右肩ボーン")]
     [SerializeField] Transform upperarm_r;
-    [Tooltip("右肩Xボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
-    float armRightAimAnimationRotX = 0.0f;
-    [Tooltip("右肩Yボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
-    float armRightAimAnimationRotY = 12.5f;
     [Tooltip("キャラクターの左肩ボーン")]
     [SerializeField] Transform upperarm_l;
+    [Tooltip("肩のXボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
+    [SerializeField] float armAimAnimationRotX = 0.0f;
+    [Tooltip("肩のYボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
+    [SerializeField] float armAimAnimationRotY = 12.5f;
     [Tooltip("キャラクターの手に持っているハンドガンのモデル")]
     [SerializeField] GameObject handGunModel;
     [Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
@@ -227,7 +227,7 @@ public class Player : MonoBehaviour
         {
             //右肩のボーンの角度をカメラの向きにする
             //upperarm_r.rotation = Quaternion.Euler(PlayerCamera.singletonInstance.transform.localEulerAngles.x + aimAnimationRotX, upperarm_r.eulerAngles.y + aimAnimationRotY, upperarm_r.eulerAngles.z);
-            upperarm_r.rotation = Quaternion.Euler(upperarm_r.eulerAngles.x + armRightAimAnimationRotX, upperarm_r.eulerAngles.y + armRightAimAnimationRotY, upperarm_r.eulerAngles.z);
+            upperarm_r.rotation = Quaternion.Euler(upperarm_r.eulerAngles.x + armAimAnimationRotX, upperarm_r.eulerAngles.y + armAimAnimationRotY, upperarm_r.eulerAngles.z);
         }
         else if (isAim == false)
         {
@@ -244,7 +244,7 @@ public class Player : MonoBehaviour
         if (isAim == true)
         {
             //左肩のボーンの角度をカメラの向きにする
-            upperarm_l.rotation = Quaternion.Euler(upperarm_l.eulerAngles.x + armRightAimAnimationRotX, upperarm_l.eulerAngles.y + armRightAimAnimationRotY, upperarm_l.eulerAngles.z);
+            upperarm_l.rotation = Quaternion.Euler(upperarm_l.eulerAngles.x + armAimAnimationRotX, upperarm_l.eulerAngles.y + armAimAnimationRotY, upperarm_l.eulerAngles.z);
         }
         else if (isAim == false)
         {
