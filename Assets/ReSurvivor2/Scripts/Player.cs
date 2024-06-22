@@ -106,7 +106,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            isAim = false;
+            //isAim = false;
         }
 
         NormalMoveAnimation();
