@@ -209,22 +209,23 @@ public class GroundEnemy : MonoBehaviour
 
     void DebugText()
     {
-        debugText[5].text = "chaseCountTime : " + chaseCountTime.ToString();
-        debugText[4].text = "isChase : " + isChase.ToString();
+        //コメントアウトしないとビルドできない
+        //debugText[5].text = "chaseCountTime : " + chaseCountTime.ToString();
+        //debugText[4].text = "isChase : " + isChase.ToString();
 
-        debugText[3].text = "patrolPointNumber : " + patrolPointNumber.ToString();
-        debugText[2].text = "isGrounded : " + isGrounded.ToString();
+        //debugText[3].text = "patrolPointNumber : " + patrolPointNumber.ToString();
+        //debugText[2].text = "isGrounded : " + isGrounded.ToString();
 
 
-        if (hitCollider != null)
-        {
-            debugText[1].text = "hitCollider : " + hitCollider.ToString();
-        }
-        else
-        {
-            debugText[1].text = "hitCollider : " + "null";
-        }
-        debugText[0].text = "hits[0] : " + hits[0].ToString();
+        //if (hitCollider != null)
+        //{
+        //debugText[1].text = "hitCollider : " + hitCollider.ToString();
+        //}
+        //else
+        //{
+        //debugText[1].text = "hitCollider : " + "null";
+        //}
+        //debugText[0].text = "hits[0] : " + hits[0].ToString();
     }
 
     void FixedUpdate()
