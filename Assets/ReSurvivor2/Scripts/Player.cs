@@ -132,7 +132,8 @@ public class Player : MonoBehaviour
                 textAmmo.text = PlayerCamera.singletonInstance.HandGunAmmo.ToString();
                 break;
             case PlayerCamera.GunTYPE.AssaultRifle:
-
+                textMagazine.text = PlayerCamera.singletonInstance.AssaultRifleCurrentMagazine.ToString();
+                textAmmo.text = PlayerCamera.singletonInstance.AssaultRifleAmmo.ToString();
                 break;
             case PlayerCamera.GunTYPE.ShotGun:
 
@@ -262,7 +263,23 @@ public class Player : MonoBehaviour
                 }
                 break;
             case PlayerCamera.GunTYPE.AssaultRifle:
+                if (PlayerCamera.singletonInstance.IsAssaultRifleReloadTimeActive == true)
+                {
+                    if (reloadColor.a <= 1)
+                    {
+                        reloadColor.a += Time.deltaTime * 2.0f;
+                        imageReload.GetComponent<Image>().color = reloadColor;
+                    }
+                }
 
+                if (PlayerCamera.singletonInstance.IsAssaultRifleReloadTimeActive == false)
+                {
+                    if (reloadColor.a >= 0)
+                    {
+                        reloadColor.a -= Time.deltaTime * 2.0f;
+                        imageReload.GetComponent<Image>().color = reloadColor;
+                    }
+                }
                 break;
             case PlayerCamera.GunTYPE.ShotGun:
 
@@ -282,7 +299,8 @@ public class Player : MonoBehaviour
                 textAmmo.text = PlayerCamera.singletonInstance.HandGunAmmo.ToString();
                 break;
             case PlayerCamera.GunTYPE.AssaultRifle:
-
+                textMagazine.text = PlayerCamera.singletonInstance.AssaultRifleCurrentMagazine.ToString();
+                textAmmo.text = PlayerCamera.singletonInstance.AssaultRifleAmmo.ToString();
                 break;
             case PlayerCamera.GunTYPE.ShotGun:
 
