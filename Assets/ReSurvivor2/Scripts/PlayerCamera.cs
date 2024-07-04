@@ -423,12 +423,23 @@ public class PlayerCamera : MonoBehaviour
             if (handGunReloadTimeDefine <= handGunReloadTime)//リロードタイムが10以上になったら
             {
                 //弾リセット
+                int oldMagazine = handGunCurrentMagazine;
                 int localMagazine = handGunMagazineCapacity - handGunCurrentMagazine;
                 int localAmmo = handGunAmmo - localMagazine;
                 if (localAmmo < 0)
                 {
-                    handGunCurrentMagazine = handGunAmmo;
-                    handGunAmmo = 0;
+                    if (handGunAmmo + oldMagazine < handGunMagazineCapacity)
+                    {
+                        handGunCurrentMagazine = handGunAmmo + oldMagazine;
+                        handGunAmmo = 0;
+                    }
+                    else
+                    {
+                        handGunCurrentMagazine = handGunMagazineCapacity;
+                        int totalAmmo = handGunAmmo + oldMagazine;
+                        int resultAmmo = totalAmmo - handGunMagazineCapacity;
+                        handGunAmmo = resultAmmo;
+                    }
                 }
                 else
                 {
@@ -582,12 +593,23 @@ public class PlayerCamera : MonoBehaviour
             if (assaultRifleReloadTimeDefine <= assaultRifleReloadTime)//リロードタイムが10以上になったら
             {
                 //弾リセット
+                int oldMagazine = assaultRifleCurrentMagazine;
                 int localMagazine = assaultRifleMagazineCapacity - assaultRifleCurrentMagazine;
                 int localAmmo = assaultRifleAmmo - localMagazine;
                 if (localAmmo < 0)
                 {
-                    assaultRifleCurrentMagazine = assaultRifleAmmo;
-                    assaultRifleAmmo = 0;
+                    if (assaultRifleAmmo + oldMagazine < assaultRifleMagazineCapacity)
+                    {
+                        assaultRifleCurrentMagazine = assaultRifleAmmo + oldMagazine;
+                        assaultRifleAmmo = 0;
+                    }
+                    else
+                    {
+                        assaultRifleCurrentMagazine = assaultRifleMagazineCapacity;
+                        int totalAmmo = assaultRifleAmmo + oldMagazine;
+                        int resultAmmo = totalAmmo - assaultRifleMagazineCapacity;
+                        assaultRifleAmmo = resultAmmo;
+                    }
                 }
                 else
                 {
@@ -745,12 +767,23 @@ public class PlayerCamera : MonoBehaviour
             if (shotGunReloadTimeDefine <= shotGunReloadTime)//リロードタイムが10以上になったら
             {
                 //弾リセット
+                int oldMagazine = shotGunCurrentMagazine;
                 int localMagazine = shotGunMagazineCapacity - shotGunCurrentMagazine;
                 int localAmmo = shotGunAmmo - localMagazine;
                 if (localAmmo < 0)
                 {
-                    shotGunCurrentMagazine = shotGunAmmo;
-                    shotGunAmmo = 0;
+                    if (shotGunAmmo + oldMagazine < shotGunMagazineCapacity)
+                    {
+                        shotGunCurrentMagazine = shotGunAmmo + oldMagazine;
+                        shotGunAmmo = 0;
+                    }
+                    else
+                    {
+                        shotGunCurrentMagazine = shotGunMagazineCapacity;
+                        int totalAmmo = shotGunAmmo + oldMagazine;
+                        int resultAmmo = totalAmmo - shotGunMagazineCapacity;
+                        shotGunAmmo = resultAmmo;
+                    }
                 }
                 else
                 {
