@@ -18,7 +18,7 @@ public class HandIK : MonoBehaviour
     /// </summary> 
     void OnAnimatorIK()
     {
-        if (PlayerCamera.singletonInstance.gunTYPE == PlayerCamera.GunTYPE.HandGun)
+        if (PlayerCamera.SingletonInstance.gunTYPE == PlayerCamera.GunTYPE.HandGun)
         {
             //キャラクターの左手の位置と角度を合わせる
             animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
@@ -26,7 +26,7 @@ public class HandIK : MonoBehaviour
             animator.SetIKPosition(AvatarIKGoal.LeftHand, handGunLeftHandPos.position);
             animator.SetIKRotation(AvatarIKGoal.LeftHand, handGunLeftHandPos.rotation);
         }
-        else if (PlayerCamera.singletonInstance.gunTYPE == PlayerCamera.GunTYPE.AssaultRifle)
+        else if (PlayerCamera.SingletonInstance.gunTYPE == PlayerCamera.GunTYPE.AssaultRifle)
         {
             //キャラクターの左手の位置と角度を合わせる
             animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
@@ -34,7 +34,7 @@ public class HandIK : MonoBehaviour
             animator.SetIKPosition(AvatarIKGoal.LeftHand, assaultRifleLeftHandPos.position);
             animator.SetIKRotation(AvatarIKGoal.LeftHand, assaultRifleLeftHandPos.rotation);
         }
-        else if (PlayerCamera.singletonInstance.gunTYPE == PlayerCamera.GunTYPE.ShotGun)
+        else if (PlayerCamera.SingletonInstance.gunTYPE == PlayerCamera.GunTYPE.ShotGun)
         {
             //キャラクターの左手の位置と角度を合わせる
             animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);

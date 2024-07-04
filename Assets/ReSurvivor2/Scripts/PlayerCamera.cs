@@ -6,7 +6,8 @@ using Knife.Effects;
 public class PlayerCamera : MonoBehaviour
 {
     //シングルトンで作成（ゲーム中に１つのみにする）
-    public static PlayerCamera singletonInstance = null;
+    static PlayerCamera singletonInstance = null;
+    public static PlayerCamera SingletonInstance => singletonInstance;
 
     [Header("カメラ")]
     [Tooltip("エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用")]
