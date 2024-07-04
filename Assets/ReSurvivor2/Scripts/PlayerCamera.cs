@@ -11,6 +11,7 @@ public class PlayerCamera : MonoBehaviour
     [Header("カメラ")]
     [Tooltip("エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用")]
     bool isActiveCamera = false;
+    public bool IsActiveCamera => isActiveCamera;
     [Tooltip("X軸のカメラの回転スピード")]
     [Range(50, 150)][SerializeField] float normalCameraSpeedX = 100;
     [Tooltip("Y軸のカメラの回転スピード")]
@@ -65,6 +66,21 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] float handGunFireRate = 0.1f;
     [Tooltip("ハンドガンの射撃間隔の時間カウント用のタイマー")]
     float handGunCountTimer = 0.0f;
+    [Tooltip("ハンドガンの現在のマガジンの弾数")]
+    int handGunCurrentMagazine;
+    public int HandGunCurrentMagazine => handGunCurrentMagazine;
+    [Tooltip("ハンドガンの最大マガジン数")]
+    readonly int handGunMagazineCapacity = 7;
+    [Tooltip("ハンドガンの残弾数")]
+    int handGunAmmo = 35;
+    public int HandGunAmmo => handGunAmmo;
+
+    [Tooltip("ハンドガンのリロードのオン・オフ")]
+    bool isHandGunReloadTimeActive = false;
+    public bool IsHandGunReloadTimeActive => isHandGunReloadTimeActive;
+    float handGunReloadTime = 0.0f;
+    [Tooltip("リロード時間の固定")]
+    readonly float handGunReloadTimeDefine = 1.5f;
 
     //↓アセットストアのプログラム↓//
     [Tooltip("ハンドガンのマズルフラッシュと薬莢")]
@@ -136,15 +152,56 @@ public class PlayerCamera : MonoBehaviour
 
     IEnumerator Start()
     {
-        //起動時のロードの際にマウスの入力でカメラが思わぬ方向に動いてしまうので、1秒間カメラ操作を受け付けなくする（ここの処理をごまかす為、ゲーム開始時にフェードイン・フェードアウトを行う）
+        //各種初期化処理
+        InitHandGunMagazine();
+
+
+        //起動時のロードの際にマウスの入力でカメラが思わぬ方向に動いてしまうので、1秒間カメラ操作を受け付けなくする
+        //（ここの処理をごまかす為、ゲーム開始時にフェードイン・フェードアウトを行い、フェードアウト後にisActiveCamera = true;にするように修正する必要がある）
         yield return new WaitForSeconds(1.0f);
         isActiveCamera = true;
 
         yield return null;
     }
 
+    /// <summary>
+    /// ハンドガンの弾数の初期化処理
+    /// </summary>
+    void InitHandGunMagazine()
+    {
+        //ハンドガンの残弾数が満タンなら切り上げ
+        if (handGunCurrentMagazine == handGunMagazineCapacity)
+        {
+            return;
+        }
+
+        //弾が0以下なら切り上げ
+        if (handGunAmmo <= 0)
+        {
+            return;
+        }
+
+        int localMagazine = handGunMagazineCapacity - handGunCurrentMagazine;
+        int localAmmo = handGunAmmo - localMagazine;
+        if (localAmmo < 0)
+        {
+            handGunCurrentMagazine = handGunAmmo;
+            handGunAmmo = 0;
+        }
+        else
+        {
+            handGunCurrentMagazine = handGunMagazineCapacity;
+            handGunAmmo = localAmmo;
+        }
+    }
+
     void Update()
     {
+        if (isActiveCamera == false)
+        {
+            return;
+        }
+
         SwitchWeapon();
     }
 
@@ -173,6 +230,9 @@ public class PlayerCamera : MonoBehaviour
         {
             case GunTYPE.HandGun:
                 HandGunShoot();
+                HandGunAutoReload();
+                HandGunManualReload();
+                HandGunReload();
                 break;
             case GunTYPE.AssaultRifle:
                 AssaultRifleShoot();
@@ -194,8 +254,15 @@ public class PlayerCamera : MonoBehaviour
             {
                 if (handGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
                 {
-                    HandGunFire();
-                    handGunCountTimer = handGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
+                    if (handGunCurrentMagazine != 0)
+                    {
+                        if (isHandGunReloadTimeActive == false)
+                        {
+                            handGunCurrentMagazine = handGunCurrentMagazine - 1;//ハンドガンの現在のマガジンの弾数を-1する
+                            HandGunFire();
+                            handGunCountTimer = handGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
+                        }
+                    }
                 }
             }
         }
@@ -205,6 +272,73 @@ public class PlayerCamera : MonoBehaviour
         {
             //カウントタイマーを減らす
             handGunCountTimer = handGunCountTimer - Time.deltaTime;
+        }
+    }
+
+    /// <summary>
+    /// ハンドガンのオートリロード
+    /// </summary> 
+    void HandGunAutoReload()
+    {
+        //ハンドガンの残弾数が0かつハンドガンの弾薬が1発以上あるとき
+        if (handGunCurrentMagazine == 0 && 0 < handGunAmmo)
+        {
+            isHandGunReloadTimeActive = true;//リロードのオン
+        }
+    }
+
+    /// <summary>
+    /// ハンドガンの手動リロード
+    /// </summary> 
+    void HandGunManualReload()
+    {
+        //ハンドガンの残弾数が満タンなら切り上げ
+        if (handGunCurrentMagazine == handGunMagazineCapacity)
+        {
+            return;
+        }
+
+        //弾が0以下なら切り上げ
+        if (handGunAmmo <= 0)
+        {
+            return;
+        }
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            isHandGunReloadTimeActive = true;//リロードのオン
+        }
+    }
+
+    /// <summary>
+    /// ハンドガンのリロード
+    /// </summary> 
+    void HandGunReload()
+    {
+        if (isHandGunReloadTimeActive == true)//リロードがオンになったら
+        {
+            //リロード中画像
+            handGunReloadTime += Time.deltaTime;//リロードタイムをプラス
+
+            if (handGunReloadTimeDefine <= handGunReloadTime)//リロードタイムが10以上になったら
+            {
+                //弾リセット
+                int localMagazine = handGunMagazineCapacity - handGunCurrentMagazine;
+                int localAmmo = handGunAmmo - localMagazine;
+                if (localAmmo < 0)
+                {
+                    handGunCurrentMagazine = handGunAmmo;
+                    handGunAmmo = 0;
+                }
+                else
+                {
+                    handGunCurrentMagazine = handGunMagazineCapacity;
+                    handGunAmmo = localAmmo;
+                }
+
+                handGunReloadTime = 0.0f;//リロードタイムをリセット
+                isHandGunReloadTimeActive = false;//リロードのオフ
+            }
         }
     }
 

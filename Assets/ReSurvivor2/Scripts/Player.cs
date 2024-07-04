@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -62,6 +63,15 @@ public class Player : MonoBehaviour
     [SerializeField] Image imageBG;
     [SerializeField] Slider sliderHp;
 
+    [Tooltip("リロード画像")]
+    [SerializeField] GameObject imageReload;
+    Color reloadColor = new Color(255.0f, 255.0f, 255.0f, 0.0f);
+    float RotateSpeed = -500.0f;
+
+    [Tooltip("弾数")]
+    [SerializeField] TextMeshProUGUI textMagazine;
+    [SerializeField] TextMeshProUGUI textAmmo;
+
     void Awake()
     {
         //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -80,6 +90,8 @@ public class Player : MonoBehaviour
     {
         InitBoneSpine03();
         InitHP();
+        StartImageReload();
+        StartTextMagazine();
     }
 
     /// <summary>
@@ -100,8 +112,41 @@ public class Player : MonoBehaviour
         currentHp = maxHp;
     }
 
+    /// <summary>
+    /// リロードイメージの初期化処理
+    /// </summary>
+    void StartImageReload()
+    {
+        imageReload.GetComponent<Image>().color = reloadColor;
+    }
+
+    /// <summary>
+    /// 残弾テキストの初期化処理
+    /// </summary>
+    void StartTextMagazine()
+    {
+        switch (PlayerCamera.singletonInstance.gunTYPE)
+        {
+            case PlayerCamera.GunTYPE.HandGun:
+                textMagazine.text = PlayerCamera.singletonInstance.HandGunCurrentMagazine.ToString();
+                textAmmo.text = PlayerCamera.singletonInstance.HandGunAmmo.ToString();
+                break;
+            case PlayerCamera.GunTYPE.AssaultRifle:
+
+                break;
+            case PlayerCamera.GunTYPE.ShotGun:
+
+                break;
+        }
+    }
+
     void Update()
     {
+        if (PlayerCamera.singletonInstance.IsActiveCamera == false)
+        {
+            return;
+        }
+
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
 
@@ -120,6 +165,8 @@ public class Player : MonoBehaviour
         SwitchWeaponModel();
 
         PlayerUI();
+        UpdateImageReload();
+        UpdateTextMagazine();
     }
 
     /// <summary>
@@ -183,6 +230,63 @@ public class Player : MonoBehaviour
             imageBG.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
             imageBG.transform.localRotation = Quaternion.Euler(0.0f, 0.1f, 0.0f);
             imageBG.transform.localPosition = new Vector3(95.0f, -20.0f, 0.0f);
+        }
+    }
+
+    /// <summary>
+    /// リロードイメージの処理
+    /// </summary>
+    void UpdateImageReload()
+    {
+        imageReload.GetComponent<RectTransform>().transform.Rotate(0.0f, 0.0f, RotateSpeed * Time.deltaTime);
+
+        switch (PlayerCamera.singletonInstance.gunTYPE)
+        {
+            case PlayerCamera.GunTYPE.HandGun:
+                if (PlayerCamera.singletonInstance.IsHandGunReloadTimeActive == true)
+                {
+                    if (reloadColor.a <= 1)
+                    {
+                        reloadColor.a += Time.deltaTime * 2.0f;
+                        imageReload.GetComponent<Image>().color = reloadColor;
+                    }
+                }
+
+                if (PlayerCamera.singletonInstance.IsHandGunReloadTimeActive == false)
+                {
+                    if (reloadColor.a >= 0)
+                    {
+                        reloadColor.a -= Time.deltaTime * 2.0f;
+                        imageReload.GetComponent<Image>().color = reloadColor;
+                    }
+                }
+                break;
+            case PlayerCamera.GunTYPE.AssaultRifle:
+
+                break;
+            case PlayerCamera.GunTYPE.ShotGun:
+
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 残弾テキスト
+    /// </summary>
+    void UpdateTextMagazine()
+    {
+        switch (PlayerCamera.singletonInstance.gunTYPE)
+        {
+            case PlayerCamera.GunTYPE.HandGun:
+                textMagazine.text = PlayerCamera.singletonInstance.HandGunCurrentMagazine.ToString();
+                textAmmo.text = PlayerCamera.singletonInstance.HandGunAmmo.ToString();
+                break;
+            case PlayerCamera.GunTYPE.AssaultRifle:
+
+                break;
+            case PlayerCamera.GunTYPE.ShotGun:
+
+                break;
         }
     }
 
@@ -255,6 +359,11 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (PlayerCamera.singletonInstance.IsActiveCamera == false)
+        {
+            return;
+        }
+
         NormalMove();
         AimMove();
     }
