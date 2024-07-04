@@ -128,6 +128,21 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] float shotGunRandomAngle = 5.0f;
     [Tooltip("ショットガンが一度で出る弾の数")]
     [SerializeField] int shotGunBullet = 10;
+    [Tooltip("ショットガンの現在のマガジンの弾数")]
+    int shotGunCurrentMagazine;
+    public int ShotGunCurrentMagazine => shotGunCurrentMagazine;
+    [Tooltip("ショットガンの最大マガジン数")]
+    readonly int shotGunMagazineCapacity = 8;
+    [Tooltip("ショットガンの残弾数")]
+    int shotGunAmmo = 40;
+    public int ShotGunAmmo => shotGunAmmo;
+
+    [Tooltip("ショットガンのリロードのオン・オフ")]
+    bool isShotGunReloadTimeActive = false;
+    public bool IsShotGunReloadTimeActive => isShotGunReloadTimeActive;
+    float shotGunReloadTime = 0.0f;
+    [Tooltip("ショットガンのリロード時間")]
+    readonly float shotGunReloadTimeDefine = 1.5f;
 
     //↓アセットストアのプログラム↓//
     [Tooltip("ショットガンのマズルフラッシュと薬莢")]
@@ -170,6 +185,7 @@ public class PlayerCamera : MonoBehaviour
         //各種初期化処理
         InitHandGunMagazine();
         InitAssaultRifleMagazine();
+        InitShotGunMagazine();
 
         //起動時のロードの際にマウスの入力でカメラが思わぬ方向に動いてしまうので、1秒間カメラ操作を受け付けなくする
         //（ここの処理をごまかす為、ゲーム開始時にフェードイン・フェードアウトを行い、フェードアウト後にisActiveCamera = true;にするように修正する必要がある）
@@ -241,6 +257,37 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ショットガンの弾数の初期化処理
+    /// </summary>
+    void InitShotGunMagazine()
+    {
+        //残弾数が満タンなら切り上げ
+        if (shotGunCurrentMagazine == shotGunMagazineCapacity)
+        {
+            return;
+        }
+
+        //弾が0以下なら切り上げ
+        if (shotGunAmmo <= 0)
+        {
+            return;
+        }
+
+        int localMagazine = shotGunMagazineCapacity - shotGunCurrentMagazine;
+        int localAmmo = shotGunAmmo - localMagazine;
+        if (localAmmo < 0)
+        {
+            shotGunCurrentMagazine = shotGunAmmo;
+            shotGunAmmo = 0;
+        }
+        else
+        {
+            shotGunCurrentMagazine = shotGunMagazineCapacity;
+            shotGunAmmo = localAmmo;
+        }
+    }
+
     void Update()
     {
         if (isActiveCamera == false)
@@ -288,6 +335,9 @@ public class PlayerCamera : MonoBehaviour
                 break;
             case GunTYPE.ShotGun:
                 ShotGunShoot();
+                ShotGunAutoReload();
+                ShotGunManualReload();
+                ShotGunReload();
                 break;
         }
     }
@@ -307,7 +357,7 @@ public class PlayerCamera : MonoBehaviour
                     {
                         if (isHandGunReloadTimeActive == false)
                         {
-                            handGunCurrentMagazine = handGunCurrentMagazine - 1;//ハンドガンの現在のマガジンの弾数を-1する
+                            handGunCurrentMagazine = handGunCurrentMagazine - 1;//現在のマガジンの弾数を-1する
                             HandGunFire();
                             handGunCountTimer = handGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
                         }
@@ -329,7 +379,7 @@ public class PlayerCamera : MonoBehaviour
     /// </summary> 
     void HandGunAutoReload()
     {
-        //ハンドガンの残弾数が0かつハンドガンの弾薬が1発以上あるとき
+        //残弾数が0かつ弾薬が1発以上あるとき
         if (handGunCurrentMagazine == 0 && 0 < handGunAmmo)
         {
             isHandGunReloadTimeActive = true;//リロードのオン
@@ -341,7 +391,7 @@ public class PlayerCamera : MonoBehaviour
     /// </summary> 
     void HandGunManualReload()
     {
-        //ハンドガンの残弾数が満タンなら切り上げ
+        //残弾数が満タンなら切り上げ
         if (handGunCurrentMagazine == handGunMagazineCapacity)
         {
             return;
@@ -466,7 +516,7 @@ public class PlayerCamera : MonoBehaviour
                     {
                         if (isAssaultRifleReloadTimeActive == false)
                         {
-                            assaultRifleCurrentMagazine = assaultRifleCurrentMagazine - 1;//ハンドガンの現在のマガジンの弾数を-1する
+                            assaultRifleCurrentMagazine = assaultRifleCurrentMagazine - 1;//現在のマガジンの弾数を-1する
                             AssaultRifleFire();
                             assaultRifleCountTimer = assaultRifleFireRate;//カウントタイマーに射撃を待つ時間を入れる
                         }
@@ -625,8 +675,15 @@ public class PlayerCamera : MonoBehaviour
             {
                 if (shotGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
                 {
-                    ShotGunFire();
-                    shotGunCountTimer = shotGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
+                    if (shotGunCurrentMagazine != 0)
+                    {
+                        if (isShotGunReloadTimeActive == false)
+                        {
+                            shotGunCurrentMagazine = shotGunCurrentMagazine - 1;//現在のマガジンの弾数を-1する
+                            ShotGunFire();
+                            shotGunCountTimer = shotGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
+                        }
+                    }
                 }
             }
         }
@@ -636,6 +693,73 @@ public class PlayerCamera : MonoBehaviour
         {
             //カウントタイマーを減らす
             shotGunCountTimer = shotGunCountTimer - Time.deltaTime;
+        }
+    }
+
+    /// <summary>
+    /// ショットガンのオートリロード
+    /// </summary> 
+    void ShotGunAutoReload()
+    {
+        //残弾数が0かつの弾薬が1発以上あるとき
+        if (shotGunCurrentMagazine == 0 && 0 < shotGunAmmo)
+        {
+            isShotGunReloadTimeActive = true;//リロードのオン
+        }
+    }
+
+    /// <summary>
+    /// ショットガンの手動リロード
+    /// </summary> 
+    void ShotGunManualReload()
+    {
+        //残弾数が満タンなら切り上げ
+        if (shotGunCurrentMagazine == shotGunMagazineCapacity)
+        {
+            return;
+        }
+
+        //弾が0以下なら切り上げ
+        if (shotGunAmmo <= 0)
+        {
+            return;
+        }
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            isShotGunReloadTimeActive = true;//リロードのオン
+        }
+    }
+
+    /// <summary>
+    /// ショットガンのリロード
+    /// </summary> 
+    void ShotGunReload()
+    {
+        if (isShotGunReloadTimeActive == true)//リロードがオンになったら
+        {
+            //リロード中画像
+            shotGunReloadTime += Time.deltaTime;//リロードタイムをプラス
+
+            if (shotGunReloadTimeDefine <= shotGunReloadTime)//リロードタイムが10以上になったら
+            {
+                //弾リセット
+                int localMagazine = shotGunMagazineCapacity - shotGunCurrentMagazine;
+                int localAmmo = shotGunAmmo - localMagazine;
+                if (localAmmo < 0)
+                {
+                    shotGunCurrentMagazine = shotGunAmmo;
+                    shotGunAmmo = 0;
+                }
+                else
+                {
+                    shotGunCurrentMagazine = shotGunMagazineCapacity;
+                    shotGunAmmo = localAmmo;
+                }
+
+                shotGunReloadTime = 0.0f;//リロードタイムをリセット
+                isShotGunReloadTimeActive = false;//リロードのオフ
+            }
         }
     }
 
