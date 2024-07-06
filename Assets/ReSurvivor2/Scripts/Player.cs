@@ -250,7 +250,7 @@ public class Player : MonoBehaviour
             //SRT(スケール→トランスフォーム→ローテーション)
             imageBG.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
             imageBG.transform.localRotation = Quaternion.Euler(0.0f, 0.1f, 0.0f);
-            imageBG.transform.localPosition = new Vector3(95.0f, -20.0f, 0.0f);
+            imageBG.transform.localPosition = new Vector3(85.0f, -20.0f, 0.0f);
         }
     }
 
