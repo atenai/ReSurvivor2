@@ -45,9 +45,11 @@ public class Player : MonoBehaviour
     [Tooltip("キャラクターの左肩ボーン")]
     [SerializeField] Transform upperarm_l;
     [Tooltip("肩のXボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
-    const float armAimAnimationRotX = 5.0f;
+    //const float armAimAnimationRotX = 5.0f;
+    const float armAimAnimationRotX = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
     [Tooltip("肩のYボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
-    const float armAimAnimationRotY = 12.5f;
+    //const float armAimAnimationRotY = 12.5f;
+    const float armAimAnimationRotY = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
     [Tooltip("キャラクターの手に持っているハンドガンのモデル")]
     [SerializeField] GameObject handGunModel;
     [Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
@@ -160,7 +162,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            isAim = false;
+            //isAim = false;
         }
 
         NormalMoveAnimation();
@@ -537,5 +539,13 @@ public class Player : MonoBehaviour
         GUI.Box(new Rect(350, 350, 100, 50), isAim.ToString(), styleBlack);
         GUI.Box(new Rect(10, 500, 100, 50), "spine_03.eulerAngles", styleBlack);
         GUI.Box(new Rect(350, 500, 100, 50), spine_03.eulerAngles.ToString(), styleBlack);
+        GUI.Box(new Rect(10, 700, 100, 50), "upperarm_r.eulerAngles.x + armAimAnimationRotX", styleRed);
+        GUI.Box(new Rect(750, 700, 100, 50), upperarm_r.eulerAngles.x + armAimAnimationRotX.ToString(), styleRed);
+        GUI.Box(new Rect(10, 750, 100, 50), "upperarm_r.eulerAngles.y + armAimAnimationRotY", styleRed);
+        GUI.Box(new Rect(750, 750, 100, 50), upperarm_r.eulerAngles.y + armAimAnimationRotY.ToString(), styleRed);
+        GUI.Box(new Rect(10, 800, 100, 50), "upperarm_l.eulerAngles.x + armAimAnimationRotX", styleRed);
+        GUI.Box(new Rect(750, 800, 100, 50), upperarm_l.eulerAngles.x + armAimAnimationRotX.ToString(), styleRed);
+        GUI.Box(new Rect(10, 850, 100, 50), "upperarm_l.eulerAngles.y + armAimAnimationRotY", styleRed);
+        GUI.Box(new Rect(750, 850, 100, 50), upperarm_l.eulerAngles.y + armAimAnimationRotY.ToString(), styleRed);
     }
 }
