@@ -21,10 +21,10 @@ public class Player : MonoBehaviour
 
     [Header("プレイヤーキャラクターの移動関連")]
     [Tooltip("プレイヤーキャラクターの通常移動速度")]
-    [SerializeField] float normalMoveSpeed = 1.0f;
+    [SerializeField] float normalMoveSpeed = 5.0f;
     public float NormalMoveSpeed => normalMoveSpeed;
     [Tooltip("プレイヤーキャラクターのエイム中移動速度")]
-    [SerializeField] float weaponMoveSpeed = 1.0f;
+    [SerializeField] float weaponMoveSpeed = 3.0f;
     public float WeaponMoveSpeed => weaponMoveSpeed;
     float inputHorizontal;
     float inputVertical;
@@ -63,19 +63,21 @@ public class Player : MonoBehaviour
     [Tooltip("キャラクターの手に持っているショットガンのモデル")]
     [SerializeField] GameObject shotGunModel;
 
+    [Header("UI")]
+    [Tooltip("プレイヤーのキャンバス")]
+    [SerializeField] Canvas canvasPlayer;
+    [Tooltip("バックグラウンドイメージ")]
+    [SerializeField] Image imageBG;
     [Tooltip("現在のHP")]
     float currentHp = 100.0f;
     [Tooltip("HPの最大値")]
     [SerializeField] float maxHp = 100.0f;
-    [SerializeField] Canvas canvasPlayer;
-    [SerializeField] Image imageBG;
+    [Tooltip("HPバー")]
     [SerializeField] Slider sliderHp;
-
     [Tooltip("リロード画像")]
     [SerializeField] GameObject imageReload;
     Color reloadColor = new Color(255.0f, 255.0f, 255.0f, 0.0f);
     float RotateSpeed = -500.0f;
-
     [Tooltip("マガジン弾数テキスト")]
     [SerializeField] TextMeshProUGUI textMagazine;
     [Tooltip("弾薬数テキスト")]
