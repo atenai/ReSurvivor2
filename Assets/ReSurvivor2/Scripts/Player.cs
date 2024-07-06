@@ -45,15 +45,16 @@ public class Player : MonoBehaviour
     [Tooltip("キャラクターの脊椎ボーンの初期値")]
     float spine_03_InitEulerAnglesX;
     bool isSpine03AnimationRotInit = false;
+    //※型のボーンを曲げると銃の持つ位置がずれておかしくなる為、首と背骨のボーンを曲げる事によって型のボーンを曲げずに済むようにする必要がある
     [Tooltip("キャラクターの右肩ボーン")]
     [SerializeField] Transform upperarm_r;
     [Tooltip("キャラクターの左肩ボーン")]
     [SerializeField] Transform upperarm_l;
     [Tooltip("肩のXボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
-    //const float armAimAnimationRotX = 5.0f;
+    //const float armAimAnimationRotX = 5.0f;//←型のボーンを曲げると銃の持つ位置がずれてしまう
     const float armAimAnimationRotX = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
     [Tooltip("肩のYボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
-    //const float armAimAnimationRotY = 12.5f;
+    //const float armAimAnimationRotY = 12.5f;//←型のボーンを曲げると銃の持つ位置がずれてしまう
     const float armAimAnimationRotY = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
     [Tooltip("キャラクターの手に持っているハンドガンのモデル")]
     [SerializeField] GameObject handGunModel;
