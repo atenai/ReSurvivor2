@@ -35,11 +35,16 @@ public class Player : MonoBehaviour
     public bool IsAim => isAim;
 
     [Header("キャラクターモデル")]
+    [Tooltip("キャラクターの首ボーン")]
+    [SerializeField] Transform neck_01;
+    [Tooltip("キャラクターの首ボーンの初期値")]
+    float neck_01_InitEulerAnglesY;
+    bool isNeck01AnimationRotInit = false;
     [Tooltip("キャラクターの脊椎ボーン")]
     [SerializeField] Transform spine_03;
     [Tooltip("キャラクターの脊椎ボーンの初期値")]
     float spine_03_InitEulerAnglesX;
-    bool isAnimationRotInit = false;
+    bool isSpine03AnimationRotInit = false;
     [Tooltip("キャラクターの右肩ボーン")]
     [SerializeField] Transform upperarm_r;
     [Tooltip("キャラクターの左肩ボーン")]
@@ -91,10 +96,20 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        InitBoneNeck01();
         InitBoneSpine03();
         InitHP();
         StartImageReload();
         StartTextMagazine();
+    }
+
+    /// <summary>
+    /// キャラクターの首ボーンの初期化処理
+    /// </summary> 
+    void InitBoneNeck01()
+    {
+        //キャラクターの脊椎ボーンの初期値を取得する（真正面に戻す際に必要なため）
+        neck_01_InitEulerAnglesY = neck_01.eulerAngles.y;
     }
 
     /// <summary>
@@ -162,7 +177,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            //isAim = false;
+            isAim = false;
         }
 
         NormalMoveAnimation();
@@ -332,9 +347,33 @@ public class Player : MonoBehaviour
     void LateUpdate()
     {
         //ボーンを曲げる際は必ずLateUpdateに書く必要がある！（これいつかメモする！）
+        RotateBoneNeck01();
         RotateBoneSpine03();
         RotateBoneUpperArmR();
         RotateBoneUpperArmL();
+    }
+
+    /// <summary>
+    /// キャラクターの首ボーンを曲げる
+    /// </summary> 
+    void RotateBoneNeck01()
+    {
+        if (isAim == true)
+        {
+            const float aimAnimationRotY = -15.0f;
+            //腰のボーンの角度をカメラの向きにする
+            neck_01.rotation = Quaternion.Euler(neck_01.eulerAngles.x, neck_01.eulerAngles.y + aimAnimationRotY, neck_01.eulerAngles.z);
+            isNeck01AnimationRotInit = true;
+        }
+        else if (isAim == false)
+        {
+            if (isNeck01AnimationRotInit == true)
+            {
+                //腰のボーンの角度を真正面（初期値）にする
+                neck_01.rotation = Quaternion.Euler(neck_01.eulerAngles.x, neck_01_InitEulerAnglesY, neck_01.eulerAngles.z);
+                isNeck01AnimationRotInit = false;
+            }
+        }
     }
 
     /// <summary>
@@ -347,17 +386,16 @@ public class Player : MonoBehaviour
             const float aimAnimationRotX = 12.5f;
             //腰のボーンの角度をカメラの向きにする
             spine_03.rotation = Quaternion.Euler(PlayerCamera.SingletonInstance.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
-            isAnimationRotInit = true;
+            isSpine03AnimationRotInit = true;
         }
         else if (isAim == false)
         {
-            if (isAnimationRotInit == true)
+            if (isSpine03AnimationRotInit == true)
             {
                 //腰のボーンの角度を真正面（初期値）にする
                 spine_03.rotation = Quaternion.Euler(spine_03_InitEulerAnglesX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
-                isAnimationRotInit = false;
+                isSpine03AnimationRotInit = false;
             }
-
         }
     }
 

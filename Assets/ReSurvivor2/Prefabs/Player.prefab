@@ -102,11 +102,10 @@ MonoBehaviour:
   rb: {fileID: 1859192107321473125}
   normalMoveSpeed: 5
   weaponMoveSpeed: 3
+  neck_01: {fileID: 8963754979861601838}
   spine_03: {fileID: 8951071322393462715}
   upperarm_r: {fileID: 3247915256232972873}
   upperarm_l: {fileID: 7338203176264424074}
-  armAimAnimationRotX: 0
-  armAimAnimationRotY: 12.5
   handGunModel: {fileID: 1805156889620345343}
   assaultRifleModel: {fileID: 6458952836186968688}
   shotGunModel: {fileID: 171608272400192684}
@@ -1239,5 +1238,10 @@ Transform:
 --- !u!4 &8951071322393462715 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4101313241586222435, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
+  m_PrefabInstance: {fileID: 4959128775433945816}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8963754979861601838 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4087011100852395254, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
   m_PrefabInstance: {fileID: 4959128775433945816}
   m_PrefabAsset: {fileID: 0}

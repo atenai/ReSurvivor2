@@ -45,7 +45,7 @@ public class PlayerCamera : MonoBehaviour
     const float normalForwardPos = -4.0f;
 
     [Tooltip("肩越しカメラのx位置")]
-    const float aimRightPos = 0.6f;
+    const float aimRightPos = 0.5f;
     [Tooltip("肩越しカメラのy位置")]
     const float aimUpPos = 1.6f;
     public float AimUpPos => aimUpPos;
