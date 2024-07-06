@@ -80,6 +80,14 @@ public class Player : MonoBehaviour
     [SerializeField] TextMeshProUGUI textMagazine;
     [Tooltip("弾薬数テキスト")]
     [SerializeField] TextMeshProUGUI textAmmo;
+    [Tooltip("タイマーテキスト")]
+    [SerializeField] TextMeshProUGUI timerTMP;
+    [Tooltip("分")]
+    [SerializeField] int minute = 10;
+    [Tooltip("秒")]
+    [SerializeField] float seconds = 0.0f;
+    [Tooltip("totalTImeは秒で集計されている")]
+    float totalTime = 0.0f;
 
     void Awake()
     {
@@ -188,6 +196,7 @@ public class Player : MonoBehaviour
         PlayerUI();
         UpdateImageReload();
         UpdateTextMagazine();
+        UpdateTimerSystem();
     }
 
     /// <summary>
@@ -342,6 +351,25 @@ public class Player : MonoBehaviour
                 textMagazine.text = PlayerCamera.SingletonInstance.ShotGunCurrentMagazine.ToString();
                 textAmmo.text = PlayerCamera.SingletonInstance.ShotGunAmmo.ToString();
                 break;
+        }
+    }
+
+    void UpdateTimerSystem()
+    {
+        totalTime = (minute * 60) + seconds;
+        totalTime = totalTime - Time.deltaTime;
+
+        minute = (int)totalTime / 60;
+        seconds = totalTime - (minute * 60);
+
+        if (minute <= 0 && seconds <= 0.0f)
+        {
+            timerTMP.text = "00" + ":" + "00";
+            //ゲームオーバー処理
+        }
+        else
+        {
+            timerTMP.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
         }
     }
 
