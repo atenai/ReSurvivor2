@@ -360,7 +360,7 @@ public class Player : MonoBehaviour
     {
         if (isAim == true)
         {
-            const float aimAnimationRotY = -15.0f;
+            const float aimAnimationRotY = -20.0f;
             //腰のボーンの角度をカメラの向きにする
             neck_01.rotation = Quaternion.Euler(neck_01.eulerAngles.x, neck_01.eulerAngles.y + aimAnimationRotY, neck_01.eulerAngles.z);
             isNeck01AnimationRotInit = true;
@@ -384,8 +384,9 @@ public class Player : MonoBehaviour
         if (isAim == true)
         {
             const float aimAnimationRotX = 12.5f;
+            const float aimAnimationRotY = 12.5f;
             //腰のボーンの角度をカメラの向きにする
-            spine_03.rotation = Quaternion.Euler(PlayerCamera.SingletonInstance.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
+            spine_03.rotation = Quaternion.Euler(PlayerCamera.SingletonInstance.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
             isSpine03AnimationRotInit = true;
         }
         else if (isAim == false)
