@@ -39,10 +39,10 @@ public class PlayerCamera : MonoBehaviour
     [Range(1.0f, 4.0f)] float slowDownCameraSpeed = 2.0f;
 
     [Tooltip("通常カメラのy位置")]
-    const float normalUpPos = 2.0f;
+    const float normalUpPos = 1.6f;
     public float NormalUpPos => normalUpPos;
     [Tooltip("通常カメラのz位置")]
-    const float normalForwardPos = -5.0f;
+    const float normalForwardPos = -4.0f;
 
     [Tooltip("肩越しカメラのx位置")]
     const float aimRightPos = 0.6f;
@@ -974,8 +974,8 @@ public class PlayerCamera : MonoBehaviour
         if (deadZoneY < Mathf.Abs(y_Rotation))
         {
             float cameraAngles = this.transform.localEulerAngles.x;
-            const float lookingDownLimit = 79.0f;
             const float lookingUpLimit = 360.0f;
+            const float lookingDownLimit = 40.0f;
             if (324 < cameraAngles && cameraAngles < lookingUpLimit || -10 < cameraAngles && cameraAngles < lookingDownLimit)//ここの各左の数字を変えればカメラの上下の止まる限界値が変わる
             {
                 // 回転軸はカメラ自身のX軸

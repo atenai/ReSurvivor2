@@ -45,9 +45,9 @@ public class Player : MonoBehaviour
     [Tooltip("キャラクターの左肩ボーン")]
     [SerializeField] Transform upperarm_l;
     [Tooltip("肩のXボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
-    [SerializeField] float armAimAnimationRotX = 0.0f;
+    const float armAimAnimationRotX = 5.0f;
     [Tooltip("肩のYボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
-    [SerializeField] float armAimAnimationRotY = 12.5f;
+    const float armAimAnimationRotY = 12.5f;
     [Tooltip("キャラクターの手に持っているハンドガンのモデル")]
     [SerializeField] GameObject handGunModel;
     [Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
