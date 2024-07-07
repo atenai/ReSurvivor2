@@ -20,27 +20,48 @@ public class HandIK : MonoBehaviour
     {
         if (PlayerCamera.SingletonInstance.gunTYPE == PlayerCamera.GunTYPE.HandGun)
         {
-            //キャラクターの左手の位置と角度を合わせる
-            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
-            animator.SetIKPosition(AvatarIKGoal.LeftHand, handGunLeftHandPos.position);
-            animator.SetIKRotation(AvatarIKGoal.LeftHand, handGunLeftHandPos.rotation);
+            if (PlayerCamera.SingletonInstance.IsHandGunReloadTimeActive == false)
+            {
+                //キャラクターの左手の位置と角度を合わせる
+                animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+                animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+                animator.SetIKPosition(AvatarIKGoal.LeftHand, handGunLeftHandPos.position);
+                animator.SetIKRotation(AvatarIKGoal.LeftHand, handGunLeftHandPos.rotation);
+            }
+            else
+            {
+
+            }
         }
         else if (PlayerCamera.SingletonInstance.gunTYPE == PlayerCamera.GunTYPE.AssaultRifle)
         {
-            //キャラクターの左手の位置と角度を合わせる
-            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
-            animator.SetIKPosition(AvatarIKGoal.LeftHand, assaultRifleLeftHandPos.position);
-            animator.SetIKRotation(AvatarIKGoal.LeftHand, assaultRifleLeftHandPos.rotation);
+            if (PlayerCamera.SingletonInstance.IsAssaultRifleReloadTimeActive == false)
+            {
+                //キャラクターの左手の位置と角度を合わせる
+                animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+                animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+                animator.SetIKPosition(AvatarIKGoal.LeftHand, assaultRifleLeftHandPos.position);
+                animator.SetIKRotation(AvatarIKGoal.LeftHand, assaultRifleLeftHandPos.rotation);
+            }
+            else
+            {
+
+            }
         }
         else if (PlayerCamera.SingletonInstance.gunTYPE == PlayerCamera.GunTYPE.ShotGun)
         {
-            //キャラクターの左手の位置と角度を合わせる
-            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
-            animator.SetIKPosition(AvatarIKGoal.LeftHand, shotGunLeftHandPos.position);
-            animator.SetIKRotation(AvatarIKGoal.LeftHand, shotGunLeftHandPos.rotation);
+            if (PlayerCamera.SingletonInstance.IsShotGunReloadTimeActive == false)
+            {
+                //キャラクターの左手の位置と角度を合わせる
+                animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+                animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
+                animator.SetIKPosition(AvatarIKGoal.LeftHand, shotGunLeftHandPos.position);
+                animator.SetIKRotation(AvatarIKGoal.LeftHand, shotGunLeftHandPos.rotation);
+            }
+            else
+            {
+
+            }
         }
     }
 }
