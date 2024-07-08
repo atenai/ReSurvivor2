@@ -109,9 +109,9 @@ MonoBehaviour:
   handGunModel: {fileID: 1805156889620345343}
   assaultRifleModel: {fileID: 6458952836186968688}
   shotGunModel: {fileID: 171608272400192684}
-  maxHp: 100
   canvasPlayer: {fileID: 637544306048898191}
   imageBG: {fileID: 8467590313357425202}
+  maxHp: 100
   sliderHp: {fileID: 7909805020945899953}
   imageReload: {fileID: 2607014482642238062}
   textMagazine: {fileID: 7143347430111689300}
@@ -1832,7 +1832,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8366740980199478483
 CanvasRenderer:
@@ -1862,7 +1862,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c7ba18dfb43874244bb7d1dd364638a3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 37298e88dc60e384ba79bc0c9838e467, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
