@@ -74,6 +74,12 @@ public class Player : MonoBehaviour
     [SerializeField] float maxHp = 100.0f;
     [Tooltip("HPバー")]
     [SerializeField] Slider sliderHp;
+    [Tooltip("現在のアーマープレート数")]
+    int currentArmorPlate = 2;
+    [Tooltip("アーマープレートの最大数")]
+    int maxArmorPlate = 3;
+    [Tooltip("アーマープレートテキスト")]
+    [SerializeField] TextMeshProUGUI textArmorPlate;
     [Tooltip("リロード画像")]
     [SerializeField] GameObject imageReload;
     Color reloadColor = new Color(255.0f, 255.0f, 255.0f, 0.0f);
@@ -110,6 +116,7 @@ public class Player : MonoBehaviour
         InitBoneNeck01();
         InitBoneSpine03();
         InitHP();
+        StartTextArmorPlate();
         StartImageReload();
         StartTextMagazine();
     }
@@ -139,6 +146,14 @@ public class Player : MonoBehaviour
     {
         sliderHp.value = 1;
         currentHp = maxHp;
+    }
+
+    /// <summary>
+    /// アーマープレートテキストの初期化処理
+    /// </summary> 
+    void StartTextArmorPlate()
+    {
+        textArmorPlate.text = currentArmorPlate.ToString();
     }
 
     /// <summary>
@@ -194,6 +209,11 @@ public class Player : MonoBehaviour
         NormalMoveAnimation();
 
         SwitchWeaponModel();
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            Heal();
+        }
 
         PlayerUI();
         UpdateImageReload();
@@ -569,6 +589,42 @@ public class Player : MonoBehaviour
         {
             //Destroy(this.gameObject);
         }
+    }
+
+    /// <summary>
+    /// HPを回復
+    /// </summary>
+    void Heal()
+    {
+        if (currentArmorPlate <= 0)
+        {
+            return;
+        }
+
+        if (maxHp <= currentHp)
+        {
+            return;
+        }
+
+        currentArmorPlate = currentArmorPlate - 1;
+        textArmorPlate.text = currentArmorPlate.ToString();
+
+        currentHp = maxHp;
+        sliderHp.value = (float)currentHp / (float)maxHp;
+    }
+
+    /// <summary>
+    /// アーマープレートを取得
+    /// </summary> 
+    public void AcquireArmorPlate()
+    {
+        if (maxArmorPlate <= currentArmorPlate)
+        {
+            return;
+        }
+
+        currentArmorPlate = currentArmorPlate + 1;
+        textArmorPlate.text = currentArmorPlate.ToString();
     }
 
     void OnGUI()
