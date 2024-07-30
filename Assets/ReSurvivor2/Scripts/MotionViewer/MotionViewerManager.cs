@@ -36,9 +36,9 @@ public class MotionViewerManager : MonoBehaviour
     [SerializeField] GameObject _contentAnimation;
     [SerializeField] GameObject _copyModelButton;
     [SerializeField] GameObject _copyAnimationButton;
+    [SerializeField] Slider _currentAnimationFrameBar;
     [SerializeField] TextMeshProUGUI _allAnimationFrameParameter;
     [SerializeField] TextMeshProUGUI _currentAnimationFrameParameter;
-    [SerializeField] Slider _currentAnimationFrameBar;
     [SerializeField] TextMeshProUGUI _animationSpeedParameter;
     [SerializeField] TMP_InputField _specifySecondsInputField;
     [SerializeField] TMP_InputField _spawnForwardDistanceInputField;
@@ -278,7 +278,10 @@ public class MotionViewerManager : MonoBehaviour
             float currentClipLength = _currentAnimationFrameBar.value * _mainBodyAnimator.GetCurrentAnimatorStateInfo(0).length;//↑のコメントアウトしている方が計算式として正しいが、こちらは今回のスライダーの値を適用したタイプになる
             float currentFrameCount = Mathf.Abs(currentClipLength * sampleRate);
 
-            _currentAnimationFrameParameter.text = currentFrameCount.ToString();
+            if (_currentAnimationFrameParameter != null)
+            {
+                _currentAnimationFrameParameter.text = currentFrameCount.ToString();
+            }
 
             _spawnWaitingTimeTemporary = currentClipLength;
         }
@@ -646,7 +649,10 @@ public class MotionViewerManager : MonoBehaviour
     /// </summary>
     void AnimationUI()
     {
-        _animationSpeedParameter.text = _animationSpeed.ToString();
+        if (_animationSpeedParameter != null)
+        {
+            _animationSpeedParameter.text = _animationSpeed.ToString();
+        }
 
         if (_mainBodyAnimator != null)
         {
@@ -685,7 +691,11 @@ public class MotionViewerManager : MonoBehaviour
             float currentFrameCount = Mathf.Abs(currentClipLength * sampleRate);
 
             float calculationFrame = frameCount / _animationSpeed;
-            _allAnimationFrameParameter.text = calculationFrame.ToString();
+
+            if (_allAnimationFrameParameter != null)
+            {
+                _allAnimationFrameParameter.text = calculationFrame.ToString();
+            }
         }
     }
 
