@@ -40,6 +40,7 @@ public class MotionViewerManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _allAnimationFrameParameter;
     [SerializeField] TextMeshProUGUI _currentAnimationFrameParameter;
     [SerializeField] TextMeshProUGUI _animationSpeedParameter;
+    [UnityEngine.Tooltip("進める秒数指定のインプットフィールド")]
     [SerializeField] TMP_InputField _specifySecondsInputField;
     [SerializeField] TMP_InputField _spawnForwardDistanceInputField;
     [SerializeField] TMP_InputField _spawnUpDistanceInputField;
