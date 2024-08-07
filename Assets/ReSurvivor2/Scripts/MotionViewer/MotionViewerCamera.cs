@@ -56,9 +56,9 @@ public class MotionViewerCamera : MonoBehaviour
 
     #region 公開関数
 
-    public void OnCameraReset()
+    public void OnClickCameraReset()
     {
-        this.transform.position = new Vector3(0.0f, 0.0f, -10.0f);
+        this.transform.position = new Vector3(0.0f, 1.0f, -5.0f);
         this.transform.localEulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
     }
 
