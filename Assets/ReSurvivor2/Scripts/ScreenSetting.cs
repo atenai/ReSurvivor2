@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.ResourceManagement.ResourceProviders;
 
 public class ScreenSetting : MonoBehaviour
 {

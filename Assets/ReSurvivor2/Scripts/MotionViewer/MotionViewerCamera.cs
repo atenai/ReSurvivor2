@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -144,4 +143,3 @@ public class MotionViewerCamera : MonoBehaviour
 
     #endregion
 }
-#endif

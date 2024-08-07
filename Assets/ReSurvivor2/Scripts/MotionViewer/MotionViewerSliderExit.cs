@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -30,4 +29,3 @@ public class MotionViewerSliderExit : MonoBehaviour, IPointerDownHandler, IPoint
 
     }
 }
-#endif

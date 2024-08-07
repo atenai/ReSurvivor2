@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEngine;
 using TMPro;
 
@@ -29,4 +28,3 @@ public class MotionViewerButtonInfo : MonoBehaviour
 
     #endregion
 }
-#endif

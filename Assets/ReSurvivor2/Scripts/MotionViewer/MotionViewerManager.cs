@@ -1,13 +1,9 @@
-#if UNITY_EDITOR
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using System;
-using UnityEngine.EventSystems;
+using UnityEditor;
 
 
 /// <summary>
@@ -128,6 +124,15 @@ public class MotionViewerManager : MonoBehaviour
 
     #region Monobehaviour Override関数
 
+    void Awake()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN//Unityエディター上または端末がPCだった場合の処理
+
+        //Screen.SetResolution(1920, 1080, true, 60);
+
+#endif //終了
+    }
+
     void Start()
     {
         Debug.Log("Start");
@@ -144,6 +149,14 @@ public class MotionViewerManager : MonoBehaviour
 
     void Update()
     {
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN//Unityエディター上または端末がPCだった場合の処理
+        //Escapeキーでゲーム終了
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Quit();//ゲーム終了
+        }
+#endif //終了  
+
         InputSpecifySeconds();
         InputSpawnForwardDistance();
         InputSpawnUpDistance();
@@ -1092,6 +1105,14 @@ public class MotionViewerManager : MonoBehaviour
         _spawnWaitingTimeInputField.text = _spawnWaitingTimeTemporary.ToString();
     }
 
+    void Quit()
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#elif UNITY_STANDALONE
+        UnityEngine.Application.Quit();
+#endif
+    }
+
     #endregion
 }
-#endif
