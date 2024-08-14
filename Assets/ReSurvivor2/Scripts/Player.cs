@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
+/// <summary>
+/// プレイヤー
+/// </summary>
 public class Player : MonoBehaviour
 {
     //変数名は「小文字」から始める（test）
@@ -588,6 +592,7 @@ public class Player : MonoBehaviour
         if (currentHp <= 0.0f)
         {
             //Destroy(this.gameObject);
+            SceneManager.LoadScene("GameOver");
         }
     }
 

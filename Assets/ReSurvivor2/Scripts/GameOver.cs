@@ -1,8 +1,8 @@
 
 /// <summary>
-/// タイトル
+/// ゲームオーバー
 /// </summary>
-public class Title : OutGameManagerBase
+public class GameOver : OutGameManagerBase
 {
     void Start()
     {

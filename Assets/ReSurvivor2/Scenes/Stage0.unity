@@ -1340,6 +1340,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7483067194817926134, guid: 7d6a9cfa0f3ced34495f15378e8345b2, type: 3}
+      propertyPath: sceneName
+      value: Stage1
+      objectReference: {fileID: 0}
     - target: {fileID: 8119492837351665505, guid: 7d6a9cfa0f3ced34495f15378e8345b2, type: 3}
       propertyPath: m_Name
       value: Cube_LoadNextSceneObject

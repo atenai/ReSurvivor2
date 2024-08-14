@@ -5,16 +5,22 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/ReSurvivor2/Scenes/Title.unity
     guid: 1059944bd46f4b04db77602e5825aaac
-  - enabled: 0
+  - enabled: 1
+    path: Assets/ReSurvivor2/Scenes/GameClear.unity
+    guid: c7ab54d7e3523a64a850f59822809321
+  - enabled: 1
+    path: Assets/ReSurvivor2/Scenes/GameOver.unity
+    guid: 4f593c502400f0941a8be5365c1f972a
+  - enabled: 1
     path: Assets/ReSurvivor2/Scenes/Stage1.unity
     guid: ab89f672ef8d7c0499ca20a8dc8f4651
-  - enabled: 0
+  - enabled: 1
     path: Assets/ReSurvivor2/Scenes/Stage2.unity
     guid: 4d9124a540831b14e818a40fac052e97
-  - enabled: 1
+  - enabled: 0
     path: Assets/ReSurvivor2/Scenes/MotionViewer.unity
     guid: 3fecec7f86c849c4dab55046100e079d
   m_configObjects:

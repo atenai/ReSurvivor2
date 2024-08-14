@@ -1,8 +1,8 @@
 
 /// <summary>
-/// タイトル
+/// ゲームクリアー
 /// </summary>
-public class Title : OutGameManagerBase
+public class GameClear : OutGameManagerBase
 {
     void Start()
     {
