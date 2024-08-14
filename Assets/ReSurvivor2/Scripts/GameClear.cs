@@ -4,13 +4,13 @@
 /// </summary>
 public class GameClear : OutGameManagerBase
 {
-    void Start()
+    new void Start()
     {
-
+        base.Start();
     }
 
-    void Update()
+    new void Update()
     {
-
+        base.Update();
     }
 }

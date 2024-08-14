@@ -4,13 +4,13 @@
 /// </summary>
 public class Title : OutGameManagerBase
 {
-    void Start()
+    new void Start()
     {
-
+        base.Start();
     }
 
-    void Update()
+    new void Update()
     {
-
+        base.Update();
     }
 }

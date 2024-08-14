@@ -9,12 +9,25 @@ public class OutGameManagerBase : MonoBehaviour
     [SerializeField] protected string sceneName;
     [SerializeField] protected Slider sliderLoading;
 
-    void Start()
+    protected void Start()
     {
+        if (Player.SingletonInstance != null)
+        {
+            Destroy(Player.SingletonInstance.gameObject);
+        }
 
+        if (PlayerCamera.SingletonInstance != null)
+        {
+            Destroy(PlayerCamera.SingletonInstance.gameObject);
+        }
+
+        if (UI.singletonInstance != null)
+        {
+            Destroy(UI.singletonInstance.gameObject);
+        }
     }
 
-    void Update()
+    protected void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
