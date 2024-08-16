@@ -599,9 +599,9 @@ MonoBehaviour:
         Test Conditional","Instant":true,"BooleanisTest":true},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(0,146.33136)"},"ID":4,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-247.5409,152.4591)"},"ID":5,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyChaseConditional","NodeData":{"Offset":"(-419.999756,151.4281)"},"ID":6,"Name":"Can
         Ground Enemy Chase Conditional","Instant":true},{"Type":"CanGroundEnemyTrackingRangeConditional","NodeData":{"Offset":"(-182.950531,153.009338)"},"ID":7,"Name":"Can
         Ground Enemy Tracking Range Conditional","Instant":true,"Singlerange":40},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-1.18015289,145.714355)"},"ID":8,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-354.093,197.577637)"},"ID":9,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyAwayFromTheTargetConditional","NodeData":{"Offset":"(-175.684814,147.278)"},"ID":10,"Name":"Can
-        Ground Enemy Away From The Target Conditional","Instant":true,"Singlerange":4},{"Type":"GroundEnemyMoveTargetAction","NodeData":{"Offset":"(68.13437,153.269043)"},"ID":11,"Name":"Ground
+        Ground Enemy Away From The Target Conditional","Instant":true},{"Type":"GroundEnemyMoveTargetAction","NodeData":{"Offset":"(68.13437,153.269043)"},"ID":11,"Name":"Ground
         Enemy Move Target Action","Instant":true,"SingleendPos":2.5,"SinglemoveSpeed":2}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(104.19622,195.403809)"},"ID":12,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyWithinSpecificDistanceConditional","NodeData":{"Offset":"(-80.79617,151.254883)"},"ID":13,"Name":"Can
-        Ground Enemy Within Specific Distance Conditional","Instant":true,"Singlerange":4},{"Type":"GroundEnemyShootAction","NodeData":{"Offset":"(129.239777,149.6489)"},"ID":14,"Name":"Ground
+        Ground Enemy Within Specific Distance Conditional","Instant":true},{"Type":"GroundEnemyShootAction","NodeData":{"Offset":"(129.239777,149.6489)"},"ID":14,"Name":"Ground
         Enemy Shoot Action","Instant":true,"GameObjectshootGameObjectPrefab":0,"SinglespawnDistance":1,"SingleshootTime":2,"SinglelifeTime":3}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(204.478546,152.66272)"},"ID":15,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(4.88408661,146.750259)"},"ID":16,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyMovePatrolPointConditional","NodeData":{"Offset":"(-130.734467,153.934875)"},"ID":17,"Name":"Can
         Ground Enemy Move Patrol Point Conditional","Instant":true},{"Type":"GroundEnemyMovePatrolPointAction","NodeData":{"Offset":"(119.045959,147.767883)"},"ID":18,"Name":"Ground
         Enemy Move Patrol Point Action","Instant":true,"SingleendPos":0.5,"SinglemoveSpeed":2}]}]}]}]}]}}'
@@ -658,6 +658,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   groundedRadius: 0.2
+  shootingDistance: 4
   isDebugMode: 1
   debugText:
   - {fileID: 2514668074816785207}

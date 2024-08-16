@@ -9,9 +9,6 @@ public class CanGroundEnemyWithinSpecificDistanceConditional : Conditional
 {
     GroundEnemy groundEnemy;
 
-    [UnityEngine.Tooltip("エネミーとターゲットの距離")]
-    [SerializeField] float range = 4.0f;
-
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
@@ -26,7 +23,7 @@ public class CanGroundEnemyWithinSpecificDistanceConditional : Conditional
         //Debug.Log("<color=red>sqrCurrentDistance : " + sqrCurrentDistance + "</color>");
 
         //↑の値が特定の範囲以上だとtrue、範囲以内だとfalse
-        if (sqrCurrentDistance < range * range)
+        if (sqrCurrentDistance < groundEnemy.ShootingDistance * groundEnemy.ShootingDistance)
         {
             //範囲以内
             return TaskStatus.Success;

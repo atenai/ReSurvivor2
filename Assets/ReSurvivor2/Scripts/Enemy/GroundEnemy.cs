@@ -65,7 +65,14 @@ public class GroundEnemy : MonoBehaviour
     bool isGrounded = false;
     public bool IsGrounded => isGrounded;
 
+    [UnityEngine.Tooltip("射撃距離")]
+    [SerializeField] float shootingDistance = 4.0f;
+    public float ShootingDistance => shootingDistance;
+
+    [Header("デバッグ")]
+    [Tooltip("デバッグモード")]
     [SerializeField] bool isDebugMode = true;
+    [Tooltip("デバッグテキスト")]
     [SerializeField] List<TextMeshProUGUI> debugText = new List<TextMeshProUGUI>();
 
 
