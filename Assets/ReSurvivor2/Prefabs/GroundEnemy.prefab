@@ -658,6 +658,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   groundedRadius: 0.2
+  isDebugMode: 1
   debugText:
   - {fileID: 2514668074816785207}
   - {fileID: 8008100074515245927}
@@ -2529,6 +2530,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5670419140712977810, guid: b5246e6bf352ad149bcf542344ded600, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: fd03430d11717ba49ac85dc2d88f9e91, type: 2}
     - target: {fileID: 7112821464118992825, guid: b5246e6bf352ad149bcf542344ded600, type: 3}
       propertyPath: m_Name
       value: ReSurvivorEnemyModel
