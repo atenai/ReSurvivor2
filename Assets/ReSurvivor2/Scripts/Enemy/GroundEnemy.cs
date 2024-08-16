@@ -65,9 +65,9 @@ public class GroundEnemy : MonoBehaviour
     bool isGrounded = false;
     public bool IsGrounded => isGrounded;
 
-#if UNITY_EDITOR
+    [SerializeField] bool isDebugMode = true;
     [SerializeField] List<TextMeshProUGUI> debugText = new List<TextMeshProUGUI>();
-#endif
+
 
     void Start()
     {
@@ -170,14 +170,17 @@ public class GroundEnemy : MonoBehaviour
         alert.gameObject.SetActive(isChase);
         ChasePlayer();
 
-#if UNITY_EDITOR
         DebugText();
-#endif
     }
 
+    /// <summary>
+    /// 視界
+    /// </summary>
     void Eyesight()
     {
-        Ray ray = new Ray(this.transform.position, this.transform.forward);
+        Vector3 eyePos = new Vector3(this.transform.position.x, this.transform.position.y + 1.7f, this.transform.position.z);
+
+        Ray ray = new Ray(eyePos, this.transform.forward);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, rayDistance))
         {
@@ -207,25 +210,32 @@ public class GroundEnemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// デバッグテキスト
+    /// </summary> 
     void DebugText()
     {
-        //コメントアウトしないとビルドできない
-        //debugText[5].text = "chaseCountTime : " + chaseCountTime.ToString();
-        //debugText[4].text = "isChase : " + isChase.ToString();
+        if (isDebugMode == false)
+        {
+            return;
+        }
 
-        //debugText[3].text = "patrolPointNumber : " + patrolPointNumber.ToString();
-        //debugText[2].text = "isGrounded : " + isGrounded.ToString();
+        debugText[5].text = "chaseCountTime : " + chaseCountTime.ToString();
+        debugText[4].text = "isChase : " + isChase.ToString();
+
+        debugText[3].text = "patrolPointNumber : " + patrolPointNumber.ToString();
+        debugText[2].text = "isGrounded : " + isGrounded.ToString();
 
 
-        //if (hitCollider != null)
-        //{
-        //debugText[1].text = "hitCollider : " + hitCollider.ToString();
-        //}
-        //else
-        //{
-        //debugText[1].text = "hitCollider : " + "null";
-        //}
-        //debugText[0].text = "hits[0] : " + hits[0].ToString();
+        if (hitCollider != null)
+        {
+            debugText[1].text = "hitCollider : " + hitCollider.ToString();
+        }
+        else
+        {
+            debugText[1].text = "hitCollider : " + "null";
+        }
+        debugText[0].text = "hits[0] : " + hits[0].ToString();
     }
 
     void FixedUpdate()
