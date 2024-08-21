@@ -78,6 +78,12 @@ public class Player : MonoBehaviour
     [SerializeField] float maxHp = 100.0f;
     [Tooltip("HPバー")]
     [SerializeField] Slider sliderHp;
+    [Tooltip("現在のスタミナ")]
+    float currentStamina = 1000.0f;
+    [Tooltip("スタミナの最大値")]
+    float maxStamina = 1000.0f;
+    [Tooltip("スタミナバー")]
+    [SerializeField] Slider sliderStamina;
     [Tooltip("現在のアーマープレート数")]
     int currentArmorPlate = 2;
     [Tooltip("アーマープレートの所持できる最大数")]
@@ -122,6 +128,7 @@ public class Player : MonoBehaviour
         InitBoneNeck01();
         InitBoneSpine03();
         InitHP();
+        InitStamina();
         StartTextArmorPlate();
         StartImageReload();
         StartTextMagazine();
@@ -152,6 +159,15 @@ public class Player : MonoBehaviour
     {
         sliderHp.value = 1;
         currentHp = maxHp;
+    }
+
+    /// <summary>
+    /// スタミナの初期化処理
+    /// </summary> 
+    void InitStamina()
+    {
+        sliderStamina.value = 1;
+        currentStamina = maxStamina;
     }
 
     /// <summary>
@@ -533,6 +549,18 @@ public class Player : MonoBehaviour
             this.transform.rotation = Quaternion.LookRotation(moveForward);
         }
 
+        if (inputVertical <= -1 || 1 <= inputVertical)//前後移動入力
+        {
+            //スタミナ消費
+            ConsumeStamina(2.0f);
+        }
+        else if (inputHorizontal <= -1 || 1 <= inputHorizontal)//左右移動入力
+        {
+            //スタミナ消費
+            ConsumeStamina(2.0f);
+        }
+
+
 #if UNITY_EDITOR
         VectorVisualizer();
 #endif
@@ -563,6 +591,17 @@ public class Player : MonoBehaviour
         if (cameraForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
         {
             this.transform.rotation = Quaternion.LookRotation(cameraForward);
+        }
+
+        if (inputVertical <= -1 || 1 <= inputVertical)//前後移動入力
+        {
+            //スタミナ消費
+            ConsumeStamina(2.0f);
+        }
+        else if (inputHorizontal <= -1 || 1 <= inputHorizontal)//左右移動入力
+        {
+            //スタミナ消費
+            ConsumeStamina(2.0f);
         }
     }
 
@@ -645,6 +684,22 @@ public class Player : MonoBehaviour
         }
 
         maxArmorPlate = maxArmorPlate + 1;
+    }
+
+    /// <summary>
+    /// スタミナを消費
+    /// </summary> 
+    void ConsumeStamina(float amount)
+    {
+        if (currentStamina <= 0.0f)
+        {
+            currentStamina = 0.0f;
+            return;
+        }
+
+        currentStamina = currentStamina - amount;
+        //Debug.Log("<color=orange>currentStamina : " + currentStamina + "</color>");
+        sliderStamina.value = (float)currentStamina / (float)maxStamina;
     }
 
     void OnGUI()
