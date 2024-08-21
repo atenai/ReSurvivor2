@@ -24,11 +24,20 @@ public class Player : MonoBehaviour
     [SerializeField] Rigidbody rb;
 
     [Header("プレイヤーキャラクターの移動関連")]
+    [Tooltip("プレイヤーキャラクターの元気な時の通常移動速度")]
+    [SerializeField] float energeticNormalMoveSpeed = 5.0f;
+    [Tooltip("プレイヤーキャラクターの元気な時のエイム中移動速度")]
+    [SerializeField] float energeticWeaponMoveSpeed = 3.0f;
+    [Tooltip("プレイヤーキャラクターの疲れた時の通常移動速度")]
+    [SerializeField] float tiredNormalMoveSpeed = 3.0f;
+    [Tooltip("プレイヤーキャラクターの疲れた時のエイム中移動速度")]
+    [SerializeField] float tiredWeaponMoveSpeed = 1.0f;
+
     [Tooltip("プレイヤーキャラクターの通常移動速度")]
-    [SerializeField] float normalMoveSpeed = 5.0f;
+    float normalMoveSpeed = 5.0f;
     public float NormalMoveSpeed => normalMoveSpeed;
     [Tooltip("プレイヤーキャラクターのエイム中移動速度")]
-    [SerializeField] float weaponMoveSpeed = 3.0f;
+    float weaponMoveSpeed = 3.0f;
     public float WeaponMoveSpeed => weaponMoveSpeed;
     float inputHorizontal;
     float inputVertical;
@@ -84,6 +93,8 @@ public class Player : MonoBehaviour
     float maxStamina = 1000.0f;
     [Tooltip("スタミナバー")]
     [SerializeField] Slider sliderStamina;
+    [Tooltip("疲れた時のスタミナ値")]
+    [SerializeField] float tiredStamina = 100.0f;
     [Tooltip("現在のアーマープレート数")]
     int currentArmorPlate = 2;
     [Tooltip("アーマープレートの所持できる最大数")]
@@ -515,6 +526,7 @@ public class Player : MonoBehaviour
             return;
         }
 
+        ChangeMoveSpeed();
         NormalMove();
         AimMove();
     }
@@ -612,6 +624,25 @@ public class Player : MonoBehaviour
     {
         Ray debugRayVelocity = new Ray(this.transform.position, rb.velocity);
         Debug.DrawRay(debugRayVelocity.origin, debugRayVelocity.direction, Color.magenta);
+    }
+
+    /// <summary>
+    /// 移動スピードを変える
+    /// </summary>
+    void ChangeMoveSpeed()
+    {
+        if (currentStamina <= tiredStamina)
+        {
+            //疲れた際の移動速度
+            normalMoveSpeed = tiredNormalMoveSpeed;
+            weaponMoveSpeed = tiredWeaponMoveSpeed;
+        }
+        else
+        {
+            //元気な際の移動速度
+            normalMoveSpeed = energeticNormalMoveSpeed;
+            weaponMoveSpeed = energeticWeaponMoveSpeed;
+        }
     }
 
     void OnCollisionEnter(Collision collision)
