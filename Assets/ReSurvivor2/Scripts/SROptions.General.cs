@@ -61,11 +61,19 @@ public partial class SROptions
     }
 
     [Category("Player")]
-    [DisplayName("アーマーを増やす")]
+    [DisplayName("アーマープレートを1つ取得する")]
     [Sort(0)]
-    public void IncreaseArmorPlate()
+    public void AcquireArmorPlate()
     {
         Player.SingletonInstance.AcquireArmorPlate();
+    }
+
+    [Category("Player")]
+    [DisplayName("アーマープレートの最大数を増やす")]
+    [Sort(1)]
+    public void IncreaseMaxArmorPlate()
+    {
+        Player.SingletonInstance.IncreaseMaxArmorPlate();
     }
 
     #endregion

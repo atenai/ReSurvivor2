@@ -80,8 +80,10 @@ public class Player : MonoBehaviour
     [SerializeField] Slider sliderHp;
     [Tooltip("現在のアーマープレート数")]
     int currentArmorPlate = 2;
-    [Tooltip("アーマープレートの最大数")]
+    [Tooltip("アーマープレートの所持できる最大数")]
     int maxArmorPlate = 3;
+    [Tooltip("アーマープレートの所持できる限界最大数")]
+    int limitMaximumArmorPlate = 10;
     [Tooltip("アーマープレートテキスト")]
     [SerializeField] TextMeshProUGUI textArmorPlate;
     [Tooltip("リロード画像")]
@@ -630,6 +632,19 @@ public class Player : MonoBehaviour
 
         currentArmorPlate = currentArmorPlate + 1;
         textArmorPlate.text = currentArmorPlate.ToString();
+    }
+
+    /// <summary>
+    /// アーマープレートの所持できる最大数を増加
+    /// </summary>
+    public void IncreaseMaxArmorPlate()
+    {
+        if (limitMaximumArmorPlate <= maxArmorPlate)
+        {
+            return;
+        }
+
+        maxArmorPlate = maxArmorPlate + 1;
     }
 
     void OnGUI()
