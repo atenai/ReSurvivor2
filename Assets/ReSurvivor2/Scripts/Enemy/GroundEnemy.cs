@@ -190,12 +190,10 @@ public class GroundEnemy : MonoBehaviour
     }
 
     /// <summary>
-    /// 視界
+    /// レイキャストによる視界
     /// </summary>
     void Eyesight()
     {
-        Vector3 eyePos = new Vector3(this.transform.position.x, head.transform.position.y, this.transform.position.z);
-
         Ray ray = new Ray(head.transform.position, this.transform.forward);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, rayDistance))
@@ -207,7 +205,7 @@ public class GroundEnemy : MonoBehaviour
                 chaseCountTime = chaseTime;
             }
         }
-        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.yellow, 1);
+        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.yellow);
     }
 
     /// <summary>
