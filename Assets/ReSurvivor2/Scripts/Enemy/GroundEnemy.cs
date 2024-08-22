@@ -17,6 +17,8 @@ public class GroundEnemy : MonoBehaviour
     [SerializeField] Rigidbody rb;
     public Rigidbody Rigidbody => rb;
 
+    [SerializeField] Canvas canvas;
+
     //センサーコライダー用の変数
     [SerializeField] ColliderEventHandler[] colliders = default;
     private bool[] hits;
@@ -78,12 +80,9 @@ public class GroundEnemy : MonoBehaviour
     [SerializeField] float shootingDistance = 8.0f;
     public float ShootingDistance => shootingDistance;
 
-    [Header("デバッグ")]
-    [Tooltip("デバッグモード")]
-    [SerializeField] bool isDebugMode = true;
-    [Tooltip("デバッグテキスト")]
-    [SerializeField] List<TextMeshProUGUI> debugText = new List<TextMeshProUGUI>();
-
+    [Tooltip("デバッグ")]
+    [SerializeField] DebugEnemy debugEnemy;
+    public DebugEnemy DebugEnemy => debugEnemy;
 
     void Start()
     {
@@ -186,6 +185,8 @@ public class GroundEnemy : MonoBehaviour
         alert.gameObject.SetActive(isChase);
         ChasePlayer();
 
+        //デバッグ関連の処理
+        debugEnemy.DebugCheckChase(debugEnemy.IsDebugMode, isChase);
         DebugText();
     }
 
@@ -229,27 +230,27 @@ public class GroundEnemy : MonoBehaviour
     /// </summary> 
     void DebugText()
     {
-        if (isDebugMode == false)
-        {
-            return;
-        }
+        string[] debugTexts = new string[6];
 
-        debugText[5].text = "chaseCountTime : " + chaseCountTime.ToString();
-        debugText[4].text = "isChase : " + isChase.ToString();
+        debugTexts[5] = "chaseCountTime : " + chaseCountTime.ToString();
+        debugTexts[4] = "isChase : " + isChase.ToString();
 
-        debugText[3].text = "patrolPointNumber : " + patrolPointNumber.ToString();
-        debugText[2].text = "isGrounded : " + isGrounded.ToString();
+        debugTexts[3] = "patrolPointNumber : " + patrolPointNumber.ToString();
+        debugTexts[2] = "isGrounded : " + isGrounded.ToString();
 
 
         if (hitCollider != null)
         {
-            debugText[1].text = "hitCollider : " + hitCollider.ToString();
+            debugTexts[1] = "hitCollider : " + hitCollider.ToString();
         }
         else
         {
-            debugText[1].text = "hitCollider : " + "null";
+            debugTexts[1] = "hitCollider : " + "null";
         }
-        debugText[0].text = "hits[0] : " + hits[0].ToString();
+        debugTexts[0] = "hits[0] : " + hits[0].ToString();
+
+        debugEnemy.DebugSystem(debugEnemy.IsDebugMode, canvas, debugTexts.Length);
+        debugEnemy.SetDebugText(debugTexts);
     }
 
     void FixedUpdate()
