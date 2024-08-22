@@ -10,9 +10,10 @@ using UnityEngine.AddressableAssets;
 /// </summary>
 public class GroundEnemy : MonoBehaviour
 {
+    [UnityEngine.Tooltip("プレイヤー")]
     GameObject target;
     public GameObject Target => target;
-
+    [UnityEngine.Tooltip("物理")]
     [SerializeField] Rigidbody rb;
     public Rigidbody Rigidbody => rb;
 
@@ -23,28 +24,38 @@ public class GroundEnemy : MonoBehaviour
     private Collider hitCollider = null;
     public Collider HitCollider => hitCollider;
 
-    //ビヘイビアデザイナー用変数
-    bool isChase = false;
-    public bool IsChase
-    {
-        get { return isChase; }
-        set { isChase = value; }
-    }
-
+    [Header("追跡")]
+    [UnityEngine.Tooltip("追跡時間の設定")]
     [SerializeField] float chaseTime = 10.0f;
     public float ChaseTime => chaseTime;
-
+    [UnityEngine.Tooltip("追跡カウントタイマー")]
     float chaseCountTime;
     public float ChaseCountTime
     {
         get { return chaseCountTime; }
         set { chaseCountTime = value; }
     }
-
+    [UnityEngine.Tooltip("追跡中か？")]
+    bool isChase = false;
+    public bool IsChase
+    {
+        get { return isChase; }
+        set { isChase = value; }
+    }
+    [UnityEngine.Tooltip("エネミー追跡範囲の中心点")]
+    [SerializeField] GameObject centerPos;
+    public GameObject CenterPos => centerPos;
+    [UnityEngine.Tooltip("追跡中か？のアラートイメージ")]
     [SerializeField] GameObject alert;
+    [UnityEngine.Tooltip("視界用の頭ゲームオブジェクト")]
+    [SerializeField] GameObject head;
+    [UnityEngine.Tooltip("視界な長さ")]
+    float rayDistance = 8.0f;
 
-    float rayDistance = 3.5f;
-
+    [Header("パトロール")]
+    [UnityEngine.Tooltip("パトロールポイントの位置")]
+    [SerializeField] List<GameObject> patrolPoints = new List<GameObject>();
+    public List<GameObject> PatrolPoints => patrolPoints;
     [UnityEngine.Tooltip("現在のパトロールポイントのナンバー")]
     int patrolPointNumber = 0;
     public int PatrolPointNumber
@@ -52,21 +63,19 @@ public class GroundEnemy : MonoBehaviour
         get { return patrolPointNumber; }
         set { patrolPointNumber = value; }
     }
-
-    [SerializeField] List<GameObject> patrolPoints = new List<GameObject>();
-    public List<GameObject> PatrolPoints => patrolPoints;
-
-    [SerializeField] GameObject centerPos;
-    public GameObject CenterPos => centerPos;
-
+    [UnityEngine.Tooltip("地面の中心点")]
     [SerializeField] Transform groundCheckCenter;
+    [UnityEngine.Tooltip("地面となるレイヤー")]
     [SerializeField] LayerMask groundLayers;
+    [UnityEngine.Tooltip("地面検知範囲")]
     [SerializeField] float groundedRadius = 0.2f;
+    [UnityEngine.Tooltip("地面と接地しているか？")]
     bool isGrounded = false;
     public bool IsGrounded => isGrounded;
 
+    [Header("攻撃")]
     [UnityEngine.Tooltip("射撃距離")]
-    [SerializeField] float shootingDistance = 4.0f;
+    [SerializeField] float shootingDistance = 8.0f;
     public float ShootingDistance => shootingDistance;
 
     [Header("デバッグ")]
@@ -185,9 +194,9 @@ public class GroundEnemy : MonoBehaviour
     /// </summary>
     void Eyesight()
     {
-        Vector3 eyePos = new Vector3(this.transform.position.x, this.transform.position.y + 1.7f, this.transform.position.z);
+        Vector3 eyePos = new Vector3(this.transform.position.x, head.transform.position.y, this.transform.position.z);
 
-        Ray ray = new Ray(eyePos, this.transform.forward);
+        Ray ray = new Ray(head.transform.position, this.transform.forward);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, rayDistance))
         {
@@ -198,7 +207,7 @@ public class GroundEnemy : MonoBehaviour
                 chaseCountTime = chaseTime;
             }
         }
-        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.red, 1);
+        Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.yellow, 1);
     }
 
     /// <summary>

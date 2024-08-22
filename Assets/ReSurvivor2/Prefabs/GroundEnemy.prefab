@@ -649,6 +649,7 @@ MonoBehaviour:
   - {fileID: 3131403555685646428}
   chaseTime: 10
   alert: {fileID: 6114367730951322678}
+  head: {fileID: 5418519800963674144}
   patrolPoints:
   - {fileID: 9062189167038372566}
   - {fileID: 7114279790199196112}
@@ -658,7 +659,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   groundedRadius: 0.2
-  shootingDistance: 4
+  shootingDistance: 8
   isDebugMode: 1
   debugText:
   - {fileID: 2514668074816785207}
@@ -2547,5 +2548,10 @@ PrefabInstance:
 --- !u!4 &2367113111532255360 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2528928732354439076, guid: b5246e6bf352ad149bcf542344ded600, type: 3}
+  m_PrefabInstance: {fileID: 270536613565521700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5418519800963674144 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5256633774687612676, guid: b5246e6bf352ad149bcf542344ded600, type: 3}
   m_PrefabInstance: {fileID: 270536613565521700}
   m_PrefabAsset: {fileID: 0}
