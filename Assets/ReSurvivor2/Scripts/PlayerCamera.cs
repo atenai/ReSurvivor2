@@ -595,6 +595,12 @@ public class PlayerCamera : MonoBehaviour
     {
         if (isAssaultRifleReloadTimeActive == true)//リロードがオンになったら
         {
+            if (assaultRifleReloadTime == 0)
+            {
+                //アサルトライフルのリロードアニメーションをオン
+                Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
+            }
+
             //リロード中画像
             assaultRifleReloadTime += Time.deltaTime;//リロードタイムをプラス
 
@@ -627,6 +633,8 @@ public class PlayerCamera : MonoBehaviour
 
                 assaultRifleReloadTime = 0.0f;//リロードタイムをリセット
                 isAssaultRifleReloadTimeActive = false;//リロードのオフ
+                //アサルトライフルのリロードアニメーションをオフ
+                Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", false);
             }
         }
     }
@@ -769,6 +777,12 @@ public class PlayerCamera : MonoBehaviour
     {
         if (isShotGunReloadTimeActive == true)//リロードがオンになったら
         {
+            if (assaultRifleReloadTime == 0)
+            {
+                //ショットガンのリロードアニメーションをオン
+                Player.SingletonInstance.Animator.SetBool("b_isShotGunReload", true);
+            }
+
             //リロード中画像
             shotGunReloadTime += Time.deltaTime;//リロードタイムをプラス
 
@@ -801,6 +815,8 @@ public class PlayerCamera : MonoBehaviour
 
                 shotGunReloadTime = 0.0f;//リロードタイムをリセット
                 isShotGunReloadTimeActive = false;//リロードのオフ
+                //ショットガンのリロードアニメーションをオフ
+                Player.SingletonInstance.Animator.SetBool("b_isShotGunReload", false);
             }
         }
     }
