@@ -417,6 +417,12 @@ public class PlayerCamera : MonoBehaviour
     {
         if (isHandGunReloadTimeActive == true)//リロードがオンになったら
         {
+            if (handGunReloadTime == 0)
+            {
+                //ハンドガンのリロードアニメーションをオン
+                Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", true);
+            }
+
             //リロード中画像
             handGunReloadTime += Time.deltaTime;//リロードタイムをプラス
 
@@ -449,6 +455,8 @@ public class PlayerCamera : MonoBehaviour
 
                 handGunReloadTime = 0.0f;//リロードタイムをリセット
                 isHandGunReloadTimeActive = false;//リロードのオフ
+                //ハンドガンのリロードアニメーションをオフ
+                Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", false);
             }
         }
     }

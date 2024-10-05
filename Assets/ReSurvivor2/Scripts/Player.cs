@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     public static Player SingletonInstance => singletonInstance;
 
     [SerializeField] Animator animator;
+    public Animator Animator => animator;
     [SerializeField] Rigidbody rb;
 
     [Header("プレイヤーキャラクターの移動関連")]
