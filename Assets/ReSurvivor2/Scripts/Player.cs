@@ -104,6 +104,10 @@ public class Player : MonoBehaviour
     int limitMaximumArmorPlate = 10;
     [Tooltip("アーマープレートテキスト")]
     [SerializeField] TextMeshProUGUI textArmorPlate;
+    [Tooltip("現在の食料数")]
+    int currentFood = 2;
+    [Tooltip("食料テキスト")]
+    [SerializeField] TextMeshProUGUI textFood;
     [Tooltip("リロード画像")]
     [SerializeField] GameObject imageReload;
     Color reloadColor = new Color(255.0f, 255.0f, 255.0f, 0.0f);
@@ -142,6 +146,7 @@ public class Player : MonoBehaviour
         InitHP();
         InitStamina();
         StartTextArmorPlate();
+        StartTextFood();
         StartImageReload();
         StartTextMagazine();
     }
@@ -188,6 +193,14 @@ public class Player : MonoBehaviour
     void StartTextArmorPlate()
     {
         textArmorPlate.text = currentArmorPlate.ToString();
+    }
+
+    /// <summary>
+    /// 食料テキストの初期化処理
+    /// </summary> 
+    void StartTextFood()
+    {
+        textFood.text = currentFood.ToString();
     }
 
     /// <summary>
@@ -247,6 +260,11 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             Heal();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            RestoresStamina();
         }
 
         PlayerUI();
@@ -731,6 +749,28 @@ public class Player : MonoBehaviour
 
         currentStamina = currentStamina - amount;
         //Debug.Log("<color=orange>currentStamina : " + currentStamina + "</color>");
+        sliderStamina.value = (float)currentStamina / (float)maxStamina;
+    }
+
+    /// <summary>
+    /// スタミナを回復
+    /// </summary>
+    void RestoresStamina()
+    {
+        if (currentFood <= 0)
+        {
+            return;
+        }
+
+        if (maxStamina <= currentStamina)
+        {
+            return;
+        }
+
+        currentFood = currentFood - 1;
+        textFood.text = currentFood.ToString();
+
+        currentStamina = maxStamina;
         sliderStamina.value = (float)currentStamina / (float)maxStamina;
     }
 
