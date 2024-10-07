@@ -108,8 +108,10 @@ public class Player : MonoBehaviour
     [SerializeField] TextMeshProUGUI textArmorPlate;
     [Tooltip("現在の食料数")]
     int currentFood = 2;
+    public int CurrentFood => currentFood;
     [Tooltip("食料の所持できる最大数")]
     int maxFood = 3;
+    public int MaxFood => maxFood;
     [Tooltip("食料の所持できる限界最大数")]
     int limitMaximumFood = 10;
     [Tooltip("食料テキスト")]
