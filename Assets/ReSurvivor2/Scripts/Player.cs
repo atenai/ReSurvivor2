@@ -98,8 +98,10 @@ public class Player : MonoBehaviour
     [SerializeField] float tiredStamina = 100.0f;
     [Tooltip("現在のアーマープレート数")]
     int currentArmorPlate = 2;
+    public int CurrentArmorPlate => currentArmorPlate;
     [Tooltip("アーマープレートの所持できる最大数")]
     int maxArmorPlate = 3;
+    public int MaxArmorPlate => maxArmorPlate;
     [Tooltip("アーマープレートの所持できる限界最大数")]
     int limitMaximumArmorPlate = 10;
     [Tooltip("アーマープレートテキスト")]
