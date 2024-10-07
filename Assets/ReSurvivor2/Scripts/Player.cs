@@ -106,6 +106,10 @@ public class Player : MonoBehaviour
     [SerializeField] TextMeshProUGUI textArmorPlate;
     [Tooltip("現在の食料数")]
     int currentFood = 2;
+    [Tooltip("食料の所持できる最大数")]
+    int maxFood = 3;
+    [Tooltip("食料の所持できる限界最大数")]
+    int limitMaximumFood = 10;
     [Tooltip("食料テキスト")]
     [SerializeField] TextMeshProUGUI textFood;
     [Tooltip("リロード画像")]
@@ -772,6 +776,33 @@ public class Player : MonoBehaviour
 
         currentStamina = maxStamina;
         sliderStamina.value = (float)currentStamina / (float)maxStamina;
+    }
+
+    /// <summary>
+    /// 食料を取得
+    /// </summary> 
+    public void AcquireFood()
+    {
+        if (maxFood <= currentFood)
+        {
+            return;
+        }
+
+        currentFood = currentFood + 1;
+        textFood.text = currentFood.ToString();
+    }
+
+    /// <summary>
+    /// 食料の所持できる最大数を増加
+    /// </summary>
+    public void IncreaseMaxFood()
+    {
+        if (limitMaximumFood <= maxFood)
+        {
+            return;
+        }
+
+        maxFood = maxFood + 1;
     }
 
     void OnGUI()

@@ -76,5 +76,21 @@ public partial class SROptions
         Player.SingletonInstance.IncreaseMaxArmorPlate();
     }
 
+    [Category("Player")]
+    [DisplayName("食料を1つ取得する")]
+    [Sort(2)]
+    public void AcquireFood()
+    {
+        Player.SingletonInstance.AcquireFood();
+    }
+
+    [Category("Player")]
+    [DisplayName("食料の最大数を増やす")]
+    [Sort(3)]
+    public void IncreaseMaxFood()
+    {
+        Player.SingletonInstance.IncreaseMaxFood();
+    }
+
     #endregion
 }
