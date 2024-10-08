@@ -228,15 +228,15 @@ public class Player : MonoBehaviour
         {
             case PlayerCamera.GunTYPE.HandGun:
                 textMagazine.text = PlayerCamera.SingletonInstance.HandGunCurrentMagazine.ToString();
-                textAmmo.text = PlayerCamera.SingletonInstance.HandGunAmmo.ToString();
+                textAmmo.text = PlayerCamera.SingletonInstance.CurrentHandGunAmmo.ToString();
                 break;
             case PlayerCamera.GunTYPE.AssaultRifle:
                 textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifleCurrentMagazine.ToString();
-                textAmmo.text = PlayerCamera.SingletonInstance.AssaultRifleAmmo.ToString();
+                textAmmo.text = PlayerCamera.SingletonInstance.CurrentAssaultRifleAmmo.ToString();
                 break;
             case PlayerCamera.GunTYPE.ShotGun:
                 textMagazine.text = PlayerCamera.SingletonInstance.ShotGunCurrentMagazine.ToString();
-                textAmmo.text = PlayerCamera.SingletonInstance.ShotGunAmmo.ToString();
+                textAmmo.text = PlayerCamera.SingletonInstance.CurrentShotGunAmmo.ToString();
                 break;
         }
     }
@@ -423,15 +423,15 @@ public class Player : MonoBehaviour
         {
             case PlayerCamera.GunTYPE.HandGun:
                 textMagazine.text = PlayerCamera.SingletonInstance.HandGunCurrentMagazine.ToString();
-                textAmmo.text = PlayerCamera.SingletonInstance.HandGunAmmo.ToString();
+                textAmmo.text = PlayerCamera.SingletonInstance.CurrentHandGunAmmo.ToString();
                 break;
             case PlayerCamera.GunTYPE.AssaultRifle:
                 textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifleCurrentMagazine.ToString();
-                textAmmo.text = PlayerCamera.SingletonInstance.AssaultRifleAmmo.ToString();
+                textAmmo.text = PlayerCamera.SingletonInstance.CurrentAssaultRifleAmmo.ToString();
                 break;
             case PlayerCamera.GunTYPE.ShotGun:
                 textMagazine.text = PlayerCamera.SingletonInstance.ShotGunCurrentMagazine.ToString();
-                textAmmo.text = PlayerCamera.SingletonInstance.ShotGunAmmo.ToString();
+                textAmmo.text = PlayerCamera.SingletonInstance.CurrentShotGunAmmo.ToString();
                 break;
         }
     }

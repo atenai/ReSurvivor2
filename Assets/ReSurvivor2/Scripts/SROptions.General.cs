@@ -92,5 +92,13 @@ public partial class SROptions
         Player.SingletonInstance.IncreaseMaxFood();
     }
 
+    [Category("Player")]
+    [DisplayName("ハンドガンの弾を取得する")]
+    [Sort(4)]
+    public void AcquireHandGunAmmo()
+    {
+        PlayerCamera.SingletonInstance.AcquireHandGunAmmo();
+    }
+
     #endregion
 }

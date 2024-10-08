@@ -72,10 +72,11 @@ public class PlayerCamera : MonoBehaviour
     public int HandGunCurrentMagazine => handGunCurrentMagazine;
     [Tooltip("ハンドガンの最大マガジン数")]
     readonly int handGunMagazineCapacity = 7;
-    [Tooltip("ハンドガンの残弾数")]
-    int handGunAmmo = 35;
-    public int HandGunAmmo => handGunAmmo;
-
+    [Tooltip("ハンドガンの現在の残弾数")]
+    int currentHandGunAmmo = 30;
+    public int CurrentHandGunAmmo => currentHandGunAmmo;
+    [Tooltip("ハンドガンの最大残弾数")]
+    int maxHandGunAmmo = 120;
     [Tooltip("ハンドガンのリロードのオン・オフ")]
     bool isHandGunReloadTimeActive = false;
     public bool IsHandGunReloadTimeActive => isHandGunReloadTimeActive;
@@ -102,9 +103,9 @@ public class PlayerCamera : MonoBehaviour
     public int AssaultRifleCurrentMagazine => assaultRifleCurrentMagazine;
     [Tooltip("アサルトライフルの最大マガジン数")]
     readonly int assaultRifleMagazineCapacity = 30;
-    [Tooltip("アサルトライフルの残弾数")]
-    int assaultRifleAmmo = 150;
-    public int AssaultRifleAmmo => assaultRifleAmmo;
+    [Tooltip("アサルトライフルの現在の残弾数")]
+    int currentAssaultRifleAmmo = 150;
+    public int CurrentAssaultRifleAmmo => currentAssaultRifleAmmo;
 
     [Tooltip("アサルトライフルのリロードのオン・オフ")]
     bool isAssaultRifleReloadTimeActive = false;
@@ -134,9 +135,9 @@ public class PlayerCamera : MonoBehaviour
     public int ShotGunCurrentMagazine => shotGunCurrentMagazine;
     [Tooltip("ショットガンの最大マガジン数")]
     readonly int shotGunMagazineCapacity = 8;
-    [Tooltip("ショットガンの残弾数")]
-    int shotGunAmmo = 40;
-    public int ShotGunAmmo => shotGunAmmo;
+    [Tooltip("ショットガンの現在の残弾数")]
+    int currentShotGunAmmo = 40;
+    public int CurrentShotGunAmmo => currentShotGunAmmo;
 
     [Tooltip("ショットガンのリロードのオン・オフ")]
     bool isShotGunReloadTimeActive = false;
@@ -208,22 +209,22 @@ public class PlayerCamera : MonoBehaviour
         }
 
         //弾が0以下なら切り上げ
-        if (handGunAmmo <= 0)
+        if (currentHandGunAmmo <= 0)
         {
             return;
         }
 
         int localMagazine = handGunMagazineCapacity - handGunCurrentMagazine;
-        int localAmmo = handGunAmmo - localMagazine;
+        int localAmmo = currentHandGunAmmo - localMagazine;
         if (localAmmo < 0)
         {
-            handGunCurrentMagazine = handGunAmmo;
-            handGunAmmo = 0;
+            handGunCurrentMagazine = currentHandGunAmmo;
+            currentHandGunAmmo = 0;
         }
         else
         {
             handGunCurrentMagazine = handGunMagazineCapacity;
-            handGunAmmo = localAmmo;
+            currentHandGunAmmo = localAmmo;
         }
     }
 
@@ -239,22 +240,22 @@ public class PlayerCamera : MonoBehaviour
         }
 
         //弾が0以下なら切り上げ
-        if (assaultRifleAmmo <= 0)
+        if (currentAssaultRifleAmmo <= 0)
         {
             return;
         }
 
         int localMagazine = assaultRifleMagazineCapacity - assaultRifleCurrentMagazine;
-        int localAmmo = assaultRifleAmmo - localMagazine;
+        int localAmmo = currentAssaultRifleAmmo - localMagazine;
         if (localAmmo < 0)
         {
-            assaultRifleCurrentMagazine = assaultRifleAmmo;
-            assaultRifleAmmo = 0;
+            assaultRifleCurrentMagazine = currentAssaultRifleAmmo;
+            currentAssaultRifleAmmo = 0;
         }
         else
         {
             assaultRifleCurrentMagazine = assaultRifleMagazineCapacity;
-            assaultRifleAmmo = localAmmo;
+            currentAssaultRifleAmmo = localAmmo;
         }
     }
 
@@ -270,22 +271,22 @@ public class PlayerCamera : MonoBehaviour
         }
 
         //弾が0以下なら切り上げ
-        if (shotGunAmmo <= 0)
+        if (currentShotGunAmmo <= 0)
         {
             return;
         }
 
         int localMagazine = shotGunMagazineCapacity - shotGunCurrentMagazine;
-        int localAmmo = shotGunAmmo - localMagazine;
+        int localAmmo = currentShotGunAmmo - localMagazine;
         if (localAmmo < 0)
         {
-            shotGunCurrentMagazine = shotGunAmmo;
-            shotGunAmmo = 0;
+            shotGunCurrentMagazine = currentShotGunAmmo;
+            currentShotGunAmmo = 0;
         }
         else
         {
             shotGunCurrentMagazine = shotGunMagazineCapacity;
-            shotGunAmmo = localAmmo;
+            currentShotGunAmmo = localAmmo;
         }
     }
 
@@ -381,7 +382,7 @@ public class PlayerCamera : MonoBehaviour
     void HandGunAutoReload()
     {
         //残弾数が0かつ弾薬が1発以上あるとき
-        if (handGunCurrentMagazine == 0 && 0 < handGunAmmo)
+        if (handGunCurrentMagazine == 0 && 0 < currentHandGunAmmo)
         {
             isHandGunReloadTimeActive = true;//リロードのオン
         }
@@ -399,7 +400,7 @@ public class PlayerCamera : MonoBehaviour
         }
 
         //弾が0以下なら切り上げ
-        if (handGunAmmo <= 0)
+        if (currentHandGunAmmo <= 0)
         {
             return;
         }
@@ -431,26 +432,26 @@ public class PlayerCamera : MonoBehaviour
                 //弾リセット
                 int oldMagazine = handGunCurrentMagazine;
                 int localMagazine = handGunMagazineCapacity - handGunCurrentMagazine;
-                int localAmmo = handGunAmmo - localMagazine;
+                int localAmmo = currentHandGunAmmo - localMagazine;
                 if (localAmmo < 0)
                 {
-                    if (handGunAmmo + oldMagazine < handGunMagazineCapacity)
+                    if (currentHandGunAmmo + oldMagazine < handGunMagazineCapacity)
                     {
-                        handGunCurrentMagazine = handGunAmmo + oldMagazine;
-                        handGunAmmo = 0;
+                        handGunCurrentMagazine = currentHandGunAmmo + oldMagazine;
+                        currentHandGunAmmo = 0;
                     }
                     else
                     {
                         handGunCurrentMagazine = handGunMagazineCapacity;
-                        int totalAmmo = handGunAmmo + oldMagazine;
+                        int totalAmmo = currentHandGunAmmo + oldMagazine;
                         int resultAmmo = totalAmmo - handGunMagazineCapacity;
-                        handGunAmmo = resultAmmo;
+                        currentHandGunAmmo = resultAmmo;
                     }
                 }
                 else
                 {
                     handGunCurrentMagazine = handGunMagazineCapacity;
-                    handGunAmmo = localAmmo;
+                    currentHandGunAmmo = localAmmo;
                 }
 
                 handGunReloadTime = 0.0f;//リロードタイムをリセット
@@ -462,7 +463,7 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// 弾を発射
+    /// ハンドガンの弾を発射
     /// </summary> 
     void HandGunFire()
     {
@@ -522,6 +523,23 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
+    /// ハンドガンの弾を取得
+    /// </summary> 
+    public void AcquireHandGunAmmo()
+    {
+        if (maxHandGunAmmo <= currentHandGunAmmo)
+        {
+            return;
+        }
+
+        currentHandGunAmmo = currentHandGunAmmo + 10;
+        if (maxHandGunAmmo <= currentHandGunAmmo)
+        {
+            currentHandGunAmmo = maxHandGunAmmo;
+        }
+    }
+
+    /// <summary>
     /// アサルトライフルで射撃
     /// </summary> 
     void AssaultRifleShoot()
@@ -559,7 +577,7 @@ public class PlayerCamera : MonoBehaviour
     void AssaultRifleAutoReload()
     {
         //残弾数が0かつの弾薬が1発以上あるとき
-        if (assaultRifleCurrentMagazine == 0 && 0 < assaultRifleAmmo)
+        if (assaultRifleCurrentMagazine == 0 && 0 < currentAssaultRifleAmmo)
         {
             isAssaultRifleReloadTimeActive = true;//リロードのオン
         }
@@ -577,7 +595,7 @@ public class PlayerCamera : MonoBehaviour
         }
 
         //弾が0以下なら切り上げ
-        if (assaultRifleAmmo <= 0)
+        if (currentAssaultRifleAmmo <= 0)
         {
             return;
         }
@@ -609,26 +627,26 @@ public class PlayerCamera : MonoBehaviour
                 //弾リセット
                 int oldMagazine = assaultRifleCurrentMagazine;
                 int localMagazine = assaultRifleMagazineCapacity - assaultRifleCurrentMagazine;
-                int localAmmo = assaultRifleAmmo - localMagazine;
+                int localAmmo = currentAssaultRifleAmmo - localMagazine;
                 if (localAmmo < 0)
                 {
-                    if (assaultRifleAmmo + oldMagazine < assaultRifleMagazineCapacity)
+                    if (currentAssaultRifleAmmo + oldMagazine < assaultRifleMagazineCapacity)
                     {
-                        assaultRifleCurrentMagazine = assaultRifleAmmo + oldMagazine;
-                        assaultRifleAmmo = 0;
+                        assaultRifleCurrentMagazine = currentAssaultRifleAmmo + oldMagazine;
+                        currentAssaultRifleAmmo = 0;
                     }
                     else
                     {
                         assaultRifleCurrentMagazine = assaultRifleMagazineCapacity;
-                        int totalAmmo = assaultRifleAmmo + oldMagazine;
+                        int totalAmmo = currentAssaultRifleAmmo + oldMagazine;
                         int resultAmmo = totalAmmo - assaultRifleMagazineCapacity;
-                        assaultRifleAmmo = resultAmmo;
+                        currentAssaultRifleAmmo = resultAmmo;
                     }
                 }
                 else
                 {
                     assaultRifleCurrentMagazine = assaultRifleMagazineCapacity;
-                    assaultRifleAmmo = localAmmo;
+                    currentAssaultRifleAmmo = localAmmo;
                 }
 
                 assaultRifleReloadTime = 0.0f;//リロードタイムをリセット
@@ -640,7 +658,7 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// 弾を発射
+    /// アサルトライフルの弾を発射
     /// </summary> 
     void AssaultRifleFire()
     {
@@ -741,7 +759,7 @@ public class PlayerCamera : MonoBehaviour
     void ShotGunAutoReload()
     {
         //残弾数が0かつの弾薬が1発以上あるとき
-        if (shotGunCurrentMagazine == 0 && 0 < shotGunAmmo)
+        if (shotGunCurrentMagazine == 0 && 0 < currentShotGunAmmo)
         {
             isShotGunReloadTimeActive = true;//リロードのオン
         }
@@ -759,7 +777,7 @@ public class PlayerCamera : MonoBehaviour
         }
 
         //弾が0以下なら切り上げ
-        if (shotGunAmmo <= 0)
+        if (currentShotGunAmmo <= 0)
         {
             return;
         }
@@ -791,26 +809,26 @@ public class PlayerCamera : MonoBehaviour
                 //弾リセット
                 int oldMagazine = shotGunCurrentMagazine;
                 int localMagazine = shotGunMagazineCapacity - shotGunCurrentMagazine;
-                int localAmmo = shotGunAmmo - localMagazine;
+                int localAmmo = currentShotGunAmmo - localMagazine;
                 if (localAmmo < 0)
                 {
-                    if (shotGunAmmo + oldMagazine < shotGunMagazineCapacity)
+                    if (currentShotGunAmmo + oldMagazine < shotGunMagazineCapacity)
                     {
-                        shotGunCurrentMagazine = shotGunAmmo + oldMagazine;
-                        shotGunAmmo = 0;
+                        shotGunCurrentMagazine = currentShotGunAmmo + oldMagazine;
+                        currentShotGunAmmo = 0;
                     }
                     else
                     {
                         shotGunCurrentMagazine = shotGunMagazineCapacity;
-                        int totalAmmo = shotGunAmmo + oldMagazine;
+                        int totalAmmo = currentShotGunAmmo + oldMagazine;
                         int resultAmmo = totalAmmo - shotGunMagazineCapacity;
-                        shotGunAmmo = resultAmmo;
+                        currentShotGunAmmo = resultAmmo;
                     }
                 }
                 else
                 {
                     shotGunCurrentMagazine = shotGunMagazineCapacity;
-                    shotGunAmmo = localAmmo;
+                    currentShotGunAmmo = localAmmo;
                 }
 
                 shotGunReloadTime = 0.0f;//リロードタイムをリセット
@@ -822,7 +840,7 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// 弾を発射
+    /// ショットガンの弾を発射
     /// </summary> 
     void ShotGunFire()
     {
