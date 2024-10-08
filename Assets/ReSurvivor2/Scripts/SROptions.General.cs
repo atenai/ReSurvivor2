@@ -100,5 +100,21 @@ public partial class SROptions
         PlayerCamera.SingletonInstance.AcquireHandGunAmmo();
     }
 
+    [Category("Player")]
+    [DisplayName("アサルトライフルの弾を取得する")]
+    [Sort(5)]
+    public void AcquireAssaultRifleAmmo()
+    {
+        PlayerCamera.SingletonInstance.AcquireAssaultRifleAmmo();
+    }
+
+    [Category("Player")]
+    [DisplayName("ショットガンの弾を取得する")]
+    [Sort(6)]
+    public void AcquireShotGunAmmo()
+    {
+        PlayerCamera.SingletonInstance.AcquireShotGunAmmo();
+    }
+
     #endregion
 }

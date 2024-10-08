@@ -73,10 +73,10 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("ハンドガンの最大マガジン数")]
     readonly int handGunMagazineCapacity = 7;
     [Tooltip("ハンドガンの現在の残弾数")]
-    int currentHandGunAmmo = 30;
+    int currentHandGunAmmo = 35;
     public int CurrentHandGunAmmo => currentHandGunAmmo;
     [Tooltip("ハンドガンの最大残弾数")]
-    int maxHandGunAmmo = 120;
+    int maxHandGunAmmo = 70;
     [Tooltip("ハンドガンのリロードのオン・オフ")]
     bool isHandGunReloadTimeActive = false;
     public bool IsHandGunReloadTimeActive => isHandGunReloadTimeActive;
@@ -106,7 +106,8 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("アサルトライフルの現在の残弾数")]
     int currentAssaultRifleAmmo = 150;
     public int CurrentAssaultRifleAmmo => currentAssaultRifleAmmo;
-
+    [Tooltip("アサルトライフルの最大残弾数")]
+    int maxAssaultRifleAmmo = 300;
     [Tooltip("アサルトライフルのリロードのオン・オフ")]
     bool isAssaultRifleReloadTimeActive = false;
     public bool IsAssaultRifleReloadTimeActive => isAssaultRifleReloadTimeActive;
@@ -138,7 +139,8 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("ショットガンの現在の残弾数")]
     int currentShotGunAmmo = 40;
     public int CurrentShotGunAmmo => currentShotGunAmmo;
-
+    [Tooltip("ショットガンの最大残弾数")]
+    int maxShotGunAmmo = 80;
     [Tooltip("ショットガンのリロードのオン・オフ")]
     bool isShotGunReloadTimeActive = false;
     public bool IsShotGunReloadTimeActive => isShotGunReloadTimeActive;
@@ -722,6 +724,23 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
+    /// アサルトライフルの弾を取得
+    /// </summary> 
+    public void AcquireAssaultRifleAmmo()
+    {
+        if (maxAssaultRifleAmmo <= currentAssaultRifleAmmo)
+        {
+            return;
+        }
+
+        currentAssaultRifleAmmo = currentAssaultRifleAmmo + 10;
+        if (maxAssaultRifleAmmo <= currentAssaultRifleAmmo)
+        {
+            currentAssaultRifleAmmo = maxAssaultRifleAmmo;
+        }
+    }
+
+    /// <summary>
     /// ショットガンで射撃
     /// </summary> 
     void ShotGunShoot()
@@ -903,6 +922,23 @@ public class PlayerCamera : MonoBehaviour
         if (shotGunAfterFireSmoke != null)
         {
             shotGunAfterFireSmoke.Play();
+        }
+    }
+
+    /// <summary>
+    /// ショットガンの弾を取得
+    /// </summary> 
+    public void AcquireShotGunAmmo()
+    {
+        if (maxShotGunAmmo <= currentShotGunAmmo)
+        {
+            return;
+        }
+
+        currentShotGunAmmo = currentShotGunAmmo + 10;
+        if (maxShotGunAmmo <= currentShotGunAmmo)
+        {
+            currentShotGunAmmo = maxShotGunAmmo;
         }
     }
 
