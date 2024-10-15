@@ -20,12 +20,20 @@ public class UI : MonoBehaviour
         set { imageDamage = value; }
     }
 
-    [Tooltip("体力回復画像エフェクト")]
+    [Tooltip("HP回復画像エフェクト")]
     [SerializeField] Image imageHpHeal;
     public Image ImageHpHeal
     {
         get { return imageHpHeal; }
         set { imageHpHeal = value; }
+    }
+
+    [Tooltip("スタミナ回復画像エフェクト")]
+    [SerializeField] Image imageStaminaHeal;
+    public Image ImageStaminaHeal
+    {
+        get { return imageStaminaHeal; }
+        set { imageStaminaHeal = value; }
     }
 
     void Awake()
@@ -47,8 +55,11 @@ public class UI : MonoBehaviour
         //ダメージ画像エフェクト
         imageDamage.color = Color.clear;
 
-        //体力回復画像エフェクト
+        //HP回復画像エフェクト
         imageHpHeal.color = Color.clear;
+
+        //スタミナ回復画像エフェクト
+        imageStaminaHeal.color = Color.clear;
     }
 
     void Update()

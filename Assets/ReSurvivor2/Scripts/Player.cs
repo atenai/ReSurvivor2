@@ -135,8 +135,10 @@ public class Player : MonoBehaviour
 
     [Tooltip("ダメージ画像エフェクトトリガー")]
     bool isDamage = false;
-    [Tooltip("体力回復画像エフェクトトリガー")]
+    [Tooltip("HP回復画像エフェクトトリガー")]
     bool isHpHeal = false;
+    [Tooltip("スタミナ回復画像エフェクトトリガー")]
+    bool isStaminaHeal = false;
 
     void Awake()
     {
@@ -164,6 +166,7 @@ public class Player : MonoBehaviour
         StartTextMagazine();
         StartDamageEffect();
         StartHpHealEffect();
+        StartStaminaHealEffect();
     }
 
     /// <summary>
@@ -257,11 +260,19 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
-    /// 体力回復画像エフェクト
+    /// HP回復画像エフェクト
     /// </summary> 
     void StartHpHealEffect()
     {
         isHpHeal = false;
+    }
+
+    /// <summary>
+    /// スタミナ回復画像エフェクト
+    /// </summary> 
+    void StartStaminaHealEffect()
+    {
+        isStaminaHeal = false;
     }
 
     void Update()
@@ -304,6 +315,7 @@ public class Player : MonoBehaviour
         UpdateTimerSystem();
         UpdateDamageEffect();
         UpdateHpHealEffect();
+        UpdateStaminaHealEffect();
     }
 
     /// <summary>
@@ -766,7 +778,7 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
-    /// 体力回復画像エフェクト
+    /// HP回復画像エフェクト
     /// </summary> 
     void UpdateHpHealEffect()
     {
@@ -846,6 +858,26 @@ public class Player : MonoBehaviour
 
         currentStamina = maxStamina;
         sliderStamina.value = (float)currentStamina / (float)maxStamina;
+
+        isStaminaHeal = true;
+    }
+
+    /// <summary>
+    /// スタミナ回復画像エフェクト
+    /// </summary> 
+    void UpdateStaminaHealEffect()
+    {
+        if (isStaminaHeal == true)
+        {
+            UI.singletonInstance.ImageStaminaHeal.color = new Color(0.5f, 0.5f, 0f, 0.5f);
+        }
+
+        if (isStaminaHeal == false)
+        {
+            UI.singletonInstance.ImageStaminaHeal.color = Color.Lerp(UI.singletonInstance.ImageStaminaHeal.color, Color.clear, Time.deltaTime);
+        }
+
+        isStaminaHeal = false;
     }
 
     /// <summary>
