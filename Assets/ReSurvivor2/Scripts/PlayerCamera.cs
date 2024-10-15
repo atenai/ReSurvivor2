@@ -10,9 +10,7 @@ public class PlayerCamera : MonoBehaviour
     public static PlayerCamera SingletonInstance => singletonInstance;
 
     [Header("カメラ")]
-    [Tooltip("エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題の対処用")]
-    bool isActiveCamera = false;
-    public bool IsActiveCamera => isActiveCamera;
+
     [Tooltip("X軸のカメラの回転スピード")]
     [Range(50, 150)][SerializeField] float normalCameraSpeedX = 100;
     [Tooltip("Y軸のカメラの回転スピード")]
@@ -187,19 +185,12 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
-    IEnumerator Start()
+    void Start()
     {
         //各種初期化処理
         InitHandGunMagazine();
         InitAssaultRifleMagazine();
         InitShotGunMagazine();
-
-        //起動時のロードの際にマウスの入力でカメラが思わぬ方向に動いてしまうので、1秒間カメラ操作を受け付けなくする
-        //（ここの処理をごまかす為、ゲーム開始時にフェードイン・フェードアウトを行い、フェードアウト後にisActiveCamera = true;にするように修正する必要がある）
-        yield return new WaitForSeconds(1.0f);
-        isActiveCamera = true;
-
-        yield return null;
     }
 
     /// <summary>
@@ -297,7 +288,7 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
-        if (isActiveCamera == false)
+        if (InGameManager.SingletonInstance.IsGamePlayReady == false)
         {
             return;
         }
@@ -964,7 +955,7 @@ public class PlayerCamera : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isActiveCamera == false)
+        if (InGameManager.SingletonInstance.IsGamePlayReady == false)
         {
             return;
         }

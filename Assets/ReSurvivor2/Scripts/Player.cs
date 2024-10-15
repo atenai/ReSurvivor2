@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Security.Cryptography;
 
 /// <summary>
 /// プレイヤー
@@ -277,7 +278,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (PlayerCamera.SingletonInstance.IsActiveCamera == false)
+        if (InGameManager.SingletonInstance.IsGamePlayReady == false)
         {
             return;
         }
@@ -585,7 +586,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (PlayerCamera.SingletonInstance.IsActiveCamera == false)
+        if (InGameManager.SingletonInstance.IsGamePlayReady == false)
         {
             return;
         }

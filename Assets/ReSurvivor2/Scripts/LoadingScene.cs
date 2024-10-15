@@ -61,8 +61,12 @@ public class LoadingScene : MonoBehaviour
                 //フレームのラストまで待つ
                 yield return new WaitForEndOfFrame();
 
+                //不透明にする
+                UI.singletonInstance.InitFadeColor();
+
                 //ロードUIをOffにする
                 UI.singletonInstance.panelLoading.SetActive(false);
+
                 //シーンを切り替える
                 async.allowSceneActivation = true;
             }

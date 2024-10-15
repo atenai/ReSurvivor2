@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// アウトゲームのマネージャー
+/// </summary>
 public class OutGameManagerBase : MonoBehaviour
 {
     [SerializeField] protected string sceneName;
@@ -11,6 +14,11 @@ public class OutGameManagerBase : MonoBehaviour
 
     protected void Start()
     {
+        if (InGameManager.SingletonInstance != null)
+        {
+            Destroy(InGameManager.SingletonInstance.gameObject);
+        }
+
         if (Player.SingletonInstance != null)
         {
             Destroy(Player.SingletonInstance.gameObject);

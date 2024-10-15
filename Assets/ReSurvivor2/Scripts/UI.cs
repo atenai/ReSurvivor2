@@ -36,6 +36,11 @@ public class UI : MonoBehaviour
         set { imageStaminaHeal = value; }
     }
 
+    [Tooltip("フェード用のUI Image")]
+    [SerializeField] Image imageFade;
+    [Tooltip("フェードの速さ")]
+    float fadeSpeed = 1.0f;
+
     void Awake()
     {
         //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -60,6 +65,8 @@ public class UI : MonoBehaviour
 
         //スタミナ回復画像エフェクト
         imageStaminaHeal.color = Color.clear;
+
+        InitFadeColor();
     }
 
     void Update()
@@ -89,5 +96,60 @@ public class UI : MonoBehaviour
                 imageCrosshair.color = new Color32(255, 255, 255, 150);
             }
         }
+    }
+
+    /// <summary>
+    /// フェードの色を初期化
+    /// </summary>
+    public void InitFadeColor()
+    {
+        InGameManager.SingletonInstance.IsGamePlayReady = false;
+        imageFade.color = new Color(imageFade.color.r, imageFade.color.g, imageFade.color.b, 1);
+    }
+
+    /// <summary>
+    /// フェードアウト処理（不透明にする）
+    /// </summary>
+    public IEnumerator FadeOut()
+    {
+        InGameManager.SingletonInstance.IsGamePlayReady = false;
+
+        //現在のアルファ値を取得
+        Color color = imageFade.color;
+        float alpha = color.a;
+
+        //アルファ値が1になるまで徐々に増やす
+        while (alpha < 1)
+        {
+            alpha += Time.deltaTime * fadeSpeed;
+            imageFade.color = new Color(color.r, color.g, color.b, alpha);
+            yield return null;
+        }
+
+        //最後に完全に不透明にする
+        imageFade.color = new Color(color.r, color.g, color.b, 1);
+    }
+
+    /// <summary>
+    /// フェードイン処理（透明にする）
+    /// </summary>
+    public IEnumerator FadeIn()
+    {
+        //現在のアルファ値を取得
+        Color color = imageFade.color;
+        float alpha = color.a;
+
+        //アルファ値が0になるまで徐々に減らす
+        while (0 < alpha)
+        {
+            alpha -= Time.deltaTime * fadeSpeed;
+            imageFade.color = new Color(color.r, color.g, color.b, alpha);
+            yield return null;
+        }
+
+        //最後に完全に透明にする
+        imageFade.color = new Color(color.r, color.g, color.b, 0);
+
+        InGameManager.SingletonInstance.IsGamePlayReady = true;
     }
 }
