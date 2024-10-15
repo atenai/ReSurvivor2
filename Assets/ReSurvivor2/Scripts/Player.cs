@@ -133,6 +133,11 @@ public class Player : MonoBehaviour
     [Tooltip("totalTImeは秒で集計されている")]
     float totalTime = 0.0f;
 
+    [Tooltip("体力回復画像エフェクトトリガー")]
+    bool isHpHeal = false;
+    [Tooltip("体力回復画像エフェクト透明度変化時間")]
+    float hpHealTime = 0.0f;
+
     void Awake()
     {
         //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -157,6 +162,7 @@ public class Player : MonoBehaviour
         StartTextFood();
         StartImageReload();
         StartTextMagazine();
+        StartHpHealEffect();
     }
 
     /// <summary>
@@ -241,6 +247,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 体力回復画像エフェクト
+    /// </summary> 
+    void StartHpHealEffect()
+    {
+        isHpHeal = false;
+        hpHealTime = 0.0f;
+    }
+
     void Update()
     {
         if (PlayerCamera.SingletonInstance.IsActiveCamera == false)
@@ -279,6 +294,7 @@ public class Player : MonoBehaviour
         UpdateImageReload();
         UpdateTextMagazine();
         UpdateTimerSystem();
+        UpdateHpHealEffect();
     }
 
     /// <summary>
@@ -715,6 +731,30 @@ public class Player : MonoBehaviour
 
         currentHp = maxHp;
         sliderHp.value = (float)currentHp / (float)maxHp;
+
+        isHpHeal = true;
+    }
+
+    /// <summary>
+    /// 体力回復画像エフェクト
+    /// </summary> 
+    void UpdateHpHealEffect()
+    {
+        if (isHpHeal == true)
+        {
+            UI.singletonInstance.ImageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
+
+            hpHealTime = 0.0f;
+        }
+
+        if (isHpHeal == false)
+        {
+            UI.singletonInstance.ImageHpHeal.color = Color.Lerp(UI.singletonInstance.ImageHpHeal.color, Color.clear, Time.deltaTime);
+        }
+
+        isHpHeal = false;
+
+        hpHealTime = hpHealTime + Time.deltaTime;
     }
 
     /// <summary>

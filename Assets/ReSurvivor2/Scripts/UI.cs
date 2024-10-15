@@ -11,6 +11,14 @@ public class UI : MonoBehaviour
     [SerializeField] public GameObject panelLoading;
     [SerializeField] public Slider sliderLoading;
 
+    [Tooltip("体力回復画像エフェクト")]
+    [SerializeField] Image imageHpHeal;
+    public Image ImageHpHeal
+    {
+        get { return imageHpHeal; }
+        set { imageHpHeal = value; }
+    }
+
     void Awake()
     {
         //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -27,7 +35,8 @@ public class UI : MonoBehaviour
 
     void Start()
     {
-
+        //体力ヒール画像
+        imageHpHeal.color = Color.clear;
     }
 
     void Update()
