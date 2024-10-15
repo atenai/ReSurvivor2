@@ -11,6 +11,15 @@ public class UI : MonoBehaviour
     [SerializeField] public GameObject panelLoading;
     [SerializeField] public Slider sliderLoading;
 
+
+    [Tooltip("ダメージ画像エフェクト")]
+    [SerializeField] Image imageDamage;
+    public Image ImageDamage
+    {
+        get { return imageDamage; }
+        set { imageDamage = value; }
+    }
+
     [Tooltip("体力回復画像エフェクト")]
     [SerializeField] Image imageHpHeal;
     public Image ImageHpHeal
@@ -35,7 +44,10 @@ public class UI : MonoBehaviour
 
     void Start()
     {
-        //体力ヒール画像
+        //ダメージ画像エフェクト
+        imageDamage.color = Color.clear;
+
+        //体力回復画像エフェクト
         imageHpHeal.color = Color.clear;
     }
 

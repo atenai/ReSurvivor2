@@ -133,10 +133,10 @@ public class Player : MonoBehaviour
     [Tooltip("totalTImeは秒で集計されている")]
     float totalTime = 0.0f;
 
+    [Tooltip("ダメージ画像エフェクトトリガー")]
+    bool isDamage = false;
     [Tooltip("体力回復画像エフェクトトリガー")]
     bool isHpHeal = false;
-    [Tooltip("体力回復画像エフェクト透明度変化時間")]
-    float hpHealTime = 0.0f;
 
     void Awake()
     {
@@ -162,6 +162,7 @@ public class Player : MonoBehaviour
         StartTextFood();
         StartImageReload();
         StartTextMagazine();
+        StartDamageEffect();
         StartHpHealEffect();
     }
 
@@ -248,12 +249,19 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
+    /// ダメージ画像エフェクト
+    /// </summary> 
+    void StartDamageEffect()
+    {
+        isDamage = false;
+    }
+
+    /// <summary>
     /// 体力回復画像エフェクト
     /// </summary> 
     void StartHpHealEffect()
     {
         isHpHeal = false;
-        hpHealTime = 0.0f;
     }
 
     void Update()
@@ -294,6 +302,7 @@ public class Player : MonoBehaviour
         UpdateImageReload();
         UpdateTextMagazine();
         UpdateTimerSystem();
+        UpdateDamageEffect();
         UpdateHpHealEffect();
     }
 
@@ -704,11 +713,32 @@ public class Player : MonoBehaviour
         currentHp = currentHp - amount;
         //Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
         sliderHp.value = (float)currentHp / (float)maxHp;
+
+        isDamage = true;
+
         if (currentHp <= 0.0f)
         {
             //Destroy(this.gameObject);
             SceneManager.LoadScene("GameOver");
         }
+    }
+
+    /// <summary>
+    /// ダメージ画像エフェクト
+    /// </summary> 
+    void UpdateDamageEffect()
+    {
+        if (isDamage == true)
+        {
+            UI.singletonInstance.ImageDamage.color = new Color(0.5f, 0f, 0f, 0.5f);
+        }
+
+        if (isDamage == false)
+        {
+            UI.singletonInstance.ImageDamage.color = Color.Lerp(UI.singletonInstance.ImageDamage.color, Color.clear, Time.deltaTime);
+        }
+
+        isDamage = false;
     }
 
     /// <summary>
@@ -743,8 +773,6 @@ public class Player : MonoBehaviour
         if (isHpHeal == true)
         {
             UI.singletonInstance.ImageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
-
-            hpHealTime = 0.0f;
         }
 
         if (isHpHeal == false)
@@ -753,8 +781,6 @@ public class Player : MonoBehaviour
         }
 
         isHpHeal = false;
-
-        hpHealTime = hpHealTime + Time.deltaTime;
     }
 
     /// <summary>
