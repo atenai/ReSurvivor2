@@ -728,6 +728,8 @@ public class Player : MonoBehaviour
 
         isDamage = true;
 
+        PlayerCamera.SingletonInstance.Shake(0.25f, 0.1f);
+
         if (currentHp <= 0.0f)
         {
             //Destroy(this.gameObject);
