@@ -77,6 +77,7 @@ public class PlayerCamera : MonoBehaviour
     public int CurrentHandGunAmmo => currentHandGunAmmo;
     [Tooltip("ハンドガンの最大残弾数")]
     int maxHandGunAmmo = 70;
+    public int MaxHandGunAmmo => maxHandGunAmmo;
     [Tooltip("ハンドガンのリロードのオン・オフ")]
     bool isHandGunReloadTimeActive = false;
     public bool IsHandGunReloadTimeActive => isHandGunReloadTimeActive;
@@ -108,6 +109,7 @@ public class PlayerCamera : MonoBehaviour
     public int CurrentAssaultRifleAmmo => currentAssaultRifleAmmo;
     [Tooltip("アサルトライフルの最大残弾数")]
     int maxAssaultRifleAmmo = 300;
+    public int MaxAssaultRifleAmmo => maxAssaultRifleAmmo;
     [Tooltip("アサルトライフルのリロードのオン・オフ")]
     bool isAssaultRifleReloadTimeActive = false;
     public bool IsAssaultRifleReloadTimeActive => isAssaultRifleReloadTimeActive;
@@ -141,6 +143,7 @@ public class PlayerCamera : MonoBehaviour
     public int CurrentShotGunAmmo => currentShotGunAmmo;
     [Tooltip("ショットガンの最大残弾数")]
     int maxShotGunAmmo = 80;
+    public int MaxShotGunAmmo => maxShotGunAmmo;
     [Tooltip("ショットガンのリロードのオン・オフ")]
     bool isShotGunReloadTimeActive = false;
     public bool IsShotGunReloadTimeActive => isShotGunReloadTimeActive;
