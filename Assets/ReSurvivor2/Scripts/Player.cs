@@ -277,11 +277,6 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-        {
-            return;
-        }
-
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
 
@@ -296,6 +291,13 @@ public class Player : MonoBehaviour
         }
 
         NormalMoveAnimation();
+
+        //↑ロード中に動かせる処理
+        if (InGameManager.SingletonInstance.IsGamePlayReady == false)
+        {
+            return;
+        }
+        //↓ロード中に動かせない処理
 
         SwitchWeaponModel();
 
@@ -585,10 +587,12 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        //↑ロード中に動かせる処理
         if (InGameManager.SingletonInstance.IsGamePlayReady == false)
         {
             return;
         }
+        //↓ロード中に動かせない処理
 
         ChangeMoveSpeed();
         NormalMove();

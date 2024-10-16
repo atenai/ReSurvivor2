@@ -291,10 +291,12 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
+        //↑ロード中に動かせる処理
         if (InGameManager.SingletonInstance.IsGamePlayReady == false)
         {
             return;
         }
+        //↓ロード中に動かせない処理
 
         SwitchWeapon();
     }
@@ -958,11 +960,6 @@ public class PlayerCamera : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-        {
-            return;
-        }
-
         //SRT
         if (Player.SingletonInstance.IsAim == false)
         {
@@ -972,6 +969,13 @@ public class PlayerCamera : MonoBehaviour
         {
             CameraAimMove();
         }
+
+        //↑ロード中に動かせる処理
+        if (InGameManager.SingletonInstance.IsGamePlayReady == false)
+        {
+            return;
+        }
+        //↓ロード中に動かせない処理
 
         CameraRot();
     }
