@@ -62,6 +62,10 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] float Damage = 10.0f;
     [Tooltip("着弾した物体を後ろに押す")]
     [SerializeField] float impactForce = 30.0f;
+    [Tooltip("ヒットレティクル")]
+    bool isHitReticule = false;
+    [Tooltip("ヒットレティクルが消失するスピード")]
+    float hitReticuleSpeed = 10.0f;
 
     [Header("ハンドガン")]
     [Tooltip("ハンドガンを何秒間隔で撃つか")]
@@ -299,6 +303,7 @@ public class PlayerCamera : MonoBehaviour
         //↓ロード中に動かせない処理
 
         SwitchWeapon();
+        UpdateHitReticule();
     }
 
     /// <summary>
@@ -492,6 +497,9 @@ public class PlayerCamera : MonoBehaviour
                 {
                     hit.rigidbody.AddForce(-hit.normal * impactForce);
                 }
+
+                //ヒットレティクルを表示
+                isHitReticule = true;
             }
 
             ImpactEffect(hit);
@@ -691,6 +699,9 @@ public class PlayerCamera : MonoBehaviour
                 {
                     hit.rigidbody.AddForce(-hit.normal * impactForce);
                 }
+
+                //ヒットレティクルを表示
+                isHitReticule = true;
             }
 
             ImpactEffect(hit);
@@ -892,6 +903,9 @@ public class PlayerCamera : MonoBehaviour
                     {
                         hit.rigidbody.AddForce(-hit.normal * impactForce);
                     }
+
+                    //ヒットレティクルを表示
+                    isHitReticule = true;
                 }
 
                 ImpactEffect(hit);
@@ -956,6 +970,24 @@ public class PlayerCamera : MonoBehaviour
             GameObject impactGameObject = Instantiate(rockImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(impactGameObject, 2.0f);
         }
+    }
+
+    /// <summary>
+    /// ヒットレティクル
+    /// </summary> 
+    void UpdateHitReticule()
+    {
+        if (isHitReticule == true)
+        {
+            UI.SingletonInstance.ImageHitReticule.color = new Color32(255, 0, 0, 150);
+        }
+
+        if (isHitReticule == false)
+        {
+            UI.SingletonInstance.ImageHitReticule.color = Color.Lerp(UI.SingletonInstance.ImageHitReticule.color, Color.clear, Time.deltaTime * hitReticuleSpeed);
+        }
+
+        isHitReticule = false;
     }
 
     void FixedUpdate()

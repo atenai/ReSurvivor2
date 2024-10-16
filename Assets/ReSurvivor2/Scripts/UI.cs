@@ -8,7 +8,17 @@ public class UI : MonoBehaviour
     //シングルトンで作成（ゲーム中に１つのみにする）
     static UI singletonInstance = null;
     public static UI SingletonInstance => singletonInstance;
+
+    [Tooltip("クロスヘアー")]
     [SerializeField] Image imageCrosshair;
+    [Tooltip("ヒットレティクル")]
+    [SerializeField] Image imageHitReticule;
+    public Image ImageHitReticule
+    {
+        get { return imageHitReticule; }
+        set { imageHitReticule = value; }
+    }
+
     [SerializeField] GameObject panelLoading;
     public GameObject PanelLoading
     {
@@ -77,6 +87,8 @@ public class UI : MonoBehaviour
         imageStaminaHeal.color = Color.clear;
 
         InitFadeColor();
+
+        imageHitReticule.color = Color.clear;
     }
 
     void Update()
