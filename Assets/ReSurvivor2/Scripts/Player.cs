@@ -279,6 +279,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (UI.SingletonInstance.IsPause == true)
+        {
+            return;
+        }
+
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
 

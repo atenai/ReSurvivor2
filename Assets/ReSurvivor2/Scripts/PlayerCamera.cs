@@ -295,6 +295,11 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
+        if (UI.SingletonInstance.IsPause == true)
+        {
+            return;
+        }
+
         //↑ロード中に動かせる処理
         if (InGameManager.SingletonInstance.IsGamePlayReady == false)
         {

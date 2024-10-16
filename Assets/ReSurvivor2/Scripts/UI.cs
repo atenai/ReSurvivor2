@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Unity.Timeline;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -60,6 +61,9 @@ public class UI : MonoBehaviour
     [SerializeField] Image imageFade;
     [Tooltip("フェードの速さ")]
     float fadeSpeed = 1.0f;
+    [Tooltip("ポーズ")]
+    bool isPause = false;
+    public bool IsPause => isPause;
 
     void Awake()
     {
@@ -93,7 +97,19 @@ public class UI : MonoBehaviour
 
     void Update()
     {
+        //↑ロード中に動かせる処理
+        if (InGameManager.SingletonInstance.IsGamePlayReady == false)
+        {
+            return;
+        }
+        //↓ロード中に動かせない処理
+
         Crosshair();
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Pause();
+        }
     }
 
     /// <summary>
@@ -173,5 +189,22 @@ public class UI : MonoBehaviour
         imageFade.color = new Color(color.r, color.g, color.b, 0);
 
         InGameManager.SingletonInstance.IsGamePlayReady = true;
+    }
+
+    /// <summary>
+    /// ポーズ
+    /// </summary>
+    void Pause()
+    {
+        isPause = isPause ? false : true;
+
+        if (isPause == true)
+        {
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
     }
 }
