@@ -82,6 +82,8 @@ public class Player : MonoBehaviour
     [SerializeField] Canvas canvasPlayer;
     [Tooltip("バックグラウンドイメージ")]
     [SerializeField] Image imageBG;
+    [Tooltip("プレイヤーUIのY軸の傾き")]
+    float playerUIRotY = 0.2f;
     [Tooltip("現在のHP")]
     float currentHp = 100.0f;
     [Tooltip("HPの最大値")]
@@ -368,7 +370,7 @@ public class Player : MonoBehaviour
             canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(this.transform.position.x, this.transform.position.y + PlayerCamera.SingletonInstance.NormalUpPos, this.transform.position.z);
             //SRT(スケール→トランスフォーム→ローテーション)
             imageBG.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-            imageBG.transform.localRotation = Quaternion.Euler(0.0f, 0.1f, 0.0f);
+            imageBG.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
             imageBG.transform.localPosition = new Vector3(150.0f, -100.0f, 0.0f);
         }
         else if (isAim == true)
@@ -379,7 +381,7 @@ public class Player : MonoBehaviour
             canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(this.transform.position.x, this.transform.position.y + PlayerCamera.SingletonInstance.AimUpPos, this.transform.position.z);
             //SRT(スケール→トランスフォーム→ローテーション)
             imageBG.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
-            imageBG.transform.localRotation = Quaternion.Euler(0.0f, 0.1f, 0.0f);
+            imageBG.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
             imageBG.transform.localPosition = new Vector3(85.0f, -20.0f, 0.0f);
         }
     }
