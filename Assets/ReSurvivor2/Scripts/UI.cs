@@ -64,6 +64,7 @@ public class UI : MonoBehaviour
     [Tooltip("ポーズ")]
     bool isPause = false;
     public bool IsPause => isPause;
+    [SerializeField] GameObject panelPause;
 
     void Awake()
     {
@@ -201,10 +202,12 @@ public class UI : MonoBehaviour
         if (isPause == true)
         {
             Time.timeScale = 0f;
+            panelPause.SetActive(true);
         }
         else
         {
             Time.timeScale = 1f;
+            panelPause.SetActive(false);
         }
     }
 }
