@@ -1090,9 +1090,11 @@ public class PlayerCamera : MonoBehaviour
         if (deadZoneY < Mathf.Abs(y_Rotation))
         {
             float cameraAngles = this.transform.localEulerAngles.x;
-            const float lookingUpLimit = 360.0f;
-            const float lookingDownLimit = 40.0f;
-            if (324 < cameraAngles && cameraAngles < lookingUpLimit || -10 < cameraAngles && cameraAngles < lookingDownLimit)//ここの各左の数字を変えればカメラの上下の止まる限界値が変わる
+            const float lookingUpLimit = 360.0f;//変えてはいけない数値
+            float lookingUp = 345.0f;//減らしていくほど上を見れる範囲が広がる
+            const float lookingDownLimit = -10.0f;//変えてはいけない数値
+            float lookingDown = 40;//増やしていくほど下を見れる範囲が広がる
+            if (lookingUp < cameraAngles && cameraAngles < lookingUpLimit || lookingDownLimit < cameraAngles && cameraAngles < lookingDown)//ここの数値を変えればカメラの上下の止まる限界値が変わる
             {
                 // 回転軸はカメラ自身のX軸
                 this.transform.RotateAround(Player.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
