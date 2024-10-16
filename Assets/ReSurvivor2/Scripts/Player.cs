@@ -922,6 +922,8 @@ public class Player : MonoBehaviour
 
     void OnGUI()
     {
+#if UNITY_EDITOR//Unityエディター上での処理
+
         GUIStyle styleGreen = new GUIStyle();
         styleGreen.fontSize = 30;
         GUIStyleState styleStateGreen = new GUIStyleState();
@@ -940,6 +942,12 @@ public class Player : MonoBehaviour
         styleStateBlack.textColor = Color.black;
         styleBlack.normal = styleStateBlack;
 
+        GUIStyle styleYellow = new GUIStyle();
+        styleYellow.fontSize = 30;
+        GUIStyleState styleStateYellow = new GUIStyleState();
+        styleStateYellow.textColor = Color.yellow;
+        styleYellow.normal = styleStateYellow;
+
         GUI.Box(new Rect(10, 0, 100, 50), "inputHorizontal", styleGreen);
         GUI.Box(new Rect(350, 0, 100, 50), inputHorizontal.ToString(), styleGreen);
         GUI.Box(new Rect(10, 50, 100, 50), "inputVertical", styleGreen);
@@ -948,23 +956,25 @@ public class Player : MonoBehaviour
         GUI.Box(new Rect(350, 100, 100, 50), normalMoveSpeed.ToString(), styleGreen);
         GUI.Box(new Rect(10, 150, 100, 50), "weaponMoveSpeed", styleGreen);
         GUI.Box(new Rect(350, 150, 100, 50), weaponMoveSpeed.ToString(), styleGreen);
-        GUI.Box(new Rect(10, 200, 100, 50), "rb.velocity", styleRed);
-        GUI.Box(new Rect(350, 200, 100, 50), rb.velocity.ToString(), styleRed);
-        GUI.Box(new Rect(10, 250, 100, 50), "moveForward", styleRed);
-        GUI.Box(new Rect(350, 250, 100, 50), moveForward.ToString(), styleRed);
-        GUI.Box(new Rect(10, 300, 100, 50), "cameraForward", styleRed);
-        GUI.Box(new Rect(350, 300, 100, 50), cameraForward.ToString(), styleRed);
-        GUI.Box(new Rect(10, 350, 100, 50), "isAim", styleBlack);
-        GUI.Box(new Rect(350, 350, 100, 50), isAim.ToString(), styleBlack);
-        GUI.Box(new Rect(10, 500, 100, 50), "spine_03.eulerAngles", styleBlack);
-        GUI.Box(new Rect(350, 500, 100, 50), spine_03.eulerAngles.ToString(), styleBlack);
-        GUI.Box(new Rect(10, 700, 100, 50), "upperarm_r.eulerAngles.x + armAimAnimationRotX", styleRed);
-        GUI.Box(new Rect(750, 700, 100, 50), upperarm_r.eulerAngles.x + armAimAnimationRotX.ToString(), styleRed);
-        GUI.Box(new Rect(10, 750, 100, 50), "upperarm_r.eulerAngles.y + armAimAnimationRotY", styleRed);
-        GUI.Box(new Rect(750, 750, 100, 50), upperarm_r.eulerAngles.y + armAimAnimationRotY.ToString(), styleRed);
-        GUI.Box(new Rect(10, 800, 100, 50), "upperarm_l.eulerAngles.x + armAimAnimationRotX", styleRed);
-        GUI.Box(new Rect(750, 800, 100, 50), upperarm_l.eulerAngles.x + armAimAnimationRotX.ToString(), styleRed);
-        GUI.Box(new Rect(10, 850, 100, 50), "upperarm_l.eulerAngles.y + armAimAnimationRotY", styleRed);
-        GUI.Box(new Rect(750, 850, 100, 50), upperarm_l.eulerAngles.y + armAimAnimationRotY.ToString(), styleRed);
+        GUI.Box(new Rect(10, 200, 100, 50), "rb.velocity", styleGreen);
+        GUI.Box(new Rect(350, 200, 100, 50), rb.velocity.ToString(), styleGreen);
+        GUI.Box(new Rect(10, 250, 100, 50), "moveForward", styleGreen);
+        GUI.Box(new Rect(350, 250, 100, 50), moveForward.ToString(), styleGreen);
+        GUI.Box(new Rect(10, 300, 100, 50), "cameraForward", styleGreen);
+        GUI.Box(new Rect(350, 300, 100, 50), cameraForward.ToString(), styleGreen);
+        GUI.Box(new Rect(10, 350, 100, 50), "isAim", styleGreen);
+        GUI.Box(new Rect(350, 350, 100, 50), isAim.ToString(), styleGreen);
+        GUI.Box(new Rect(10, 400, 100, 50), "spine_03.eulerAngles", styleGreen);
+        GUI.Box(new Rect(350, 400, 100, 50), spine_03.eulerAngles.ToString(), styleGreen);
+        GUI.Box(new Rect(10, 450, 100, 50), "upperarm_r.eulerAngles.x + armAimAnimationRotX", styleGreen);
+        GUI.Box(new Rect(750, 450, 100, 50), upperarm_r.eulerAngles.x + armAimAnimationRotX.ToString(), styleGreen);
+        GUI.Box(new Rect(10, 500, 100, 50), "upperarm_r.eulerAngles.y + armAimAnimationRotY", styleGreen);
+        GUI.Box(new Rect(750, 500, 100, 50), upperarm_r.eulerAngles.y + armAimAnimationRotY.ToString(), styleGreen);
+        GUI.Box(new Rect(10, 550, 100, 50), "upperarm_l.eulerAngles.x + armAimAnimationRotX", styleGreen);
+        GUI.Box(new Rect(750, 550, 100, 50), upperarm_l.eulerAngles.x + armAimAnimationRotX.ToString(), styleGreen);
+        GUI.Box(new Rect(10, 600, 100, 50), "upperarm_l.eulerAngles.y + armAimAnimationRotY", styleGreen);
+        GUI.Box(new Rect(750, 600, 100, 50), upperarm_l.eulerAngles.y + armAimAnimationRotY.ToString(), styleGreen);
+
+#endif //終了  
     }
 }

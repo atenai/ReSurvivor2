@@ -1151,6 +1151,8 @@ public class PlayerCamera : MonoBehaviour
 
     void OnGUI()
     {
+#if UNITY_EDITOR//Unityエディター上での処理
+
         GUIStyle styleGreen = new GUIStyle();
         styleGreen.fontSize = 30;
         GUIStyleState styleStateGreen = new GUIStyleState();
@@ -1175,15 +1177,15 @@ public class PlayerCamera : MonoBehaviour
         styleStateYellow.textColor = Color.yellow;
         styleYellow.normal = styleStateYellow;
 
-        GUI.Box(new Rect(10, 400, 100, 50), "cameraPos", styleRed);
-        GUI.Box(new Rect(350, 400, 100, 50), this.transform.position.ToString(), styleRed);
-        GUI.Box(new Rect(10, 450, 100, 50), "hitName", styleRed);
-        GUI.Box(new Rect(350, 450, 100, 50), hitName, styleRed);
-        GUI.Box(new Rect(10, 550, 100, 50), "localCameraSpeedX", styleRed);
-        GUI.Box(new Rect(350, 550, 100, 50), localCameraSpeedX.ToString(), styleRed);
-        GUI.Box(new Rect(10, 600, 100, 50), "localCameraSpeedY", styleRed);
-        GUI.Box(new Rect(350, 600, 100, 50), localCameraSpeedY.ToString(), styleRed);
-        GUI.Box(new Rect(10, 650, 100, 50), "gunTYPE", styleRed);
-        GUI.Box(new Rect(350, 650, 100, 50), gunTYPE.ToString(), styleRed);
+        GUI.Box(new Rect(10, 650, 100, 50), "cameraPos", styleRed);
+        GUI.Box(new Rect(350, 650, 100, 50), this.transform.position.ToString(), styleRed);
+        GUI.Box(new Rect(10, 700, 100, 50), "hitName", styleRed);
+        GUI.Box(new Rect(350, 700, 100, 50), hitName, styleRed);
+        GUI.Box(new Rect(10, 750, 100, 50), "localCameraSpeedX", styleRed);
+        GUI.Box(new Rect(350, 750, 100, 50), localCameraSpeedX.ToString(), styleRed);
+        GUI.Box(new Rect(10, 800, 100, 50), "localCameraSpeedY", styleRed);
+        GUI.Box(new Rect(350, 800, 100, 50), localCameraSpeedY.ToString(), styleRed);
+
+#endif //終了  
     }
 }
