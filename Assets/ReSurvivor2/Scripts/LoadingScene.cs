@@ -7,13 +7,21 @@ public class LoadingScene : MonoBehaviour
 {
     [SerializeField] string sceneName;
     [SerializeField] GameObject spawnPos;
+    [Tooltip("連続ロードしないための変数")]
+    bool isLoadOnce = false;
 
     void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == "Player")
         {
-            SetPlayerSpawnPos(collider);
-            StartCoroutine(LoadScene());
+            if (isLoadOnce == false)
+            {
+                isLoadOnce = true;
+                //ロード中にプレイヤーが移動してロードトリガーに触り連続ロードを行わないようにするための処理
+                InGameManager.SingletonInstance.IsGamePlayReady = false;
+                SetPlayerSpawnPos(collider);
+                StartCoroutine(LoadScene());
+            }
         }
     }
 

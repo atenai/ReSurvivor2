@@ -11,6 +11,7 @@ public class OutGameManagerBase : MonoBehaviour
 {
     [SerializeField] protected string sceneName;
     [SerializeField] protected Slider sliderLoading;
+    bool isLoadOnce = false;
 
     protected void Start()
     {
@@ -39,7 +40,11 @@ public class OutGameManagerBase : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            StartCoroutine(LoadScene());
+            if (isLoadOnce == false)
+            {
+                isLoadOnce = true;
+                StartCoroutine(LoadScene());
+            }
         }
     }
 
