@@ -29,9 +29,9 @@ public class OutGameManagerBase : MonoBehaviour
             Destroy(PlayerCamera.SingletonInstance.gameObject);
         }
 
-        if (UI.singletonInstance != null)
+        if (UI.SingletonInstance != null)
         {
-            Destroy(UI.singletonInstance.gameObject);
+            Destroy(UI.SingletonInstance.gameObject);
         }
     }
 

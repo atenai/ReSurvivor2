@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Knife.Effects;
 
+/// <summary>
+/// プレイヤーカメラ
+/// </summary> 
 public class PlayerCamera : MonoBehaviour
 {
     //シングルトンで作成（ゲーム中に１つのみにする）
@@ -1077,7 +1080,7 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// カメラシェイク
+    /// カメラを揺らす
     /// </summary>
     public void Shake(float duration, float magnitude)
     {

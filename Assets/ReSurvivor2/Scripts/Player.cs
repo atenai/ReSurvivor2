@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-using System.Security.Cryptography;
 
 /// <summary>
 /// プレイヤー
@@ -729,7 +728,7 @@ public class Player : MonoBehaviour
 
         isDamage = true;
 
-        PlayerCamera.SingletonInstance.Shake(0.25f, 0.1f);
+        //PlayerCamera.SingletonInstance.Shake(0.25f, 0.1f);
 
         if (currentHp <= 0.0f)
         {
@@ -745,12 +744,12 @@ public class Player : MonoBehaviour
     {
         if (isDamage == true)
         {
-            UI.singletonInstance.ImageDamage.color = new Color(0.5f, 0f, 0f, 0.5f);
+            UI.SingletonInstance.ImageDamage.color = new Color(0.5f, 0f, 0f, 0.5f);
         }
 
         if (isDamage == false)
         {
-            UI.singletonInstance.ImageDamage.color = Color.Lerp(UI.singletonInstance.ImageDamage.color, Color.clear, Time.deltaTime);
+            UI.SingletonInstance.ImageDamage.color = Color.Lerp(UI.SingletonInstance.ImageDamage.color, Color.clear, Time.deltaTime);
         }
 
         isDamage = false;
@@ -787,12 +786,12 @@ public class Player : MonoBehaviour
     {
         if (isHpHeal == true)
         {
-            UI.singletonInstance.ImageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
+            UI.SingletonInstance.ImageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
         }
 
         if (isHpHeal == false)
         {
-            UI.singletonInstance.ImageHpHeal.color = Color.Lerp(UI.singletonInstance.ImageHpHeal.color, Color.clear, Time.deltaTime);
+            UI.SingletonInstance.ImageHpHeal.color = Color.Lerp(UI.SingletonInstance.ImageHpHeal.color, Color.clear, Time.deltaTime);
         }
 
         isHpHeal = false;
@@ -872,12 +871,12 @@ public class Player : MonoBehaviour
     {
         if (isStaminaHeal == true)
         {
-            UI.singletonInstance.ImageStaminaHeal.color = new Color(0.5f, 0.5f, 0f, 0.5f);
+            UI.SingletonInstance.ImageStaminaHeal.color = new Color(0.5f, 0.5f, 0f, 0.5f);
         }
 
         if (isStaminaHeal == false)
         {
-            UI.singletonInstance.ImageStaminaHeal.color = Color.Lerp(UI.singletonInstance.ImageStaminaHeal.color, Color.clear, Time.deltaTime);
+            UI.SingletonInstance.ImageStaminaHeal.color = Color.Lerp(UI.SingletonInstance.ImageStaminaHeal.color, Color.clear, Time.deltaTime);
         }
 
         isStaminaHeal = false;

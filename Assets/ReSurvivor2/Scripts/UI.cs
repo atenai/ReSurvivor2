@@ -6,11 +6,21 @@ using UnityEngine.UI;
 public class UI : MonoBehaviour
 {
     //シングルトンで作成（ゲーム中に１つのみにする）
-    public static UI singletonInstance = null;
+    static UI singletonInstance = null;
+    public static UI SingletonInstance => singletonInstance;
     [SerializeField] Image imageCrosshair;
-    [SerializeField] public GameObject panelLoading;
-    [SerializeField] public Slider sliderLoading;
-
+    [SerializeField] GameObject panelLoading;
+    public GameObject PanelLoading
+    {
+        get { return panelLoading; }
+        set { panelLoading = value; }
+    }
+    [SerializeField] Slider sliderLoading;
+    public Slider SliderLoading
+    {
+        get { return sliderLoading; }
+        set { sliderLoading = value; }
+    }
 
     [Tooltip("ダメージ画像エフェクト")]
     [SerializeField] Image imageDamage;

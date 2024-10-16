@@ -9,7 +9,7 @@ public class StageManager : MonoBehaviour
 {
     void Start()
     {
-        StartCoroutine(UI.singletonInstance.FadeIn());
+        StartCoroutine(UI.SingletonInstance.FadeIn());
     }
 
     void Update()
