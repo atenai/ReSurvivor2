@@ -316,20 +316,23 @@ public class PlayerCamera : MonoBehaviour
     /// </summary> 
     void SwitchWeapon()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (isHandGunReloadTimeActive == false && isAssaultRifleReloadTimeActive == false && isShotGunReloadTimeActive == false)
         {
-            //Debug.Log("ハンドガン");
-            gunTYPE = GunTYPE.HandGun;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            //Debug.Log("アサルトライフル");
-            gunTYPE = GunTYPE.AssaultRifle;
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            //Debug.Log("ショットガン");
-            gunTYPE = GunTYPE.ShotGun;
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                //Debug.Log("ハンドガン");
+                gunTYPE = GunTYPE.HandGun;
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                //Debug.Log("アサルトライフル");
+                gunTYPE = GunTYPE.AssaultRifle;
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                //Debug.Log("ショットガン");
+                gunTYPE = GunTYPE.ShotGun;
+            }
         }
 
         switch (gunTYPE)
