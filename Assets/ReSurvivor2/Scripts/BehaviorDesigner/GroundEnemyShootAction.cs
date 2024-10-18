@@ -24,6 +24,7 @@ public class GroundEnemyShootAction : Action
     public override void OnStart()
     {
         groundEnemy = this.GetComponent<GroundEnemy>();
+        groundEnemy.Animator.SetBool("b_rifleAim", true);
     }
 
     // Tick毎に呼ばれる
@@ -62,10 +63,14 @@ public class GroundEnemyShootAction : Action
 
     void Shot()
     {
+        groundEnemy.Animator.SetBool("b_rifleFire", false);
+
         count = count + Time.deltaTime;
         if (shootTime < count)
         {
             count = 0.0f;
+
+            groundEnemy.Animator.SetBool("b_rifleFire", true);
 
             // キャラクターの前方にオブジェクトを生成
             //Vector3 spawnPosition = transform.position + transform.forward * spawnDistance;
@@ -74,7 +79,6 @@ public class GroundEnemyShootAction : Action
             //UnityEngine.Object.Destroy(localGameObject, lifeTime);
             HandGunFire();
         }
-
     }
 
     /// <summary>

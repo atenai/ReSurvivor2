@@ -21,6 +21,8 @@ public class GroundEnemyMovePatrolPointAction : Action
     public override void OnStart()
     {
         groundEnemy = this.GetComponent<GroundEnemy>();
+        groundEnemy.Animator.SetBool("b_rifleAim", false);
+        groundEnemy.Animator.SetFloat("f_moveSpeed", 0.5f);
 
         InitMove();
         SetPatrolPoint();

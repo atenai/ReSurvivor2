@@ -13,6 +13,9 @@ public class GroundEnemy : MonoBehaviour
     [UnityEngine.Tooltip("プレイヤー")]
     GameObject target;
     public GameObject Target => target;
+    [UnityEngine.Tooltip("アニメーター")]
+    [SerializeField] Animator animator;
+    public Animator Animator => animator;
     [UnityEngine.Tooltip("物理")]
     [SerializeField] Rigidbody rb;
     public Rigidbody Rigidbody => rb;

@@ -19,6 +19,8 @@ public class GroundEnemyMoveTargetAction : Action
     public override void OnStart()
     {
         groundEnemy = this.GetComponent<GroundEnemy>();
+        groundEnemy.Animator.SetBool("b_rifleAim", false);
+        groundEnemy.Animator.SetFloat("f_moveSpeed", 1.0f);
 
         InitMove();
     }

@@ -200,7 +200,7 @@ MonoBehaviour:
         Ground Enemy Away From The Target Conditional","Instant":true},{"Type":"GroundEnemyMoveTargetAction","NodeData":{"Offset":"(68.13437,153.269043)"},"ID":11,"Name":"Ground
         Enemy Move Target Action","Instant":true,"SingleendPos":2.5,"SinglemoveSpeed":2}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(104.19622,195.403809)"},"ID":12,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyWithinSpecificDistanceConditional","NodeData":{"Offset":"(-80.79617,151.254883)"},"ID":13,"Name":"Can
         Ground Enemy Within Specific Distance Conditional","Instant":true},{"Type":"GroundEnemyShootAction","NodeData":{"Offset":"(129.239777,149.6489)"},"ID":14,"Name":"Ground
-        Enemy Shoot Action","Instant":true,"GameObjectshootGameObjectPrefab":0,"SinglespawnDistance":1,"SingleshootTime":2,"SinglelifeTime":3}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(204.478546,152.66272)"},"ID":15,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(4.88408661,146.750259)"},"ID":16,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyMovePatrolPointConditional","NodeData":{"Offset":"(-130.734467,153.934875)"},"ID":17,"Name":"Can
+        Enemy Shoot Action","Instant":true,"GameObjectshootGameObjectPrefab":0,"SingleshootTime":2,"Singlerange":100,"SingleDamage":10}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(204.478546,152.66272)"},"ID":15,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(4.88408661,146.750259)"},"ID":16,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyMovePatrolPointConditional","NodeData":{"Offset":"(-130.734467,153.934875)"},"ID":17,"Name":"Can
         Ground Enemy Move Patrol Point Conditional","Instant":true},{"Type":"GroundEnemyMovePatrolPointAction","NodeData":{"Offset":"(119.045959,147.767883)"},"ID":18,"Name":"Ground
         Enemy Move Patrol Point Action","Instant":true,"SingleendPos":0.5,"SinglemoveSpeed":2}]}]}]}]}]}}'
       fieldSerializationData:
@@ -242,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fdcdbb3a7f89cd44b0612ff0c7f221d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 5580034393978342070}
   rb: {fileID: 4553017098955803893}
   canvas: {fileID: 2419519451328426163}
   colliders:
@@ -1213,10 +1214,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5670419140712977810, guid: b5246e6bf352ad149bcf542344ded600, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: fd03430d11717ba49ac85dc2d88f9e91, type: 2}
     - target: {fileID: 7112821464118992825, guid: b5246e6bf352ad149bcf542344ded600, type: 3}
       propertyPath: m_Name
       value: ReSurvivorEnemyModel
@@ -1234,5 +1231,10 @@ Transform:
 --- !u!1 &5418519800963674144 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5256633774687612676, guid: b5246e6bf352ad149bcf542344ded600, type: 3}
+  m_PrefabInstance: {fileID: 270536613565521700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5580034393978342070 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5670419140712977810, guid: b5246e6bf352ad149bcf542344ded600, type: 3}
   m_PrefabInstance: {fileID: 270536613565521700}
   m_PrefabAsset: {fileID: 0}
