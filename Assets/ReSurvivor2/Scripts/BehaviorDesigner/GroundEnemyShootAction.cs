@@ -9,10 +9,15 @@ using UnityEngine;
 public class GroundEnemyShootAction : Action
 {
     GroundEnemy groundEnemy;
-    [SerializeField] GameObject shootGameObjectPrefab;
-    //[SerializeField] float spawnDistance = 1.0f;//キャラクターからの距離
-    [SerializeField] float shootTime = 2.0f;
+
+    //[SerializeField] GameObject shootGameObjectPrefab;
+    //[UnityEngine.Tooltip("キャラクターからの射撃物の生成距離")]
+    //[SerializeField] float spawnDistance = 1.0f;//
     //[SerializeField] float lifeTime = 3.0f;
+
+    [UnityEngine.Tooltip("射撃間隔")]
+    [SerializeField] float shootTime = 2.0f;
+    [UnityEngine.Tooltip("射撃カウント")]
     float count = 0.0f;
 
     [UnityEngine.Tooltip("レイの長さ")]
@@ -24,7 +29,17 @@ public class GroundEnemyShootAction : Action
     public override void OnStart()
     {
         groundEnemy = this.GetComponent<GroundEnemy>();
+
+        InitAnimation();
+    }
+
+    /// <summary>
+    /// アニメーションの初期化処理
+    /// </summary>
+    void InitAnimation()
+    {
         groundEnemy.Animator.SetBool("b_rifleAim", true);
+        groundEnemy.Animator.SetBool("b_rifleFire", false);
     }
 
     // Tick毎に呼ばれる
@@ -72,7 +87,7 @@ public class GroundEnemyShootAction : Action
 
             groundEnemy.Animator.SetBool("b_rifleFire", true);
 
-            // キャラクターの前方にオブジェクトを生成
+            //キャラクターの前方にオブジェクトを生成
             //Vector3 spawnPosition = transform.position + transform.forward * spawnDistance;
             //GameObject localGameObject = UnityEngine.Object.Instantiate(shootGameObjectPrefab, spawnPosition, this.transform.rotation);
             //localGameObject.GetComponent<Rigidbody>().AddForce(this.transform.forward * 500.0f);
@@ -91,7 +106,7 @@ public class GroundEnemyShootAction : Action
         Ray ray = new Ray(pos, this.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
+        if (Physics.Raycast(ray, out hit, range) == true)//もしRayを投射して何らかのコライダーに衝突したら
         {
             if (hit.collider.gameObject.CompareTag("Player"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
             {

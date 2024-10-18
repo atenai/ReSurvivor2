@@ -13,16 +13,24 @@ public class GroundEnemyMoveTargetAction : Action
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
     [SerializeField] float endPos = 2.5f;
     [UnityEngine.Tooltip("エネミーの移動スピード")]
-    [SerializeField] float moveSpeed = 2.0f;
+    float moveSpeed = 3.0f;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
         groundEnemy = this.GetComponent<GroundEnemy>();
+
+        InitAnimation();
+        InitMove();
+    }
+
+    /// <summary>
+    /// アニメーションの初期化処理
+    /// </summary>
+    void InitAnimation()
+    {
         groundEnemy.Animator.SetBool("b_rifleAim", false);
         groundEnemy.Animator.SetFloat("f_moveSpeed", 1.0f);
-
-        InitMove();
     }
 
     /// <summary>

@@ -508,6 +508,13 @@ public class PlayerCamera : MonoBehaviour
 
                 //ヒットレティクルを表示
                 isHitReticule = true;
+
+                //追跡開始
+                GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
+                if (groundEnemy != null)
+                {
+                    groundEnemy.ChaseOn();
+                }
             }
 
             ImpactEffect(hit);
@@ -710,6 +717,13 @@ public class PlayerCamera : MonoBehaviour
 
                 //ヒットレティクルを表示
                 isHitReticule = true;
+
+                //追跡開始
+                GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
+                if (groundEnemy != null)
+                {
+                    groundEnemy.ChaseOn();
+                }
             }
 
             ImpactEffect(hit);
@@ -914,6 +928,13 @@ public class PlayerCamera : MonoBehaviour
 
                     //ヒットレティクルを表示
                     isHitReticule = true;
+
+                    //追跡開始
+                    GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
+                    if (groundEnemy != null)
+                    {
+                        groundEnemy.ChaseOn();
+                    }
                 }
 
                 ImpactEffect(hit);

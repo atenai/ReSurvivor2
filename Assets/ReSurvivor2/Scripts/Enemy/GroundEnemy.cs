@@ -22,7 +22,7 @@ public class GroundEnemy : MonoBehaviour
 
     [SerializeField] Canvas canvas;
 
-    //センサーコライダー用の変数
+    [Header("センサーコライダー用の変数")]
     [SerializeField] ColliderEventHandler[] colliders = default;
     private bool[] hits;
     public bool GetHit(int index) => hits[index];
@@ -205,11 +205,19 @@ public class GroundEnemy : MonoBehaviour
             if (hit.collider.tag == "Player")
             {
                 //Debug.Log("<color=red>プレイヤーを発見!</color>");
-                isChase = true;
-                chaseCountTime = chaseTime;
+                ChaseOn();
             }
         }
         Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.yellow);
+    }
+
+    /// <summary>
+    /// 追跡開始
+    /// </summary>
+    public void ChaseOn()
+    {
+        isChase = true;
+        chaseCountTime = chaseTime;
     }
 
     /// <summary>

@@ -15,17 +15,25 @@ public class GroundEnemyMovePatrolPointAction : Action
     Vector3 patrolPointPos;
     bool isMoveEnd = false;
     [UnityEngine.Tooltip("エネミーの移動スピード")]
-    [SerializeField] float moveSpeed = 2.0f;
+    float moveSpeed = 2.0f;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
         groundEnemy = this.GetComponent<GroundEnemy>();
-        groundEnemy.Animator.SetBool("b_rifleAim", false);
-        groundEnemy.Animator.SetFloat("f_moveSpeed", 0.5f);
 
+        InitAnimation();
         InitMove();
         SetPatrolPoint();
+    }
+
+    /// <summary>
+    /// アニメーションの初期化処理
+    /// </summary>
+    void InitAnimation()
+    {
+        groundEnemy.Animator.SetBool("b_rifleAim", false);
+        groundEnemy.Animator.SetFloat("f_moveSpeed", 0.5f);
     }
 
     /// <summary>
