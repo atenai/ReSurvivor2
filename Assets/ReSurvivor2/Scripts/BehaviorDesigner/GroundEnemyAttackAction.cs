@@ -11,8 +11,11 @@ using System.Collections.Generic;
 public class GroundEnemyAttackAction : Action
 {
     [SerializeField] GameObject attackGameObjectPrefab;
-    [SerializeField] float spawnDistance = 2.0f; // キャラクターからの距離
+    [UnityEngine.Tooltip("キャラクターからの攻撃物の生成距離")]
+    [SerializeField] float spawnDistance = 2.0f;
+    [UnityEngine.Tooltip("攻撃間隔")]
     [SerializeField] float attackTimer = 2.0f;
+    [UnityEngine.Tooltip("攻撃カウント")]
     float count = 0.0f;
 
     // Taskが処理される直前に呼ばれる

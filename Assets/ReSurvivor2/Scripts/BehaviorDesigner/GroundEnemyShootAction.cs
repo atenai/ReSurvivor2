@@ -31,6 +31,7 @@ public class GroundEnemyShootAction : Action
         groundEnemy = this.GetComponent<GroundEnemy>();
 
         InitAnimation();
+        InitMove();
     }
 
     /// <summary>
@@ -40,6 +41,14 @@ public class GroundEnemyShootAction : Action
     {
         groundEnemy.Animator.SetBool("b_rifleAim", true);
         groundEnemy.Animator.SetBool("b_rifleFire", false);
+    }
+
+    /// <summary>
+    /// 移動の初期化
+    /// </summary> 
+    void InitMove()
+    {
+        groundEnemy.Rigidbody.velocity = Vector3.zero;
     }
 
     // Tick毎に呼ばれる
