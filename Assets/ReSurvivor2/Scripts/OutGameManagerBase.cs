@@ -40,24 +40,32 @@ public class OutGameManagerBase : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            if (isLoadOnce == false)
-            {
-                isLoadOnce = true;
-                StartCoroutine(LoadScene());
-            }
+            Load(sceneName);
+        }
+    }
+
+    /// <summary>
+    /// ロード
+    /// </summary> 
+    protected void Load(string nextSceneName)
+    {
+        if (isLoadOnce == false)
+        {
+            isLoadOnce = true;
+            StartCoroutine(LoadScene(nextSceneName));
         }
     }
 
     /// <summary>
     /// シーンをロードする
     /// </summary>
-    IEnumerator LoadScene()
+    IEnumerator LoadScene(string nextSceneName)
     {
         //スライダーの値を最低にする
         sliderLoading.value = float.MinValue;
 
         //シーンをロード
-        AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
+        AsyncOperation async = SceneManager.LoadSceneAsync(nextSceneName);
         //シーンが勝手に切り替わらないようにする
         async.allowSceneActivation = false;
         //シーンをロードするまでのループ処理
