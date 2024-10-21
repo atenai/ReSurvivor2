@@ -2,14 +2,19 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Fire Flamethrower 1
   m_Shader: {fileID: 4800000, guid: 895b2f1ffab5108428b6e73de20b5448, type: 3}
-  m_ShaderKeywords: _ALPHABLEND_ON _COLORADDSUBDIFF_ON _EMISSIONDISSOLVE_ON _FINALALPHASMOOTHSTEP_ON
+  m_ValidKeywords:
+  - _EMISSIONDISSOLVE_ON
+  - _FINALALPHASMOOTHSTEP_ON
+  m_InvalidKeywords:
+  - _ALPHABLEND_ON
+  - _COLORADDSUBDIFF_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -95,7 +100,21 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
+    - _AlphaCutoff: 0.5
     - _AlphaDissolve: 0
     - _AlphaEmissionDissolveSub: 0
     - _AlphaSoftness: 0.578
@@ -151,6 +170,8 @@ Material:
     - _Offset: 0.3
     - _Opacity: 1
     - _Parallax: 0.02
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _Rows: 1
     - _SideFramesCount: 4
     - _SmoothnessTextureChannel: 0
@@ -181,3 +202,4 @@ Material:
     - _NoiseSpeed: {r: 0, g: 1, b: 0, a: 0}
     - _NoiseSpeed1: {r: 0, g: 1, b: 0, a: 0}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
+  m_BuildTextureStacks: []

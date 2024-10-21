@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.VisualScripting.Member;
 
 namespace Knife.Effects
 {
@@ -70,6 +71,12 @@ namespace Knife.Effects
             updateLastFrame = true;
         }
 
+        [ContextMenu("Test Blind")]
+        private void TestBlind()
+        {
+            Blind(1f, transform.position + transform.forward);
+        }
+
         private void OnEnable()
         {
             if(attachedCamera == null)
@@ -78,8 +85,26 @@ namespace Knife.Effects
             lastFrame = RenderTexture.GetTemporary(attachedCamera.pixelWidth, attachedCamera.pixelHeight, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default);
         }
 
+        private void LateUpdate()
+        {
+            if (isBlinded == false)
+                return;
+
+            if (updateLastFrame)
+            {
+                updateLastFrame = false;
+                Graphics.Blit(attachedCamera.activeTexture, lastFrame);
+            }
+            float fraction = blindTime / blindDuration;
+            material.SetFloat("_White", whiteScreenCurve.Evaluate(fraction) * blindAmount);
+            material.SetFloat("_Last", lastFrameCurve.Evaluate(fraction) * blindAmount);
+            material.SetTexture("_BlendTex", lastFrame);
+        }
+
         private void OnDisable()
         {
+            material.SetFloat("_White", 0);
+            material.SetFloat("_Last", 0);
             RenderTexture.ReleaseTemporary(lastFrame);
         }
 
@@ -90,29 +115,6 @@ namespace Knife.Effects
                 blindTime += Time.deltaTime;
                 if (blindTime >= blindDuration)
                     isBlinded = false;
-            }
-        }
-
-        private void OnRenderImage(RenderTexture source, RenderTexture destination)
-        {
-            if (isBlinded)
-            {
-                if (updateLastFrame)
-                {
-                    updateLastFrame = false;
-                    Graphics.Blit(source, lastFrame);
-                }
-
-                float fraction = blindTime / blindDuration;
-
-                material.SetFloat("_White", whiteScreenCurve.Evaluate(fraction) * blindAmount);
-                material.SetFloat("_Last", lastFrameCurve.Evaluate(fraction) * blindAmount);
-                material.SetTexture("_BlendTex", lastFrame);
-                Graphics.Blit(source, destination, material, 0);
-            }
-            else
-            {
-                Graphics.Blit(source, destination);
             }
         }
     }
