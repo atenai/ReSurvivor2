@@ -10,11 +10,6 @@ public class GroundEnemyShootAction : Action
 {
     GroundEnemy groundEnemy;
 
-    //[SerializeField] GameObject shootGameObjectPrefab;
-    //[UnityEngine.Tooltip("キャラクターからの射撃物の生成距離")]
-    //[SerializeField] float spawnDistance = 1.0f;//
-    //[SerializeField] float lifeTime = 3.0f;
-
     [UnityEngine.Tooltip("射撃間隔")]
     [SerializeField] float shootTime = 2.0f;
     [UnityEngine.Tooltip("射撃カウント")]
@@ -60,6 +55,8 @@ public class GroundEnemyShootAction : Action
             return TaskStatus.Running;
         }
 
+        groundEnemy.Animator.SetBool("b_rifleFire", false);
+        groundEnemy.Animator.SetBool("b_rifleAim", false);
         //目的地にたどりついた
         return TaskStatus.Success;
     }
@@ -95,13 +92,9 @@ public class GroundEnemyShootAction : Action
             count = 0.0f;
 
             groundEnemy.Animator.SetBool("b_rifleFire", true);
-
-            //キャラクターの前方にオブジェクトを生成
-            //Vector3 spawnPosition = transform.position + transform.forward * spawnDistance;
-            //GameObject localGameObject = UnityEngine.Object.Instantiate(shootGameObjectPrefab, spawnPosition, this.transform.rotation);
-            //localGameObject.GetComponent<Rigidbody>().AddForce(this.transform.forward * 500.0f);
-            //UnityEngine.Object.Destroy(localGameObject, lifeTime);
             HandGunFire();
+
+            groundEnemy.HandGunCurrentMagazine = groundEnemy.HandGunCurrentMagazine - 1;//現在のマガジンの弾数を-1する
         }
     }
 

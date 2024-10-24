@@ -83,6 +83,33 @@ public class GroundEnemy : MonoBehaviour
     [SerializeField] float shootingDistance = 8.0f;
     public float ShootingDistance => shootingDistance;
 
+    [Tooltip("ハンドガンの現在のマガジンの弾数")]
+    int handGunCurrentMagazine;
+    public int HandGunCurrentMagazine
+    {
+        get { return handGunCurrentMagazine; }
+        set { handGunCurrentMagazine = value; }
+    }
+    [Tooltip("ハンドガンの最大マガジン数")]
+    readonly int handGunMagazineCapacity = 7;
+    public int HandGunMagazineCapacity => handGunMagazineCapacity;
+    [Tooltip("ハンドガンのリロードのオン・オフ")]
+    bool isHandGunReloadTimeActive = false;
+    public bool IsHandGunReloadTimeActive
+    {
+        get { return isHandGunReloadTimeActive; }
+        set { isHandGunReloadTimeActive = value; }
+    }
+    float handGunReloadTime = 0.0f;
+    public float HandGunReloadTime
+    {
+        get { return handGunReloadTime; }
+        set { handGunReloadTime = value; }
+    }
+    [Tooltip("ハンドガンのリロード時間")]
+    readonly float handGunReloadTimeDefine = 1.5f;
+    public float HandGunReloadTimeDefine => handGunReloadTimeDefine;
+
     [Tooltip("デバッグ")]
     [SerializeField] DebugEnemy debugEnemy;
     public DebugEnemy DebugEnemy => debugEnemy;
@@ -129,6 +156,7 @@ public class GroundEnemy : MonoBehaviour
         isChase = false;
         patrolPointNumber = 0;
         isGrounded = false;
+        InitHandGunMagazine();
 
         GroundCheck();
     }
@@ -157,6 +185,15 @@ public class GroundEnemy : MonoBehaviour
         Vector3 spherePosition = groundCheckCenter.transform.position;
         bool centerChecker = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
         isGrounded = centerChecker;
+    }
+
+    /// <summary>
+    /// ハンドガンの弾数の初期化処理
+    /// </summary>
+    void InitHandGunMagazine()
+    {
+        handGunCurrentMagazine = handGunMagazineCapacity;
+        isHandGunReloadTimeActive = false;
     }
 
     /// <summary>
@@ -241,7 +278,11 @@ public class GroundEnemy : MonoBehaviour
     /// </summary> 
     void DebugText()
     {
-        string[] debugTexts = new string[6];
+        string[] debugTexts = new string[9];
+
+        debugTexts[8] = "handGunReloadTime : " + handGunReloadTime.ToString();
+        debugTexts[7] = "isHandGunReloadTimeActive : " + isHandGunReloadTimeActive.ToString();
+        debugTexts[6] = "handGunCurrentMagazine : " + handGunCurrentMagazine.ToString();
 
         debugTexts[5] = "chaseCountTime : " + chaseCountTime.ToString();
         debugTexts[4] = "isChase : " + isChase.ToString();
