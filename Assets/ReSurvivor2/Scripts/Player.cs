@@ -494,6 +494,7 @@ public class Player : MonoBehaviour
         {
             timerTMP.text = "00" + ":" + "00";
             //ゲームオーバー処理
+            SceneManager.LoadScene("GameOver");
         }
         else
         {
@@ -743,7 +744,6 @@ public class Player : MonoBehaviour
 
         if (currentHp <= 0.0f)
         {
-            //Destroy(this.gameObject);
             SceneManager.LoadScene("GameOver");
         }
     }
