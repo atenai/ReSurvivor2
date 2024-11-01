@@ -19,18 +19,21 @@ public class Mine : MonoBehaviour
     [Tooltip("地雷のSE終了時間")]
     [SerializeField] float mineSeEndtime = 1.0f;
 
-    [Tooltip("ダメージ")]
-    [SerializeField] int damage = 50;
+    [Tooltip("爆発のあたり判定オブジェクトを生成")]
+    [SerializeField] GameObject mineExplosionColliderPrefab = null;
+    float mineExplosionColliderDestroyTime = 1.0f;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collider)
     {
-        if (other.CompareTag("Player"))
+        if (collider.CompareTag("Player") || collider.gameObject.CompareTag("Enemy") || collider.gameObject.CompareTag("GroundEnemy"))
         {
             Explosion();
-            Player.SingletonInstance.TakeDamage(damage);
         }
     }
 
+    /// <summary>
+    /// 爆発
+    /// </summary>
     public void Explosion()
     {
         if (mineSePrefab != null)
@@ -52,6 +55,13 @@ public class Mine : MonoBehaviour
             //煙エフェクトオブジェクトを生成する	
             var smokeEffect = Instantiate(mineSmokeEffectPrefab, this.gameObject.transform.position, Quaternion.identity);
             Destroy(smokeEffect, mineSmokeEffectDestroyTime);
+        }
+
+        if (mineExplosionColliderPrefab != null)
+        {
+            //爆発のあたり判定オブジェクトを生成する	
+            var mineExplosionCollider = Instantiate(mineExplosionColliderPrefab, this.gameObject.transform.position, Quaternion.identity);
+            Destroy(mineExplosionCollider, mineExplosionColliderDestroyTime);
         }
 
         Destroy(this.gameObject);

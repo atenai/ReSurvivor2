@@ -59,7 +59,7 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("レイの長さ")]
     [SerializeField] float range = 100.0f;
     [Tooltip("銃のダメージ")]
-    [SerializeField] float Damage = 10.0f;
+    [SerializeField] float damage = 10.0f;
     [Tooltip("着弾した物体を後ろに押す")]
     [SerializeField] float impactForce = 30.0f;
     [Tooltip("ヒットレティクル")]
@@ -497,7 +497,7 @@ public class PlayerCamera : MonoBehaviour
                 Target target = hit.transform.GetComponent<Target>();
                 if (target != null)
                 {
-                    target.TakeDamage(Damage);
+                    target.TakeDamage(damage);
                 }
 
                 //着弾した物体を後ろに押す
@@ -713,7 +713,7 @@ public class PlayerCamera : MonoBehaviour
                 Target target = hit.transform.GetComponent<Target>();
                 if (target != null)
                 {
-                    target.TakeDamage(Damage);
+                    target.TakeDamage(damage);
                 }
 
                 //着弾した物体を後ろに押す
@@ -931,7 +931,7 @@ public class PlayerCamera : MonoBehaviour
                     Target target = hit.transform.GetComponent<Target>();
                     if (target != null)
                     {
-                        target.TakeDamage(Damage);
+                        target.TakeDamage(damage);
                     }
 
                     //着弾した物体を後ろに押す
