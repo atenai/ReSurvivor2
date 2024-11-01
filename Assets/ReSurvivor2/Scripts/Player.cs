@@ -134,13 +134,20 @@ public class Player : MonoBehaviour
     [SerializeField] float seconds = 0.0f;
     [Tooltip("totalTImeは秒で集計されている")]
     float totalTime = 0.0f;
-
     [Tooltip("ダメージ画像エフェクトトリガー")]
     bool isDamage = false;
     [Tooltip("HP回復画像エフェクトトリガー")]
     bool isHpHeal = false;
     [Tooltip("スタミナ回復画像エフェクトトリガー")]
     bool isStaminaHeal = false;
+    [Tooltip("地雷")]
+    [SerializeField] GameObject minePrefab;
+    [Tooltip("キャラクターからの地雷の生成距離")]
+    float spawnDistance = 1.0f;
+    [Tooltip("再生成できるまでの間隔")]
+    [SerializeField] float spawnTimer = 2.0f;
+    [Tooltip("再生成できるまでのカウント")]
+    float count;
 
     void Awake()
     {
@@ -169,6 +176,7 @@ public class Player : MonoBehaviour
         StartDamageEffect();
         StartHpHealEffect();
         StartStaminaHealEffect();
+        InitMine();
     }
 
     /// <summary>
@@ -277,6 +285,14 @@ public class Player : MonoBehaviour
         isStaminaHeal = false;
     }
 
+    /// <summary>
+    /// 地雷の初期化
+    /// </summary> 
+    void InitMine()
+    {
+        count = spawnTimer;
+    }
+
     void Update()
     {
         if (UI.SingletonInstance.IsPause == true)
@@ -318,6 +334,7 @@ public class Player : MonoBehaviour
             RestoresStamina();
         }
 
+        PlaceMine();
         PlayerUI();
         UpdateImageReload();
         UpdateTextMagazine();
@@ -482,6 +499,9 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 時間経過の処理
+    /// </summary>
     void UpdateTimerSystem()
     {
         totalTime = (minute * 60) + seconds;
@@ -499,6 +519,31 @@ public class Player : MonoBehaviour
         else
         {
             timerTMP.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
+        }
+    }
+
+    /// <summary>
+    /// 地雷を設置する
+    /// </summary>
+    void PlaceMine()
+    {
+        if (minePrefab == null)
+        {
+            return;
+        }
+
+        count = count + Time.deltaTime;
+        if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.G))
+        {
+            if (spawnTimer < count)
+            {
+                count = 0.0f;
+
+                Vector3 localPosition = new Vector3(this.transform.position.x, 0.0f, this.transform.position.z);
+                // キャラクターの前方にオブジェクトを生成
+                Vector3 spawnPosition = localPosition + (this.transform.forward * spawnDistance);
+                GameObject localGameObject = UnityEngine.Object.Instantiate(minePrefab, spawnPosition, this.transform.rotation);
+            }
         }
     }
 

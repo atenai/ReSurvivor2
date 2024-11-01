@@ -200,6 +200,9 @@ MonoBehaviour:
   timerTMP: {fileID: 6710278366421634206}
   minute: 10
   seconds: 0
+  minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
+  spawnDistance: 2
+  spawnTimer: 2
 --- !u!1 &659778031211487241
 GameObject:
   m_ObjectHideFlags: 0
