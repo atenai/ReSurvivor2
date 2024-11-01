@@ -491,7 +491,7 @@ public class PlayerCamera : MonoBehaviour
         {
             hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 
-            if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+            if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy") || hit.collider.gameObject.CompareTag("Mine"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
             {
                 //ダメージ
                 Target target = hit.transform.GetComponent<Target>();
@@ -514,6 +514,13 @@ public class PlayerCamera : MonoBehaviour
                 if (groundEnemy != null)
                 {
                     groundEnemy.ChaseOn();
+                }
+
+                //地雷を爆破
+                Mine mine = hit.transform.GetComponent<Mine>();
+                if (mine != null)
+                {
+                    mine.Explosion();
                 }
             }
 
@@ -700,7 +707,7 @@ public class PlayerCamera : MonoBehaviour
         {
             hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 
-            if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+            if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy") || hit.collider.gameObject.CompareTag("Mine"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
             {
                 //ダメージ
                 Target target = hit.transform.GetComponent<Target>();
@@ -723,6 +730,13 @@ public class PlayerCamera : MonoBehaviour
                 if (groundEnemy != null)
                 {
                     groundEnemy.ChaseOn();
+                }
+
+                //地雷を爆破
+                Mine mine = hit.transform.GetComponent<Mine>();
+                if (mine != null)
+                {
+                    mine.Explosion();
                 }
             }
 
@@ -911,7 +925,7 @@ public class PlayerCamera : MonoBehaviour
             {
                 hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 
-                if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+                if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy") || hit.collider.gameObject.CompareTag("Mine"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
                 {
                     //ダメージ
                     Target target = hit.transform.GetComponent<Target>();
@@ -934,6 +948,13 @@ public class PlayerCamera : MonoBehaviour
                     if (groundEnemy != null)
                     {
                         groundEnemy.ChaseOn();
+                    }
+
+                    //地雷を爆破
+                    Mine mine = hit.transform.GetComponent<Mine>();
+                    if (mine != null)
+                    {
+                        mine.Explosion();
                     }
                 }
 

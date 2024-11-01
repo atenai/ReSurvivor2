@@ -26,29 +26,34 @@ public class Mine : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (mineSePrefab != null)
-            {
-                //SEオブジェクトを生成する
-                var se = Instantiate(mineSePrefab, this.gameObject.transform.position, Quaternion.identity);
-                Destroy(se, mineSeEndtime);
-            }
-
-            if (mineExplosionEffectPrefab != null)
-            {
-                //爆発エフェクトオブジェクトを生成する	
-                var effect = Instantiate(mineExplosionEffectPrefab, this.gameObject.transform.position, Quaternion.identity);
-                Destroy(effect, mineExplosionEffectDestroyTime);
-            }
-
-            if (mineSmokeEffectPrefab != null)
-            {
-                //煙エフェクトオブジェクトを生成する	
-                var smokeEffect = Instantiate(mineSmokeEffectPrefab, this.gameObject.transform.position, Quaternion.identity);
-                Destroy(smokeEffect, mineSmokeEffectDestroyTime);
-            }
-
+            Explosion();
             Player.SingletonInstance.TakeDamage(damage);
-            Destroy(this.gameObject);
         }
+    }
+
+    public void Explosion()
+    {
+        if (mineSePrefab != null)
+        {
+            //SEオブジェクトを生成する
+            var se = Instantiate(mineSePrefab, this.gameObject.transform.position, Quaternion.identity);
+            Destroy(se, mineSeEndtime);
+        }
+
+        if (mineExplosionEffectPrefab != null)
+        {
+            //爆発エフェクトオブジェクトを生成する	
+            var effect = Instantiate(mineExplosionEffectPrefab, this.gameObject.transform.position, Quaternion.identity);
+            Destroy(effect, mineExplosionEffectDestroyTime);
+        }
+
+        if (mineSmokeEffectPrefab != null)
+        {
+            //煙エフェクトオブジェクトを生成する	
+            var smokeEffect = Instantiate(mineSmokeEffectPrefab, this.gameObject.transform.position, Quaternion.identity);
+            Destroy(smokeEffect, mineSmokeEffectDestroyTime);
+        }
+
+        Destroy(this.gameObject);
     }
 }
