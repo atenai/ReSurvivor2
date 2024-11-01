@@ -7,6 +7,8 @@ public class MineExplosionCollider : MonoBehaviour
     [Tooltip("ダメージ")]
     [SerializeField] int damage = 50;
     float scale = 1.0f;
+    [Tooltip("ダメージ")]
+    [SerializeField] float rangeSpeed = 2.0f;
 
     void Start()
     {
@@ -14,9 +16,9 @@ public class MineExplosionCollider : MonoBehaviour
         this.transform.localScale = new Vector3(scale, scale, scale);
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        scale = scale + Time.deltaTime;
+        scale = scale + (Time.deltaTime * rangeSpeed);
         this.transform.localScale = new Vector3(scale, scale, scale);
     }
 

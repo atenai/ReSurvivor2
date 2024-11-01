@@ -140,14 +140,20 @@ public class Player : MonoBehaviour
     bool isHpHeal = false;
     [Tooltip("スタミナ回復画像エフェクトトリガー")]
     bool isStaminaHeal = false;
-    [Tooltip("地雷")]
+    [Tooltip("地雷のプレファブ")]
     [SerializeField] GameObject minePrefab;
     [Tooltip("キャラクターからの地雷の生成距離")]
-    float spawnDistance = 1.0f;
-    [Tooltip("再生成できるまでの間隔")]
-    [SerializeField] float spawnTimer = 2.0f;
-    [Tooltip("再生成できるまでのカウント")]
-    float count;
+    float mineSpawnDistance = 1.0f;
+    [Tooltip("地雷が再生成できるまでの間隔")]
+    [SerializeField] float mineSpawnTimer = 2.0f;
+    [Tooltip("地雷が再生成できるまでのカウント")]
+    float mineSpawnCount;
+    [Tooltip("現在の地雷数")]
+    int currentMine = 3;
+    [Tooltip("地雷テキスト")]
+    [SerializeField] TextMeshProUGUI textMine;
+    [Tooltip("地雷の所持できる最大数")]
+    int maxMine = 3;
 
     void Awake()
     {
@@ -290,7 +296,8 @@ public class Player : MonoBehaviour
     /// </summary> 
     void InitMine()
     {
-        count = spawnTimer;
+        mineSpawnCount = mineSpawnTimer;
+        textMine.text = currentMine.ToString();
     }
 
     void Update()
@@ -532,16 +539,24 @@ public class Player : MonoBehaviour
             return;
         }
 
-        count = count + Time.deltaTime;
+        mineSpawnCount = mineSpawnCount + Time.deltaTime;
+
         if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.G))
         {
-            if (spawnTimer < count)
+            if (currentMine <= 0)
             {
-                count = 0.0f;
+                return;
+            }
+
+            if (mineSpawnTimer < mineSpawnCount)
+            {
+                mineSpawnCount = 0.0f;
+                currentMine = currentMine - 1;
+                textMine.text = currentMine.ToString();
 
                 Vector3 localPosition = new Vector3(this.transform.position.x, 0.0f, this.transform.position.z);
                 // キャラクターの前方にオブジェクトを生成
-                Vector3 spawnPosition = localPosition + (this.transform.forward * spawnDistance);
+                Vector3 spawnPosition = localPosition + (this.transform.forward * mineSpawnDistance);
                 GameObject localGameObject = UnityEngine.Object.Instantiate(minePrefab, spawnPosition, this.transform.rotation);
             }
         }
@@ -963,6 +978,20 @@ public class Player : MonoBehaviour
         }
 
         maxFood = maxFood + 1;
+    }
+
+    /// <summary>
+    /// 地雷を取得
+    /// </summary> 
+    public void AcquireMine()
+    {
+        if (maxMine <= currentMine)
+        {
+            return;
+        }
+
+        currentMine = currentMine + 1;
+        textMine.text = currentMine.ToString();
     }
 
     void OnGUI()
