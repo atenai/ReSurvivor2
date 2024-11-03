@@ -3,6 +3,7 @@ using UnityEditor;
 
 public class ScreenSetting : MonoBehaviour
 {
+    [Tooltip("マウスカーソルのオン/オフ")]
     [SerializeField] bool isCursor = false;
 
     void Awake()
@@ -43,6 +44,9 @@ public class ScreenSetting : MonoBehaviour
 #endif //終了   
     }
 
+    /// <summary>
+    /// マウスカーソルのオン/オフ処理 
+    /// </summary>
     void CursorActive()
     {
         if (isCursor == false)
@@ -59,6 +63,9 @@ public class ScreenSetting : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ゲーム終了
+    /// </summary> 
     void Quit()
     {
 #if UNITY_EDITOR
