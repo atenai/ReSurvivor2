@@ -3,10 +3,10 @@ using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// プレイヤーを射撃するタスク
+/// プレイヤーをハンドガンで射撃するタスク
 /// </summary>
 [TaskCategory("GroundEnemy")]
-public class GroundEnemyShootAction : Action
+public class GroundEnemyHandGunFireAction : Action
 {
     GroundEnemy groundEnemy;
 
@@ -14,7 +14,6 @@ public class GroundEnemyShootAction : Action
     [SerializeField] float shootTime = 2.0f;
     [UnityEngine.Tooltip("射撃カウント")]
     float count = 0.0f;
-
     [UnityEngine.Tooltip("レイの長さ")]
     [SerializeField] float range = 100.0f;
     [UnityEngine.Tooltip("銃のダメージ")]
