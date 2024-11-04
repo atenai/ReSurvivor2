@@ -260,8 +260,11 @@ MonoBehaviour:
   upperarm_r: {fileID: 3247915256232972873}
   upperarm_l: {fileID: 7338203176264424074}
   handGunModel: {fileID: 1805156889620345343}
+  handGunModelBodyDecoration: {fileID: 5770772284250233470}
   assaultRifleModel: {fileID: 6458952836186968688}
+  assaultRifleModelBodyDecoration: {fileID: 3759090778997060633}
   shotGunModel: {fileID: 171608272400192684}
+  shotGunModelBodyDecoration: {fileID: 5983286883851262208}
   canvasPlayer: {fileID: 637544306048898191}
   imageBG: {fileID: 8467590313357425202}
   maxHp: 100
@@ -3551,6 +3554,21 @@ Transform:
 --- !u!95 &3457195716041837385 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7721474850707310993, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
+  m_PrefabInstance: {fileID: 4959128775433945816}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3759090778997060633 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8140437183782221505, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
+  m_PrefabInstance: {fileID: 4959128775433945816}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5770772284250233470 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1497371602190276774, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
+  m_PrefabInstance: {fileID: 4959128775433945816}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5983286883851262208 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1718891682958531544, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
   m_PrefabInstance: {fileID: 4959128775433945816}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6458952836186968688 stripped

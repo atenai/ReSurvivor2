@@ -72,10 +72,16 @@ public class Player : MonoBehaviour
     const float armAimAnimationRotY = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
     [Tooltip("キャラクターの手に持っているハンドガンのモデル")]
     [SerializeField] GameObject handGunModel;
+    [Tooltip("キャラクターの体についているハンドガンのモデル")]
+    [SerializeField] GameObject handGunModelBodyDecoration;
     [Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
     [SerializeField] GameObject assaultRifleModel;
+    [Tooltip("キャラクターの体についているアサルトライフルのモデル")]
+    [SerializeField] GameObject assaultRifleModelBodyDecoration;
     [Tooltip("キャラクターの手に持っているショットガンのモデル")]
     [SerializeField] GameObject shotGunModel;
+    [Tooltip("キャラクターの体についているショットガンのモデル")]
+    [SerializeField] GameObject shotGunModelBodyDecoration;
 
     [Header("UI")]
     [Tooltip("プレイヤーのキャンバス")]
@@ -370,18 +376,27 @@ public class Player : MonoBehaviour
         {
             case PlayerCamera.GunTYPE.HandGun:
                 handGunModel.SetActive(true);
+                handGunModelBodyDecoration.SetActive(false);
                 assaultRifleModel.SetActive(false);
+                assaultRifleModelBodyDecoration.SetActive(true);
                 shotGunModel.SetActive(false);
+                shotGunModelBodyDecoration.SetActive(true);
                 break;
             case PlayerCamera.GunTYPE.AssaultRifle:
                 handGunModel.SetActive(false);
+                handGunModelBodyDecoration.SetActive(true);
                 assaultRifleModel.SetActive(true);
+                assaultRifleModelBodyDecoration.SetActive(false);
                 shotGunModel.SetActive(false);
+                shotGunModelBodyDecoration.SetActive(true);
                 break;
             case PlayerCamera.GunTYPE.ShotGun:
                 handGunModel.SetActive(false);
+                handGunModelBodyDecoration.SetActive(true);
                 assaultRifleModel.SetActive(false);
+                assaultRifleModelBodyDecoration.SetActive(true);
                 shotGunModel.SetActive(true);
+                shotGunModelBodyDecoration.SetActive(false);
                 break;
         }
     }
