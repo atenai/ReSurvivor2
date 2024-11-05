@@ -337,12 +337,12 @@ public class Player : MonoBehaviour
 
         SwitchWeaponModel();
 
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             Heal();
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha5))
+        if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             RestoresStamina();
         }
@@ -556,7 +556,7 @@ public class Player : MonoBehaviour
 
         mineSpawnCount = mineSpawnCount + Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.G))
         {
             if (currentMine <= 0)
             {
