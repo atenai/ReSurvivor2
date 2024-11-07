@@ -18,7 +18,7 @@ public class CanGroundEnemyReloadConditional : Conditional
     // 更新時に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (groundEnemy.HandGunCurrentMagazine <= 0)
+        if (groundEnemy.CurrentMagazine <= 0)
         {
             return TaskStatus.Success;
         }

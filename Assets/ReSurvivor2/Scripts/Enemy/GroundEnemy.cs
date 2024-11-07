@@ -83,32 +83,32 @@ public class GroundEnemy : MonoBehaviour
     [SerializeField] float shootingDistance = 8.0f;
     public float ShootingDistance => shootingDistance;
 
-    [Tooltip("ハンドガンの現在のマガジンの弾数")]
-    int handGunCurrentMagazine;
-    public int HandGunCurrentMagazine
+    [Tooltip("銃の現在のマガジンの弾数")]
+    int currentMagazine;
+    public int CurrentMagazine
     {
-        get { return handGunCurrentMagazine; }
-        set { handGunCurrentMagazine = value; }
+        get { return currentMagazine; }
+        set { currentMagazine = value; }
     }
-    [Tooltip("ハンドガンの最大マガジン数")]
-    readonly int handGunMagazineCapacity = 7;
-    public int HandGunMagazineCapacity => handGunMagazineCapacity;
+    [Tooltip("銃の最大マガジン数")]
+    readonly int magazineCapacity = 7;
+    public int MagazineCapacity => magazineCapacity;
     [Tooltip("ハンドガンのリロードのオン・オフ")]
-    bool isHandGunReloadTimeActive = false;
-    public bool IsHandGunReloadTimeActive
+    bool isReloadTimeActive = false;
+    public bool IsReloadTimeActive
     {
-        get { return isHandGunReloadTimeActive; }
-        set { isHandGunReloadTimeActive = value; }
+        get { return isReloadTimeActive; }
+        set { isReloadTimeActive = value; }
     }
-    float handGunReloadTime = 0.0f;
-    public float HandGunReloadTime
+    float reloadTime = 0.0f;
+    public float ReloadTime
     {
-        get { return handGunReloadTime; }
-        set { handGunReloadTime = value; }
+        get { return reloadTime; }
+        set { reloadTime = value; }
     }
-    [Tooltip("ハンドガンのリロード時間")]
-    readonly float handGunReloadTimeDefine = 1.5f;
-    public float HandGunReloadTimeDefine => handGunReloadTimeDefine;
+    [Tooltip("銃のリロード時間")]
+    readonly float reloadTimeDefine = 1.5f;
+    public float ReloadTimeDefine => reloadTimeDefine;
 
     //↓アセットストアのプログラム↓//
     [Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
@@ -199,8 +199,8 @@ public class GroundEnemy : MonoBehaviour
     /// </summary>
     void InitHandGunMagazine()
     {
-        handGunCurrentMagazine = handGunMagazineCapacity;
-        isHandGunReloadTimeActive = false;
+        CurrentMagazine = MagazineCapacity;
+        isReloadTimeActive = false;
     }
 
     /// <summary>
@@ -312,9 +312,9 @@ public class GroundEnemy : MonoBehaviour
     {
         string[] debugTexts = new string[9];
 
-        debugTexts[8] = "handGunReloadTime : " + handGunReloadTime.ToString();
-        debugTexts[7] = "isHandGunReloadTimeActive : " + isHandGunReloadTimeActive.ToString();
-        debugTexts[6] = "handGunCurrentMagazine : " + handGunCurrentMagazine.ToString();
+        debugTexts[8] = "reloadTime : " + reloadTime.ToString();
+        debugTexts[7] = "isReloadTimeActive : " + isReloadTimeActive.ToString();
+        debugTexts[6] = "currentMagazine : " + currentMagazine.ToString();
 
         debugTexts[5] = "chaseCountTime : " + chaseCountTime.ToString();
         debugTexts[4] = "isChase : " + isChase.ToString();

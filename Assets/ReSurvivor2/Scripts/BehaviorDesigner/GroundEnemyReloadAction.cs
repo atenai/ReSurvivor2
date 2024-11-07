@@ -45,13 +45,13 @@ public class GroundEnemyReloadAction : Action
     /// </summary>
     void InitReload()
     {
-        groundEnemy.IsHandGunReloadTimeActive = true;
+        groundEnemy.IsReloadTimeActive = true;
     }
 
     // Tick毎に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (groundEnemy.IsHandGunReloadTimeActive == true)
+        if (groundEnemy.IsReloadTimeActive == true)
         {
             //リロード実行中
             return TaskStatus.Running;
@@ -71,17 +71,17 @@ public class GroundEnemyReloadAction : Action
     /// </summary>
     void Reload()
     {
-        if (groundEnemy.IsHandGunReloadTimeActive == true)//リロードがオンになったら
+        if (groundEnemy.IsReloadTimeActive == true)//リロードがオンになったら
         {
-            groundEnemy.HandGunReloadTime += Time.deltaTime;//リロードタイムをプラス
+            groundEnemy.ReloadTime += Time.deltaTime;//リロードタイムをプラス
 
-            if (groundEnemy.HandGunReloadTimeDefine <= groundEnemy.HandGunReloadTime)//リロードタイムが10以上になったら
+            if (groundEnemy.ReloadTimeDefine <= groundEnemy.ReloadTime)//リロードタイムが10以上になったら
             {
                 //弾リセット
-                groundEnemy.HandGunCurrentMagazine = groundEnemy.HandGunMagazineCapacity;
+                groundEnemy.CurrentMagazine = groundEnemy.MagazineCapacity;
 
-                groundEnemy.HandGunReloadTime = 0.0f;//リロードタイムをリセット
-                groundEnemy.IsHandGunReloadTimeActive = false;//リロードのオフ
+                groundEnemy.ReloadTime = 0.0f;//リロードタイムをリセット
+                groundEnemy.IsReloadTimeActive = false;//リロードのオフ
 
                 //ハンドガンのリロードアニメーションをオフ
                 groundEnemy.Animator.SetBool("b_isHandGunReload", false);

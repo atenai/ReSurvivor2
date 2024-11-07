@@ -93,7 +93,7 @@ public class GroundEnemyHandGunFireAction : Action
             groundEnemy.Animator.SetBool("b_rifleFire", true);
             HandGunFire();
 
-            groundEnemy.HandGunCurrentMagazine = groundEnemy.HandGunCurrentMagazine - 1;//現在のマガジンの弾数を-1する
+            groundEnemy.CurrentMagazine = groundEnemy.CurrentMagazine - 1;//現在のマガジンの弾数を-1する
         }
     }
 
