@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.AddressableAssets;
+using Knife.Effects;
 
 /// <summary>
 /// 地上敵
@@ -109,6 +109,13 @@ public class GroundEnemy : MonoBehaviour
     [Tooltip("ハンドガンのリロード時間")]
     readonly float handGunReloadTimeDefine = 1.5f;
     public float HandGunReloadTimeDefine => handGunReloadTimeDefine;
+
+    //↓アセットストアのプログラム↓//
+    [Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
+    [SerializeField] ParticleGroupEmitter[] assaultRifleShotEmitters;
+    [Tooltip("アサルトライフルの硝煙")]
+    [SerializeField] ParticleGroupPlayer assaultRifleAfterFireSmoke;
+    //↑アセットストアのプログラム↑//
 
     [Tooltip("デバッグ")]
     [SerializeField] DebugEnemy debugEnemy;
@@ -270,6 +277,31 @@ public class GroundEnemy : MonoBehaviour
             {
                 isChase = false;
             }
+        }
+    }
+
+    /// <summary>
+    /// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
+    /// </summary>
+    public void AssaultRifleMuzzleFlashAndShell()
+    {
+        if (assaultRifleShotEmitters != null)
+        {
+            foreach (var effect in assaultRifleShotEmitters)
+            {
+                effect.Emit(1);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
+    /// </summary>
+    public void AssaultRifleSmoke()
+    {
+        if (assaultRifleAfterFireSmoke != null)
+        {
+            assaultRifleAfterFireSmoke.Play();
         }
     }
 
