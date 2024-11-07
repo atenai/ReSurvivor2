@@ -29,8 +29,8 @@ public class GroundEnemyMoveTargetAction : Action
     /// </summary>
     void InitAnimation()
     {
-        groundEnemy.Animator.SetBool("b_rifleFire", false);
-        groundEnemy.Animator.SetBool("b_rifleAim", false);
+        groundEnemy.Animator.SetBool("b_isRifleFire", false);
+        groundEnemy.Animator.SetBool("b_isRifleAim", false);
         groundEnemy.Animator.SetFloat("f_moveSpeed", 1.0f);
     }
 

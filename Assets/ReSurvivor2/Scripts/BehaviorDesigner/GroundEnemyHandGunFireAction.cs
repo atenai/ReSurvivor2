@@ -33,8 +33,8 @@ public class GroundEnemyHandGunFireAction : Action
     /// </summary>
     void InitAnimation()
     {
-        groundEnemy.Animator.SetBool("b_rifleAim", true);
-        groundEnemy.Animator.SetBool("b_rifleFire", false);
+        groundEnemy.Animator.SetBool("b_isRifleAim", true);
+        groundEnemy.Animator.SetBool("b_isRifleFire", false);
     }
 
     /// <summary>
@@ -54,8 +54,8 @@ public class GroundEnemyHandGunFireAction : Action
             return TaskStatus.Running;
         }
 
-        groundEnemy.Animator.SetBool("b_rifleFire", false);
-        groundEnemy.Animator.SetBool("b_rifleAim", false);
+        groundEnemy.Animator.SetBool("b_isRifleFire", false);
+        groundEnemy.Animator.SetBool("b_isRifleAim", false);
         //目的地にたどりついた
         return TaskStatus.Success;
     }
@@ -83,14 +83,14 @@ public class GroundEnemyHandGunFireAction : Action
 
     void Shot()
     {
-        groundEnemy.Animator.SetBool("b_rifleFire", false);
+        groundEnemy.Animator.SetBool("b_isRifleFire", false);
 
         count = count + Time.deltaTime;
         if (shootTime < count)
         {
             count = 0.0f;
 
-            groundEnemy.Animator.SetBool("b_rifleFire", true);
+            groundEnemy.Animator.SetBool("b_isRifleFire", true);
             HandGunFire();
 
             groundEnemy.CurrentMagazine = groundEnemy.CurrentMagazine - 1;//現在のマガジンの弾数を-1する

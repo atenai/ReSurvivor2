@@ -32,7 +32,7 @@ public class GroundEnemyMovePatrolPointAction : Action
     /// </summary>
     void InitAnimation()
     {
-        groundEnemy.Animator.SetBool("b_rifleAim", false);
+        groundEnemy.Animator.SetBool("b_isRifleAim", false);
         groundEnemy.Animator.SetFloat("f_moveSpeed", 0.5f);
     }
 
