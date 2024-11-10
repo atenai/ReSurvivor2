@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 4906538321328653936}
   - component: {fileID: 5951477866204293009}
   - component: {fileID: 6617248888777553093}
+  - component: {fileID: 962727797225885184}
   m_Layer: 2
   m_Name: Cube_LoadNextSceneObject
   m_TagString: Untagged
@@ -153,6 +154,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: Stage1
   spawnPos: {fileID: 7238809896560818720}
+--- !u!114 &962727797225885184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5522040474447366226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55de1d2660648704eb4839f1902faddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7238809896560818720
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,6 +177,7 @@ GameObject:
   - component: {fileID: 3516955404163393452}
   - component: {fileID: 4318695313345756198}
   - component: {fileID: 5221867726554210914}
+  - component: {fileID: 6306366895330901120}
   m_Layer: 0
   m_Name: Cube_SpawnPos
   m_TagString: Untagged
@@ -236,3 +250,15 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6306366895330901120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7238809896560818720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55de1d2660648704eb4839f1902faddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

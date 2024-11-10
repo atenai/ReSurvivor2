@@ -234,7 +234,9 @@ public class GroundEnemy : MonoBehaviour
 
         //デバッグ関連の処理
         debugEnemy.DebugCheckChase(debugEnemy.IsDebugMode, isChase);
+#if UNITY_EDITOR
         DebugText();
+#endif
     }
 
     /// <summary>
