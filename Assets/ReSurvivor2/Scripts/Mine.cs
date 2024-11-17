@@ -9,11 +9,6 @@ public class Mine : MonoBehaviour
     [Tooltip("爆発エフェクトの終了時間")]
     [SerializeField] float mineExplosionEffectDestroyTime = 1.0f;
 
-    [Tooltip("煙エフェクトのプレファブ")]
-    [SerializeField] GameObject mineSmokeEffectPrefab = null;
-    [Tooltip("煙エフェクトの終了時間")]
-    [SerializeField] float mineSmokeEffectDestroyTime = 1.5f;
-
     [Tooltip("地雷のSEプレファブ")]
     [SerializeField] GameObject mineSePrefab = null;
     [Tooltip("地雷のSE終了時間")]
@@ -48,13 +43,6 @@ public class Mine : MonoBehaviour
             //爆発エフェクトオブジェクトを生成する	
             var effect = Instantiate(mineExplosionEffectPrefab, this.gameObject.transform.position, Quaternion.identity);
             Destroy(effect, mineExplosionEffectDestroyTime);
-        }
-
-        if (mineSmokeEffectPrefab != null)
-        {
-            //煙エフェクトオブジェクトを生成する	
-            var smokeEffect = Instantiate(mineSmokeEffectPrefab, this.gameObject.transform.position, Quaternion.identity);
-            Destroy(smokeEffect, mineSmokeEffectDestroyTime);
         }
 
         if (mineExplosionColliderPrefab != null)
