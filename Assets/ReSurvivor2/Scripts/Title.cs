@@ -14,17 +14,25 @@ public class Title : OutGameManagerBase
     [SerializeField] Image[] menuOptions;
     int selectedIndex = 0;
     [SerializeField] string showCreditsSceneName;
+    bool isInputKeyActive = true;
 
     new void Start()
     {
         base.Start();
 
         Menu();
+
+        isInputKeyActive = true;
     }
 
     new void Update()
     {
-        // 上下の矢印キーで選択を変更
+        if (isInputKeyActive == false)
+        {
+            return;
+        }
+
+        //上下の矢印キーで選択を変更
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
             selectedIndex--;
@@ -44,9 +52,10 @@ public class Title : OutGameManagerBase
             Menu();
         }
 
-        // Enterキーで選択を確定
+        //Enterキーで選択を確定
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            isInputKeyActive = false;
             ExecuteMenuAction();
         }
     }
