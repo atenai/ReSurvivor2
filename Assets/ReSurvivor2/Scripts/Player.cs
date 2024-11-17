@@ -337,12 +337,12 @@ public class Player : MonoBehaviour
 
         SwitchWeaponModel();
 
-        if (Input.GetKeyDown(KeyCode.Alpha5))
+        if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E))
         {
             Heal();
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha6))
+        if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Q))
         {
             RestoresStamina();
         }
