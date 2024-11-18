@@ -18,6 +18,8 @@ public class GroundEnemyReloadAction : Action
         InitAnimation();
         InitMove();
         InitReload();
+
+        groundEnemy.AssaultRifleReloadSE();
     }
 
     /// <summary>

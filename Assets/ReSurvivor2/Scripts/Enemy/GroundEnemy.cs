@@ -93,7 +93,7 @@ public class GroundEnemy : MonoBehaviour
     [Tooltip("銃の最大マガジン数")]
     readonly int magazineCapacity = 7;
     public int MagazineCapacity => magazineCapacity;
-    [Tooltip("ハンドガンのリロードのオン・オフ")]
+    [Tooltip("銃のリロードのオン・オフ")]
     bool isReloadTimeActive = false;
     public bool IsReloadTimeActive
     {
@@ -109,6 +109,16 @@ public class GroundEnemy : MonoBehaviour
     [Tooltip("銃のリロード時間")]
     readonly float reloadTimeDefine = 1.5f;
     public float ReloadTimeDefine => reloadTimeDefine;
+
+    [Tooltip("アサルトライフルの射撃のSE")]
+    [SerializeField] GameObject assaultRifleShootSe;
+    float assaultRifleShootSeDestroyTime = 1.0f;
+    [Tooltip("アサルトライフルのリロードのSE")]
+    [SerializeField] GameObject assaultRifleReloadSe;
+    float assaultRifleReloadSeDestroyTime = 1.0f;
+    [Tooltip("アサルトライフルの薬莢のSE")]
+    [SerializeField] GameObject assaultRifleBulletCasingSe;
+    float assaultRifleBulletCasingSeDestroyTime = 1.0f;
 
     //↓アセットストアのプログラム↓//
     [Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
@@ -283,10 +293,42 @@ public class GroundEnemy : MonoBehaviour
     }
 
     /// <summary>
+    /// アサルトライフルの射撃SE
+    /// </summary> 
+    public void AssaultRifleFireSE()
+    {
+        //SEオブジェクトを生成する
+        UnityEngine.GameObject se = Instantiate(assaultRifleShootSe, this.transform.position, Quaternion.identity);
+        Destroy(se, assaultRifleShootSeDestroyTime);
+    }
+
+    /// <summary>
+    /// アサルトライフルのリロードSE
+    /// </summary> 
+    public void AssaultRifleReloadSE()
+    {
+        //SEオブジェクトを生成する
+        UnityEngine.GameObject se = Instantiate(assaultRifleReloadSe, this.transform.position, Quaternion.identity);
+        Destroy(se, assaultRifleReloadSeDestroyTime);
+    }
+
+    /// <summary>
+    /// アサルトライフルの薬莢SE
+    /// </summary>
+    public void AssaultRifleBulletCasingSE()
+    {
+        //SEオブジェクトを生成する
+        UnityEngine.GameObject se = Instantiate(assaultRifleBulletCasingSe, this.transform.position, Quaternion.identity);
+        Destroy(se, assaultRifleBulletCasingSeDestroyTime);
+    }
+
+    /// <summary>
     /// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
     /// </summary>
     public void AssaultRifleMuzzleFlashAndShell()
     {
+        AssaultRifleBulletCasingSE();
+
         if (assaultRifleShotEmitters != null)
         {
             foreach (var effect in assaultRifleShotEmitters)

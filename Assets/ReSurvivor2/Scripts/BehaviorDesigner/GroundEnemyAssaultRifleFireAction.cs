@@ -108,6 +108,8 @@ public class GroundEnemyAssaultRifleFireAction : Action
         groundEnemy.AssaultRifleMuzzleFlashAndShell();
         groundEnemy.AssaultRifleSmoke();
 
+        groundEnemy.AssaultRifleFireSE();
+
         Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 1f, this.transform.position.z);
 
         Vector3 direction = this.transform.forward;

@@ -263,6 +263,9 @@ MonoBehaviour:
     m_Bits: 1024
   groundedRadius: 0.2
   shootingDistance: 8
+  assaultRifleShootSe: {fileID: 8217214238848448886, guid: cb79abab45b525d4bb855cc4f856f2f7, type: 3}
+  assaultRifleReloadSe: {fileID: 8217214238848448886, guid: a86a0a4f0eb7bc2429ce1e1624dd7845, type: 3}
+  assaultRifleBulletCasingSe: {fileID: 8217214238848448886, guid: 0b7a2882204ab784bb1f500c5a6eb54e, type: 3}
   assaultRifleShotEmitters:
   - {fileID: 1717239033193219912}
   - {fileID: 7646512579346927600}
