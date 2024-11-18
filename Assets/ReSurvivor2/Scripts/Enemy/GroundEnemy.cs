@@ -297,7 +297,6 @@ public class GroundEnemy : MonoBehaviour
     /// </summary> 
     public void AssaultRifleFireSE()
     {
-        //SEオブジェクトを生成する
         UnityEngine.GameObject se = Instantiate(assaultRifleShootSe, this.transform.position, Quaternion.identity);
         Destroy(se, assaultRifleShootSeDestroyTime);
     }
@@ -307,7 +306,6 @@ public class GroundEnemy : MonoBehaviour
     /// </summary> 
     public void AssaultRifleReloadSE()
     {
-        //SEオブジェクトを生成する
         UnityEngine.GameObject se = Instantiate(assaultRifleReloadSe, this.transform.position, Quaternion.identity);
         Destroy(se, assaultRifleReloadSeDestroyTime);
     }
@@ -317,7 +315,6 @@ public class GroundEnemy : MonoBehaviour
     /// </summary>
     public void AssaultRifleBulletCasingSE()
     {
-        //SEオブジェクトを生成する
         UnityEngine.GameObject se = Instantiate(assaultRifleBulletCasingSe, this.transform.position, Quaternion.identity);
         Destroy(se, assaultRifleBulletCasingSeDestroyTime);
     }

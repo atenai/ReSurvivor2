@@ -467,9 +467,7 @@ public class PlayerCamera : MonoBehaviour
                 //ハンドガンのリロードアニメーションをオン
                 Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", true);
 
-                //SEオブジェクトを生成する
-                UnityEngine.GameObject se = Instantiate(handGunReloadSe, this.transform.position, Quaternion.identity);
-                Destroy(se, handGunReloadSeDestroyTime);
+                HandGunReloadSE();
             }
 
             //リロード中画像
@@ -518,9 +516,7 @@ public class PlayerCamera : MonoBehaviour
         HandGunMuzzleFlashAndShell();
         HandGunSmoke();
 
-        //SEオブジェクトを生成する
-        UnityEngine.GameObject se = Instantiate(handGunShootSe, this.transform.position, Quaternion.identity);
-        Destroy(se, handGunShootSeDestroyTime);
+        HandGunFireSE();
 
         Ray ray = new Ray(this.transform.position, this.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
@@ -567,13 +563,39 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
+    /// ハンドガンの射撃SE
+    /// </summary> 
+    void HandGunFireSE()
+    {
+        UnityEngine.GameObject se = Instantiate(handGunShootSe, this.transform.position, Quaternion.identity);
+        Destroy(se, handGunShootSeDestroyTime);
+    }
+
+
+    /// <summary>
+    /// ハンドガンのリロードSE
+    /// </summary> 
+    void HandGunReloadSE()
+    {
+        UnityEngine.GameObject se = Instantiate(handGunReloadSe, this.transform.position, Quaternion.identity);
+        Destroy(se, handGunReloadSeDestroyTime);
+    }
+
+    /// <summary>
+    /// ハンドガンの薬莢SE
+    /// </summary>
+    void HandGunBulletCasingSE()
+    {
+        UnityEngine.GameObject se = Instantiate(handGunBulletCasingSe, this.transform.position, Quaternion.identity);
+        Destroy(se, handGunBulletCasingSeDestroyTime);
+    }
+
+    /// <summary>
     /// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
     /// </summary>
     void HandGunMuzzleFlashAndShell()
     {
-        //SEオブジェクトを生成する
-        UnityEngine.GameObject se = Instantiate(handGunBulletCasingSe, this.transform.position, Quaternion.identity);
-        Destroy(se, handGunBulletCasingSeDestroyTime);
+        HandGunBulletCasingSE();
 
         if (handGunShotEmitters != null)
         {
@@ -691,9 +713,7 @@ public class PlayerCamera : MonoBehaviour
                 //アサルトライフルのリロードアニメーションをオン
                 Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
 
-                //SEオブジェクトを生成する
-                UnityEngine.GameObject se = Instantiate(assaultRifleReloadSe, this.transform.position, Quaternion.identity);
-                Destroy(se, assaultRifleReloadSeDestroyTime);
+                AssaultRifleReloadSE();
             }
 
             //リロード中画像
@@ -742,9 +762,7 @@ public class PlayerCamera : MonoBehaviour
         AssaultRifleMuzzleFlashAndShell();
         AssaultRifleSmoke();
 
-        //SEオブジェクトを生成する
-        UnityEngine.GameObject se = Instantiate(assaultRifleShootSe, this.transform.position, Quaternion.identity);
-        Destroy(se, assaultRifleShootSeDestroyTime);
+        AssaultRifleFireSE();
 
         Vector3 direction = this.transform.forward;
         direction = Quaternion.AngleAxis(Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), this.transform.up) * direction;
@@ -795,13 +813,38 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
+    /// アサルトライフルの射撃SE
+    /// </summary> 
+    void AssaultRifleFireSE()
+    {
+        UnityEngine.GameObject se = Instantiate(assaultRifleShootSe, this.transform.position, Quaternion.identity);
+        Destroy(se, assaultRifleShootSeDestroyTime);
+    }
+
+    /// <summary>
+    /// アサルトライフルのリロードSE
+    /// </summary> 
+    void AssaultRifleReloadSE()
+    {
+        UnityEngine.GameObject se = Instantiate(assaultRifleReloadSe, this.transform.position, Quaternion.identity);
+        Destroy(se, assaultRifleReloadSeDestroyTime);
+    }
+
+    /// <summary>
+    /// アサルトライフルの薬莢SE
+    /// </summary>
+    void AssaultRifleBulletCasingSE()
+    {
+        UnityEngine.GameObject se = Instantiate(assaultRifleBulletCasingSe, this.transform.position, Quaternion.identity);
+        Destroy(se, assaultRifleBulletCasingSeDestroyTime);
+    }
+
+    /// <summary>
     /// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
     /// </summary>
     void AssaultRifleMuzzleFlashAndShell()
     {
-        //SEオブジェクトを生成する
-        UnityEngine.GameObject se = Instantiate(assaultRifleBulletCasingSe, this.transform.position, Quaternion.identity);
-        Destroy(se, assaultRifleBulletCasingSeDestroyTime);
+        AssaultRifleBulletCasingSE();
 
         if (assaultRifleShotEmitters != null)
         {
@@ -919,9 +962,7 @@ public class PlayerCamera : MonoBehaviour
                 //ショットガンのリロードアニメーションをオン
                 Player.SingletonInstance.Animator.SetBool("b_isShotGunReload", true);
 
-                //SEオブジェクトを生成する
-                UnityEngine.GameObject se = Instantiate(shotGunReloadSe, this.transform.position, Quaternion.identity);
-                Destroy(se, shotGunReloadSeDestroyTime);
+                ShotGunReloadSE();
             }
 
             //リロード中画像
@@ -970,9 +1011,7 @@ public class PlayerCamera : MonoBehaviour
         ShotGunMuzzleFlashAndShell();
         ShotGunSmoke();
 
-        //SEオブジェクトを生成する
-        UnityEngine.GameObject se = Instantiate(shotGunShootSe, this.transform.position, Quaternion.identity);
-        Destroy(se, shotGunShootSeDestroyTime);
+        ShotGunFireSE();
 
         for (int i = 0; i < shotGunBullet; i++)
         {
@@ -1026,13 +1065,38 @@ public class PlayerCamera : MonoBehaviour
     }
 
     /// <summary>
+    /// ショットガンの射撃SE
+    /// </summary> 
+    void ShotGunFireSE()
+    {
+        UnityEngine.GameObject se = Instantiate(shotGunShootSe, this.transform.position, Quaternion.identity);
+        Destroy(se, shotGunShootSeDestroyTime);
+    }
+
+    /// <summary>
+    /// ショットガンのリロードSE
+    /// </summary> 
+    void ShotGunReloadSE()
+    {
+        UnityEngine.GameObject se = Instantiate(shotGunReloadSe, this.transform.position, Quaternion.identity);
+        Destroy(se, shotGunReloadSeDestroyTime);
+    }
+
+    /// <summary>
+    /// ショットガンの薬莢SE
+    /// </summary>
+    void ShotGunBulletCasingSE()
+    {
+        UnityEngine.GameObject se = Instantiate(shotGunBulletCasingSe, this.transform.position, Quaternion.identity);
+        Destroy(se, shotGunBulletCasingSeDestroyTime);
+    }
+
+    /// <summary>
     /// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
     /// </summary>
     void ShotGunMuzzleFlashAndShell()
     {
-        //SEオブジェクトを生成する
-        UnityEngine.GameObject se = Instantiate(shotGunBulletCasingSe, this.transform.position, Quaternion.identity);
-        Destroy(se, shotGunBulletCasingSeDestroyTime);
+        ShotGunBulletCasingSE();
 
         if (shotGunShotEmitters != null)
         {
