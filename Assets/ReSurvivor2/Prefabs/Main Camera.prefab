@@ -113,7 +113,7 @@ MonoBehaviour:
   deadZoneX: 0.1
   deadZoneY: 0.1
   range: 100
-  Damage: 10
+  damage: 10
   impactForce: 30
   handGunFireRate: 0.1
   handGunShotEmitters:
@@ -122,6 +122,8 @@ MonoBehaviour:
   handGunAfterFireSmoke: {fileID: 0}
   assaultRifleFireRate: 0.1
   assaultRifleRandomAngle: 1
+  assaultRifleShootSe: {fileID: 8217214238848448886, guid: 066a5374d881d7b49b73fd1c8a018a3a, type: 3}
+  assaultRifleReloadSe: {fileID: 8217214238848448886, guid: e0f7e3a31646cc846ad9350fd73aa2e4, type: 3}
   assaultRifleShotEmitters:
   - {fileID: 0}
   - {fileID: 0}

@@ -122,6 +122,13 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("アサルトライフルのリロード時間")]
     readonly float assaultRifleReloadTimeDefine = 1.5f;
 
+    [Tooltip("アサルトライフルの射撃のSE")]
+    [SerializeField] GameObject assaultRifleShootSe;
+    float assaultRifleShootSeDestroyTime = 1.0f;
+    [Tooltip("アサルトライフルのリロードのSE")]
+    [SerializeField] GameObject assaultRifleReloadSe;
+    float assaultRifleReloadSeDestroyTime = 1.0f;
+
     //↓アセットストアのプログラム↓//
     [Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
     [SerializeField] ParticleGroupEmitter[] assaultRifleShotEmitters;
@@ -648,6 +655,10 @@ public class PlayerCamera : MonoBehaviour
             {
                 //アサルトライフルのリロードアニメーションをオン
                 Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
+
+                //SEオブジェクトを生成する
+                UnityEngine.GameObject reloadSe = Instantiate(assaultRifleReloadSe, this.transform.position, Quaternion.identity);
+                Destroy(reloadSe, assaultRifleReloadSeDestroyTime);
             }
 
             //リロード中画像
@@ -695,6 +706,10 @@ public class PlayerCamera : MonoBehaviour
     {
         AssaultRifleMuzzleFlashAndShell();
         AssaultRifleSmoke();
+
+        //SEオブジェクトを生成する
+        UnityEngine.GameObject se = Instantiate(assaultRifleShootSe, this.transform.position, Quaternion.identity);
+        Destroy(se, assaultRifleShootSeDestroyTime);
 
         Vector3 direction = this.transform.forward;
         direction = Quaternion.AngleAxis(Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), this.transform.up) * direction;

@@ -1,0 +1,28 @@
+Weapon Sound Pack - M16		by Catastic
+
+This note is used to help you integrate the sound in your game.
+Automatic weapons are more difficult to integrate for the shooting because of intense fire the player can do.I hope it will help.
+
+A) Single shot:
+For the single shot, you can easily use:
+-M16_Shoot_SingleShot00#
+-M16_Shoot_SingleShot_BulletCasing_00#
+
+B) Automatic shot or burst mode:
+	For automatic shot you can use:
+	1) Shoot sound
+		-M16_Shoot_Auto_00# for all shot
+	2) End of shoot / Tail
+		M16_Shoot_Auto_LastShoot_00#
+		OR for the last shot:
+		M16_Shoot_SingleShot00#
+	3) Bullet casing
+		M16_Shoot_SingleShot_BulletCasing_00#
+
+--> this will help you avoiding too much sounds in same time.
+
+If you have any problem to integrate them or you think something is missing, feel free to contact me, or use the unity asset comment section.
+
+Thanks for purchasing this asset, and see you for new one!
+
+Catastic ^_^
