@@ -132,6 +132,9 @@ MonoBehaviour:
   shotGunFireRate: 0.1
   shotGunRandomAngle: 5
   shotGunBullet: 10
+  shotGunShootSe: {fileID: 8217214238848448886, guid: 73acd60308d57854b89edef180dc2a7e, type: 3}
+  shotGunReloadSe: {fileID: 8217214238848448886, guid: d51869a4ed188164f8c7cc336eab7c02, type: 3}
+  shotGunBulletCasingSe: {fileID: 8217214238848448886, guid: b110fe9e06522124d9a80a594f699591, type: 3}
   shotGunShotEmitters:
   - {fileID: 0}
   - {fileID: 0}

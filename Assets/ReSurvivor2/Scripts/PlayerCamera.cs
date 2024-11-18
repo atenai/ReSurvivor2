@@ -166,6 +166,16 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("ショットガンのリロード時間")]
     readonly float shotGunReloadTimeDefine = 1.5f;
 
+    [Tooltip("ショットガンの射撃のSE")]
+    [SerializeField] GameObject shotGunShootSe;
+    float shotGunShootSeDestroyTime = 1.0f;
+    [Tooltip("ショットガンのリロードのSE")]
+    [SerializeField] GameObject shotGunReloadSe;
+    float shotGunReloadSeDestroyTime = 1.0f;
+    [Tooltip("ショットガンの薬莢のSE")]
+    [SerializeField] GameObject shotGunBulletCasingSe;
+    float shotGunBulletCasingSeDestroyTime = 1.0f;
+
     //↓アセットストアのプログラム↓//
     [Tooltip("ショットガンのマズルフラッシュと薬莢")]
     [SerializeField] ParticleGroupEmitter[] shotGunShotEmitters;
@@ -660,8 +670,8 @@ public class PlayerCamera : MonoBehaviour
                 Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
 
                 //SEオブジェクトを生成する
-                UnityEngine.GameObject reloadSe = Instantiate(assaultRifleReloadSe, this.transform.position, Quaternion.identity);
-                Destroy(reloadSe, assaultRifleReloadSeDestroyTime);
+                UnityEngine.GameObject se = Instantiate(assaultRifleReloadSe, this.transform.position, Quaternion.identity);
+                Destroy(se, assaultRifleReloadSeDestroyTime);
             }
 
             //リロード中画像
@@ -882,10 +892,14 @@ public class PlayerCamera : MonoBehaviour
     {
         if (isShotGunReloadTimeActive == true)//リロードがオンになったら
         {
-            if (assaultRifleReloadTime == 0)
+            if (shotGunReloadTime == 0)
             {
                 //ショットガンのリロードアニメーションをオン
                 Player.SingletonInstance.Animator.SetBool("b_isShotGunReload", true);
+
+                //SEオブジェクトを生成する
+                UnityEngine.GameObject se = Instantiate(shotGunReloadSe, this.transform.position, Quaternion.identity);
+                Destroy(se, shotGunReloadSeDestroyTime);
             }
 
             //リロード中画像
@@ -933,6 +947,10 @@ public class PlayerCamera : MonoBehaviour
     {
         ShotGunMuzzleFlashAndShell();
         ShotGunSmoke();
+
+        //SEオブジェクトを生成する
+        UnityEngine.GameObject se = Instantiate(shotGunShootSe, this.transform.position, Quaternion.identity);
+        Destroy(se, shotGunShootSeDestroyTime);
 
         for (int i = 0; i < shotGunBullet; i++)
         {
@@ -990,6 +1008,10 @@ public class PlayerCamera : MonoBehaviour
     /// </summary>
     void ShotGunMuzzleFlashAndShell()
     {
+        //SEオブジェクトを生成する
+        UnityEngine.GameObject se = Instantiate(shotGunBulletCasingSe, this.transform.position, Quaternion.identity);
+        Destroy(se, shotGunBulletCasingSeDestroyTime);
+
         if (shotGunShotEmitters != null)
         {
             foreach (var effect in shotGunShotEmitters)
