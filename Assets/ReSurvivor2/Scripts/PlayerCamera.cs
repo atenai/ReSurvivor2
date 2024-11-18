@@ -128,6 +128,9 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("アサルトライフルのリロードのSE")]
     [SerializeField] GameObject assaultRifleReloadSe;
     float assaultRifleReloadSeDestroyTime = 1.0f;
+    [Tooltip("アサルトライフルの薬莢のSE")]
+    [SerializeField] GameObject assaultRifleBulletCasingSe;
+    float assaultRifleBulletCasingSeDestroyTime = 1.0f;
 
     //↓アセットストアのプログラム↓//
     [Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
@@ -764,6 +767,10 @@ public class PlayerCamera : MonoBehaviour
     /// </summary>
     void AssaultRifleMuzzleFlashAndShell()
     {
+        //SEオブジェクトを生成する
+        UnityEngine.GameObject se = Instantiate(assaultRifleBulletCasingSe, this.transform.position, Quaternion.identity);
+        Destroy(se, assaultRifleBulletCasingSeDestroyTime);
+
         if (assaultRifleShotEmitters != null)
         {
             foreach (var effect in assaultRifleShotEmitters)
