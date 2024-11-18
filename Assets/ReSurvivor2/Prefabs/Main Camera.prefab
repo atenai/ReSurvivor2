@@ -116,6 +116,9 @@ MonoBehaviour:
   damage: 10
   impactForce: 30
   handGunFireRate: 0.1
+  handGunShootSe: {fileID: 8217214238848448886, guid: 2ca2fcb005ddc55439c81d9f05e2b0bd, type: 3}
+  handGunReloadSe: {fileID: 8217214238848448886, guid: dbd4f5156bb04524d85bf1495ef0c0b3, type: 3}
+  handGunBulletCasingSe: {fileID: 8217214238848448886, guid: 905e6cd8f31a47e4192ff0852eec3724, type: 3}
   handGunShotEmitters:
   - {fileID: 0}
   - {fileID: 0}

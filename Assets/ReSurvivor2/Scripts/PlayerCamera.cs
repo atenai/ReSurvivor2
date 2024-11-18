@@ -90,6 +90,16 @@ public class PlayerCamera : MonoBehaviour
     [Tooltip("ハンドガンのリロード時間")]
     readonly float handGunReloadTimeDefine = 1.5f;
 
+    [Tooltip("ハンドガンの射撃のSE")]
+    [SerializeField] GameObject handGunShootSe;
+    float handGunShootSeDestroyTime = 1.0f;
+    [Tooltip("ハンドガンのリロードのSE")]
+    [SerializeField] GameObject handGunReloadSe;
+    float handGunReloadSeDestroyTime = 1.0f;
+    [Tooltip("ハンドガンの薬莢のSE")]
+    [SerializeField] GameObject handGunBulletCasingSe;
+    float handGunBulletCasingSeDestroyTime = 1.0f;
+
     //↓アセットストアのプログラム↓//
     [Tooltip("ハンドガンのマズルフラッシュと薬莢")]
     [SerializeField] ParticleGroupEmitter[] handGunShotEmitters;
@@ -456,6 +466,10 @@ public class PlayerCamera : MonoBehaviour
             {
                 //ハンドガンのリロードアニメーションをオン
                 Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", true);
+
+                //SEオブジェクトを生成する
+                UnityEngine.GameObject se = Instantiate(handGunReloadSe, this.transform.position, Quaternion.identity);
+                Destroy(se, handGunReloadSeDestroyTime);
             }
 
             //リロード中画像
@@ -503,6 +517,10 @@ public class PlayerCamera : MonoBehaviour
     {
         HandGunMuzzleFlashAndShell();
         HandGunSmoke();
+
+        //SEオブジェクトを生成する
+        UnityEngine.GameObject se = Instantiate(handGunShootSe, this.transform.position, Quaternion.identity);
+        Destroy(se, handGunShootSeDestroyTime);
 
         Ray ray = new Ray(this.transform.position, this.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
@@ -553,6 +571,10 @@ public class PlayerCamera : MonoBehaviour
     /// </summary>
     void HandGunMuzzleFlashAndShell()
     {
+        //SEオブジェクトを生成する
+        UnityEngine.GameObject se = Instantiate(handGunBulletCasingSe, this.transform.position, Quaternion.identity);
+        Destroy(se, handGunBulletCasingSeDestroyTime);
+
         if (handGunShotEmitters != null)
         {
             foreach (var effect in handGunShotEmitters)
