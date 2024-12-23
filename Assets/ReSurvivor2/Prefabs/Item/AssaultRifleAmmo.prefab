@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2282524475134795690}
   - component: {fileID: 8496678879875446343}
   - component: {fileID: 8317800426580845731}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: AssaultRifleAmmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 7783214741593320718}
   - component: {fileID: 4381257180319774580}
   - component: {fileID: 4513091950738738032}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ammo_box_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,6 +262,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: bb278576dfdff7d469c69525c5398699, type: 3}
       propertyPath: m_Name
       value: ammo_box_cap
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bb278576dfdff7d469c69525c5398699, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

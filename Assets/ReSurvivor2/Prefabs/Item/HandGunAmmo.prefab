@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5283697308746070259}
   - component: {fileID: 7855016972328461262}
   - component: {fileID: 5114199307263429024}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ammo_box_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 4080221520230364854}
   - component: {fileID: 8357653381719026619}
   - component: {fileID: 807033615481644698}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: HandGunAmmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,6 +258,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: bb278576dfdff7d469c69525c5398699, type: 3}
       propertyPath: m_Name
       value: ammo_box_cap
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bb278576dfdff7d469c69525c5398699, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

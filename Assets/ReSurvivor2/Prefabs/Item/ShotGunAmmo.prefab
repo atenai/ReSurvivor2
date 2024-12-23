@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1560841350557117586}
   - component: {fileID: 8217414932744996124}
   - component: {fileID: 3094902705470743148}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ShotGunAmmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 2131550872992084517}
   - component: {fileID: 3295622684495851859}
   - component: {fileID: 7270759832753858536}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ammo_box_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,6 +262,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: bb278576dfdff7d469c69525c5398699, type: 3}
       propertyPath: m_Name
       value: ammo_box_cap
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bb278576dfdff7d469c69525c5398699, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
