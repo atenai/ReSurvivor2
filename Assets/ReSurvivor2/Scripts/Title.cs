@@ -14,6 +14,7 @@ public class Title : OutGameManagerBase
     [SerializeField] Image[] menuOptions;
     int selectedIndex = 0;
     [SerializeField] string showCreditsSceneName;
+    [Tooltip("連続でキー入力による選択をできないようにする為の変数")]
     bool isInputKeyActive = true;
 
     new void Start()

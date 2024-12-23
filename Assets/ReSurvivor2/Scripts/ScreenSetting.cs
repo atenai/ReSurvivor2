@@ -35,13 +35,13 @@ public class ScreenSetting : MonoBehaviour
         }
 #endif //終了   
 
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN//Unityエディター上または端末がPCだった場合の処理
-        //Escapeキーでゲーム終了
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Quit();//ゲーム終了
-        }
-#endif //終了   
+        // #if UNITY_EDITOR || UNITY_STANDALONE_WIN//Unityエディター上または端末がPCだった場合の処理
+        //         //Escapeキーでゲーム終了
+        //         if (Input.GetKeyDown(KeyCode.Escape))
+        //         {
+        //             Quit();//ゲーム終了
+        //         }
+        // #endif //終了   
     }
 
     /// <summary>

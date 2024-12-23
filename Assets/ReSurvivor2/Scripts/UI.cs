@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class UI : MonoBehaviour
 {
@@ -64,6 +65,9 @@ public class UI : MonoBehaviour
     bool isPause = false;
     public bool IsPause => isPause;
     [SerializeField] GameObject panelPause;
+    [Tooltip("ポーズメニューオプションのイメージリスト")]
+    [SerializeField] Image[] pauseMenuOptions;
+    int selectedIndex = 0;
 
     void Awake()
     {
@@ -106,10 +110,7 @@ public class UI : MonoBehaviour
 
         Crosshair();
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Pause();
-        }
+        UpdatePauseMenuSystem();
     }
 
     /// <summary>
@@ -192,6 +193,46 @@ public class UI : MonoBehaviour
     }
 
     /// <summary>
+    /// ポーズメニュー画面の更新
+    /// </summary> 
+    void UpdatePauseMenuSystem()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        {
+            Pause();
+        }
+
+        if (isPause == true)
+        {
+            //上下の矢印キーで選択を変更
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            {
+                selectedIndex--;
+                if (selectedIndex < 0)
+                {
+                    selectedIndex = pauseMenuOptions.Length - 1;
+                }
+                PauseMenu();
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            {
+                selectedIndex++;
+                if (pauseMenuOptions.Length <= selectedIndex)
+                {
+                    selectedIndex = 0;
+                }
+                PauseMenu();
+            }
+
+            //Enterキーで選択を確定
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                ExecuteMenuAction();
+            }
+        }
+    }
+
+    /// <summary>
     /// ポーズ
     /// </summary>
     void Pause()
@@ -202,11 +243,73 @@ public class UI : MonoBehaviour
         {
             Time.timeScale = 0f;
             panelPause.SetActive(true);
+
+            //各種パラメーターの初期化処理
+            selectedIndex = 0;
+            PauseMenu();
         }
         else
         {
             Time.timeScale = 1f;
             panelPause.SetActive(false);
         }
+    }
+
+    /// <summary>
+    /// ポーズメニュー
+    /// </summary> 
+    void PauseMenu()
+    {
+        //メニューの見た目を更新
+        for (int i = 0; i < pauseMenuOptions.Length; i++)
+        {
+            if (i == selectedIndex)
+            {
+                //選択中の項目の色を変更
+                pauseMenuOptions[i].color = new Color(pauseMenuOptions[i].color.r, pauseMenuOptions[i].color.g, pauseMenuOptions[i].color.b, 0.5f);
+            }
+            else
+            {
+                pauseMenuOptions[i].color = new Color(pauseMenuOptions[i].color.r, pauseMenuOptions[i].color.g, pauseMenuOptions[i].color.b, 0.0f);
+            }
+        }
+    }
+
+    void ExecuteMenuAction()
+    {
+        switch (selectedIndex)
+        {
+            case 0:
+                ReturnToGamePlay();
+                break;
+            case 1:
+                ExitGamePlay();
+                break;
+        }
+    }
+
+    /// <summary>
+    /// ゲームプレイ画面に戻る
+    /// </summary>
+    void ReturnToGamePlay()
+    {
+        Pause();
+    }
+
+    /// <summary>
+    /// ゲーム終了
+    /// </summary>
+    void ExitGamePlay()
+    {
+        Quit();
+    }
+
+    void Quit()
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#elif UNITY_STANDALONE
+        UnityEngine.Application.Quit();
+#endif
     }
 }
