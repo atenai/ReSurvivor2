@@ -3342,6 +3342,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4094981230853522424, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
+      propertyPath: tiredNormalMoveSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4094981230853522424, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
+      propertyPath: tiredWeaponMoveSpeed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4356552282514037423, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

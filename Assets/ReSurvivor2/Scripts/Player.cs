@@ -30,9 +30,9 @@ public class Player : MonoBehaviour
     [Tooltip("プレイヤーキャラクターの元気な時のエイム中移動速度")]
     [SerializeField] float energeticWeaponMoveSpeed = 3.0f;
     [Tooltip("プレイヤーキャラクターの疲れた時の通常移動速度")]
-    [SerializeField] float tiredNormalMoveSpeed = 4.0f;
+    float tiredNormalMoveSpeed = 4.0f;
     [Tooltip("プレイヤーキャラクターの疲れた時のエイム中移動速度")]
-    [SerializeField] float tiredWeaponMoveSpeed = 2.0f;
+    float tiredWeaponMoveSpeed = 2.0f;
 
     [Tooltip("プレイヤーキャラクターの通常移動速度")]
     float normalMoveSpeed = 5.0f;
