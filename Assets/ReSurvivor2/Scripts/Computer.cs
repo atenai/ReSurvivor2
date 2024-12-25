@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Computer : MonoBehaviour
 {
-    [Tooltip("このコンピューターで既にミッション関連の処理を行ったか？")]
-    [SerializeField] bool isAlreadyReceivedMissionThisComputer = false;
+    [Tooltip("このコンピューターの名前")]
+    [SerializeField] InGameManager.ComputerTYPE thisComputerName;
 
     void OnTriggerStay(Collider collider)
     {
@@ -18,22 +18,19 @@ public class Computer : MonoBehaviour
                 Debug.Log("<color=green>Fキー</color>");
                 Save();
 
-                if (InGameManager.SingletonInstance.IsMissionActive == false && isAlreadyReceivedMissionThisComputer == false)
+                if (InGameManager.SingletonInstance.IsMissionActive == false)
                 {
-                    //ミッション開始
                     Debug.Log("<color=red>ミッション開始</color>");
                     InGameManager.SingletonInstance.IsMissionActive = true;
-                    isAlreadyReceivedMissionThisComputer = true;
 
+                    InGameManager.SingletonInstance.TargetComputerName = InGameManager.ComputerTYPE.Stage4Computer;
                     Player.SingletonInstance.Minute = 10;
-                    Player.SingletonInstance.Seconds = 3.0f;
+                    Player.SingletonInstance.Seconds = 30.0f;
                 }
-                else if (InGameManager.SingletonInstance.IsMissionActive == true && isAlreadyReceivedMissionThisComputer == false)
+                else if (InGameManager.SingletonInstance.IsMissionActive == true && thisComputerName == InGameManager.SingletonInstance.TargetComputerName)
                 {
-                    //ミッション終了
                     Debug.Log("<color=blue>ミッション終了</color>");
                     InGameManager.SingletonInstance.IsMissionActive = false;
-                    isAlreadyReceivedMissionThisComputer = true;
 
                     //ゲームクリアー処理
                     SceneManager.LoadScene("GameClear");

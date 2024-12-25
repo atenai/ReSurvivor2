@@ -27,6 +27,23 @@ public class InGameManager : MonoBehaviour
         set { isMissionActive = value; }
     }
 
+    public enum ComputerTYPE
+    {
+        Stage0Computer = 0,
+        Stage1Computer = 1,
+        Stage2Computer = 2,
+        Stage3Computer = 3,
+        Stage4Computer = 4,
+    }
+
+    [Tooltip("ミッションターゲットのコンピューター名")]
+    ComputerTYPE targetComputerName;
+    public ComputerTYPE TargetComputerName
+    {
+        get { return targetComputerName; }
+        set { targetComputerName = value; }
+    }
+
     [Tooltip("キーアイテム1がアクティブか？どうか")]
     [SerializeField] int keyItem1 = 0;//0 = false , 1 = true
     public int KeyItem1
