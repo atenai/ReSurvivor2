@@ -14,8 +14,8 @@ public class Title : OutGameManagerBase
     [SerializeField] Image[] menuOptions;
     int selectedIndex = 0;
     [SerializeField] string showCreditsSceneName;
-    [Tooltip("連続でキー入力による選択をできないようにする為の変数")]
-    bool isInputKeyActive = true;
+    [Tooltip("メニューボタンを連続でキー入力による選択をできないようにする為の変数")]
+    bool isDisableConsecutiveKeystrokes = true;
 
     new void Start()
     {
@@ -23,12 +23,12 @@ public class Title : OutGameManagerBase
 
         Menu();
 
-        isInputKeyActive = true;
+        isDisableConsecutiveKeystrokes = true;
     }
 
     new void Update()
     {
-        if (isInputKeyActive == false)
+        if (isDisableConsecutiveKeystrokes == false)
         {
             return;
         }
@@ -56,7 +56,6 @@ public class Title : OutGameManagerBase
         //Enterキーで選択を確定
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            isInputKeyActive = false;
             ExecuteMenuAction();
         }
     }
@@ -92,6 +91,9 @@ public class Title : OutGameManagerBase
                 ShowCredits();
                 break;
             case 2:
+                SaveDataDelete();
+                break;
+            case 3:
                 ExitGame();
                 break;
         }
@@ -102,6 +104,7 @@ public class Title : OutGameManagerBase
     /// </summary>
     void StartGame()
     {
+        isDisableConsecutiveKeystrokes = false;
         Load(sceneName);
     }
 
@@ -110,7 +113,17 @@ public class Title : OutGameManagerBase
     /// </summary>
     void ShowCredits()
     {
+        isDisableConsecutiveKeystrokes = false;
         Load(showCreditsSceneName);
+    }
+
+    /// <summary>
+    /// セーブデータ削除
+    /// </summary>
+    void SaveDataDelete()
+    {
+        Debug.Log("<color=orange>セーブデータを削除しました</color>");
+        PlayerPrefs.DeleteAll();
     }
 
     /// <summary>
@@ -118,6 +131,7 @@ public class Title : OutGameManagerBase
     /// </summary>
     void ExitGame()
     {
+        isDisableConsecutiveKeystrokes = false;
         Quit();
     }
 

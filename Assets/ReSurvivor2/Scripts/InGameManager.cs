@@ -48,6 +48,14 @@ public class InGameManager : MonoBehaviour
             Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
         }
 
+        Load();
+    }
+
+    /// <summary>
+    /// ロード
+    /// </summary>
+    void Load()
+    {
         Debug.Log("<color=purple>ロード</color>");
 
         if (PlayerPrefs.HasKey("KeyItem1") == true)
