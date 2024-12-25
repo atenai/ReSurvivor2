@@ -27,6 +27,14 @@ public class InGameManager : MonoBehaviour
         set { isMissionActive = value; }
     }
 
+    [Tooltip("キーアイテム1がアクティブか？どうか")]
+    [SerializeField] int keyItem1 = 0;//0 = false , 1 = true
+    public int KeyItem1
+    {
+        get { return keyItem1; }
+        set { keyItem1 = value; }
+    }
+
     void Awake()
     {
         //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -38,6 +46,14 @@ public class InGameManager : MonoBehaviour
         else
         {
             Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
+        }
+
+        Debug.Log("<color=purple>ロード</color>");
+
+        if (PlayerPrefs.HasKey("KeyItem1") == true)
+        {
+            keyItem1 = PlayerPrefs.GetInt("KeyItem1", 0);
+            Debug.Log("<color=purple>キーアイテム1 : " + keyItem1 + "</color>");
         }
     }
 

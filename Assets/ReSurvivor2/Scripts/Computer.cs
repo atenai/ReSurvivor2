@@ -16,6 +16,8 @@ public class Computer : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 Debug.Log("<color=green>Fキー</color>");
+                Save();
+
                 if (InGameManager.SingletonInstance.IsMissionActive == false && isAlreadyReceivedMissionThisComputer == false)
                 {
                     //ミッション開始
@@ -38,5 +40,15 @@ public class Computer : MonoBehaviour
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// セーブ
+    /// </summary>
+    private void Save()
+    {
+        Debug.Log("<color=cyan>セーブ</color>");
+        PlayerPrefs.SetInt("KeyItem1", InGameManager.SingletonInstance.KeyItem1);
+        PlayerPrefs.Save();
     }
 }
