@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using BehaviorDesigner.Runtime;
 
 /// <summary>
 /// プレイヤー
@@ -136,8 +137,18 @@ public class Player : MonoBehaviour
     [SerializeField] TextMeshProUGUI timerTMP;
     [Tooltip("分")]
     [SerializeField] int minute = 10;
+    public int Minute
+    {
+        get { return minute; }
+        set { minute = value; }
+    }
     [Tooltip("秒")]
     [SerializeField] float seconds = 0.0f;
+    public float Seconds
+    {
+        get { return seconds; }
+        set { seconds = value; }
+    }
     [Tooltip("totalTImeは秒で集計されている")]
     float totalTime = 0.0f;
     [Tooltip("ダメージ画像エフェクトトリガー")]
@@ -526,6 +537,12 @@ public class Player : MonoBehaviour
     /// </summary>
     void UpdateTimerSystem()
     {
+        if (InGameManager.SingletonInstance.IsMissionActive == false)
+        {
+            timerTMP.text = "--" + ":" + "--";
+            return;
+        }
+
         totalTime = (minute * 60) + seconds;
         totalTime = totalTime - Time.deltaTime;
 

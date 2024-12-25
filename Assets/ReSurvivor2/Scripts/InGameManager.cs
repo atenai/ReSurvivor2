@@ -19,6 +19,14 @@ public class InGameManager : MonoBehaviour
         set { isGamePlayReady = value; }
     }
 
+    [Tooltip("ミッションがアクティブか？どうか")]
+    bool isMissionActive = false;
+    public bool IsMissionActive
+    {
+        get { return isMissionActive; }
+        set { isMissionActive = value; }
+    }
+
     void Awake()
     {
         //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
