@@ -328,7 +328,7 @@ public class Player : MonoBehaviour
         inputVertical = Input.GetAxisRaw("Vertical");
 
         //右ボタンまたはレフトシフトが押されていたら中身を実行
-        if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftControl))
         {
             isAim = true;
         }
@@ -353,7 +353,7 @@ public class Player : MonoBehaviour
             Heal();
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.LeftShift))
         {
             RestoresStamina();
         }
