@@ -23,6 +23,8 @@ public class Computer : MonoBehaviour
                     Debug.Log("<color=red>ミッション開始</color>");
                     InGameManager.SingletonInstance.IsMissionActive = true;
 
+                    //↓ここをミッションごとに変えるようにする必要がある
+                    //各ComputerTYPEに紐づいたミッションリストを取得して、そこから選択されたミッション内容を↓に反映すればいい
                     InGameManager.SingletonInstance.TargetComputerName = InGameManager.ComputerTYPE.Stage4Computer;
                     Player.SingletonInstance.Minute = 10;
                     Player.SingletonInstance.Seconds = 30.0f;
