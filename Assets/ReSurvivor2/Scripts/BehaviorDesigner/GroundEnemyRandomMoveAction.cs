@@ -10,6 +10,7 @@ using UnityEngine;
 public class GroundEnemyRandomMoveAction : Action
 {
     GroundEnemy groundEnemy;
+    bool isEnd = false;
 
     //ターゲット座標位置の変数
     Vector3 targetPos;
@@ -29,7 +30,6 @@ public class GroundEnemyRandomMoveAction : Action
     int zMoveRange = 5;
     [UnityEngine.Tooltip("エネミーの移動スピード")]
     float moveSpeed = 3.0f;
-    bool isEnd = false;
 
     //前進できない際の処理
     Vector3 startPos;
@@ -95,17 +95,18 @@ public class GroundEnemyRandomMoveAction : Action
         if (isEnd == true)
         {
             isEnd = false;
+            //目的地にたどりついた
             return TaskStatus.Success;
         }
 
-        if (groundEnemy.IsChase == true)
+        if (groundEnemy.IsChase == false)
         {
-            //移動実行中
-            return TaskStatus.Running;
+            //追跡終了
+            return TaskStatus.Success;
         }
 
-        //目的地にたどりついた
-        return TaskStatus.Success;
+        //実行中
+        return TaskStatus.Running;
     }
 
     public override void OnFixedUpdate()

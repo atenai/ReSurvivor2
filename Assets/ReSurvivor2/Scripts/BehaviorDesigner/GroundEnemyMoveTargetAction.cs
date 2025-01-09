@@ -9,6 +9,7 @@ using UnityEngine;
 public class GroundEnemyMoveTargetAction : Action
 {
     GroundEnemy groundEnemy;
+    bool isEnd = false;
 
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
     [SerializeField] float endPos = 2.5f;
@@ -40,19 +41,27 @@ public class GroundEnemyMoveTargetAction : Action
     void InitMove()
     {
         groundEnemy.Rigidbody.velocity = Vector3.zero;
+        isEnd = false;
     }
 
     // Tick毎に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (groundEnemy.IsChase == true)
+        if (isEnd == true)
         {
-            //移動実行中
-            return TaskStatus.Running;
+            isEnd = false;
+            //目的地にたどりついた
+            return TaskStatus.Success;
         }
 
-        //目的地にたどりついた
-        return TaskStatus.Success;
+        if (groundEnemy.IsChase == false)
+        {
+            //追跡終了
+            return TaskStatus.Success;
+        }
+
+        //実行中
+        return TaskStatus.Running;
     }
 
     public override void OnFixedUpdate()
@@ -86,6 +95,7 @@ public class GroundEnemyMoveTargetAction : Action
         {
             //Debug.Log("<color=red>移動の終了</color>");
             groundEnemy.Rigidbody.velocity = Vector3.zero;
+            isEnd = true;
             return;
         }
 

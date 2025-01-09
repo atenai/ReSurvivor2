@@ -9,6 +9,7 @@ using UnityEngine;
 public class GroundEnemyAssaultRifleFireAction : Action
 {
     GroundEnemy groundEnemy;
+    bool isEnd = false;
 
     [UnityEngine.Tooltip("射撃間隔")]
     float shootTime = 1.5f;
@@ -18,11 +19,8 @@ public class GroundEnemyAssaultRifleFireAction : Action
     [SerializeField] float range = 100.0f;
     [UnityEngine.Tooltip("銃のダメージ")]
     [SerializeField] float Damage = 10.0f;
-
     [UnityEngine.Tooltip("アサルトライフルの散乱角度")]
     float assaultRifleRandomAngle = 7.0f;
-
-    bool isEnd = false;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
@@ -56,23 +54,23 @@ public class GroundEnemyAssaultRifleFireAction : Action
     {
         if (isEnd == true)
         {
+            isEnd = false;
             groundEnemy.Animator.SetBool("b_isRifleFire", false);
             groundEnemy.Animator.SetBool("b_isRifleAim", false);
-            isEnd = false;
-            //目的地にたどりついた
+            //射撃終了
             return TaskStatus.Success;
         }
 
-        if (groundEnemy.IsChase == true)
+        if (groundEnemy.IsChase == false)
         {
-            //移動実行中
-            return TaskStatus.Running;
+            groundEnemy.Animator.SetBool("b_isRifleFire", false);
+            groundEnemy.Animator.SetBool("b_isRifleAim", false);
+            //追跡終了
+            return TaskStatus.Success;
         }
 
-        groundEnemy.Animator.SetBool("b_isRifleFire", false);
-        groundEnemy.Animator.SetBool("b_isRifleAim", false);
-        //目的地にたどりついた
-        return TaskStatus.Success;
+        //実行中
+        return TaskStatus.Running;
     }
 
     public override void OnFixedUpdate()

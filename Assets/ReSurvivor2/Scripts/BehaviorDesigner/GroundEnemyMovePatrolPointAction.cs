@@ -9,11 +9,11 @@ using UnityEngine;
 public class GroundEnemyMovePatrolPointAction : Action
 {
     GroundEnemy groundEnemy;
+    bool isEnd = false;
 
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
     [SerializeField] float endPos = 0.5f;
     Vector3 patrolPointPos;
-    bool isEnd = false;
     [UnityEngine.Tooltip("エネミーの移動スピード")]
     float moveSpeed = 2.0f;
 
