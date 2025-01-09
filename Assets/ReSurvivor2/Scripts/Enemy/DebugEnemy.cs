@@ -11,68 +11,68 @@ public class DebugEnemy
 
     #region 非公開変数
     [Tooltip("デバッグ用処理をONにするか？を判別する変数")]
-    [SerializeField] bool _isDebugMode = false;
+    [SerializeField] bool isDebugMode = false;
 
-    List<GameObject> _debugTextList = new List<GameObject>();
+    List<GameObject> debugTextList = new List<GameObject>();
 
     [Tooltip("生成するデバッグ用テキストのプレハブ")]
-    [SerializeField] GameObject _debugTextPrefab = null;
+    [SerializeField] GameObject debugTextPrefab = null;
 
     [Tooltip("デバッグ用テキストのグラデーションの設定")]
-    [SerializeField] Gradient _debugGradient = default;
+    [SerializeField] Gradient debugGradient = default;
 
-    bool _isCreateDebugText = false;
+    bool isCreateDebugText = false;
 
-    [SerializeField] float _debugTextPosY = 60.0f;//GroundEnemy = 60.0f, FlyingEnemy = 20.0f
+    [SerializeField] float debugTextPosY = 60.0f;//GroundEnemy = 60.0f, FlyingEnemy = 20.0f
 
-    int _count = 0;
+    int count = 0;
 
     [Tooltip("デバッグ用ゲームオブジェクトを破棄する時間")]
-    [SerializeField] float _debugGameObjectDestroyTime = 3.0f;
+    [SerializeField] float debugGameObjectDestroyTime = 3.0f;
 
     [Tooltip("デバッグ用の赤いキューブ")]
-    [SerializeField] GameObject _debugLeftRedCubePrefab = null;
+    [SerializeField] GameObject debugLeftRedCubePrefab = null;
 
     [Tooltip("デバッグ用の青いキューブ")]
-    [SerializeField] GameObject _debugRightBlueCubePrefab = null;
+    [SerializeField] GameObject debugRightBlueCubePrefab = null;
 
     [Tooltip("デバッグ用の大スフィア")]
-    [SerializeField] GameObject _debugLargeSpherePrefab = null;
+    [SerializeField] GameObject debugLargeSpherePrefab = null;
 
     [Tooltip("デバッグ用の中スフィア")]
-    [SerializeField] GameObject _debugMediumSpherePrefab = null;
+    [SerializeField] GameObject debugMediumSpherePrefab = null;
 
     [Tooltip("デバッグ用の小スフィア")]
-    [SerializeField] GameObject _debugSmallSpherePrefab = null;
+    [SerializeField] GameObject debugSmallSpherePrefab = null;
 
     [Tooltip("追跡の際に出す「!」画像")]
-    [SerializeField] GameObject _alert = null;
+    [SerializeField] GameObject alert = null;
 
     [Tooltip("前方の地面チェックのメッシュ")]
-    [SerializeField] MeshRenderer _meshRendererGroundCheckFront = null;
+    [SerializeField] MeshRenderer meshRendererGroundCheckFront = null;
     #endregion
 
     #region プロパティ
 
     public bool IsDebugMode
     {
-        get { return _isDebugMode; }
-        set { _isDebugMode = value; }
+        get { return isDebugMode; }
+        set { isDebugMode = value; }
     }
 
-    public bool IsCreateDebugText => _isCreateDebugText;
+    public bool IsCreateDebugText => isCreateDebugText;
 
-    public float DebugGameObjectDestroyTime => _debugGameObjectDestroyTime;
+    public float DebugGameObjectDestroyTime => debugGameObjectDestroyTime;
 
-    public GameObject DebugLeftRedCubePrefab => _debugLeftRedCubePrefab;
+    public GameObject DebugLeftRedCubePrefab => debugLeftRedCubePrefab;
 
-    public GameObject DebugRightBlueCubePrefab => _debugRightBlueCubePrefab;
+    public GameObject DebugRightBlueCubePrefab => debugRightBlueCubePrefab;
 
-    public GameObject DebugLargeSpherePrefab => _debugLargeSpherePrefab;
+    public GameObject DebugLargeSpherePrefab => debugLargeSpherePrefab;
 
-    public GameObject DebugMediumSpherePrefab => _debugMediumSpherePrefab;
+    public GameObject DebugMediumSpherePrefab => debugMediumSpherePrefab;
 
-    public GameObject DebugSmallSpherePrefab => _debugSmallSpherePrefab;
+    public GameObject DebugSmallSpherePrefab => debugSmallSpherePrefab;
 
     #endregion
 
@@ -83,15 +83,15 @@ public class DebugEnemy
     /// </summary>
     public void DebugSystem(bool isDebugMode, Canvas canvas, int count)
     {
-        _count = count;
+        this.count = count;
 
         if (isDebugMode == true)
         {
             DebugCreateText(canvas);
 
-            if (_isCreateDebugText == true)
+            if (isCreateDebugText == true)
             {
-                foreach (var text in _debugTextList)
+                foreach (var text in debugTextList)
                 {
                     text.GetComponent<TextMeshProUGUI>().color = DebugChangeTextColor();
                 }
@@ -108,11 +108,11 @@ public class DebugEnemy
     /// </summary>
     public void SetDebugText(string[] debugTexts)
     {
-        if (_isCreateDebugText == true)
+        if (isCreateDebugText == true)
         {
-            for (int i = 0; i < _count; i++)
+            for (int i = 0; i < count; i++)
             {
-                _debugTextList[i].GetComponent<TextMeshProUGUI>().text = debugTexts[i];
+                debugTextList[i].GetComponent<TextMeshProUGUI>().text = debugTexts[i];
             }
         }
     }
@@ -122,18 +122,18 @@ public class DebugEnemy
     /// </summary> 
     public void DebugCheckChase(bool isDebugMode, bool isChase)
     {
-        if (_alert == null)
+        if (alert == null)
         {
             return;
         }
 
         if (isDebugMode == false)
         {
-            _alert.gameObject.SetActive(false);
+            alert.gameObject.SetActive(false);
             return;
         }
 
-        _alert.gameObject.SetActive(isChase);
+        alert.gameObject.SetActive(isChase);
     }
 
     /// <summary>
@@ -141,18 +141,18 @@ public class DebugEnemy
     /// </summary>
     public void DebugGroundCheckFrontMesh(bool isDebugMode)
     {
-        if (_meshRendererGroundCheckFront == null)
+        if (meshRendererGroundCheckFront == null)
         {
             return;
         }
 
         if (isDebugMode == false)
         {
-            _meshRendererGroundCheckFront.enabled = false;
+            meshRendererGroundCheckFront.enabled = false;
             return;
         }
 
-        _meshRendererGroundCheckFront.enabled = true;
+        meshRendererGroundCheckFront.enabled = true;
     }
 
     #endregion
@@ -164,18 +164,18 @@ public class DebugEnemy
     /// </summary>
     void DebugCreateText(Canvas canvas)
     {
-        if (_isCreateDebugText == false)
+        if (isCreateDebugText == false)
         {
-            for (int i = 0; i < _count; i++)
+            for (int i = 0; i < count; i++)
             {
-                GameObject debugTextGameObject = UnityEngine.Object.Instantiate(_debugTextPrefab, canvas.transform);
+                GameObject debugTextGameObject = UnityEngine.Object.Instantiate(debugTextPrefab, canvas.transform);
                 float heightCalculation = (i * 10);
-                debugTextGameObject.GetComponent<RectTransform>().localPosition = new Vector3(debugTextGameObject.GetComponent<RectTransform>().localPosition.x, _debugTextPosY + heightCalculation, debugTextGameObject.GetComponent<RectTransform>().localPosition.z);
-                _debugTextList.Add(debugTextGameObject);
-                _debugTextList[i].GetComponent<TextMeshProUGUI>().color = _debugGradient.Evaluate(0);
+                debugTextGameObject.GetComponent<RectTransform>().localPosition = new Vector3(debugTextGameObject.GetComponent<RectTransform>().localPosition.x, debugTextPosY + heightCalculation, debugTextGameObject.GetComponent<RectTransform>().localPosition.z);
+                debugTextList.Add(debugTextGameObject);
+                debugTextList[i].GetComponent<TextMeshProUGUI>().color = debugGradient.Evaluate(0);
             }
 
-            _isCreateDebugText = true;
+            isCreateDebugText = true;
         }
     }
 
@@ -184,7 +184,7 @@ public class DebugEnemy
     /// </summary>
     Color DebugChangeTextColor()
     {
-        return _debugGradient.Evaluate(Mathf.PingPong(Time.time, 1.0f));
+        return debugGradient.Evaluate(Mathf.PingPong(Time.time, 1.0f));
     }
 
     /// <summary>
@@ -192,14 +192,14 @@ public class DebugEnemy
     /// </summary>
     void DestroyAllDebugText()
     {
-        foreach (var text in _debugTextList)
+        foreach (var text in debugTextList)
         {
             UnityEngine.Object.Destroy(text);
         }
 
-        _debugTextList.Clear();
+        debugTextList.Clear();
 
-        _isCreateDebugText = false;
+        isCreateDebugText = false;
     }
 
     #endregion

@@ -260,7 +260,7 @@ public class GroundEnemy : MonoBehaviour
         {
             if (hit.collider.tag == "Player")
             {
-                Debug.Log("<color=red>プレイヤーを発見!</color>");
+                //Debug.Log("<color=red>プレイヤーを発見!</color>");
                 ChaseOn();
             }
         }

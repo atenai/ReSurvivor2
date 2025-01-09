@@ -274,9 +274,9 @@ MonoBehaviour:
   - {fileID: 7646512579346927600}
   assaultRifleAfterFireSmoke: {fileID: 6181686689946337306}
   debugEnemy:
-    _isDebugMode: 1
-    _debugTextPrefab: {fileID: 5879542589618870122, guid: 2b9195b1c4d4e344a8dae248f1394dc4, type: 3}
-    _debugGradient:
+    isDebugMode: 1
+    debugTextPrefab: {fileID: 5879542589618870122, guid: 2b9195b1c4d4e344a8dae248f1394dc4, type: 3}
+    debugGradient:
       serializedVersion: 2
       key0: {r: 1, g: 0.54901963, b: 0, a: 1}
       key1: {r: 1, g: 0.98039216, b: 0, a: 1}
@@ -306,15 +306,15 @@ MonoBehaviour:
       m_ColorSpace: -1
       m_NumColorKeys: 8
       m_NumAlphaKeys: 2
-    _debugTextPosY: 60
-    _debugGameObjectDestroyTime: 3
-    _debugLeftRedCubePrefab: {fileID: 0}
-    _debugRightBlueCubePrefab: {fileID: 0}
-    _debugLargeSpherePrefab: {fileID: 0}
-    _debugMediumSpherePrefab: {fileID: 0}
-    _debugSmallSpherePrefab: {fileID: 0}
-    _alert: {fileID: 6114367730951322678}
-    _meshRendererGroundCheckFront: {fileID: 0}
+    debugTextPosY: 0
+    debugGameObjectDestroyTime: 3
+    debugLeftRedCubePrefab: {fileID: 0}
+    debugRightBlueCubePrefab: {fileID: 0}
+    debugLargeSpherePrefab: {fileID: 0}
+    debugMediumSpherePrefab: {fileID: 0}
+    debugSmallSpherePrefab: {fileID: 0}
+    alert: {fileID: 6114367730951322678}
+    meshRendererGroundCheckFront: {fileID: 0}
 --- !u!1 &4442056355678566016
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,8 +614,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 70, y: 70}
+  m_AnchoredPosition: {x: -100, y: -35}
+  m_SizeDelta: {x: 10, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2749723883935180018
 CanvasRenderer:
@@ -638,14 +638,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 36a4ffcec43ea184b9ccb40e06d69bb8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fa4a3dea13d28344a8bcc77a1a7e2fcf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
