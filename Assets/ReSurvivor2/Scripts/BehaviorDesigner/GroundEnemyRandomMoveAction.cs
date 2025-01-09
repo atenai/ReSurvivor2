@@ -1,21 +1,35 @@
+using System.Collections;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// 指定座標をパトロールするタスク
+/// グラウンドエネミーがランダムに移動するタスク
 /// </summary>
 [TaskCategory("GroundEnemy")]
-public class GroundEnemyMovePatrolPointAction : Action
+public class GroundEnemyRandomMoveAction : Action
 {
     GroundEnemy groundEnemy;
 
+    //ターゲット座標位置の変数
+    Vector3 targetPos;
+
+#if UNITY_EDITOR
+    [SerializeField] GameObject obj;//プレハブをGameObject型で取得（デバッグ用）
+#endif
+
+    //移動処理系の変数
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
-    [SerializeField] float endPos = 0.5f;
-    Vector3 patrolPointPos;
-    bool isEnd = false;
+    [SerializeField] float endPos = 0.1f;
+    [UnityEngine.Tooltip("エネミーがx軸で移動するランダム座標位置の範囲")]
+    int xMoveRange = 5;
+    [UnityEngine.Tooltip("エネミーがy軸で移動するランダム座標位置の範囲")]
+    int yMoveRange = 0;
+    [UnityEngine.Tooltip("エネミーがy軸で移動するランダム座標位置の範囲")]
+    int zMoveRange = 5;
     [UnityEngine.Tooltip("エネミーの移動スピード")]
-    float moveSpeed = 2.0f;
+    float moveSpeed = 3.0f;
+    bool isEnd = false;
 
     //前進できない際の処理
     Vector3 startPos;
@@ -29,10 +43,24 @@ public class GroundEnemyMovePatrolPointAction : Action
     {
         groundEnemy = this.GetComponent<GroundEnemy>();
 
+        TargetPos();
         InitAnimation();
         InitMove();
-        SetPatrolPoint();
         InitEnemyCanNotMove();
+    }
+
+    void TargetPos()
+    {
+        int xPos = UnityEngine.Random.Range(-xMoveRange, xMoveRange);
+        //int yPos = UnityEngine.Random.Range(-yMoveRange, yMoveRange);
+        int yPos = 0;
+        int zPos = UnityEngine.Random.Range(-zMoveRange, zMoveRange); ;
+        targetPos = new Vector3(this.transform.position.x + xPos, this.transform.position.y + yPos, this.transform.position.z + zPos);
+
+#if UNITY_EDITOR
+        GameObject debugGameObject = UnityEngine.Object.Instantiate(obj, targetPos, Quaternion.identity);//プレハブを元に、インスタンスを生成（デバッグ用）
+        UnityEngine.Object.Destroy(debugGameObject, 5.0f);// 5秒後にゲームオブジェクトを削除
+#endif
     }
 
     /// <summary>
@@ -40,33 +68,15 @@ public class GroundEnemyMovePatrolPointAction : Action
     /// </summary>
     void InitAnimation()
     {
+        groundEnemy.Animator.SetBool("b_isRifleFire", false);
         groundEnemy.Animator.SetBool("b_isRifleAim", false);
-        groundEnemy.Animator.SetFloat("f_moveSpeed", 0.5f);
+        groundEnemy.Animator.SetFloat("f_moveSpeed", 1.0f);
     }
 
-    /// <summary>
-    /// 移動の初期化
-    /// </summary>
     void InitMove()
     {
         groundEnemy.Rigidbody.velocity = Vector3.zero;
         isEnd = false;
-    }
-
-    /// <summary>
-    /// パトロールポイントをセットする
-    /// </summary>
-    void SetPatrolPoint()
-    {
-        //巡回地点が設定されていなければ
-        if (groundEnemy.PatrolPoints.Count == 0)
-        {
-            //Debug.Log("<color=red>パトロールポイントが無い</color>");
-            return;
-        }
-
-        //現在選択されている配列の座標を巡回地点の座標に代入
-        patrolPointPos = groundEnemy.PatrolPoints[groundEnemy.PatrolPointNumber].transform.position;
     }
 
     /// <summary>
@@ -79,22 +89,16 @@ public class GroundEnemyMovePatrolPointAction : Action
         oldDistance = 0.0f;
     }
 
-    // Tick毎に呼ばれる
+    // 更新時に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (groundEnemy.IsChase == true)
-        {
-            //プレイヤーを発見した
-            return TaskStatus.Success;
-        }
-
         float currentDistance = Vector3.Distance(startPos, groundEnemy.transform.position);
         //エネミーの移動距離が全く変わらない場合
         if (oldDistance == currentDistance)
         {
             //強制終了用のカウントを足す
             endCount = endCount + Time.deltaTime;
-            Debug.Log("<color=blue>endCount " + endCount + "</color>");
+            Debug.Log("<color=red>endCount " + endCount + "</color>");
         }
 
         //エネミーがその場から前に進めず距離計算ができない場合に、秒数で移動アクションを終了させる処理
@@ -106,50 +110,47 @@ public class GroundEnemyMovePatrolPointAction : Action
         if (isEnd == true)
         {
             isEnd = false;
-            Debug.Log("<color=green>パトロール移動の終了</color>");
-            groundEnemy.Rigidbody.velocity = Vector3.zero;
-            NextPatrolPoint();
-            //目的地にたどりついた
             return TaskStatus.Success;
         }
 
-        //エネミーの移動距離が全く変わらない場合の強制終了カウント用の距離計算処理
-        oldDistance = currentDistance;
+        if (groundEnemy.IsChase == true)
+        {
+            //エネミーの移動距離が全く変わらない場合の強制終了カウント用の距離計算処理
+            oldDistance = currentDistance;
+            //移動実行中
+            return TaskStatus.Running;
+        }
 
-        //移動実行中
-        return TaskStatus.Running;
+        //目的地にたどりついた
+        return TaskStatus.Success;
     }
 
     public override void OnFixedUpdate()
     {
         RotateToDirectionTarget();
-        MovePatrolPoint();
+        Move();
     }
 
-    /// <summary>
-    /// ターゲットの方を向く
-    /// </summary> 
     void RotateToDirectionTarget()
     {
         //対象オブジェクトの位置 – 自分のオブジェクトの位置 = 対象オブジェクトの向きベクトルが求められる
-        Vector3 direction = patrolPointPos - groundEnemy.transform.position;
+        Vector3 direction = targetPos - groundEnemy.transform.position;
         //単純に左右だけを見るようにしたいので、y軸の数値を0にする
         direction.y = 0;
         //第一引数に向きたい方向の向きベクトルを入れてあげる、それによってどのくらい回転させれば良いのか？の数値を求めることができる
         Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
         //↑で求めたどのくらい回転させれば良いのか？の数値を元に回転させる
-        groundEnemy.transform.rotation = Quaternion.Lerp(groundEnemy.transform.rotation, lookRotation, Time.deltaTime * 10.0f);
+        groundEnemy.transform.rotation = Quaternion.Lerp(groundEnemy.transform.rotation, lookRotation, Time.deltaTime * 10f);
     }
 
-    /// <summary>
-    /// パトロールポイントに移動する
-    /// </summary>
-    void MovePatrolPoint()
+    void Move()
     {
-        float sqrCurrentDistance = Vector3.SqrMagnitude(patrolPointPos - groundEnemy.transform.position);
-        //Debug.Log("<color=red>sqrCurrentDistance: " + sqrCurrentDistance + "</color>");
-        if (sqrCurrentDistance < endPos)
+        float sqrCurrentDistance = Vector3.SqrMagnitude(targetPos - this.transform.position);
+
+        if (sqrCurrentDistance <= endPos)
         {
+            //Debug.Log("<color=red>移動の終了</color>");
+            groundEnemy.Rigidbody.velocity = Vector3.zero;
             isEnd = true;
             return;
         }
@@ -158,35 +159,20 @@ public class GroundEnemyMovePatrolPointAction : Action
     }
 
     /// <summary>
-    /// 次のパトロールポイントを出す
-    /// </summary>
-    void NextPatrolPoint()
-    {
-        Debug.Log("<color=orange>今のパトロールポイント " + groundEnemy.PatrolPointNumber + "</color>");
-        //配列の中から次の巡回地点を選択（必要に応じて繰り返し）
-        groundEnemy.PatrolPointNumber = (groundEnemy.PatrolPointNumber + 1) % groundEnemy.PatrolPoints.Count;
-        Debug.Log("<color=yellow>次のパトロールポイント " + groundEnemy.PatrolPointNumber + "</color>");
-    }
-
-    /// <summary>
     /// 一定の速さによる移動
     /// </summary>
     void ConstantSpeed()
     {
+        Vector3 localTargetPos = targetPos;
+        localTargetPos.y = groundEnemy.transform.position.y;
         //向きベクトル
-        Vector3 moveDirection = patrolPointPos - groundEnemy.transform.position;
+        Vector3 moveDirection = localTargetPos - groundEnemy.transform.position;
 #if UNITY_EDITOR
-        Ray ray1 = new Ray(groundEnemy.transform.position, moveDirection);
-        Debug.DrawRay(ray1.origin, ray1.direction * moveDirection.magnitude, Color.yellow);
+        Ray ray = new Ray(groundEnemy.transform.position, moveDirection);
+        Debug.DrawRay(ray.origin, ray.direction * moveDirection.magnitude, Color.magenta);
 #endif
         //Normalize()関数を使用すると2つのベクトルの長さを掛け合わせた正しい位置に自動で修正してくれる関数
         moveDirection.Normalize();
-
-        moveDirection.y = 0.0f;
-#if UNITY_EDITOR
-        Ray ray2 = new Ray(groundEnemy.transform.position, moveDirection);
-        Debug.DrawRay(ray2.origin, ray2.direction * moveDirection.magnitude, Color.green);
-#endif
 
         //正規化したベクトルに加速度をかける
         groundEnemy.Rigidbody.velocity = moveDirection * moveSpeed;

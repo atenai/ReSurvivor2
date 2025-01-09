@@ -200,17 +200,20 @@ MonoBehaviour:
         Ground Enemy Reload Conditional","Instant":true},{"Type":"GroundEnemyReloadAction","NodeData":{"Offset":"(80,150)"},"ID":11,"Name":"Ground
         Enemy Reload Action","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.Log","NodeData":{"Offset":"(92.3546143,267.855225)"},"ID":12,"Name":"Log","Instant":true,"SharedStringtext":{"Type":"BehaviorDesigner.Runtime.SharedString","Name":null,"StringmValue":"Reload"},"SharedBoollogError":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedBoollogTime":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-354.093,197.577637)"},"ID":13,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyAwayFromTheTargetConditional","NodeData":{"Offset":"(-175.684814,147.278)"},"ID":14,"Name":"Can
         Ground Enemy Away From The Target Conditional","Instant":true},{"Type":"GroundEnemyMoveTargetAction","NodeData":{"Offset":"(68.13437,153.269043)"},"ID":15,"Name":"Ground
-        Enemy Move Target Action","Instant":true,"SingleendPos":2.5}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(104.19622,195.403809)"},"ID":16,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyWithinSpecificDistanceConditional","NodeData":{"Offset":"(-80.79617,151.254883)"},"ID":17,"Name":"Can
-        Ground Enemy Within Specific Distance Conditional","Instant":true},{"Type":"GroundEnemyAssaultRifleFireAction","NodeData":{"Offset":"(162.467758,146.012451)"},"ID":18,"Name":"Ground
-        Enemy Assault Rifle Fire Action","Instant":true,"SingleshootTime":2,"Singlerange":100,"SingleDamage":10,"SingleassaultRifleRandomAngle":1}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(204.478546,152.66272)"},"ID":19,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(4.88408661,146.750259)"},"ID":20,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyMovePatrolPointConditional","NodeData":{"Offset":"(-130.734467,153.934875)"},"ID":21,"Name":"Can
+        Enemy Move Target Action","Instant":true,"SingleendPos":2.5}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(45.23804,199.523941)"},"ID":16,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyWithinSpecificDistanceConditional","NodeData":{"Offset":"(-80.79617,151.254883)"},"ID":17,"Name":"Can
+        Ground Enemy Within Specific Distance Conditional","Instant":true},{"Type":"GroundEnemyRandomMoveAction","NodeData":{"Offset":"(250,310)"},"ID":18,"Name":"Ground
+        Enemy Random Move Action","Instant":true,"GameObjectobj":0,"SinglestopPos":0.1,"Int32xMoveRange":2,"Int32yMoveRange":2,"Int32zMoveRange":2,"SingleendPos":2.5}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(204.478546,152.66272)"},"ID":19,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(4.88408661,146.750259)"},"ID":20,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyMovePatrolPointConditional","NodeData":{"Offset":"(-130.734467,153.934875)"},"ID":21,"Name":"Can
         Ground Enemy Move Patrol Point Conditional","Instant":true},{"Type":"GroundEnemyMovePatrolPointAction","NodeData":{"Offset":"(119.045959,147.767883)"},"ID":22,"Name":"Ground
-        Enemy Move Patrol Point Action","Instant":true,"SingleendPos":0.5}]}]}]}]}]}}'
+        Enemy Move Patrol Point Action","Instant":true,"SingleendPos":0.5}]}]}]}]}]},"DetachedTasks":[{"Type":"SelfMadeRandom","NodeData":{"Offset":"(80,1020)"},"ID":23,"Name":"Self
+        Made Random","Instant":true,"List`1probabilitiesList":[50,50],"AbortTypeabortType":"None","Children":[{"Type":"GroundEnemyAssaultRifleFireAction","NodeData":{"Offset":"(-109.3361,145.656525)"},"ID":24,"Name":"Ground
+        Enemy Assault Rifle Fire Action","Instant":true,"Singlerange":100,"SingleDamage":10}]}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
         startIndex: 
         dataPosition: 
-        unityObjects: []
+        unityObjects:
+        - {fileID: 5105230360257206846, guid: e4c797b862596ff4083de2ee16c96364, type: 3}
         byteData: 
         byteDataArray: 
       Version: 1.7.7

@@ -22,6 +22,8 @@ public class GroundEnemyAssaultRifleFireAction : Action
     [UnityEngine.Tooltip("アサルトライフルの散乱角度")]
     float assaultRifleRandomAngle = 7.0f;
 
+    bool isEnd = false;
+
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
@@ -46,11 +48,21 @@ public class GroundEnemyAssaultRifleFireAction : Action
     void InitMove()
     {
         groundEnemy.Rigidbody.velocity = Vector3.zero;
+        isEnd = false;
     }
 
     // Tick毎に呼ばれる
     public override TaskStatus OnUpdate()
     {
+        if (isEnd == true)
+        {
+            groundEnemy.Animator.SetBool("b_isRifleFire", false);
+            groundEnemy.Animator.SetBool("b_isRifleAim", false);
+            isEnd = false;
+            //目的地にたどりついた
+            return TaskStatus.Success;
+        }
+
         if (groundEnemy.IsChase == true)
         {
             //移動実行中
@@ -97,6 +109,9 @@ public class GroundEnemyAssaultRifleFireAction : Action
             AssaultRifleFire();
 
             groundEnemy.CurrentMagazine = groundEnemy.CurrentMagazine - 1;//現在のマガジンの弾数を-1する
+
+            isEnd = true;
+            return;
         }
     }
 
