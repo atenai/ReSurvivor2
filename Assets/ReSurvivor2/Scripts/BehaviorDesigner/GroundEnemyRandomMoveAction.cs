@@ -92,21 +92,6 @@ public class GroundEnemyRandomMoveAction : Action
     // 更新時に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        float currentDistance = Vector3.Distance(startPos, groundEnemy.transform.position);
-        //エネミーの移動距離が全く変わらない場合
-        if (oldDistance == currentDistance)
-        {
-            //強制終了用のカウントを足す
-            endCount = endCount + Time.deltaTime;
-            Debug.Log("<color=red>endCount " + endCount + "</color>");
-        }
-
-        //エネミーがその場から前に進めず距離計算ができない場合に、秒数で移動アクションを終了させる処理
-        if (endTime <= endCount)
-        {
-            isEnd = true;
-        }
-
         if (isEnd == true)
         {
             isEnd = false;
@@ -115,8 +100,6 @@ public class GroundEnemyRandomMoveAction : Action
 
         if (groundEnemy.IsChase == true)
         {
-            //エネミーの移動距離が全く変わらない場合の強制終了カウント用の距離計算処理
-            oldDistance = currentDistance;
             //移動実行中
             return TaskStatus.Running;
         }
@@ -127,8 +110,50 @@ public class GroundEnemyRandomMoveAction : Action
 
     public override void OnFixedUpdate()
     {
+        float currentDistance = RounndFloat(Vector3.Distance(startPos, groundEnemy.transform.position));
+        //Debug.Log("<color=red>currentDistance " + currentDistance + "</color>");
+        //Debug.Log("<color=blue>oldDistance " + oldDistance + "</color>");
+        //エネミーの移動距離が全く変わらない場合
+        if (oldDistance == currentDistance)
+        {
+            //強制終了用のカウントを足す
+            endCount = endCount + Time.deltaTime;
+            //Debug.Log("<color=green>endCount " + endCount + "</color>");
+        }
+
+        //エネミーがその場から前に進めず距離計算ができない場合に、秒数で移動アクションを終了させる処理
+        if (endTime <= endCount)
+        {
+            isEnd = true;
+        }
+
         RotateToDirectionTarget();
         Move();
+
+        //エネミーの移動距離が全く変わらない場合の強制終了カウント用の距離計算処理
+        oldDistance = currentDistance;
+    }
+
+    /// <summary>
+    /// 小数点第2以下を切り捨てる処理
+    /// 12.345 を 12.3 にしたい場合
+    /// </summary>
+    float RounndFloat(float number)
+    {
+        //-------------------------------
+        //0.31 を 0.3 にしたい場合（小数点第一以下切り捨ての例）
+        //float calculation1 = 0.31f;
+        //float calculation2 = calculation1 * 10;           //←0.31 を 一時的に10倍にし 3.1 にする
+        //float calculation3 = Mathf.Floor(calculation2);   //←3.1 の .1 部分をFloorで切り捨て 3 にし
+        //float result = calculation3 / 10;                 //その後10で割る事で 0.3 になり目的達成
+        //-------------------------------
+
+        float calculation1 = number;
+        float calculation2 = calculation1 * 10;
+        float calculation3 = Mathf.Floor(calculation2);
+        float result = calculation3 / 10;
+
+        return result;
     }
 
     void RotateToDirectionTarget()

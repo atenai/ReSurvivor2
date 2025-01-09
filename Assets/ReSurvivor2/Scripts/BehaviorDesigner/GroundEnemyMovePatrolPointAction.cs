@@ -88,13 +88,29 @@ public class GroundEnemyMovePatrolPointAction : Action
             return TaskStatus.Success;
         }
 
+        if (isEnd == true)
+        {
+            isEnd = false;
+            //Debug.Log("<color=green>パトロール移動の終了</color>");
+            groundEnemy.Rigidbody.velocity = Vector3.zero;
+            NextPatrolPoint();
+            //目的地にたどりついた
+            return TaskStatus.Success;
+        }
+
+        //移動実行中
+        return TaskStatus.Running;
+    }
+
+    public override void OnFixedUpdate()
+    {
         float currentDistance = Vector3.Distance(startPos, groundEnemy.transform.position);
         //エネミーの移動距離が全く変わらない場合
         if (oldDistance == currentDistance)
         {
             //強制終了用のカウントを足す
             endCount = endCount + Time.deltaTime;
-            Debug.Log("<color=blue>endCount " + endCount + "</color>");
+            //Debug.Log("<color=blue>endCount " + endCount + "</color>");
         }
 
         //エネミーがその場から前に進めず距離計算ができない場合に、秒数で移動アクションを終了させる処理
@@ -103,27 +119,11 @@ public class GroundEnemyMovePatrolPointAction : Action
             isEnd = true;
         }
 
-        if (isEnd == true)
-        {
-            isEnd = false;
-            Debug.Log("<color=green>パトロール移動の終了</color>");
-            groundEnemy.Rigidbody.velocity = Vector3.zero;
-            NextPatrolPoint();
-            //目的地にたどりついた
-            return TaskStatus.Success;
-        }
+        RotateToDirectionTarget();
+        MovePatrolPoint();
 
         //エネミーの移動距離が全く変わらない場合の強制終了カウント用の距離計算処理
         oldDistance = currentDistance;
-
-        //移動実行中
-        return TaskStatus.Running;
-    }
-
-    public override void OnFixedUpdate()
-    {
-        RotateToDirectionTarget();
-        MovePatrolPoint();
     }
 
     /// <summary>
@@ -162,10 +162,10 @@ public class GroundEnemyMovePatrolPointAction : Action
     /// </summary>
     void NextPatrolPoint()
     {
-        Debug.Log("<color=orange>今のパトロールポイント " + groundEnemy.PatrolPointNumber + "</color>");
+        //Debug.Log("<color=orange>今のパトロールポイント " + groundEnemy.PatrolPointNumber + "</color>");
         //配列の中から次の巡回地点を選択（必要に応じて繰り返し）
         groundEnemy.PatrolPointNumber = (groundEnemy.PatrolPointNumber + 1) % groundEnemy.PatrolPoints.Count;
-        Debug.Log("<color=yellow>次のパトロールポイント " + groundEnemy.PatrolPointNumber + "</color>");
+        //Debug.Log("<color=yellow>次のパトロールポイント " + groundEnemy.PatrolPointNumber + "</color>");
     }
 
     /// <summary>
