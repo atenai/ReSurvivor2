@@ -307,29 +307,32 @@ public class FlyingEnemy : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") == true)
+        if (isChase == true)
         {
-            Debug.Log("<color=red>プレイヤー爆発！</color>");
-            Explosion();
-        }
+            if (collision.gameObject.CompareTag("Player") == true)
+            {
+                Debug.Log("<color=red>プレイヤー爆発！</color>");
+                Explosion();
+            }
 
-        if (collision.gameObject.CompareTag("GroundEnemy") == true)
-        {
-            Debug.Log("<color=orange>グラウンドエネミー爆発！</color>");
-            Explosion();
-        }
+            if (collision.gameObject.CompareTag("GroundEnemy") == true)
+            {
+                Debug.Log("<color=orange>グラウンドエネミー爆発！</color>");
+                Explosion();
+            }
 
-        if (collision.gameObject.CompareTag("Ground") == true)
-        {
-            Debug.Log("<color=yellow>グラウンド爆発！</color>");
-            Explosion();
+            if (collision.gameObject.CompareTag("Ground") == true)
+            {
+                Debug.Log("<color=yellow>グラウンド爆発！</color>");
+                Explosion();
+            }
         }
     }
 
     /// <summary>
     /// 爆発
     /// </summary>
-    public void Explosion()
+    void Explosion()
     {
         if (mineSePrefab != null)
         {
