@@ -172,7 +172,7 @@ public class FlyingEnemy : MonoBehaviour
     /// </summary>
     void Eyesight()
     {
-        Ray ray = new Ray(head.transform.position, this.transform.forward);
+        Ray ray = new Ray(head.transform.position, -head.transform.forward);//-head.transform.forwardをマイナスにしているのはなぜかドローンのモデル目の前方が反対になっていた為
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, rayDistance))
         {
