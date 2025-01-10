@@ -3,7 +3,7 @@ using System.Diagnostics;
 using UnityEngine;
 
 /// <summary>
-/// 
+/// フライングエネミーのプロペラ回転用クラス
 /// </summary> 
 public class Rotator : MonoBehaviour
 {

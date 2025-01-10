@@ -2,6 +2,11 @@ using UnityEditor;
 using UnityEngine;
 using Debug = System.Diagnostics.Debug;
 
+/// <summary>
+/// クラスの拡張
+/// フライングエネミーのプロペラ回転用クラスの拡張
+/// Scripts/Editor/の中に必ず入れないと動かない！
+/// </summary>
 [CustomEditor(typeof(Rotator))]
 [CanEditMultipleObjects]
 public class RotatorEditor : UnityEditor.Editor
