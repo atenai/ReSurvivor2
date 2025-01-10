@@ -1270,6 +1270,11 @@ MonoBehaviour:
   - {fileID: 1609674548147531234}
   - {fileID: 1360916112981795002}
   - {fileID: 1929448219351949097}
+  mineExplosionEffectPrefab: {fileID: 9223201917633028862, guid: f87ce86d31f75b84b9a837e2145b5549, type: 3}
+  mineExplosionEffectDestroyTime: 1
+  mineSePrefab: {fileID: 8217214238848448886, guid: 2d39d9f68faf3ba4eaee07a9d9023a0c, type: 3}
+  mineSeEndtime: 1
+  mineExplosionColliderPrefab: {fileID: 5952633979640247180, guid: b9ab6b4abc324614897c9d5048e60da9, type: 3}
   debugEnemy:
     isDebugMode: 1
     debugTextPrefab: {fileID: 5879542589618870122, guid: 2b9195b1c4d4e344a8dae248f1394dc4, type: 3}
