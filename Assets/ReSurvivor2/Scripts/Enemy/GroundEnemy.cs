@@ -19,7 +19,7 @@ public class GroundEnemy : MonoBehaviour
     [UnityEngine.Tooltip("物理")]
     [SerializeField] Rigidbody rb;
     public Rigidbody Rigidbody => rb;
-
+    [UnityEngine.Tooltip("キャンバス")]
     [SerializeField] Canvas canvas;
 
     [Header("センサーコライダー用の変数")]
@@ -68,6 +68,7 @@ public class GroundEnemy : MonoBehaviour
         get { return patrolPointNumber; }
         set { patrolPointNumber = value; }
     }
+
     [UnityEngine.Tooltip("地面の中心点")]
     [SerializeField] Transform groundCheckCenter;
     [UnityEngine.Tooltip("地面となるレイヤー")]
@@ -134,7 +135,6 @@ public class GroundEnemy : MonoBehaviour
     void Start()
     {
         InitSensorCollider();
-
         Initialize();
     }
 

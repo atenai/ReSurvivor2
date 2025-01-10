@@ -537,7 +537,10 @@ public class PlayerCamera : MonoBehaviour
                 //着弾した物体を後ろに押す
                 if (hit.rigidbody != null)
                 {
-                    hit.rigidbody.AddForce(-hit.normal * impactForce);
+                    if (hit.collider.gameObject.CompareTag("FlyingEnemy") == false)
+                    {
+                        hit.rigidbody.AddForce(-hit.normal * impactForce);
+                    }
                 }
 
                 //ヒットレティクルを表示
@@ -787,7 +790,10 @@ public class PlayerCamera : MonoBehaviour
                 //着弾した物体を後ろに押す
                 if (hit.rigidbody != null)
                 {
-                    hit.rigidbody.AddForce(-hit.normal * impactForce);
+                    if (hit.collider.gameObject.CompareTag("FlyingEnemy") == false)
+                    {
+                        hit.rigidbody.AddForce(-hit.normal * impactForce);
+                    }
                 }
 
                 //ヒットレティクルを表示
@@ -1038,7 +1044,10 @@ public class PlayerCamera : MonoBehaviour
                     //着弾した物体を後ろに押す
                     if (hit.rigidbody != null)
                     {
-                        hit.rigidbody.AddForce(-hit.normal * impactForce);
+                        if (hit.collider.gameObject.CompareTag("FlyingEnemy") == false)
+                        {
+                            hit.rigidbody.AddForce(-hit.normal * impactForce);
+                        }
                     }
 
                     //ヒットレティクルを表示
