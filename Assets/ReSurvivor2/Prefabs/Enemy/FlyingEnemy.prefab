@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 3756318823859515203}
   - component: {fileID: 926202584933459125}
   m_Layer: 2
-  m_Name: Cube_ColliderUP
+  m_Name: Cube_ColliderUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -597,7 +597,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 78b0ea01f8bb5b643a6bd4a0d9a18d5c, type: 2}
+  - {fileID: 2100000, guid: 8824c6d9f22803b4ebfa3a9e36eea639, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -736,7 +736,7 @@ Transform:
   m_GameObject: {fileID: 6477606098694973927}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -878,26 +878,26 @@ MonoBehaviour:
   head: {fileID: 6387315135914368463}
   patrolPoints: []
   debugEnemy:
-    isDebugMode: 0
-    debugTextPrefab: {fileID: 0}
+    isDebugMode: 1
+    debugTextPrefab: {fileID: 5879542589618870122, guid: 2b9195b1c4d4e344a8dae248f1394dc4, type: 3}
     debugGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
-      key3: {r: 0, g: 0, b: 0, a: 0}
-      key4: {r: 0, g: 0, b: 0, a: 0}
-      key5: {r: 0, g: 0, b: 0, a: 0}
-      key6: {r: 0, g: 0, b: 0, a: 0}
-      key7: {r: 0, g: 0, b: 0, a: 0}
+      key0: {r: 1, g: 0.54901963, b: 0, a: 1}
+      key1: {r: 1, g: 0.98039216, b: 0, a: 1}
+      key2: {r: 0.039215688, g: 1, b: 0, a: 0}
+      key3: {r: 0, g: 1, b: 0.8235294, a: 0}
+      key4: {r: 0, g: 0, b: 1, a: 0}
+      key5: {r: 0.78431374, g: 0, b: 1, a: 0}
+      key6: {r: 1, g: 0, b: 0.627451, a: 0}
+      key7: {r: 1, g: 0, b: 0, a: 0}
       ctime0: 0
-      ctime1: 65535
-      ctime2: 0
-      ctime3: 0
-      ctime4: 0
-      ctime5: 0
-      ctime6: 0
-      ctime7: 0
+      ctime1: 9830
+      ctime2: 19661
+      ctime3: 29491
+      ctime4: 39321
+      ctime5: 49151
+      ctime6: 58982
+      ctime7: 65535
       atime0: 0
       atime1: 65535
       atime2: 0
@@ -908,16 +908,16 @@ MonoBehaviour:
       atime7: 0
       m_Mode: 0
       m_ColorSpace: -1
-      m_NumColorKeys: 2
+      m_NumColorKeys: 8
       m_NumAlphaKeys: 2
-    debugTextPosY: 60
+    debugTextPosY: 0
     debugGameObjectDestroyTime: 3
     debugLeftRedCubePrefab: {fileID: 0}
     debugRightBlueCubePrefab: {fileID: 0}
     debugLargeSpherePrefab: {fileID: 0}
     debugMediumSpherePrefab: {fileID: 0}
     debugSmallSpherePrefab: {fileID: 0}
-    alert: {fileID: 0}
+    alert: {fileID: 7126498337926300050}
     meshRendererGroundCheckFront: {fileID: 0}
 --- !u!114 &8170502765061330086
 MonoBehaviour:

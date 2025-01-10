@@ -217,20 +217,23 @@ public class FlyingEnemy : MonoBehaviour
     {
         string[] debugTexts = new string[9];
 
-        debugTexts[4] = "chaseCountTime : " + chaseCountTime.ToString();
-        debugTexts[3] = "isChase : " + isChase.ToString();
+        debugTexts[7] = "chaseCountTime : " + chaseCountTime.ToString();
+        debugTexts[6] = "isChase : " + isChase.ToString();
 
-        debugTexts[2] = "patrolPointNumber : " + patrolPointNumber.ToString();
+        debugTexts[5] = "patrolPointNumber : " + patrolPointNumber.ToString();
 
         if (hitCollider != null)
         {
-            debugTexts[1] = "hitCollider : " + hitCollider.ToString();
+            debugTexts[4] = "hitCollider : " + hitCollider.ToString();
         }
         else
         {
-            debugTexts[1] = "hitCollider : " + "null";
+            debugTexts[4] = "hitCollider : " + "null";
         }
-        debugTexts[0] = "hits[0] : " + hits[0].ToString();
+        debugTexts[3] = "hits[3]Back : " + hits[3].ToString();
+        debugTexts[2] = "hits[2]Up : " + hits[2].ToString();
+        debugTexts[1] = "hits[1]Under : " + hits[1].ToString();
+        debugTexts[0] = "hits[0]Front : " + hits[0].ToString();
 
         debugEnemy.DebugSystem(debugEnemy.IsDebugMode, canvas, debugTexts.Length);
         debugEnemy.SetDebugText(debugTexts);
