@@ -172,7 +172,6 @@ public class FlyingEnemyMovePatrolPointAction : Action
         //Normalize()関数を使用すると2つのベクトルの長さを掛け合わせた正しい位置に自動で修正してくれる関数
         moveDirection.Normalize();
 
-        moveDirection.y = 0.0f;
 #if UNITY_EDITOR
         Ray ray2 = new Ray(flyingEnemy.transform.position, moveDirection);
         Debug.DrawRay(ray2.origin, ray2.direction * moveDirection.magnitude, Color.green);

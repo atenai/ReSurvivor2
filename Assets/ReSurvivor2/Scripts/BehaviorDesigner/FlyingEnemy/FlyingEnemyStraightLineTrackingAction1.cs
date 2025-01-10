@@ -25,8 +25,11 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
     //移動処理系の変数
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
-    [SerializeField] float stopPos = 0.1f;
-    bool isMoveEnd = false;
+    [SerializeField] float endPos = 0.1f;
+    bool isEnd = false;
+
+    [UnityEngine.Tooltip("エネミーの移動スピード")]
+    float moveSpeed = 8.0f;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
@@ -67,23 +70,23 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
     void InitMove()
     {
-        isMoveEnd = false;
         flyingEnemy.Rigidbody.velocity = Vector3.zero;
+        isEnd = false;
     }
 
     // 更新時に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (isMoveEnd == true)
+        if (isEnd == true)
         {
+            isEnd = false;
+            flyingEnemy.Rigidbody.velocity = Vector3.zero;
             //目的地にたどりついた
             return TaskStatus.Success;
         }
-        else
-        {
-            //移動実行中
-            return TaskStatus.Running;
-        }
+
+        //移動実行中
+        return TaskStatus.Running;
     }
 
     public override void OnFixedUpdate()
@@ -118,14 +121,37 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
     void Move()
     {
-        float currentDistance = Vector3.SqrMagnitude(targetPos - this.transform.position);
-        if (currentDistance <= stopPos)
+        float currentDistance = Vector3.SqrMagnitude(targetPos - flyingEnemy.transform.position);
+        if (currentDistance <= endPos)
         {
-            flyingEnemy.Rigidbody.velocity = Vector3.zero;
-            isMoveEnd = true;
+
+            isEnd = true;
             return;
         }
 
-        flyingEnemy.Rigidbody.velocity = targetPos - this.transform.position;
+        ConstantSpeed();
+    }
+
+    /// <summary>
+    /// 一定の速さによる移動
+    /// </summary>
+    void ConstantSpeed()
+    {
+        //向きベクトル
+        Vector3 moveDirection = targetPos - flyingEnemy.transform.position;
+#if UNITY_EDITOR
+        Ray ray1 = new Ray(flyingEnemy.transform.position, moveDirection);
+        Debug.DrawRay(ray1.origin, ray1.direction * moveDirection.magnitude, Color.yellow);
+#endif
+        //Normalize()関数を使用すると2つのベクトルの長さを掛け合わせた正しい位置に自動で修正してくれる関数
+        moveDirection.Normalize();
+
+#if UNITY_EDITOR
+        Ray ray2 = new Ray(flyingEnemy.transform.position, moveDirection);
+        Debug.DrawRay(ray2.origin, ray2.direction * moveDirection.magnitude, Color.green);
+#endif
+
+        //正規化したベクトルに加速度をかける
+        flyingEnemy.Rigidbody.velocity = moveDirection * moveSpeed;
     }
 }
