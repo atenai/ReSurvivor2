@@ -230,7 +230,7 @@ public class FlyingEnemy : MonoBehaviour
     /// </summary> 
     void DebugText()
     {
-        string[] debugTexts = new string[9];
+        string[] debugTexts = new string[8];
 
         debugTexts[7] = "chaseCountTime : " + chaseCountTime.ToString();
         debugTexts[6] = "isChase : " + isChase.ToString();

@@ -128,6 +128,14 @@ public class GroundEnemy : MonoBehaviour
     [SerializeField] ParticleGroupPlayer assaultRifleAfterFireSmoke;
     //↑アセットストアのプログラム↑//
 
+    [Tooltip("銃の現在のマガジンの弾数")]
+    int currentGrenade = 3;
+    public int CurrentGrenade
+    {
+        get { return currentGrenade; }
+        set { currentGrenade = value; }
+    }
+
     [Tooltip("デバッグ")]
     [SerializeField] DebugEnemy debugEnemy;
     public DebugEnemy DebugEnemy => debugEnemy;
@@ -351,7 +359,9 @@ public class GroundEnemy : MonoBehaviour
     /// </summary> 
     void DebugText()
     {
-        string[] debugTexts = new string[9];
+        string[] debugTexts = new string[10];
+
+        debugTexts[9] = "currentGrenade : " + currentGrenade.ToString();
 
         debugTexts[8] = "reloadTime : " + reloadTime.ToString();
         debugTexts[7] = "isReloadTimeActive : " + isReloadTimeActive.ToString();
