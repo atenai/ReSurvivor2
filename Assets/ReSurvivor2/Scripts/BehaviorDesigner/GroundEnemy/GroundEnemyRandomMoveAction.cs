@@ -68,9 +68,12 @@ public class GroundEnemyRandomMoveAction : Action
     /// </summary>
     void InitAnimation()
     {
-        groundEnemy.Animator.SetBool("b_isRifleFire", false);
-        groundEnemy.Animator.SetBool("b_isRifleAim", false);
         groundEnemy.Animator.SetFloat("f_moveSpeed", 1.0f);
+        groundEnemy.Animator.SetBool("b_isReload", false);
+        groundEnemy.Animator.SetBool("b_isRifleAim", false);
+        groundEnemy.Animator.SetBool("b_isRifleFire", false);
+        groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
+        groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
     }
 
     void InitMove()

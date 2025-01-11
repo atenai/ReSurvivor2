@@ -27,11 +27,12 @@ public class GroundEnemyReloadAction : Action
     /// </summary>
     void InitAnimation()
     {
-        groundEnemy.Animator.SetBool("b_isRifleFire", false);
-        groundEnemy.Animator.SetBool("b_isRifleAim", false);
         groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
-        //ハンドガンのリロードアニメーションをオン
         groundEnemy.Animator.SetBool("b_isReload", true);
+        groundEnemy.Animator.SetBool("b_isRifleAim", false);
+        groundEnemy.Animator.SetBool("b_isRifleFire", false);
+        groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
+        groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
     }
 
     /// <summary>
@@ -85,7 +86,7 @@ public class GroundEnemyReloadAction : Action
                 groundEnemy.ReloadTime = 0.0f;//リロードタイムをリセット
                 groundEnemy.IsReloadTimeActive = false;//リロードのオフ
 
-                //ハンドガンのリロードアニメーションをオフ
+                //リロードアニメーションをオフ
                 groundEnemy.Animator.SetBool("b_isReload", false);
             }
         }

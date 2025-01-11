@@ -9,6 +9,7 @@ using UnityEngine;
 public class GroundEnemyHandGunFireAction : Action
 {
     GroundEnemy groundEnemy;
+    bool isEnd = false;
 
     [UnityEngine.Tooltip("射撃間隔")]
     [SerializeField] float shootTime = 2.0f;
@@ -33,8 +34,12 @@ public class GroundEnemyHandGunFireAction : Action
     /// </summary>
     void InitAnimation()
     {
+        groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
+        groundEnemy.Animator.SetBool("b_isReload", false);
         groundEnemy.Animator.SetBool("b_isRifleAim", true);
         groundEnemy.Animator.SetBool("b_isRifleFire", false);
+        groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
+        groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
     }
 
     /// <summary>
@@ -43,21 +48,38 @@ public class GroundEnemyHandGunFireAction : Action
     void InitMove()
     {
         groundEnemy.Rigidbody.velocity = Vector3.zero;
+        isEnd = false;
     }
 
     // Tick毎に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (groundEnemy.IsChase == true)
+        if (isEnd == true)
         {
-            //移動実行中
-            return TaskStatus.Running;
+            isEnd = false;
+            groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
+            groundEnemy.Animator.SetBool("b_isReload", false);
+            groundEnemy.Animator.SetBool("b_isRifleAim", false);
+            groundEnemy.Animator.SetBool("b_isRifleFire", false);
+            groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
+            groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
+            //射撃終了
+            return TaskStatus.Success;
         }
 
-        groundEnemy.Animator.SetBool("b_isRifleFire", false);
-        groundEnemy.Animator.SetBool("b_isRifleAim", false);
-        //目的地にたどりついた
-        return TaskStatus.Success;
+        if (groundEnemy.IsChase == false)
+        {
+            groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
+            groundEnemy.Animator.SetBool("b_isReload", false);
+            groundEnemy.Animator.SetBool("b_isRifleAim", false);
+            groundEnemy.Animator.SetBool("b_isRifleFire", false);
+            groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
+            groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
+            return TaskStatus.Success;
+
+        }
+
+        return TaskStatus.Running;
     }
 
     public override void OnFixedUpdate()
@@ -94,6 +116,9 @@ public class GroundEnemyHandGunFireAction : Action
             HandGunFire();
 
             groundEnemy.CurrentMagazine = groundEnemy.CurrentMagazine - 1;//現在のマガジンの弾数を-1する
+
+            isEnd = true;
+            return;
         }
     }
 

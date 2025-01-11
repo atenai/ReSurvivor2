@@ -36,9 +36,12 @@ public class GroundEnemyGrenadeAction : Action
     /// </summary>
     void InitAnimation()
     {
-        groundEnemy.Animator.SetBool("b_isRifleFire", false);
-        groundEnemy.Animator.SetBool("b_isRifleAim", false);
         groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
+        groundEnemy.Animator.SetBool("b_isReload", false);
+        groundEnemy.Animator.SetBool("b_isRifleAim", false);
+        groundEnemy.Animator.SetBool("b_isRifleFire", false);
+        groundEnemy.Animator.SetBool("b_isGrenadeEquip", true);
+        groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
     }
 
     /// <summary>
@@ -56,18 +59,24 @@ public class GroundEnemyGrenadeAction : Action
         if (isEnd == true)
         {
             isEnd = false;
-            groundEnemy.Animator.SetBool("b_isRifleFire", false);
-            groundEnemy.Animator.SetBool("b_isRifleAim", false);
             groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
+            groundEnemy.Animator.SetBool("b_isReload", false);
+            groundEnemy.Animator.SetBool("b_isRifleAim", false);
+            groundEnemy.Animator.SetBool("b_isRifleFire", false);
+            groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
+            groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
             //射撃終了
             return TaskStatus.Success;
         }
 
         if (groundEnemy.IsChase == false)
         {
-            groundEnemy.Animator.SetBool("b_isRifleFire", false);
-            groundEnemy.Animator.SetBool("b_isRifleAim", false);
             groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
+            groundEnemy.Animator.SetBool("b_isReload", false);
+            groundEnemy.Animator.SetBool("b_isRifleAim", false);
+            groundEnemy.Animator.SetBool("b_isRifleFire", false);
+            groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
+            groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
             //追跡終了
             return TaskStatus.Success;
         }
@@ -102,11 +111,14 @@ public class GroundEnemyGrenadeAction : Action
     /// </summary>
     void Throw()
     {
+        groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
+
         count = count + Time.deltaTime;
         if (attackTime < count)
         {
             count = 0.0f;
 
+            groundEnemy.Animator.SetBool("b_isGrenadeThrow", true);
             GrenadeSpawn();
             groundEnemy.CurrentGrenade = groundEnemy.CurrentGrenade - 1;//現在のマガジンの弾数を-1する
 
