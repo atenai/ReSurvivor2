@@ -18,8 +18,6 @@ public class GroundEnemyReloadAction : Action
         InitAnimation();
         InitMove();
         InitReload();
-
-        groundEnemy.AssaultRifleReloadSE();
     }
 
     /// <summary>
@@ -49,6 +47,8 @@ public class GroundEnemyReloadAction : Action
     void InitReload()
     {
         groundEnemy.IsReloadTimeActive = true;
+
+        groundEnemy.ReloadSE();
     }
 
     // Tick毎に呼ばれる

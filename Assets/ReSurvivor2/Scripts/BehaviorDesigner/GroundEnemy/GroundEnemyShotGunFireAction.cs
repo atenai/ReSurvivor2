@@ -3,10 +3,10 @@ using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// プレイヤーをアサルトライフルで射撃するタスク
+/// プレイヤーをショットガンで射撃するタスク
 /// </summary>
 [TaskCategory("GroundEnemy")]
-public class GroundEnemyAssaultRifleFireAction : Action
+public class GroundEnemyShotGunFireAction : Action
 {
     GroundEnemy groundEnemy;
     bool isEnd = false;
@@ -20,11 +20,9 @@ public class GroundEnemyAssaultRifleFireAction : Action
     [UnityEngine.Tooltip("銃のダメージ")]
     [SerializeField] float Damage = 10.0f;
     [UnityEngine.Tooltip("散乱角度")]
-    float randomAngle = 70.0f;
-    [UnityEngine.Tooltip("連射回数")]
-    int rapidFire = 3;
-    [UnityEngine.Tooltip("連射回数のカウント")]
-    int fireCount = 0;
+    float randomAngle = 15.0f;
+    [UnityEngine.Tooltip("ショットガンが一度で出る弾の数")]
+    [SerializeField] int shotGunBullet = 10;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
@@ -112,27 +110,19 @@ public class GroundEnemyAssaultRifleFireAction : Action
 
     void Shot()
     {
-        for (int i = 0; i < rapidFire; i++)
+        groundEnemy.Animator.SetBool("b_isRifleFire", false);
+
+        count = count + Time.deltaTime;
+        if (shootTime < count)
         {
-            groundEnemy.Animator.SetBool("b_isRifleFire", false);
+            count = 0.0f;
 
-            count = count + Time.deltaTime;
-            if (shootTime < count)
-            {
-                count = 0.0f;
+            groundEnemy.Animator.SetBool("b_isRifleFire", true);
+            Fire();
+            groundEnemy.CurrentMagazine = groundEnemy.CurrentMagazine - 1;//現在のマガジンの弾数を-1する
 
-                groundEnemy.Animator.SetBool("b_isRifleFire", true);
-                Fire();
-                groundEnemy.CurrentMagazine = groundEnemy.CurrentMagazine - 1;//現在のマガジンの弾数を-1する
-
-                fireCount++;
-                if (rapidFire <= fireCount)
-                {
-                    fireCount = 0;
-                    isEnd = true;
-                    return;
-                }
-            }
+            isEnd = true;
+            return;
         }
     }
 
@@ -146,24 +136,26 @@ public class GroundEnemyAssaultRifleFireAction : Action
 
         groundEnemy.FireSE();
 
-        Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 1f, this.transform.position.z);
-
-        Vector3 direction = this.transform.forward;
-        direction = Quaternion.AngleAxis(Random.Range(-randomAngle, randomAngle), this.transform.up) * direction;
-        direction = Quaternion.AngleAxis(Random.Range(-randomAngle, randomAngle), this.transform.right) * direction;
-
-        Ray ray = new Ray(pos, direction);
-        Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, range) == true)//もしRayを投射して何らかのコライダーに衝突したら
+        for (int i = 0; i < shotGunBullet; i++)
         {
-            if (hit.collider.gameObject.CompareTag("Player"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+            Vector3 direction = this.transform.forward;
+            direction = Quaternion.AngleAxis(Random.Range(-randomAngle, randomAngle), this.transform.up) * direction;
+            direction = Quaternion.AngleAxis(Random.Range(-randomAngle, randomAngle), this.transform.right) * direction;
+
+            Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 1f, this.transform.position.z);
+            Ray ray = new Ray(pos, direction);
+            Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, range) == true)//もしRayを投射して何らかのコライダーに衝突したら
             {
-                //ダメージ
-                Player player = hit.transform.GetComponent<Player>();
-                if (player != null)
+                if (hit.collider.gameObject.CompareTag("Player"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
                 {
-                    player.TakeDamage(Damage);
+                    //ダメージ
+                    Player player = hit.transform.GetComponent<Player>();
+                    if (player != null)
+                    {
+                        player.TakeDamage(Damage);
+                    }
                 }
             }
         }

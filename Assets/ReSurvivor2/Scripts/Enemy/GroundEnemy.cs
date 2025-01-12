@@ -92,7 +92,7 @@ public class GroundEnemy : MonoBehaviour
         set { currentMagazine = value; }
     }
     [Tooltip("銃の最大マガジン数")]
-    readonly int magazineCapacity = 7;
+    [SerializeField] int magazineCapacity = 7;
     public int MagazineCapacity => magazineCapacity;
     [Tooltip("銃のリロードのオン・オフ")]
     bool isReloadTimeActive = false;
@@ -111,24 +111,24 @@ public class GroundEnemy : MonoBehaviour
     readonly float reloadTimeDefine = 1.5f;
     public float ReloadTimeDefine => reloadTimeDefine;
 
-    [Tooltip("アサルトライフルの射撃のSE")]
-    [SerializeField] GameObject assaultRifleShootSe;
-    float assaultRifleShootSeDestroyTime = 1.0f;
-    [Tooltip("アサルトライフルのリロードのSE")]
-    [SerializeField] GameObject assaultRifleReloadSe;
-    float assaultRifleReloadSeDestroyTime = 1.0f;
-    [Tooltip("アサルトライフルの薬莢のSE")]
-    [SerializeField] GameObject assaultRifleBulletCasingSe;
-    float assaultRifleBulletCasingSeDestroyTime = 1.0f;
+    [Tooltip("射撃のSE")]
+    [SerializeField] GameObject shootSe;
+    float shootSeDestroyTime = 1.0f;
+    [Tooltip("リロードのSE")]
+    [SerializeField] GameObject reloadSe;
+    float reloadSeDestroyTime = 1.0f;
+    [Tooltip("薬莢のSE")]
+    [SerializeField] GameObject bulletCasingSe;
+    float bulletCasingSeDestroyTime = 1.0f;
 
     //↓アセットストアのプログラム↓//
-    [Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
-    [SerializeField] ParticleGroupEmitter[] assaultRifleShotEmitters;
-    [Tooltip("アサルトライフルの硝煙")]
-    [SerializeField] ParticleGroupPlayer assaultRifleAfterFireSmoke;
+    [Tooltip("マズルフラッシュと薬莢")]
+    [SerializeField] ParticleGroupEmitter[] shotEmitters;
+    [Tooltip("硝煙")]
+    [SerializeField] ParticleGroupPlayer afterFireSmoke;
     //↑アセットストアのプログラム↑//
 
-    [Tooltip("銃の現在のマガジンの弾数")]
+    [Tooltip("現在のグレネード数")]
     int currentGrenade = 3;
     public int CurrentGrenade
     {
@@ -301,42 +301,42 @@ public class GroundEnemy : MonoBehaviour
     }
 
     /// <summary>
-    /// アサルトライフルの射撃SE
+    /// 射撃SE
     /// </summary> 
-    public void AssaultRifleFireSE()
+    public void FireSE()
     {
-        UnityEngine.GameObject se = Instantiate(assaultRifleShootSe, this.transform.position, Quaternion.identity);
-        Destroy(se, assaultRifleShootSeDestroyTime);
+        UnityEngine.GameObject se = Instantiate(shootSe, this.transform.position, Quaternion.identity);
+        Destroy(se, shootSeDestroyTime);
     }
 
     /// <summary>
-    /// アサルトライフルのリロードSE
+    /// リロードSE
     /// </summary> 
-    public void AssaultRifleReloadSE()
+    public void ReloadSE()
     {
-        UnityEngine.GameObject se = Instantiate(assaultRifleReloadSe, this.transform.position, Quaternion.identity);
-        Destroy(se, assaultRifleReloadSeDestroyTime);
+        UnityEngine.GameObject se = Instantiate(reloadSe, this.transform.position, Quaternion.identity);
+        Destroy(se, reloadSeDestroyTime);
     }
 
     /// <summary>
-    /// アサルトライフルの薬莢SE
+    /// 薬莢SE
     /// </summary>
-    public void AssaultRifleBulletCasingSE()
+    public void BulletCasingSE()
     {
-        UnityEngine.GameObject se = Instantiate(assaultRifleBulletCasingSe, this.transform.position, Quaternion.identity);
-        Destroy(se, assaultRifleBulletCasingSeDestroyTime);
+        UnityEngine.GameObject se = Instantiate(bulletCasingSe, this.transform.position, Quaternion.identity);
+        Destroy(se, bulletCasingSeDestroyTime);
     }
 
     /// <summary>
     /// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
     /// </summary>
-    public void AssaultRifleMuzzleFlashAndShell()
+    public void MuzzleFlashAndShell()
     {
-        AssaultRifleBulletCasingSE();
+        BulletCasingSE();
 
-        if (assaultRifleShotEmitters != null)
+        if (shotEmitters != null)
         {
-            foreach (var effect in assaultRifleShotEmitters)
+            foreach (var effect in shotEmitters)
             {
                 effect.Emit(1);
             }
@@ -346,11 +346,11 @@ public class GroundEnemy : MonoBehaviour
     /// <summary>
     /// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
     /// </summary>
-    public void AssaultRifleSmoke()
+    public void AfterFireSmoke()
     {
-        if (assaultRifleAfterFireSmoke != null)
+        if (afterFireSmoke != null)
         {
-            assaultRifleAfterFireSmoke.Play();
+            afterFireSmoke.Play();
         }
     }
 

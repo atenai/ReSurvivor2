@@ -201,14 +201,15 @@ MonoBehaviour:
         Enemy Reload Action","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-354.093,197.577637)"},"ID":12,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyAwayFromTheTargetConditional","NodeData":{"Offset":"(-162.6978,147.278)"},"ID":13,"Name":"Can
         Ground Enemy Away From The Target Conditional","Instant":true},{"Type":"GroundEnemyMoveTargetAction","NodeData":{"Offset":"(68.13437,153.269043)"},"ID":14,"Name":"Ground
         Enemy Move Target Action","Instant":true,"SingleendPos":2.5}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(45.23804,199.523941)"},"ID":15,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyWithinSpecificDistanceConditional","NodeData":{"Offset":"(-80.79617,151.254883)"},"ID":16,"Name":"Can
-        Ground Enemy Within Specific Distance Conditional","Instant":true},{"Type":"SelfMadeRandom","NodeData":{"Offset":"(130,147.012985)"},"ID":17,"Name":"Self
-        Made Random","Instant":true,"List`1probabilitiesList":[50,40,10],"AbortTypeabortType":"None","Children":[{"Type":"GroundEnemyAssaultRifleFireAction","NodeData":{"Offset":"(-109.3361,145.656525)"},"ID":18,"Name":"Ground
+        Ground Enemy Within Specific Distance Conditional","Instant":true},{"Type":"SelfMadeRandom","NodeData":{"Offset":"(130,150)"},"ID":17,"Name":"Self
+        Made Random","Instant":true,"List`1probabilitiesList":[50,40,10],"AbortTypeabortType":"None","Children":[{"Type":"GroundEnemyAssaultRifleFireAction","NodeData":{"Offset":"(-115.64994,143.925842)"},"ID":18,"Name":"Ground
         Enemy Assault Rifle Fire Action","Instant":true,"Singlerange":100,"SingleDamage":10},{"Type":"GroundEnemyRandomMoveAction","NodeData":{"Offset":"(120,150)"},"ID":19,"Name":"Ground
         Enemy Random Move Action","Instant":true,"GameObjectobj":0,"SingleendPos":2.5},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(301.7757,149.532639)"},"ID":20,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyGrenadeConditional","NodeData":{"Offset":"(-106.292679,134.021)"},"ID":21,"Name":"Can
         Ground Enemy Grenade Conditional","Instant":true},{"Type":"GroundEnemyGrenadeAction","NodeData":{"Offset":"(110,129.972031)"},"ID":22,"Name":"Ground
         Enemy Grenade Action","Instant":true,"GameObjectgrenadeGameObjectPrefab":1,"SinglespawnDistance":2}]}]}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(204.478546,152.66272)"},"ID":23,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(4.88408661,146.750259)"},"ID":24,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyMovePatrolPointConditional","NodeData":{"Offset":"(-130.734467,153.934875)"},"ID":25,"Name":"Can
         Ground Enemy Move Patrol Point Conditional","Instant":true},{"Type":"GroundEnemyMovePatrolPointAction","NodeData":{"Offset":"(119.045959,147.767883)"},"ID":26,"Name":"Ground
-        Enemy Move Patrol Point Action","Instant":true,"SingleendPos":0.5}]}]}]}]}]}}'
+        Enemy Move Patrol Point Action","Instant":true,"SingleendPos":0.5}]}]}]}]}]},"DetachedTasks":[{"Type":"GroundEnemyShotGunFireAction","NodeData":{"Offset":"(320,1010)"},"ID":27,"Name":"Ground
+        Enemy Shot Gun Fire Action","Instant":true,"Singlerange":100,"SingleDamage":10,"Int32shotGunBullet":10}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -269,13 +270,14 @@ MonoBehaviour:
     m_Bits: 1024
   groundedRadius: 0.2
   shootingDistance: 8
-  assaultRifleShootSe: {fileID: 8217214238848448886, guid: cb79abab45b525d4bb855cc4f856f2f7, type: 3}
-  assaultRifleReloadSe: {fileID: 8217214238848448886, guid: a86a0a4f0eb7bc2429ce1e1624dd7845, type: 3}
-  assaultRifleBulletCasingSe: {fileID: 8217214238848448886, guid: 0b7a2882204ab784bb1f500c5a6eb54e, type: 3}
-  assaultRifleShotEmitters:
+  magazineCapacity: 7
+  shootSe: {fileID: 8217214238848448886, guid: cb79abab45b525d4bb855cc4f856f2f7, type: 3}
+  reloadSe: {fileID: 8217214238848448886, guid: a86a0a4f0eb7bc2429ce1e1624dd7845, type: 3}
+  bulletCasingSe: {fileID: 8217214238848448886, guid: 0b7a2882204ab784bb1f500c5a6eb54e, type: 3}
+  shotEmitters:
   - {fileID: 1717239033193219912}
   - {fileID: 7646512579346927600}
-  assaultRifleAfterFireSmoke: {fileID: 6181686689946337306}
+  afterFireSmoke: {fileID: 6181686689946337306}
   debugEnemy:
     isDebugMode: 1
     debugTextPrefab: {fileID: 5879542589618870122, guid: 2b9195b1c4d4e344a8dae248f1394dc4, type: 3}
