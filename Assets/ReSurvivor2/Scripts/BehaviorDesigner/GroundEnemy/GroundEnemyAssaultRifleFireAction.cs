@@ -20,7 +20,7 @@ public class GroundEnemyAssaultRifleFireAction : Action
     [UnityEngine.Tooltip("銃のダメージ")]
     [SerializeField] float Damage = 10.0f;
     [UnityEngine.Tooltip("散乱角度")]
-    float randomAngle = 70.0f;
+    float randomAngle = 7.0f;
     [UnityEngine.Tooltip("連射回数")]
     int rapidFire = 3;
     [UnityEngine.Tooltip("連射回数のカウント")]

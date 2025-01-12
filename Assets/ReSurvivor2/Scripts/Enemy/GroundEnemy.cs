@@ -55,7 +55,7 @@ public class GroundEnemy : MonoBehaviour
     [UnityEngine.Tooltip("視界用の頭ゲームオブジェクト")]
     [SerializeField] GameObject head;
     [UnityEngine.Tooltip("視界な長さ")]
-    float rayDistance = 8.0f;
+    [SerializeField] float rayDistance = 14.0f;
 
     [Header("パトロール")]
     [UnityEngine.Tooltip("パトロールポイントの位置")]
@@ -92,7 +92,7 @@ public class GroundEnemy : MonoBehaviour
         set { currentMagazine = value; }
     }
     [Tooltip("銃の最大マガジン数")]
-    [SerializeField] int magazineCapacity = 7;
+    [SerializeField] int magazineCapacity = 8;
     public int MagazineCapacity => magazineCapacity;
     [Tooltip("銃のリロードのオン・オフ")]
     bool isReloadTimeActive = false;

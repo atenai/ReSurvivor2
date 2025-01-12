@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 2757360148938490283}
   - component: {fileID: 3045641993606833947}
   m_Layer: 8
-  m_Name: GroundEnemy
+  m_Name: GroundAssaultRifleEnemy
   m_TagString: GroundEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,7 +105,7 @@ Transform:
   m_GameObject: {fileID: 3562646171567367577}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -208,8 +208,7 @@ MonoBehaviour:
         Ground Enemy Grenade Conditional","Instant":true},{"Type":"GroundEnemyGrenadeAction","NodeData":{"Offset":"(110,129.972031)"},"ID":22,"Name":"Ground
         Enemy Grenade Action","Instant":true,"GameObjectgrenadeGameObjectPrefab":1,"SinglespawnDistance":2}]}]}]}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(204.478546,152.66272)"},"ID":23,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(4.88408661,146.750259)"},"ID":24,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyMovePatrolPointConditional","NodeData":{"Offset":"(-130.734467,153.934875)"},"ID":25,"Name":"Can
         Ground Enemy Move Patrol Point Conditional","Instant":true},{"Type":"GroundEnemyMovePatrolPointAction","NodeData":{"Offset":"(119.045959,147.767883)"},"ID":26,"Name":"Ground
-        Enemy Move Patrol Point Action","Instant":true,"SingleendPos":0.5}]}]}]}]}]},"DetachedTasks":[{"Type":"GroundEnemyShotGunFireAction","NodeData":{"Offset":"(320,1010)"},"ID":27,"Name":"Ground
-        Enemy Shot Gun Fire Action","Instant":true,"Singlerange":100,"SingleDamage":10,"Int32shotGunBullet":10}]}'
+        Enemy Move Patrol Point Action","Instant":true,"SingleendPos":0.5}]}]}]}]}]}}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 
@@ -269,8 +268,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   groundedRadius: 0.2
-  shootingDistance: 8
-  magazineCapacity: 7
+  shootingDistance: 14
+  magazineCapacity: 30
   shootSe: {fileID: 8217214238848448886, guid: cb79abab45b525d4bb855cc4f856f2f7, type: 3}
   reloadSe: {fileID: 8217214238848448886, guid: a86a0a4f0eb7bc2429ce1e1624dd7845, type: 3}
   bulletCasingSe: {fileID: 8217214238848448886, guid: 0b7a2882204ab784bb1f500c5a6eb54e, type: 3}
@@ -462,7 +461,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5610672490780779992}
   m_Layer: 8
-  m_Name: GroundEnemy
+  m_Name: GroundAssaultRifleEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1440,7 +1439,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 488920454341985370, guid: 44f269219b94a914d81a2300c6df9bb0, type: 3}
       propertyPath: m_Name
-      value: ReSurvivorEnemyModel2
+      value: AssaultRifleEnemyModel
       objectReference: {fileID: 0}
     - target: {fileID: 3503368382933561867, guid: 44f269219b94a914d81a2300c6df9bb0, type: 3}
       propertyPath: m_LocalPosition.x
