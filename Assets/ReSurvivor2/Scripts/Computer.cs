@@ -25,9 +25,10 @@ public class Computer : MonoBehaviour
 
                     //↓ここをミッションごとに変えるようにする必要がある
                     //各ComputerTYPEに紐づいたミッションリストを取得して、そこから選択されたミッション内容を↓に反映すればいい
-                    InGameManager.SingletonInstance.TargetComputerName = InGameManager.SingletonInstance.MasterMission.Sheet1[0].TargetComputerName;
-                    Player.SingletonInstance.Minute = InGameManager.SingletonInstance.MasterMission.Sheet1[0].Minute;
-                    Player.SingletonInstance.Seconds = InGameManager.SingletonInstance.MasterMission.Sheet1[0].Seconds;
+                    var result = InGameManager.SingletonInstance.MissionSerch(thisComputerName);
+                    InGameManager.SingletonInstance.TargetComputerName = result.TargetComputerName;
+                    Player.SingletonInstance.Minute = result.Minute;
+                    Player.SingletonInstance.Seconds = result.Seconds;
                 }
                 else if (InGameManager.SingletonInstance.IsMissionActive == true && thisComputerName == InGameManager.SingletonInstance.TargetComputerName)
                 {

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /// <summary>
 /// インゲーム全体のマネージャー
@@ -84,6 +85,13 @@ public class InGameManager : MonoBehaviour
             keyItem1 = PlayerPrefs.GetInt("KeyItem1", 0);
             Debug.Log("<color=purple>キーアイテム1 : " + keyItem1 + "</color>");
         }
+    }
+
+    public MasterMissionEntity MissionSerch(ComputerTYPE computerTYPE)
+    {
+        //シナリオのメッセージ配列の中から文章をIDで検索して取得します。
+        MasterMissionEntity result = MasterMission.Sheet1.First((MasterMissionEntity excelLine) => { return excelLine.StartComputerName == computerTYPE; });
+        return result;
     }
 
     void Start()

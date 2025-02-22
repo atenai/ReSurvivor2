@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: MasterMission
   m_EditorClassIdentifier: 
   Sheet1:
-  - TargetComputerName: 4
+  - StartComputerName: 0
+    TargetComputerName: 4
     Minute: 10
     Seconds: 30
+  - StartComputerName: 4
+    TargetComputerName: 0
+    Minute: 4
+    Seconds: 10
