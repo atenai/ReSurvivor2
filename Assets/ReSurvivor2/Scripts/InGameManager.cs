@@ -52,6 +52,10 @@ public class InGameManager : MonoBehaviour
         set { keyItem1 = value; }
     }
 
+    [Tooltip("マスターデータのミッション情報")]
+    [SerializeField] MasterMission masterMission;//２番目で作成したエクセルをスクリプト化したクラスの変数を作成する
+    public MasterMission MasterMission => masterMission;
+
     void Awake()
     {
         //staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
