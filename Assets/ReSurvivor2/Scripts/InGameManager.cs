@@ -89,7 +89,7 @@ public class InGameManager : MonoBehaviour
 
     public MasterMissionEntity MissionSerch(ComputerTYPE computerTYPE)
     {
-        //シナリオのメッセージ配列の中から文章をIDで検索して取得します。
+        //引数のコンピュータータイプからマスターデータのミッション情報を照らし合わせて、一番最初にStartComputerNameと一致したコンピュータータイプの情報を取得する
         MasterMissionEntity result = MasterMission.Sheet1.First((MasterMissionEntity excelLine) => { return excelLine.StartComputerName == computerTYPE; });
         return result;
     }
