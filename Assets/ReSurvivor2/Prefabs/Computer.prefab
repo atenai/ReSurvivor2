@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 5344049323876185592}
   - component: {fileID: 62947890595212653}
   - component: {fileID: 1607760214320404728}
+  - component: {fileID: 8217807871329353931}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -171,6 +172,18 @@ MonoBehaviour:
   spriteKeyboard: {fileID: 21300000, guid: 3967d34dc919aa04cac871bbf2ebce4b, type: 3}
   amplitude: 10
   timeSpan: 2
+--- !u!114 &8217807871329353931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6971049770116686342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55de1d2660648704eb4839f1902faddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7029346628173412299
 GameObject:
   m_ObjectHideFlags: 0
