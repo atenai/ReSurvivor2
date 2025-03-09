@@ -90,7 +90,13 @@ public class InGameManager : MonoBehaviour
     public MasterMissionEntity MissionSerch(ComputerTYPE computerTYPE)
     {
         //引数のコンピュータータイプからマスターデータのミッション情報を照らし合わせて、一番最初にStartComputerNameと一致したコンピュータータイプの情報を取得する
-        MasterMissionEntity result = MasterMission.Sheet1.First((MasterMissionEntity excelLine) => { return excelLine.StartComputerName == computerTYPE; });
+        MasterMissionEntity result = MasterMission.Sheet1.FirstOrDefault((MasterMissionEntity excelLine) => { return excelLine.StartComputerName == computerTYPE; });
+
+        if (result == null)
+        {
+            Debug.LogError("マスターデータのミッション情報がnull");
+        }
+
         return result;
     }
 
