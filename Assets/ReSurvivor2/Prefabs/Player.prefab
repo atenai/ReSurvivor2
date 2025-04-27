@@ -253,8 +253,6 @@ MonoBehaviour:
   rb: {fileID: 1859192107321473125}
   energeticNormalMoveSpeed: 5
   energeticWeaponMoveSpeed: 3
-  tiredNormalMoveSpeed: 3
-  tiredWeaponMoveSpeed: 1
   neck_01: {fileID: 8963754979861601838}
   spine_03: {fileID: 8951071322393462715}
   upperarm_r: {fileID: 3247915256232972873}
@@ -267,6 +265,7 @@ MonoBehaviour:
   shotGunModelBodyDecoration: {fileID: 5983286883851262208}
   canvasPlayer: {fileID: 637544306048898191}
   imageBG: {fileID: 8467590313357425202}
+  imageMap: {fileID: 7061077649816693348}
   maxHp: 100
   sliderHp: {fileID: 7909805020945899953}
   sliderStamina: {fileID: 4667260119315885785}
@@ -1877,6 +1876,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8512284511136119125}
+  - {fileID: 1416398487049113324}
   m_Father: {fileID: 2121725323165253596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3596,3 +3596,116 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4087011100852395254, guid: d16bf6d3f556fa94093c6a21f7b1a1ba, type: 3}
   m_PrefabInstance: {fileID: 4959128775433945816}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5274476276512299949
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6443835533525732265}
+    m_Modifications:
+    - target: {fileID: 1557650826407317097, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_Name
+      value: Image_Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+--- !u!224 &1416398487049113324 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6528736016860910913, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+  m_PrefabInstance: {fileID: 5274476276512299949}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7061077649816693348 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2940648849934102985, guid: f8debde2982f6604f8bbed3c8f0f45fc, type: 3}
+  m_PrefabInstance: {fileID: 5274476276512299949}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

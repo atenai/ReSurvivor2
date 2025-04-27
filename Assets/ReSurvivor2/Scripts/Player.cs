@@ -89,6 +89,8 @@ public class Player : MonoBehaviour
     [SerializeField] Canvas canvasPlayer;
     [Tooltip("バックグラウンドイメージ")]
     [SerializeField] Image imageBG;
+    [Tooltip("マップイメージ")]
+    [SerializeField] Image imageMap;
     [Tooltip("プレイヤーUIのY軸の傾き")]
     float playerUIRotY = 0.2f;
     [Tooltip("現在のHP")]
@@ -424,9 +426,14 @@ public class Player : MonoBehaviour
             //キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
             canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(this.transform.position.x, this.transform.position.y + PlayerCamera.SingletonInstance.NormalUpPos, this.transform.position.z);
             //SRT(スケール→トランスフォーム→ローテーション)
+            //HP、スタミナ、弾薬、タイマーUI
             imageBG.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
             imageBG.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
             imageBG.transform.localPosition = new Vector3(150.0f, -100.0f, 0.0f);
+            //マップUI
+            imageMap.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
+            imageMap.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
+            imageMap.transform.localPosition = new Vector3(150.0f, 40.0f, 0.0f);
         }
         else if (isAim == true)
         {
@@ -435,9 +442,14 @@ public class Player : MonoBehaviour
             //キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
             canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(this.transform.position.x, this.transform.position.y + PlayerCamera.SingletonInstance.AimUpPos, this.transform.position.z);
             //SRT(スケール→トランスフォーム→ローテーション)
+            //HP、スタミナ、弾薬、タイマーUI
             imageBG.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
             imageBG.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
             imageBG.transform.localPosition = new Vector3(85.0f, -20.0f, 0.0f);
+            //マップUI
+            imageMap.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
+            imageMap.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
+            imageMap.transform.localPosition = new Vector3(85.0f, 10.0f, 0.0f);
         }
     }
 
