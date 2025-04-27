@@ -7,13 +7,33 @@ using UnityEngine;
 /// </summary>
 public class StageManager : MonoBehaviour
 {
-    void Start()
-    {
-        StartCoroutine(UI.SingletonInstance.FadeIn());
-    }
+	public enum StageTYPE
+	{
+		Stage0 = 0,
+		Stage1 = 1,
+		Stage2 = 2,
+		Stage3 = 3,
+		Stage4 = 4,
+		Stage5 = 5,
+	}
 
-    void Update()
-    {
+	[Tooltip("ステージ名")]
+	[SerializeField] StageTYPE stage;
+	public StageTYPE Stage
+	{
+		get { return stage; }
+		set { stage = value; }
+	}
 
-    }
+	void Start()
+	{
+		StartCoroutine(UI.SingletonInstance.FadeIn());
+
+		Player.SingletonInstance.MapUI.SetStageNumber((int)stage);
+	}
+
+	void Update()
+	{
+
+	}
 }
