@@ -31,6 +31,7 @@ public class GroundEnemyDeadAction : Action
 		groundEnemy.Animator.SetBool("b_isRifleFire", false);
 		groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
 		groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
+		groundEnemy.Animator.SetBool("b_isDead", true);
 	}
 
 	/// <summary>
