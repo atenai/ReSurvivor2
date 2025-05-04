@@ -5,12 +5,27 @@ using UnityEngine.UI;
 
 public class Target : MonoBehaviour
 {
+	[UnityEngine.Tooltip("現在のHP")]
 	float currentHp = 100.0f;
+	public float CurrentHp
+	{
+		get { return currentHp; }
+		set { currentHp = value; }
+	}
+	[UnityEngine.Tooltip("最大HP")]
 	[SerializeField] float maxHp = 100.0f;
+	public float MaxHp => maxHp;
 	[UnityEngine.Tooltip("キャンバス")]
 	[SerializeField] Canvas canvas;
 	public Canvas Canvas => canvas;
+	[UnityEngine.Tooltip("HPバー")]
 	[SerializeField] Slider sliderHp;
+	public Slider SliderHp
+	{
+		get { return sliderHp; }
+		set { sliderHp = value; }
+	}
+	[UnityEngine.Tooltip("死んだか？")]
 	bool isDead = false;
 	public bool IsDead
 	{
@@ -37,12 +52,12 @@ public class Target : MonoBehaviour
 	/// </summary>
 	public virtual void TakeDamage(float amount)
 	{
+		Debug.Log("<color=orange>TargetのTakeDamage()</color>");
 		currentHp = currentHp - amount;
 		//Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
 		sliderHp.value = (float)currentHp / (float)maxHp;
 		if (currentHp <= 0.0f)
 		{
-			isDead = true;
 			Destroy(this.gameObject);
 		}
 	}

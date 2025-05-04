@@ -360,7 +360,9 @@ public class GroundEnemy : Target
 	/// </summary> 
 	void DebugText()
 	{
-		string[] debugTexts = new string[10];
+		string[] debugTexts = new string[11];
+
+		debugTexts[10] = "IsDead : " + IsDead.ToString();
 
 		debugTexts[9] = "currentGrenade : " + currentGrenade.ToString();
 
@@ -464,5 +466,17 @@ public class GroundEnemy : Target
 	public void OnTriggerExitHitCliff(Collider collider)
 	{
 		//Debug.Log("<color=green>OnTriggerExitHitGround</color>");
+	}
+
+	public override void TakeDamage(float amount)
+	{
+		Debug.Log("<color=green>GroundEnemyのTakeDamage()</color>");
+		CurrentHp = CurrentHp - amount;
+		//Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
+		SliderHp.value = (float)CurrentHp / (float)MaxHp;
+		if (CurrentHp <= 0.0f)
+		{
+			IsDead = true;
+		}
 	}
 }
