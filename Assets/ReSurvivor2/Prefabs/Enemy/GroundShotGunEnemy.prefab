@@ -87,7 +87,6 @@ GameObject:
   - component: {fileID: 8595419044903638177}
   - component: {fileID: 4553017098955803893}
   - component: {fileID: 611402823370756306}
-  - component: {fileID: 2757360148938490283}
   - component: {fileID: 3045641993606833947}
   m_Layer: 8
   m_Name: GroundShotGunEnemy
@@ -222,21 +221,6 @@ MonoBehaviour:
       Version: 1.7.7
   gizmoViewMode: 2
   showBehaviorDesignerGizmo: 1
---- !u!114 &2757360148938490283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3562646171567367577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cebe169c357e2a04f8b2b7ce35b93f2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHp: 100
-  canvas: {fileID: 2419519451328426163}
-  sliderHp: {fileID: 4582419977116525393}
 --- !u!114 &3045641993606833947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,9 +233,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fdcdbb3a7f89cd44b0612ff0c7f221d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHp: 100
+  canvas: {fileID: 2419519451328426163}
+  sliderHp: {fileID: 4582419977116525393}
   animator: {fileID: 7403507082190380116}
   rb: {fileID: 4553017098955803893}
-  canvas: {fileID: 2419519451328426163}
   colliders:
   - {fileID: 3131403555685646428}
   chaseTime: 10
