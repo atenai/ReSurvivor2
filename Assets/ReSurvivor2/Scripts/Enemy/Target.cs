@@ -18,14 +18,15 @@ public class Target : MonoBehaviour
 		set { isDead = value; }
 	}
 
-	void Start()
+	public void Start()
 	{
+		Debug.Log("<color=orange>Targetクラスを初期化</color>");
 		sliderHp.value = 1;
 		currentHp = maxHp;
 		isDead = false;
 	}
 
-	void Update()
+	public void Update()
 	{
 		//常にキャンバスをメインカメラの方を向かせる
 		canvas.transform.rotation = Camera.main.transform.rotation;

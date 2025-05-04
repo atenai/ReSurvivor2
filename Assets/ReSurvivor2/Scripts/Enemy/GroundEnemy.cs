@@ -138,8 +138,10 @@ public class GroundEnemy : Target
 	[SerializeField] DebugEnemy debugEnemy;
 	public DebugEnemy DebugEnemy => debugEnemy;
 
-	void Start()
+	new void Start()
 	{
+		base.Start();
+		Debug.Log("<color=orange>GroundEnemyクラスを初期化</color>");
 		InitSensorCollider();
 		Initialize();
 	}
@@ -240,8 +242,9 @@ public class GroundEnemy : Target
 		Gizmos.DrawSphere(new Vector3(groundCheckCenter.transform.position.x, groundCheckCenter.transform.position.y, groundCheckCenter.transform.position.z), groundedRadius);
 	}
 
-	void Update()
+	new void Update()
 	{
+		base.Update();
 		GroundCheck();
 
 		Eyesight();

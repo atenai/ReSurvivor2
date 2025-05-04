@@ -111,8 +111,10 @@ public class FlyingEnemy : Target
 		set { isMoveBack = value; }
 	}
 
-	void Start()
+	new void Start()
 	{
+		base.Start();
+		Debug.Log("<color=orange>FlyingEnemyクラスを初期化</color>");
 		InitSensorCollider();
 		Initialize();
 	}
@@ -167,8 +169,9 @@ public class FlyingEnemy : Target
 		hitCollider = null;
 	}
 
-	void Update()
+	new void Update()
 	{
+		base.Update();
 		Eyesight();
 		alert.gameObject.SetActive(isChase);
 		ChasePlayer();
