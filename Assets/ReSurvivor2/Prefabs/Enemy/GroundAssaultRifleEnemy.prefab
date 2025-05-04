@@ -239,7 +239,8 @@ MonoBehaviour:
   canvas: {fileID: 2419519451328426163}
   sliderHp: {fileID: 4582419977116525393}
   animator: {fileID: 2776096747537405195}
-  rb: {fileID: 4553017098955803893}
+  enemyRigidbody: {fileID: 4553017098955803893}
+  enemyCollider: {fileID: 8595419044903638177}
   colliders:
   - {fileID: 3131403555685646428}
   chaseTime: 10

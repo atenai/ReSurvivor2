@@ -17,8 +17,15 @@ public class GroundEnemy : Target
 	[SerializeField] Animator animator;
 	public Animator Animator => animator;
 	[UnityEngine.Tooltip("物理")]
-	[SerializeField] Rigidbody rb;
-	public Rigidbody Rigidbody => rb;
+	[SerializeField] Rigidbody enemyRigidbody;
+	public Rigidbody Rigidbody => enemyRigidbody;
+	[UnityEngine.Tooltip("エネミー本体のコライダー")]
+	[SerializeField] Collider enemyCollider;
+	public Collider EnemyCollider
+	{
+		get { return enemyCollider; }
+		set { enemyCollider = value; }
+	}
 
 	[Header("センサーコライダー用の変数")]
 	[SerializeField] ColliderEventHandler[] colliders = default;
@@ -170,10 +177,8 @@ public class GroundEnemy : Target
 			targetPlayer = Player.SingletonInstance.gameObject;
 		}
 
-		if (rb == null)
-		{
-			rb = this.GetComponent<Rigidbody>();
-		}
+		enemyRigidbody.useGravity = true;
+		enemyCollider.enabled = true;
 
 		ResetSensorCollider();
 

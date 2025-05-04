@@ -18,6 +18,9 @@ public class GroundEnemyDeadAction : Action
 
 		InitAnimation();
 		InitMove();
+
+		groundEnemy.Rigidbody.useGravity = false;
+		groundEnemy.EnemyCollider.enabled = false;
 	}
 
 	/// <summary>
