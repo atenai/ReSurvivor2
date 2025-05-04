@@ -9,74 +9,74 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyMoveForwardAction1 : Action
 {
-    FlyingEnemy flyingEnemy;
+	FlyingEnemy flyingEnemy;
 
-    [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
-    [SerializeField] float stopPos = 0.1f;
-    Vector3 targetPos;
-    bool isMoveEnd = false;
+	[UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
+	[SerializeField] float stopPos = 0.1f;
+	Vector3 targetPos;
+	bool isMoveEnd = false;
 
 #if UNITY_EDITOR
-    [SerializeField] GameObject obj;//プレハブをGameObject型で取得（デバッグ用）
+	[SerializeField] GameObject obj;//プレハブをGameObject型で取得（デバッグ用）
 #endif
 
-    // Taskが処理される直前に呼ばれる
-    public override void OnStart()
-    {
-        flyingEnemy = this.GetComponent<FlyingEnemy>();
+	// Taskが処理される直前に呼ばれる
+	public override void OnStart()
+	{
+		flyingEnemy = this.GetComponent<FlyingEnemy>();
 
-        TargetPos();
-        InitMove();
-    }
+		TargetPos();
+		InitMove();
+	}
 
-    void TargetPos()
-    {
-        targetPos = flyingEnemy.Target.transform.position;//ターゲットの当たった座標位置を取得し保持
+	void TargetPos()
+	{
+		targetPos = flyingEnemy.TargetPlayer.transform.position;//ターゲットの当たった座標位置を取得し保持
 #if UNITY_EDITOR
-        GameObject debugGameObject = UnityEngine.Object.Instantiate(obj, targetPos, Quaternion.identity);//プレハブを元に、インスタンスを生成（デバッグ用）
-        UnityEngine.Object.Destroy(debugGameObject, 5.0f);// 5秒後にゲームオブジェクトを削除
+		GameObject debugGameObject = UnityEngine.Object.Instantiate(obj, targetPos, Quaternion.identity);//プレハブを元に、インスタンスを生成（デバッグ用）
+		UnityEngine.Object.Destroy(debugGameObject, 5.0f);// 5秒後にゲームオブジェクトを削除
 #endif
-    }
+	}
 
-    void InitMove()
-    {
-        flyingEnemy.Rigidbody.velocity = Vector3.zero;
-        isMoveEnd = false;
-    }
+	void InitMove()
+	{
+		flyingEnemy.Rigidbody.velocity = Vector3.zero;
+		isMoveEnd = false;
+	}
 
-    // 更新時に呼ばれる
-    public override TaskStatus OnUpdate()
-    {
-        if (isMoveEnd == true)
-        {
-            //目的地にたどりついた
-            return TaskStatus.Success;
-        }
-        else
-        {
-            // 実行中
-            return TaskStatus.Running;
-        }
-    }
+	// 更新時に呼ばれる
+	public override TaskStatus OnUpdate()
+	{
+		if (isMoveEnd == true)
+		{
+			//目的地にたどりついた
+			return TaskStatus.Success;
+		}
+		else
+		{
+			// 実行中
+			return TaskStatus.Running;
+		}
+	}
 
-    public override void OnFixedUpdate()
-    {
-        Move();
-    }
+	public override void OnFixedUpdate()
+	{
+		Move();
+	}
 
-    public void Move()
-    {
-        float sqrCurrentDistance = Vector3.SqrMagnitude(targetPos - this.transform.position);
+	public void Move()
+	{
+		float sqrCurrentDistance = Vector3.SqrMagnitude(targetPos - this.transform.position);
 
-        if (sqrCurrentDistance <= stopPos)
-        {
-            //Debug.Log("<color=red>移動の終了</color>");
-            flyingEnemy.Rigidbody.velocity = Vector3.zero;
-            isMoveEnd = true;
-            flyingEnemy.IsMoveForward = false;
-            return;
-        }
+		if (sqrCurrentDistance <= stopPos)
+		{
+			//Debug.Log("<color=red>移動の終了</color>");
+			flyingEnemy.Rigidbody.velocity = Vector3.zero;
+			isMoveEnd = true;
+			flyingEnemy.IsMoveForward = false;
+			return;
+		}
 
-        flyingEnemy.Rigidbody.velocity = targetPos - this.transform.position;
-    }
+		flyingEnemy.Rigidbody.velocity = targetPos - this.transform.position;
+	}
 }
