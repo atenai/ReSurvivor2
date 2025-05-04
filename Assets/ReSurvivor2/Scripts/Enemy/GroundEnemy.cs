@@ -141,7 +141,7 @@ public class GroundEnemy : Target
 	new void Start()
 	{
 		base.Start();
-		Debug.Log("<color=orange>GroundEnemyクラスを初期化</color>");
+		//Debug.Log("<color=orange>GroundEnemyクラスを初期化</color>");
 		InitSensorCollider();
 		Initialize();
 	}
@@ -181,7 +181,7 @@ public class GroundEnemy : Target
 		isChase = false;
 		patrolPointNumber = 0;
 		isGrounded = false;
-		InitHandGunMagazine();
+		InitGunMagazine();
 
 		GroundCheck();
 	}
@@ -213,9 +213,9 @@ public class GroundEnemy : Target
 	}
 
 	/// <summary>
-	/// ハンドガンの弾数の初期化処理
+	/// 銃の弾数の初期化処理
 	/// </summary>
-	void InitHandGunMagazine()
+	void InitGunMagazine()
 	{
 		CurrentMagazine = MagazineCapacity;
 		isReloadTimeActive = false;

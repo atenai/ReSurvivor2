@@ -20,7 +20,7 @@ public class Target : MonoBehaviour
 
 	public void Start()
 	{
-		Debug.Log("<color=orange>Targetクラスを初期化</color>");
+		//Debug.Log("<color=orange>Targetクラスを初期化</color>");
 		sliderHp.value = 1;
 		currentHp = maxHp;
 		isDead = false;

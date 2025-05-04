@@ -114,7 +114,7 @@ public class FlyingEnemy : Target
 	new void Start()
 	{
 		base.Start();
-		Debug.Log("<color=orange>FlyingEnemyクラスを初期化</color>");
+		//Debug.Log("<color=orange>FlyingEnemyクラスを初期化</color>");
 		InitSensorCollider();
 		Initialize();
 	}
