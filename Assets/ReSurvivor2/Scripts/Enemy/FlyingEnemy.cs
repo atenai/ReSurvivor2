@@ -176,9 +176,8 @@ public class FlyingEnemy : Target
 		alert.gameObject.SetActive(isChase);
 		ChasePlayer();
 
-		//デバッグ関連の処理
-		debugEnemy.DebugCheckChase(debugEnemy.IsDebugMode, isChase);
 #if UNITY_EDITOR
+		//デバッグ関連の処理
 		DebugText();
 #endif
 	}

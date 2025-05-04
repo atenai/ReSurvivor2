@@ -253,12 +253,11 @@ public class GroundEnemy : Target
 		GroundCheck();
 
 		Eyesight();
-		alert.gameObject.SetActive(isChase);
+		Alert();
 		ChasePlayer();
 
-		//デバッグ関連の処理
-		debugEnemy.DebugCheckChase(debugEnemy.IsDebugMode, isChase);
 #if UNITY_EDITOR
+		//デバッグ関連の処理
 		DebugText();
 #endif
 	}
@@ -288,6 +287,21 @@ public class GroundEnemy : Target
 	{
 		isChase = true;
 		chaseCountTime = chaseTime;
+	}
+
+	/// <summary>
+	/// アラートイメージの表示・非表示
+	/// </summary>
+	void Alert()
+	{
+		if (IsDead == false)
+		{
+			alert.gameObject.SetActive(isChase);
+		}
+		else
+		{
+			alert.gameObject.SetActive(false);
+		}
 	}
 
 	/// <summary>
