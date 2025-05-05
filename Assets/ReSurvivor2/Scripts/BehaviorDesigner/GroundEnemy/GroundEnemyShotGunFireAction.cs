@@ -131,6 +131,7 @@ public class GroundEnemyShotGunFireAction : Action
 	/// </summary> 
 	void Fire()
 	{
+		groundEnemy.BulletCasingSE();
 		groundEnemy.MuzzleFlashAndShell();
 		groundEnemy.AfterFireSmoke();
 

@@ -228,6 +228,14 @@ public class PlayerCamera : MonoBehaviour
 		InitHandGunMagazine();
 		InitAssaultRifleMagazine();
 		InitShotGunMagazine();
+
+		//エフェクトの初期化処理（正直気に入らない、いつかこの処理が必要ないように作る）
+		HandGunMuzzleFlashAndShell();
+		HandGunSmoke();
+		AssaultRifleMuzzleFlashAndShell();
+		AssaultRifleSmoke();
+		ShotGunMuzzleFlashAndShell();
+		ShotGunSmoke();
 	}
 
 	/// <summary>
@@ -513,6 +521,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void HandGunFire()
 	{
+		HandGunBulletCasingSE();
 		HandGunMuzzleFlashAndShell();
 		HandGunSmoke();
 
@@ -598,8 +607,6 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	void HandGunMuzzleFlashAndShell()
 	{
-		HandGunBulletCasingSE();
-
 		if (handGunShotEmitters != null)
 		{
 			foreach (var effect in handGunShotEmitters)
@@ -762,6 +769,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void AssaultRifleFire()
 	{
+		AssaultRifleBulletCasingSE();
 		AssaultRifleMuzzleFlashAndShell();
 		AssaultRifleSmoke();
 
@@ -850,8 +858,6 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	void AssaultRifleMuzzleFlashAndShell()
 	{
-		AssaultRifleBulletCasingSE();
-
 		if (assaultRifleShotEmitters != null)
 		{
 			foreach (var effect in assaultRifleShotEmitters)
@@ -1014,6 +1020,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void ShotGunFire()
 	{
+		ShotGunBulletCasingSE();
 		ShotGunMuzzleFlashAndShell();
 		ShotGunSmoke();
 
@@ -1105,8 +1112,6 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	void ShotGunMuzzleFlashAndShell()
 	{
-		ShotGunBulletCasingSE();
-
 		if (shotGunShotEmitters != null)
 		{
 			foreach (var effect in shotGunShotEmitters)

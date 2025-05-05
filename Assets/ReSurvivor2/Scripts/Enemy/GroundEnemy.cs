@@ -151,6 +151,10 @@ public class GroundEnemy : Target
 		//Debug.Log("<color=orange>GroundEnemyクラスを初期化</color>");
 		InitSensorCollider();
 		Initialize();
+
+		//エフェクトの初期化処理（正直気に入らない、いつかこの処理が必要ないように作る）
+		MuzzleFlashAndShell();
+		AfterFireSmoke();
 	}
 
 	/// <summary>
@@ -352,8 +356,6 @@ public class GroundEnemy : Target
 	/// </summary>
 	public void MuzzleFlashAndShell()
 	{
-		BulletCasingSE();
-
 		if (shotEmitters != null)
 		{
 			foreach (var effect in shotEmitters)
