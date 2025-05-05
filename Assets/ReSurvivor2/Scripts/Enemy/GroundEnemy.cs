@@ -352,8 +352,6 @@ public class GroundEnemy : Target
 	/// </summary>
 	public void MuzzleFlashAndShell()
 	{
-		BulletCasingSE();
-
 		if (shotEmitters != null)
 		{
 			foreach (var effect in shotEmitters)
