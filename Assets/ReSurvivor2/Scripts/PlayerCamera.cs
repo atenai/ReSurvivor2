@@ -557,7 +557,7 @@ public class PlayerCamera : MonoBehaviour
 				//着弾した物体を後ろに押す
 				if (hit.rigidbody != null)
 				{
-					if (hit.collider.gameObject.CompareTag("FlyingEnemy") == false)
+					if (hit.collider.gameObject.CompareTag("FlyingEnemy") == false && hit.collider.gameObject.CompareTag("GroundEnemy") == false)
 					{
 						hit.rigidbody.AddForce(-hit.normal * impactForce);
 					}
