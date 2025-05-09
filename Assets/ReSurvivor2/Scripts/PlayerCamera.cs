@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Knife.Effects;
+using Cinemachine;
 
 /// <summary>
 /// プレイヤーカメラ
@@ -52,6 +53,9 @@ public class PlayerCamera : MonoBehaviour
 	public float AimUpPos => aimUpPos;
 	[Tooltip("肩越しカメラのz位置")]
 	const float aimForwardPos = -0.6f;
+
+	[SerializeField] CinemachineBrain cinemachineBrain;
+	bool isCinemachineActive = false;
 
 	[Header("レイキャスト")]
 	[Tooltip("ヒットしたオブジェクトの名前")]
@@ -336,6 +340,17 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 		//↓ロード中に動かせない処理
+
+		if (Input.GetKeyDown(KeyCode.C))
+		{
+			isCinemachineActive = isCinemachineActive ? false : true;
+			cinemachineBrain.enabled = isCinemachineActive;
+		}
+
+		if (isCinemachineActive == true)
+		{
+			return;
+		}
 
 		SwitchWeapon();
 		UpdateHitReticule();
@@ -1178,6 +1193,11 @@ public class PlayerCamera : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		if (isCinemachineActive == true)
+		{
+			return;
+		}
+
 		//SRT
 		if (Player.SingletonInstance.IsAim == false)
 		{
@@ -1187,6 +1207,7 @@ public class PlayerCamera : MonoBehaviour
 		{
 			CameraAimMove();
 		}
+
 
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
