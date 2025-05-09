@@ -55,7 +55,17 @@ public class PlayerCamera : MonoBehaviour
 	const float aimForwardPos = -0.6f;
 
 	[SerializeField] CinemachineBrain cinemachineBrain;
+	public CinemachineBrain CinemachineBrain
+	{
+		get { return cinemachineBrain; }
+		set { cinemachineBrain = value; }
+	}
 	bool isCinemachineActive = false;
+	public bool IsCinemachineActive
+	{
+		get { return isCinemachineActive; }
+		set { isCinemachineActive = value; }
+	}
 
 	[Header("レイキャスト")]
 	[Tooltip("ヒットしたオブジェクトの名前")]
@@ -340,12 +350,6 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 		//↓ロード中に動かせない処理
-
-		if (Input.GetKeyDown(KeyCode.C))
-		{
-			isCinemachineActive = isCinemachineActive ? false : true;
-			cinemachineBrain.enabled = isCinemachineActive;
-		}
 
 		if (isCinemachineActive == true)
 		{

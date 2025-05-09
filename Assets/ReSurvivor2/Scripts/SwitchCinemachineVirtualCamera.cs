@@ -16,29 +16,33 @@ public class SwitchCinemachineVirtualCamera : MonoBehaviour
 		defaultPriority = virtualCamera.Priority;
 	}
 
-	/// <summary>
-	/// Colliderの範囲に入り続けている間実行され続ける
-	/// </summary>
-	/// <param name="other"></param>
-	private void OnTriggerStay(Collider collider)
+	private void OnTriggerEnter(Collider collider)
 	{
 		// 当たった相手に"Player"タグが付いていた場合
 		if (collider.gameObject.CompareTag("Player"))
 		{
-			// 他のvirtualCameraよりも高い優先度にすることで切り替わる
-			virtualCamera.Priority = 150;
+			PlayerCamera.SingletonInstance.IsCinemachineActive = true;
+			PlayerCamera.SingletonInstance.CinemachineBrain.enabled = true;
+			StartCoroutine(ChangePriority());
 		}
 	}
 
-	/// <summary>
-	/// Colliderから出たときに実行される
-	/// </summary>
-	/// <param name="other"></param>
+	IEnumerator ChangePriority()
+	{
+		//1フレーム停止
+		yield return null;
+
+		// 他のvirtualCameraよりも高い優先度にすることで切り替わる
+		virtualCamera.Priority = 150;
+	}
+
 	private void OnTriggerExit(Collider collider)
 	{
 		// 当たった相手に"Player"タグが付いていた場合
 		if (collider.gameObject.CompareTag("Player"))
 		{
+			PlayerCamera.SingletonInstance.IsCinemachineActive = false;
+			PlayerCamera.SingletonInstance.CinemachineBrain.enabled = false;
 			// 元のpriorityに戻す
 			virtualCamera.Priority = defaultPriority;
 		}
