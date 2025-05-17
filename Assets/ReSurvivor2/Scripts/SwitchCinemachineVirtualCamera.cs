@@ -22,7 +22,7 @@ public class SwitchCinemachineVirtualCamera : MonoBehaviour
 		if (collider.gameObject.CompareTag("Player"))
 		{
 			PlayerCamera.SingletonInstance.IsCinemachineActive = true;
-			PlayerCamera.SingletonInstance.CinemachineBrain.enabled = true;
+			//PlayerCamera.SingletonInstance.CinemachineBrain.enabled = true;
 			StartCoroutine(ChangePriority());
 		}
 	}
@@ -42,7 +42,7 @@ public class SwitchCinemachineVirtualCamera : MonoBehaviour
 		if (collider.gameObject.CompareTag("Player"))
 		{
 			PlayerCamera.SingletonInstance.IsCinemachineActive = false;
-			PlayerCamera.SingletonInstance.CinemachineBrain.enabled = false;
+			//PlayerCamera.SingletonInstance.CinemachineBrain.enabled = false;
 			// 元のpriorityに戻す
 			virtualCamera.Priority = defaultPriority;
 		}
