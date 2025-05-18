@@ -289,6 +289,7 @@ GameObject:
   - component: {fileID: 6998559814532179394}
   - component: {fileID: 4146514628067926117}
   - component: {fileID: 6627713948178079152}
+  - component: {fileID: 7853123686974485374}
   m_Layer: 6
   m_Name: Cube_Target
   m_TagString: Enemy
@@ -425,6 +426,18 @@ MonoBehaviour:
   maxHp: 100
   canvas: {fileID: 6708389677510079787}
   sliderHp: {fileID: 7667759968828004567}
+--- !u!114 &7853123686974485374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5429002274982967228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6f88c4486574f84aa391400b28c4b5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6984809440088417117
 GameObject:
   m_ObjectHideFlags: 0

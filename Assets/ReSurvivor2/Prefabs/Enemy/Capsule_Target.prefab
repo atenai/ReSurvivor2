@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 282577341247685728}
   - component: {fileID: 3102027135794137449}
   - component: {fileID: 8377339414277215395}
+  - component: {fileID: 1566322414785843685}
   m_Layer: 6
   m_Name: Capsule_Target
   m_TagString: Enemy
@@ -405,6 +406,18 @@ MonoBehaviour:
   maxHp: 100
   canvas: {fileID: 8849100633220470086}
   sliderHp: {fileID: 8660514565469374937}
+--- !u!114 &1566322414785843685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043083586570102351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6f88c4486574f84aa391400b28c4b5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5233638622931751577
 GameObject:
   m_ObjectHideFlags: 0

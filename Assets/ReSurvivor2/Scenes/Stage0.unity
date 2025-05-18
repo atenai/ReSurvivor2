@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1356,11 +1356,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abc00000000013590330756419995795, type: 3}
---- !u!4 &1994173403 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2121725323165253596, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
-  m_PrefabInstance: {fileID: 1473701676328951858}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2082091429 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3752930020430462773, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
@@ -2494,14 +2489,6 @@ PrefabInstance:
       propertyPath: Enemy
       value: 
       objectReference: {fileID: 1111513093}
-    - target: {fileID: 127141154467092146, guid: 8f5f24280647b5546a7c09700fac54b7, type: 3}
-      propertyPath: Camera
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 127141154467092146, guid: 8f5f24280647b5546a7c09700fac54b7, type: 3}
-      propertyPath: Player
-      value: 
-      objectReference: {fileID: 1994173403}
     - target: {fileID: 3723265548184136445, guid: 8f5f24280647b5546a7c09700fac54b7, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -2585,10 +2572,6 @@ PrefabInstance:
     - target: {fileID: 7008672492610339775, guid: 8f5f24280647b5546a7c09700fac54b7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8340820123049453554, guid: 8f5f24280647b5546a7c09700fac54b7, type: 3}
-      propertyPath: m_Camera
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
