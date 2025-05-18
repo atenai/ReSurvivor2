@@ -88,7 +88,6 @@ GameObject:
   - component: {fileID: 4553017098955803893}
   - component: {fileID: 611402823370756306}
   - component: {fileID: 3045641993606833947}
-  - component: {fileID: 8839987473687031828}
   m_Layer: 8
   m_Name: GroundShotGunEnemy
   m_TagString: GroundEnemy
@@ -309,18 +308,6 @@ MonoBehaviour:
     debugMediumSpherePrefab: {fileID: 0}
     debugSmallSpherePrefab: {fileID: 0}
     meshRendererGroundCheckFront: {fileID: 0}
---- !u!114 &8839987473687031828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3562646171567367577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6f88c4486574f84aa391400b28c4b5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4442056355678566016
 GameObject:
   m_ObjectHideFlags: 0

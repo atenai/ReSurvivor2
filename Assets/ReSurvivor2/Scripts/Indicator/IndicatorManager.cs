@@ -9,7 +9,7 @@ public class IndicatorManager : MonoBehaviour
 	public static IndicatorManager SingletonInstance => singletonInstance;
 	[Tooltip("敵位置表示マーカー用プレハブ")]
 	[SerializeField] private GameObject indicatorPrefab;
-	private Dictionary<IndicatorTarget, GameObject> indicatorList = new Dictionary<IndicatorTarget, GameObject>();   //マーカー一覧
+	private Dictionary<Target, GameObject> indicatorList = new Dictionary<Target, GameObject>();   //マーカー一覧
 
 	void Awake()
 	{
@@ -30,7 +30,7 @@ public class IndicatorManager : MonoBehaviour
 	/// </summary>
 	/// <param name="target">ターゲット</param>
 	/// <returns>生成された敵表示マーカー</returns>
-	public GameObject InstanceIndicator(IndicatorTarget target)
+	public GameObject InstanceIndicator(Target target)
 	{
 		//既に含まれていたら追加しない
 		if (!indicatorList.ContainsKey(target))
@@ -52,7 +52,7 @@ public class IndicatorManager : MonoBehaviour
 	/// 敵表示マーカーの削除
 	/// </summary>
 	/// <param name="target">ターゲット</param>
-	public void DeleteIndicator(IndicatorTarget target)
+	public void DeleteIndicator(Target target)
 	{
 		if (indicatorList.ContainsKey(target))
 		{

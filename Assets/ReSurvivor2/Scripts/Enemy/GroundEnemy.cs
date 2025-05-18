@@ -493,6 +493,8 @@ public class GroundEnemy : Target
 		SliderHp.value = (float)CurrentHp / (float)MaxHp;
 		if (CurrentHp <= 0.0f)
 		{
+			//敵マーカー削除
+			IndicatorManager.SingletonInstance.DeleteIndicator(this);
 			IsDead = true;
 		}
 	}

@@ -39,12 +39,23 @@ public class Target : MonoBehaviour
 		sliderHp.value = 1;
 		currentHp = maxHp;
 		isDead = false;
+		//敵マーカー作成
+		IndicatorManager.SingletonInstance.InstanceIndicator(this);
 	}
 
 	public void Update()
 	{
 		//常にキャンバスをメインカメラの方を向かせる
 		canvas.transform.rotation = Camera.main.transform.rotation;
+	}
+
+	/// <summary>
+	/// ゲームオブジェクトが非表示またはデストロイされた際に呼ばれる
+	/// </summary>
+	void OnDisable()
+	{
+		//敵マーカー削除
+		IndicatorManager.SingletonInstance.DeleteIndicator(this);
 	}
 
 	/// <summary>
@@ -58,6 +69,8 @@ public class Target : MonoBehaviour
 		sliderHp.value = (float)currentHp / (float)maxHp;
 		if (currentHp <= 0.0f)
 		{
+			//敵マーカー削除
+			IndicatorManager.SingletonInstance.DeleteIndicator(this);
 			Destroy(this.gameObject);
 		}
 	}
