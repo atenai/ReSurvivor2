@@ -268,6 +268,7 @@ MonoBehaviour:
   - {fileID: 1717239033193219912}
   - {fileID: 7646512579346927600}
   afterFireSmoke: {fileID: 6181686689946337306}
+  cinemachineImpulseSource: {fileID: 4678478672489473311}
   debugEnemy:
     isDebugMode: 1
     debugTextPrefab: {fileID: 5879542589618870122, guid: 2b9195b1c4d4e344a8dae248f1394dc4, type: 3}
@@ -334,8 +335,8 @@ MonoBehaviour:
     m_ImpulseType: 3
     m_DissipationRate: 0.25
     m_RawSignal: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
-    m_AmplitudeGain: 3
-    m_FrequencyGain: 3
+    m_AmplitudeGain: 2
+    m_FrequencyGain: 2
     m_RepeatMode: 0
     m_Randomize: 1
     m_TimeEnvelope:
@@ -352,8 +353,8 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       m_AttackTime: 0
-      m_SustainTime: 0.1
-      m_DecayTime: 0.1
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
       m_ScaleWithImpact: 1
       m_HoldForever: 0
     m_ImpactRadius: 100
@@ -361,7 +362,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 2, y: 1, z: 0}
+  m_DefaultVelocity: {x: 1, y: 1, z: 0}
 --- !u!1 &4442056355678566016
 GameObject:
   m_ObjectHideFlags: 0

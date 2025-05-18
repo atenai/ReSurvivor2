@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
-using BehaviorDesigner.Runtime;
+using Cinemachine;
 
 /// <summary>
 /// プレイヤー
@@ -179,6 +179,9 @@ public class Player : MonoBehaviour
 		get { return mapUI; }
 		set { mapUI = value; }
 	}
+
+	[SerializeField] private CinemachineImpulseSource cinemachineImpulseSource;
+	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
 
 	void Awake()
 	{
@@ -841,7 +844,13 @@ public class Player : MonoBehaviour
 		if (collision.collider.tag == "Enemy" || collision.collider.tag == "FlyingEnemy" || collision.collider.tag == "GroundEnemy")
 		{
 			TakeDamage(10.0f);
+			Shaker();
 		}
+	}
+
+	void Shaker()
+	{
+		cinemachineImpulseSource.GenerateImpulse();
 	}
 
 	/// <summary>

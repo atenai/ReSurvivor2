@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Knife.Effects;
+using Cinemachine;
 
 /// <summary>
 /// 地上敵
@@ -140,6 +141,9 @@ public class GroundEnemy : Target
 		get { return currentGrenade; }
 		set { currentGrenade = value; }
 	}
+
+	[SerializeField] private CinemachineImpulseSource cinemachineImpulseSource;
+	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
 
 	[Tooltip("デバッグ")]
 	[SerializeField] DebugEnemy debugEnemy;
@@ -501,8 +505,6 @@ public class GroundEnemy : Target
 
 	public void Shaker()
 	{
-		var impulseSource = this.GetComponent<Cinemachine.CinemachineImpulseSource>();
-		impulseSource.GenerateImpulse();
-
+		cinemachineImpulseSource.GenerateImpulse();
 	}
 }
