@@ -165,6 +165,7 @@ public class GroundEnemyAssaultRifleFireAction : Action
 				if (player != null)
 				{
 					player.TakeDamage(Damage);
+					groundEnemy.Shaker();
 				}
 			}
 		}

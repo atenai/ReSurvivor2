@@ -498,4 +498,11 @@ public class GroundEnemy : Target
 			IsDead = true;
 		}
 	}
+
+	public void Shaker()
+	{
+		var impulseSource = this.GetComponent<Cinemachine.CinemachineImpulseSource>();
+		impulseSource.GenerateImpulse();
+
+	}
 }

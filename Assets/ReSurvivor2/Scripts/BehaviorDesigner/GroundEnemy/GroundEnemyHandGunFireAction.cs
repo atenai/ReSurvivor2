@@ -141,6 +141,7 @@ public class GroundEnemyHandGunFireAction : Action
 				if (player != null)
 				{
 					player.TakeDamage(Damage);
+					groundEnemy.Shaker();
 				}
 			}
 		}
