@@ -3753,6 +3753,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3590076040678325283}
   - component: {fileID: 1524288364332871080}
+  - component: {fileID: 5943850992566820953}
   m_Layer: 5
   m_Name: IndicatorManager
   m_TagString: Untagged
@@ -3792,6 +3793,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   indicatorPrefab: {fileID: 6243797872676231460, guid: 891098baf5889174fbff27694d996f98, type: 3}
+--- !u!114 &5943850992566820953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8619269414200552523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94678bb17a7af684ea319639f56df3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grenadeIndicatorPrefab: {fileID: 6243797872676231460, guid: 4012ce7aa62b5b649bb53b796fd1bcb3, type: 3}
 --- !u!1 &8713061188910899287
 GameObject:
   m_ObjectHideFlags: 0

@@ -678,11 +678,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abc00000000013590330756419995795, type: 3}
---- !u!4 &1111513093 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2015320878320066979, guid: 46e6e13fa36aca2429091c78bf2e06aa, type: 3}
-  m_PrefabInstance: {fileID: 7749755990501120919}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1148037337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2485,10 +2480,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 127141154467092146, guid: 8f5f24280647b5546a7c09700fac54b7, type: 3}
-      propertyPath: Enemy
-      value: 
-      objectReference: {fileID: 1111513093}
     - target: {fileID: 3723265548184136445, guid: 8f5f24280647b5546a7c09700fac54b7, type: 3}
       propertyPath: m_Name
       value: Canvas
