@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 
 /// <summary>
 /// 
 /// </summary>
 public class Indicator : MonoBehaviour
 {
+	[SerializeField] Image image;
 	Transform enemy;
+	Sequence sequence;
 
 	public void Init(GameObject gameObject)
 	{
@@ -27,5 +31,12 @@ public class Indicator : MonoBehaviour
 		{
 			this.gameObject.SetActive(false);
 		}
+	}
+
+	public void Show()
+	{
+		sequence.Kill();
+		sequence.Append(image.DOFade(1, 0));
+		sequence.Append(image.DOFade(0, 5));
 	}
 }

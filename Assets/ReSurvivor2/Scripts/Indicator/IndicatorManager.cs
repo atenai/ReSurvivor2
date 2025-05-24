@@ -30,7 +30,7 @@ public class IndicatorManager : MonoBehaviour
 	/// </summary>
 	/// <param name="target">ターゲット</param>
 	/// <returns>生成された敵表示マーカー</returns>
-	public GameObject InstanceIndicator(Target target)
+	public void InstanceIndicator(Target target)
 	{
 		//既に含まれていたら追加しない
 		if (!indicatorList.ContainsKey(target))
@@ -39,13 +39,11 @@ public class IndicatorManager : MonoBehaviour
 			gameObject.transform.SetParent(this.transform);
 			indicatorList.Add(target, gameObject);
 			gameObject.GetComponent<Indicator>().Init(target.gameObject);
-			return gameObject;
 		}
 		else
 		{
 			Debug.LogError("EnemySensoreManager InstanceSensorMarker Failure.");
 		}
-		return null;
 	}
 
 	/// <summary>
@@ -59,6 +57,15 @@ public class IndicatorManager : MonoBehaviour
 			GameObject gameObject = indicatorList[target];
 			Destroy(gameObject);
 			indicatorList.Remove(target);
+		}
+	}
+
+	public void ShowIndicator(Target target)
+	{
+		if (indicatorList.ContainsKey(target))
+		{
+			GameObject gameObject = indicatorList[target];
+			gameObject.GetComponent<Indicator>().Show();
 		}
 	}
 }
