@@ -37,8 +37,8 @@ public class OutGameManagerBase : MonoBehaviour
 			Destroy(UI.SingletonInstance.gameObject);
 		}
 
-		Shader.WarmupAllShaders();
-
+		//シェーダーをロード
+		ShaderLoad();
 	}
 
 	protected void Update()
@@ -69,9 +69,6 @@ public class OutGameManagerBase : MonoBehaviour
 		//スライダーの値を最低にする
 		sliderLoading.value = float.MinValue;
 
-		//シェーダーをロード
-		ShaderLoad();
-
 		//シーンをロード
 		AsyncOperation async = SceneManager.LoadSceneAsync(nextSceneName);
 		//シーンが勝手に切り替わらないようにする
@@ -82,7 +79,7 @@ public class OutGameManagerBase : MonoBehaviour
 			//ロード数値をスライダーに反映
 			sliderLoading.value = async.progress;
 
-			//ロード数値が0.9より同じかそれ以上大きくなったら中身を実行する
+			//ロード数値が0.9より同じかそれ以上大きくなったらかつシェーダーロードが1と同じかそれ以上になったら中身を実行する
 			if (0.9f <= async.progress && 1.0f <= GetShaderWarmupProgressRate())
 			{
 				//スライダーの値を最大にする
