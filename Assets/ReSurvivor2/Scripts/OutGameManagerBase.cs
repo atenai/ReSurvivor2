@@ -106,8 +106,9 @@ public class OutGameManagerBase : MonoBehaviour
 
 		if (shaderVariantCollection != null)
 		{
+			Debug.Log("シェーダーウォームアップ開始");
 			shaderVariantCollection.WarmUp();
-			Debug.Log("シェーダーウォームアップ開始！");
+			Debug.Log("シェーダーウォームアップ完了");
 		}
 		else
 		{
