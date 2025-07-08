@@ -90,7 +90,7 @@ public class Player : MonoBehaviour
 	[Tooltip("バックグラウンドイメージ")]
 	[SerializeField] Image imageBG;
 	[Tooltip("プレイヤーUIのY軸の傾き")]
-	float playerUIRotY = 0.2f;
+	float playerUIRotY = 30.0f;
 	[Tooltip("現在のHP")]
 	float currentHp = 100.0f;
 	[Tooltip("HPの最大値")]
