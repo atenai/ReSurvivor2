@@ -2,7 +2,6 @@ using UnityEngine;
 
 /// <summary>
 /// 3DUIの大きさを画面の解像度に合わせてスケールを変更するクラス
-/// だたこれをプレイヤーの3DUIつかっても正しく斜めに表示されない
 /// </summary>
 public class UIScaler : MonoBehaviour
 {
