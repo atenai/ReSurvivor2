@@ -3,6 +3,8 @@ using UnityEngine;
 /// <summary>
 /// SafeArea（ノッチやホームバーなどを避けた安全領域）を取得し、
 /// RectTransformのAnchorを動的に調整するコンポーネント
+/// このスクリプトのようなセーフエリアは基本的にスマホゲームにしか使わない
+/// なぜならPCゲームはディスプレイのスクリーンサイズとセーフエリアの大きさがほぼ変わらないことが多い為
 /// </summary>
 [ExecuteInEditMode] // エディター上でも処理を実行（ただし、safeAreaは正確ではない）
 [RequireComponent(typeof(RectTransform))] // RectTransformが必須
@@ -78,6 +80,8 @@ public class SafeArea : MonoBehaviour
 			{
 				panel.anchorMin = anchorMin;
 				panel.anchorMax = anchorMax;
+				// NOTE:これはアンカー座標を変更した際になぜかUnityは座標位置がずれてしまう為、必ず初期位置に戻すという意味で必要がある処理
+				panel.anchoredPosition = Vector2.zero;
 			}
 		}
 	}
