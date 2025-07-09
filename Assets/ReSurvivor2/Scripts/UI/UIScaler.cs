@@ -3,6 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 3DUIの大きさを画面の解像度に合わせてスケールを変更するクラス
 /// </summary>
+[System.Obsolete("使えないが参考になるかも")]
 public class UIScaler : MonoBehaviour
 {
 	[SerializeField] private Canvas worldCanvas;
