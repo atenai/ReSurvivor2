@@ -10,10 +10,11 @@ using UnityEngine.Experimental.Rendering;
 /// </summary>
 public class OutGameManagerBase : MonoBehaviour
 {
-	[SerializeField] protected string sceneName;
-	[SerializeField] protected Slider sliderLoading;
-	bool isLoadOnce = false;
 	ShaderVariantCollection shaderVariantCollection;
+	[SerializeField] protected Slider sliderShaderLoading;
+	[SerializeField] protected string sceneName;
+	[SerializeField] protected Slider sliderSceneLoading;
+	bool isLoadOnce = false;
 
 	protected void Start()
 	{
@@ -43,6 +44,8 @@ public class OutGameManagerBase : MonoBehaviour
 
 	protected void Update()
 	{
+		sliderShaderLoading.value = GetShaderWarmupProgressRate();
+
 		if (Input.GetKeyDown(KeyCode.Return))
 		{
 			Load(sceneName);
@@ -57,17 +60,17 @@ public class OutGameManagerBase : MonoBehaviour
 		if (isLoadOnce == false)
 		{
 			isLoadOnce = true;
-			StartCoroutine(LoadScene(nextSceneName));
+			StartCoroutine(SceneLoad(nextSceneName));
 		}
 	}
 
 	/// <summary>
 	/// シーンをロードする
 	/// </summary>
-	IEnumerator LoadScene(string nextSceneName)
+	IEnumerator SceneLoad(string nextSceneName)
 	{
 		//スライダーの値を最低にする
-		sliderLoading.value = float.MinValue;
+		sliderSceneLoading.value = float.MinValue;
 
 		//シーンをロード
 		AsyncOperation async = SceneManager.LoadSceneAsync(nextSceneName);
@@ -77,13 +80,13 @@ public class OutGameManagerBase : MonoBehaviour
 		while (async.isDone == false)
 		{
 			//ロード数値をスライダーに反映
-			sliderLoading.value = async.progress;
+			sliderSceneLoading.value = async.progress;
 
-			//ロード数値が0.9より同じかそれ以上大きくなったらかつシェーダーロードが1と同じかそれ以上になったら中身を実行する
+			//ロード数値が0.9より同じかそれ以上大きくなったら かつ シェーダーロードが1と同じかそれ以上になったら 中身を実行する
 			if (0.9f <= async.progress && 1.0f <= GetShaderWarmupProgressRate())
 			{
 				//スライダーの値を最大にする
-				sliderLoading.value = float.MaxValue;
+				sliderSceneLoading.value = float.MaxValue;
 
 				//フレームのラストまで待つ
 				yield return new WaitForEndOfFrame();
@@ -102,6 +105,9 @@ public class OutGameManagerBase : MonoBehaviour
 	/// </summary>
 	void ShaderLoad()
 	{
+		//スライダーの値を最低にする
+		sliderShaderLoading.value = float.MinValue;
+
 		shaderVariantCollection = Resources.Load<ShaderVariantCollection>("ReSurvivor2ShaderVariants");
 
 		if (shaderVariantCollection != null)
@@ -120,7 +126,7 @@ public class OutGameManagerBase : MonoBehaviour
 	/// シェーダーウォームアップの進捗を返す
 	/// </summary>
 	/// <returns>進捗(0～1)</returns>
-	float GetShaderWarmupProgressRate()
+	protected float GetShaderWarmupProgressRate()
 	{
 		int variantCount = shaderVariantCollection.variantCount;            // variantの総数
 		int warmedUpCount = shaderVariantCollection.warmedUpVariantCount;   // Warmup済みのvariant数
