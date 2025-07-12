@@ -25,14 +25,15 @@ public class SoundManager : MonoBehaviour
 
 	ObjectPool<GameObject> objectPool;
 	[SerializeField] GameObject prefab;
-	[SerializeField] int defalutCapacity = 3;
-	[SerializeField] int maxCount = 10;
+	int defalutCapacity = 10;
+	int maxCount = 20;
 
 	/// <summary>
 	/// オブジェクトプールの初期化処理
 	/// </summary>
 	void Start()
 	{
+		//オブジェクトプールの設定
 		objectPool = new ObjectPool<GameObject>
 		(
 			OnCreatePoolObject,
@@ -43,6 +44,13 @@ public class SoundManager : MonoBehaviour
 			defalutCapacity,
 			maxCount
 		);
+
+		//オブジェクトプールのゲームオブジェクトを初期生成する
+		for (int i = 0; i < defalutCapacity; i++)
+		{
+			GameObject gameObject = objectPool.Get();
+			gameObject.transform.position = transform.position;
+		}
 	}
 
 	/// <summary>
@@ -87,11 +95,11 @@ public class SoundManager : MonoBehaviour
 	/// <summary>
 	/// 外部から呼ぶObj取得関数
 	/// </summary>
-	public GameObject GetGameObject(Transform transform)
+	public void GetGameObject(Transform transform)
 	{
 		GameObject gameObject = objectPool.Get();
 		gameObject.transform.position = transform.position;
-		return gameObject;
+		gameObject.GetComponent<AudioPlayPool>().PlaySound();
 	}
 
 	/// <summary>
