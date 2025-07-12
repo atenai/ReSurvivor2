@@ -555,7 +555,7 @@ public class PlayerCamera : MonoBehaviour
 				isHitReticule = true;
 
 				//ヒット音を再生
-				SoundManager.SingletonInstance.GetGameObject(this.transform);
+				SoundManager.SingletonInstance.HitSEPool.GetGameObject(this.transform);
 
 				//追跡開始
 				GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
@@ -807,7 +807,7 @@ public class PlayerCamera : MonoBehaviour
 				isHitReticule = true;
 
 				//ヒット音を再生
-				SoundManager.SingletonInstance.GetGameObject(this.transform);
+				SoundManager.SingletonInstance.HitSEPool.GetGameObject(this.transform);
 
 				//追跡開始
 				GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
@@ -1060,7 +1060,7 @@ public class PlayerCamera : MonoBehaviour
 					isHitReticule = true;
 
 					//ヒット音を再生
-					SoundManager.SingletonInstance.GetGameObject(this.transform);
+					SoundManager.SingletonInstance.HitSEPool.GetGameObject(this.transform);
 
 					//追跡開始
 					GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();

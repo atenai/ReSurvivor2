@@ -2,15 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioPlayPool : MonoBehaviour
+public class AudioPlayHitSEPool : MonoBehaviour
 {
 	[SerializeField] AudioClip audioClip;
 	[SerializeField] AudioSource audioSource;
-
-	void OnEnable()
-	{
-
-	}
 
 	public void PlaySound()
 	{
@@ -22,7 +17,7 @@ public class AudioPlayPool : MonoBehaviour
 		//音声が鳴り終えたら
 		if (audioSource.isPlaying == false)
 		{
-			SoundManager.SingletonInstance.ReleaseGameObject(this.gameObject);
+			SoundManager.SingletonInstance.HitSEPool.ReleaseGameObject(this.gameObject);
 		}
 	}
 }
