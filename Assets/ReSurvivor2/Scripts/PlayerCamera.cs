@@ -101,13 +101,12 @@ public class PlayerCamera : MonoBehaviour
 
 	[Tooltip("ハンドガンの射撃のSE")]
 	[SerializeField] GameObject handGunShootSe;
-	float handGunShootSeDestroyTime = 1.0f;
+
 	[Tooltip("ハンドガンのリロードのSE")]
 	[SerializeField] GameObject handGunReloadSe;
-	float handGunReloadSeDestroyTime = 1.0f;
+
 	[Tooltip("ハンドガンの薬莢のSE")]
 	[SerializeField] GameObject handGunBulletCasingSe;
-	float handGunBulletCasingSeDestroyTime = 1.0f;
 
 	//↓アセットストアのプログラム↓//
 	[Tooltip("ハンドガンのマズルフラッシュと薬莢")]
@@ -143,13 +142,10 @@ public class PlayerCamera : MonoBehaviour
 
 	[Tooltip("アサルトライフルの射撃のSE")]
 	[SerializeField] GameObject assaultRifleShootSe;
-	float assaultRifleShootSeDestroyTime = 1.0f;
 	[Tooltip("アサルトライフルのリロードのSE")]
 	[SerializeField] GameObject assaultRifleReloadSe;
-	float assaultRifleReloadSeDestroyTime = 1.0f;
 	[Tooltip("アサルトライフルの薬莢のSE")]
 	[SerializeField] GameObject assaultRifleBulletCasingSe;
-	float assaultRifleBulletCasingSeDestroyTime = 1.0f;
 
 	//↓アセットストアのプログラム↓//
 	[Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
@@ -187,13 +183,10 @@ public class PlayerCamera : MonoBehaviour
 
 	[Tooltip("ショットガンの射撃のSE")]
 	[SerializeField] GameObject shotGunShootSe;
-	float shotGunShootSeDestroyTime = 1.0f;
 	[Tooltip("ショットガンのリロードのSE")]
 	[SerializeField] GameObject shotGunReloadSe;
-	float shotGunReloadSeDestroyTime = 1.0f;
 	[Tooltip("ショットガンの薬莢のSE")]
 	[SerializeField] GameObject shotGunBulletCasingSe;
-	float shotGunBulletCasingSeDestroyTime = 1.0f;
 
 	//↓アセットストアのプログラム↓//
 	[Tooltip("ショットガンのマズルフラッシュと薬莢")]
@@ -561,6 +554,9 @@ public class PlayerCamera : MonoBehaviour
 				//ヒットレティクルを表示
 				isHitReticule = true;
 
+				//ヒット音を再生
+				SoundManager.SingletonInstance.GetGameObject(this.transform);
+
 				//追跡開始
 				GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
 				if (groundEnemy != null)
@@ -586,7 +582,6 @@ public class PlayerCamera : MonoBehaviour
 	void HandGunFireSE()
 	{
 		UnityEngine.GameObject se = Instantiate(handGunShootSe, this.transform.position, Quaternion.identity);
-		Destroy(se, handGunShootSeDestroyTime);
 	}
 
 
@@ -596,7 +591,6 @@ public class PlayerCamera : MonoBehaviour
 	void HandGunReloadSE()
 	{
 		UnityEngine.GameObject se = Instantiate(handGunReloadSe, this.transform.position, Quaternion.identity);
-		Destroy(se, handGunReloadSeDestroyTime);
 	}
 
 	/// <summary>
@@ -605,7 +599,6 @@ public class PlayerCamera : MonoBehaviour
 	void HandGunBulletCasingSE()
 	{
 		UnityEngine.GameObject se = Instantiate(handGunBulletCasingSe, this.transform.position, Quaternion.identity);
-		Destroy(se, handGunBulletCasingSeDestroyTime);
 	}
 
 	/// <summary>
@@ -813,6 +806,9 @@ public class PlayerCamera : MonoBehaviour
 				//ヒットレティクルを表示
 				isHitReticule = true;
 
+				//ヒット音を再生
+				SoundManager.SingletonInstance.GetGameObject(this.transform);
+
 				//追跡開始
 				GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
 				if (groundEnemy != null)
@@ -838,7 +834,6 @@ public class PlayerCamera : MonoBehaviour
 	void AssaultRifleFireSE()
 	{
 		UnityEngine.GameObject se = Instantiate(assaultRifleShootSe, this.transform.position, Quaternion.identity);
-		Destroy(se, assaultRifleShootSeDestroyTime);
 	}
 
 	/// <summary>
@@ -847,7 +842,6 @@ public class PlayerCamera : MonoBehaviour
 	void AssaultRifleReloadSE()
 	{
 		UnityEngine.GameObject se = Instantiate(assaultRifleReloadSe, this.transform.position, Quaternion.identity);
-		Destroy(se, assaultRifleReloadSeDestroyTime);
 	}
 
 	/// <summary>
@@ -856,7 +850,6 @@ public class PlayerCamera : MonoBehaviour
 	void AssaultRifleBulletCasingSE()
 	{
 		UnityEngine.GameObject se = Instantiate(assaultRifleBulletCasingSe, this.transform.position, Quaternion.identity);
-		Destroy(se, assaultRifleBulletCasingSeDestroyTime);
 	}
 
 	/// <summary>
@@ -1066,6 +1059,9 @@ public class PlayerCamera : MonoBehaviour
 					//ヒットレティクルを表示
 					isHitReticule = true;
 
+					//ヒット音を再生
+					SoundManager.SingletonInstance.GetGameObject(this.transform);
+
 					//追跡開始
 					GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
 					if (groundEnemy != null)
@@ -1092,7 +1088,6 @@ public class PlayerCamera : MonoBehaviour
 	void ShotGunFireSE()
 	{
 		UnityEngine.GameObject se = Instantiate(shotGunShootSe, this.transform.position, Quaternion.identity);
-		Destroy(se, shotGunShootSeDestroyTime);
 	}
 
 	/// <summary>
@@ -1101,7 +1096,6 @@ public class PlayerCamera : MonoBehaviour
 	void ShotGunReloadSE()
 	{
 		UnityEngine.GameObject se = Instantiate(shotGunReloadSe, this.transform.position, Quaternion.identity);
-		Destroy(se, shotGunReloadSeDestroyTime);
 	}
 
 	/// <summary>
@@ -1110,7 +1104,6 @@ public class PlayerCamera : MonoBehaviour
 	void ShotGunBulletCasingSE()
 	{
 		UnityEngine.GameObject se = Instantiate(shotGunBulletCasingSe, this.transform.position, Quaternion.identity);
-		Destroy(se, shotGunBulletCasingSeDestroyTime);
 	}
 
 	/// <summary>

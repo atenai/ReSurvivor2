@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7126199428332280945}
   - component: {fileID: 982046144689781064}
-  - component: {fileID: 4552900215750545631}
+  - component: {fileID: 5398753019830867787}
   m_Layer: 0
-  m_Name: AK47AssaultRifleBulletCasingSE
+  m_Name: HitSE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,7 +129,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4552900215750545631
+--- !u!114 &5398753019830867787
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,8 +138,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8217214238848448886}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c39a8570d1481ef47a97d1b081440c58, type: 3}
+  m_Script: {fileID: 11500000, guid: 475957d092f38fa43a4be93ba845df23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 252e29988ae854373991c77d78287585, type: 3}
+  audioClip: {fileID: 8300000, guid: bfccf4cb6c5104d62ae772136d97c1f9, type: 3}
   audioSource: {fileID: 982046144689781064}
