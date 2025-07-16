@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Knife.Effects;
 using Cinemachine;
+using System.Data;
 
 /// <summary>
 /// プレイヤーカメラ
@@ -86,11 +87,12 @@ public class PlayerCamera : MonoBehaviour
 	public int HandGunCurrentMagazine => handGunCurrentMagazine;
 	[Tooltip("ハンドガンの最大マガジン数")]
 	readonly int handGunMagazineCapacity = 7;
+	public int HandGunMagazineCapacity => handGunMagazineCapacity;
 	[Tooltip("ハンドガンの現在の残弾数")]
 	int currentHandGunAmmo = 35;
 	public int CurrentHandGunAmmo => currentHandGunAmmo;
 	[Tooltip("ハンドガンの最大残弾数")]
-	int maxHandGunAmmo = 70;
+	readonly int maxHandGunAmmo = 70;//将来的には拡張マガジンポーチを取得すると増える的なものを入れるかも
 	public int MaxHandGunAmmo => maxHandGunAmmo;
 	[Tooltip("ハンドガンのリロードのオン・オフ")]
 	bool isHandGunReloadTimeActive = false;
@@ -98,9 +100,6 @@ public class PlayerCamera : MonoBehaviour
 	float handGunReloadTime = 0.0f;
 	[Tooltip("ハンドガンのリロード時間")]
 	readonly float handGunReloadTimeDefine = 1.5f;
-
-	[Tooltip("ハンドガンの射撃のSE")]
-	[SerializeField] GameObject handGunShootSe;
 
 	[Tooltip("ハンドガンのリロードのSE")]
 	[SerializeField] GameObject handGunReloadSe;
@@ -127,11 +126,12 @@ public class PlayerCamera : MonoBehaviour
 	public int AssaultRifleCurrentMagazine => assaultRifleCurrentMagazine;
 	[Tooltip("アサルトライフルの最大マガジン数")]
 	readonly int assaultRifleMagazineCapacity = 30;
+	public int AssaultRifleMagazineCapacity => assaultRifleMagazineCapacity;
 	[Tooltip("アサルトライフルの現在の残弾数")]
 	int currentAssaultRifleAmmo = 150;
 	public int CurrentAssaultRifleAmmo => currentAssaultRifleAmmo;
 	[Tooltip("アサルトライフルの最大残弾数")]
-	int maxAssaultRifleAmmo = 300;
+	readonly int maxAssaultRifleAmmo = 300;//将来的には拡張マガジンポーチを取得すると増える的なものを入れるかも
 	public int MaxAssaultRifleAmmo => maxAssaultRifleAmmo;
 	[Tooltip("アサルトライフルのリロードのオン・オフ")]
 	bool isAssaultRifleReloadTimeActive = false;
@@ -168,11 +168,12 @@ public class PlayerCamera : MonoBehaviour
 	public int ShotGunCurrentMagazine => shotGunCurrentMagazine;
 	[Tooltip("ショットガンの最大マガジン数")]
 	readonly int shotGunMagazineCapacity = 8;
+	public int ShotGunMagazineCapacity => shotGunMagazineCapacity;
 	[Tooltip("ショットガンの現在の残弾数")]
 	int currentShotGunAmmo = 40;
 	public int CurrentShotGunAmmo => currentShotGunAmmo;
 	[Tooltip("ショットガンの最大残弾数")]
-	int maxShotGunAmmo = 80;
+	readonly int maxShotGunAmmo = 80;//将来的には拡張マガジンポーチを取得すると増える的なものを入れるかも
 	public int MaxShotGunAmmo => maxShotGunAmmo;
 	[Tooltip("ショットガンのリロードのオン・オフ")]
 	bool isShotGunReloadTimeActive = false;
@@ -581,7 +582,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void HandGunFireSE()
 	{
-		UnityEngine.GameObject se = Instantiate(handGunShootSe, this.transform.position, Quaternion.identity);
+		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(this.transform);
 	}
 
 
