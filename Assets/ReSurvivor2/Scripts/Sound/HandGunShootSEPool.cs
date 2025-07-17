@@ -30,6 +30,7 @@ public class HandGunShootSEPool : MonoBehaviour
 		);
 
 		//オブジェクトプールのゲームオブジェクトを初期生成する
+		//必ずコンポーネントのインスペクターにあるPlay On Awakeのチェックを外すしてOFFにしておくこと！
 		for (int i = 0; i < defalutCapacity; i++)
 		{
 			GameObject gameObject = objectPool.Get();
