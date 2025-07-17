@@ -599,7 +599,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	void HandGunBulletCasingSE()
 	{
-		UnityEngine.GameObject se = Instantiate(handGunBulletCasingSe, this.transform.position, Quaternion.identity);
+		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(this.transform);
 	}
 
 	/// <summary>
