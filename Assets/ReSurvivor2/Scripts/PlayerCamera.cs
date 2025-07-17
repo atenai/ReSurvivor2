@@ -585,7 +585,6 @@ public class PlayerCamera : MonoBehaviour
 		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(this.transform);
 	}
 
-
 	/// <summary>
 	/// ハンドガンのリロードSE
 	/// </summary> 
