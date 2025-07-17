@@ -591,7 +591,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void HandGunReloadSE()
 	{
-		UnityEngine.GameObject se = Instantiate(handGunReloadSe, this.transform.position, Quaternion.identity);
+		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(this.transform);
 	}
 
 	/// <summary>
