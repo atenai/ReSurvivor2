@@ -339,7 +339,7 @@ public class Player : MonoBehaviour
 		inputVertical = Input.GetAxisRaw("Vertical");
 
 		//右ボタンまたはレフトシフトが押されていたら中身を実行
-		if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftControl) || Input.GetButton("PS4 L2"))
+		if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftControl) || 0.5f < Input.GetAxisRaw("XInput LT"))
 		{
 			isAim = true;
 		}
@@ -359,12 +359,12 @@ public class Player : MonoBehaviour
 
 		SwitchWeaponModel();
 
-		if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("PS4 R1"))
+		if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("XInput RB"))
 		{
 			Heal();
 		}
 
-		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("PS4 L1"))
+		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("XInput LB"))
 		{
 			RestoresStamina();
 		}
@@ -378,7 +378,7 @@ public class Player : MonoBehaviour
 		UpdateHpHealEffect();
 		UpdateStaminaHealEffect();
 
-		if (Input.GetKeyDown(KeyCode.M))
+		if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
 		{
 			mapUI.EnableMap();
 		}
@@ -599,7 +599,7 @@ public class Player : MonoBehaviour
 
 		mineSpawnCount = mineSpawnCount + Time.deltaTime;
 
-		if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.G))
+		if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.G) || 0.5 < Input.GetAxisRaw("XInput DPad Up&Down"))
 		{
 			if (currentMine <= 0)
 			{

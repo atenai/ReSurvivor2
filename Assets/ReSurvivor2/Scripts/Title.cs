@@ -36,7 +36,7 @@ public class Title : OutGameManagerBase
 		}
 
 		//上下の矢印キーで選択を変更
-		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
 		{
 			selectedIndex--;
 			if (selectedIndex < 0)
@@ -45,7 +45,7 @@ public class Title : OutGameManagerBase
 			}
 			Menu();
 		}
-		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || 0.5 < Input.GetAxisRaw("XInput DPad Left&Right"))
 		{
 			selectedIndex++;
 			if (menuOptions.Length <= selectedIndex)
@@ -56,7 +56,7 @@ public class Title : OutGameManagerBase
 		}
 
 		//Enterキーで選択を確定
-		if (Input.GetKeyDown(KeyCode.Return))
+		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
 		{
 			ExecuteMenuAction();
 		}

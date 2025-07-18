@@ -13,7 +13,7 @@ public class Computer : MonoBehaviour
 		if (collider.gameObject.CompareTag("Player"))
 		{
 			Debug.Log("<color=yellow>プレイヤー</color>");
-			if (Input.GetKeyDown(KeyCode.F))
+			if (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("XInput Y"))
 			{
 				Debug.Log("<color=green>Fキー</color>");
 				Save();

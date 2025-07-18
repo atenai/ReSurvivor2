@@ -211,6 +211,8 @@ public class PlayerCamera : MonoBehaviour
 	}
 	public GunTYPE gunTYPE = GunTYPE.AssaultRifle;
 
+	XInputAxisTriggerButton xInputAxisTriggerButton = new XInputAxisTriggerButton();
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -347,6 +349,7 @@ public class PlayerCamera : MonoBehaviour
 
 		SwitchWeapon();
 		UpdateHitReticule();
+		xInputAxisTriggerButton.Update(Input.GetAxis("XInput RT"));
 	}
 
 	/// <summary>
@@ -356,17 +359,17 @@ public class PlayerCamera : MonoBehaviour
 	{
 		if (isHandGunReloadTimeActive == false && isAssaultRifleReloadTimeActive == false && isShotGunReloadTimeActive == false)
 		{
-			if (Input.GetKeyDown(KeyCode.Alpha1))
+			if (Input.GetKeyDown(KeyCode.Alpha1) || 0.5 < Input.GetAxisRaw("XInput DPad Left&Right"))
 			{
 				//Debug.Log("ハンドガン");
 				gunTYPE = GunTYPE.HandGun;
 			}
-			else if (Input.GetKeyDown(KeyCode.Alpha2))
+			else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
 			{
 				//Debug.Log("アサルトライフル");
 				gunTYPE = GunTYPE.AssaultRifle;
 			}
-			else if (Input.GetKeyDown(KeyCode.Alpha3))
+			else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetAxisRaw("XInput DPad Up&Down") < -0.5f)
 			{
 				//Debug.Log("ショットガン");
 				gunTYPE = GunTYPE.ShotGun;
@@ -403,7 +406,7 @@ public class PlayerCamera : MonoBehaviour
 	{
 		if (Player.SingletonInstance.IsAim == true)
 		{
-			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("PS4 R2"))//左クリックまたはEnterを押している場合に中身を実行する
+			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || xInputAxisTriggerButton.Down)//左クリックまたはEnterを押している場合に中身を実行する
 			{
 				if (handGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 				{
@@ -457,7 +460,7 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("PS4 Square"))
+		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("XInput X"))
 		{
 			isHandGunReloadTimeActive = true;//リロードのオン
 		}
@@ -650,7 +653,7 @@ public class PlayerCamera : MonoBehaviour
 	{
 		if (Player.SingletonInstance.IsAim == true)
 		{
-			if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || Input.GetButton("PS4 R2"))//左クリックまたはEnterを押している場合に中身を実行する
+			if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || 0.5f < Input.GetAxisRaw("XInput RT"))//左クリックまたはEnterを押している場合に中身を実行する
 			{
 				if (assaultRifleCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 				{
@@ -704,7 +707,7 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("PS4 Square"))
+		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("XInput X"))
 		{
 			isAssaultRifleReloadTimeActive = true;//リロードのオン
 		}
@@ -901,7 +904,7 @@ public class PlayerCamera : MonoBehaviour
 	{
 		if (Player.SingletonInstance.IsAim == true)
 		{
-			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("PS4 R2"))//左クリックまたはEnterを押している場合に中身を実行する
+			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || xInputAxisTriggerButton.Down)//左クリックまたはEnterを押している場合に中身を実行する
 			{
 				if (shotGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 				{
@@ -955,7 +958,7 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("PS4 Square"))
+		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("XInput X"))
 		{
 			isShotGunReloadTimeActive = true;//リロードのオン
 		}
@@ -1239,16 +1242,8 @@ public class PlayerCamera : MonoBehaviour
 	void CameraRot()
 	{
 		// マウスの移動量を取得
-		//float x_Rotation = Input.GetAxis("Mouse X");
-		//float y_Rotation = Input.GetAxis("Mouse Y");
-
-		// 右スティックの入力を取得
-		// 横回転
-		float x_Rotation = Input.GetAxis("PS4 R_Stick_Left&Right");
-		//Debug.Log("<color=red>x_Rotation : " + x_Rotation + "</color>");
-		// 縦回転（上下反転したければ - をつける）
-		float y_Rotation = Input.GetAxis("PS4 R_Stick_Up&Down");
-		//Debug.Log("<color=blue>y_Rotation : " + y_Rotation + "</color>");
+		float x_Rotation = Input.GetAxis("Mouse X") + Input.GetAxis("XInput R_Stick_Left&Right");
+		float y_Rotation = Input.GetAxis("Mouse Y") + Input.GetAxis("XInput R_Stick_Up&Down");
 
 		if (Player.SingletonInstance.IsAim == true)
 		{

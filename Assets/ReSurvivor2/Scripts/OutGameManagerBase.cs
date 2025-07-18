@@ -46,7 +46,7 @@ public class OutGameManagerBase : MonoBehaviour
 	{
 		sliderShaderLoading.value = GetShaderWarmupProgressRate();
 
-		if (Input.GetKeyDown(KeyCode.Return))
+		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
 		{
 			Load(sceneName);
 		}
