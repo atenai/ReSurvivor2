@@ -339,7 +339,7 @@ public class Player : MonoBehaviour
 		inputVertical = Input.GetAxisRaw("Vertical");
 
 		//右ボタンまたはレフトシフトが押されていたら中身を実行
-		if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftControl))
+		if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftControl) || Input.GetButton("PS4 L2"))
 		{
 			isAim = true;
 		}
@@ -359,12 +359,12 @@ public class Player : MonoBehaviour
 
 		SwitchWeaponModel();
 
-		if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E))
+		if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("PS4 R1"))
 		{
 			Heal();
 		}
 
-		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.LeftShift))
+		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("PS4 L1"))
 		{
 			RestoresStamina();
 		}

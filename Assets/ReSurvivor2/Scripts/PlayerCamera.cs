@@ -403,7 +403,7 @@ public class PlayerCamera : MonoBehaviour
 	{
 		if (Player.SingletonInstance.IsAim == true)
 		{
-			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return))//左クリックまたはEnterを押している場合に中身を実行する
+			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("PS4 R2"))//左クリックまたはEnterを押している場合に中身を実行する
 			{
 				if (handGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 				{
@@ -457,7 +457,7 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		if (Input.GetKey(KeyCode.R))
+		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("PS4 Square"))
 		{
 			isHandGunReloadTimeActive = true;//リロードのオン
 		}
@@ -650,7 +650,7 @@ public class PlayerCamera : MonoBehaviour
 	{
 		if (Player.SingletonInstance.IsAim == true)
 		{
-			if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return))//左クリックまたはEnterを押している場合に中身を実行する
+			if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || Input.GetButton("PS4 R2"))//左クリックまたはEnterを押している場合に中身を実行する
 			{
 				if (assaultRifleCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 				{
@@ -704,7 +704,7 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		if (Input.GetKey(KeyCode.R))
+		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("PS4 Square"))
 		{
 			isAssaultRifleReloadTimeActive = true;//リロードのオン
 		}
@@ -901,7 +901,7 @@ public class PlayerCamera : MonoBehaviour
 	{
 		if (Player.SingletonInstance.IsAim == true)
 		{
-			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return))//左クリックまたはEnterを押している場合に中身を実行する
+			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("PS4 R2"))//左クリックまたはEnterを押している場合に中身を実行する
 			{
 				if (shotGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 				{
@@ -955,7 +955,7 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		if (Input.GetKey(KeyCode.R))
+		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("PS4 Square"))
 		{
 			isShotGunReloadTimeActive = true;//リロードのオン
 		}
@@ -1239,8 +1239,16 @@ public class PlayerCamera : MonoBehaviour
 	void CameraRot()
 	{
 		// マウスの移動量を取得
-		float x_Rotation = Input.GetAxis("Mouse X");
-		float y_Rotation = Input.GetAxis("Mouse Y");
+		//float x_Rotation = Input.GetAxis("Mouse X");
+		//float y_Rotation = Input.GetAxis("Mouse Y");
+
+		// 右スティックの入力を取得
+		// 横回転
+		float x_Rotation = Input.GetAxis("PS4 R_Stick_Left&Right");
+		//Debug.Log("<color=red>x_Rotation : " + x_Rotation + "</color>");
+		// 縦回転（上下反転したければ - をつける）
+		float y_Rotation = Input.GetAxis("PS4 R_Stick_Up&Down");
+		//Debug.Log("<color=blue>y_Rotation : " + y_Rotation + "</color>");
 
 		if (Player.SingletonInstance.IsAim == true)
 		{
@@ -1297,7 +1305,7 @@ public class PlayerCamera : MonoBehaviour
 			{
 				if (300 < cameraAngles)
 				{
-					if (Input.GetAxis("Mouse Y") < 0)
+					if (y_Rotation < 0)
 					{
 						//マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
 						this.transform.RotateAround(Player.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
@@ -1305,7 +1313,7 @@ public class PlayerCamera : MonoBehaviour
 				}
 				else
 				{
-					if (0 < Input.GetAxis("Mouse Y"))
+					if (0 < y_Rotation)
 					{
 						//マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
 						this.transform.RotateAround(Player.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
