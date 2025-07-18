@@ -211,7 +211,7 @@ public class PlayerCamera : MonoBehaviour
 	}
 	public GunTYPE gunTYPE = GunTYPE.AssaultRifle;
 
-	XInputAxisTriggerButton xInputAxisTriggerButton = new XInputAxisTriggerButton();
+	XInputTriggerHandler xInputTriggerHandler = new XInputTriggerHandler();
 
 	void Awake()
 	{
@@ -349,7 +349,7 @@ public class PlayerCamera : MonoBehaviour
 
 		SwitchWeapon();
 		UpdateHitReticule();
-		xInputAxisTriggerButton.Update(Input.GetAxis("XInput RT"));
+		xInputTriggerHandler.Update(Input.GetAxis("XInput RT"));
 	}
 
 	/// <summary>
@@ -406,7 +406,7 @@ public class PlayerCamera : MonoBehaviour
 	{
 		if (Player.SingletonInstance.IsAim == true)
 		{
-			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || xInputAxisTriggerButton.Down)//左クリックまたはEnterを押している場合に中身を実行する
+			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || xInputTriggerHandler.Down)//左クリックまたはEnterを押している場合に中身を実行する
 			{
 				if (handGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 				{
@@ -904,7 +904,7 @@ public class PlayerCamera : MonoBehaviour
 	{
 		if (Player.SingletonInstance.IsAim == true)
 		{
-			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || xInputAxisTriggerButton.Down)//左クリックまたはEnterを押している場合に中身を実行する
+			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || xInputTriggerHandler.Down)//左クリックまたはEnterを押している場合に中身を実行する
 			{
 				if (shotGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 				{

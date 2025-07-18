@@ -69,6 +69,8 @@ public class UI : MonoBehaviour
 	[SerializeField] Image[] pauseMenuOptions;
 	int selectedIndex = 0;
 
+	XInputDPadHandler xInputDPadHandler = new XInputDPadHandler();
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -109,8 +111,8 @@ public class UI : MonoBehaviour
 		//↓ロード中に動かせない処理
 
 		Crosshair();
-
 		UpdatePauseMenuSystem();
+		UpdateXInputDPad();
 	}
 
 	/// <summary>
@@ -205,7 +207,7 @@ public class UI : MonoBehaviour
 		if (isPause == true)
 		{
 			//上下の矢印キーで選択を変更
-			if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
+			if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || xInputDPadHandler.LeftDown)
 			{
 				selectedIndex--;
 				if (selectedIndex < 0)
@@ -214,7 +216,7 @@ public class UI : MonoBehaviour
 				}
 				PauseMenu();
 			}
-			else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || 0.5 < Input.GetAxisRaw("XInput DPad Left&Right"))
+			else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || xInputDPadHandler.RightDown)
 			{
 				selectedIndex++;
 				if (pauseMenuOptions.Length <= selectedIndex)
@@ -273,6 +275,16 @@ public class UI : MonoBehaviour
 				pauseMenuOptions[i].color = new Color(pauseMenuOptions[i].color.r, pauseMenuOptions[i].color.g, pauseMenuOptions[i].color.b, 0.0f);
 			}
 		}
+	}
+
+	void UpdateXInputDPad()
+	{
+		// DPad軸を取得（InputManagerで設定済み or 軸番号で直接）
+		float dpadX = Input.GetAxis("XInput DPad Left&Right");
+		float dpadY = Input.GetAxis("XInput DPad Up&Down");
+
+		// 状態更新
+		xInputDPadHandler.Update(dpadX, dpadY);
 	}
 
 	void ExecuteMenuAction()

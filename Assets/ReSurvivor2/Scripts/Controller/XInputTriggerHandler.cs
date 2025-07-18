@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class XInputAxisTriggerButton
+public class XInputTriggerHandler
 {
 	private bool previous;
 	public bool IsPressed;
