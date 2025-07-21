@@ -269,6 +269,11 @@ public class GroundEnemy : Target
 	/// </summary>
 	void Eyesight()
 	{
+		if (IsDead == true)
+		{
+			return;
+		}
+
 		Ray ray = new Ray(head.transform.position, this.transform.forward);
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, rayDistance))

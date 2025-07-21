@@ -179,6 +179,11 @@ public class FlyingEnemy : Target
 	/// </summary>
 	void Eyesight()
 	{
+		if (IsDead == true)
+		{
+			return;
+		}
+
 		Ray ray = new Ray(head.transform.position, -head.transform.forward);//-head.transform.forwardをマイナスにしているのはなぜかドローンのモデル目の前方が反対になっていた為
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, rayDistance))
