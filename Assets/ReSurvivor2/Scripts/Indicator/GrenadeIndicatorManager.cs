@@ -9,7 +9,7 @@ public class GrenadeIndicatorManager : MonoBehaviour
 	public static GrenadeIndicatorManager SingletonInstance => singletonInstance;
 	[Tooltip("グレネード位置表示マーカー用プレハブ")]
 	[SerializeField] private GameObject grenadeIndicatorPrefab;
-	private Dictionary<Grenade, GameObject> indicatorList = new Dictionary<Grenade, GameObject>();   //マーカー一覧
+	private Dictionary<Grenade, GameObject> indicatorDic = new Dictionary<Grenade, GameObject>();   //マーカー一覧
 
 	void Awake()
 	{
@@ -31,11 +31,11 @@ public class GrenadeIndicatorManager : MonoBehaviour
 	public void InstanceIndicator(Grenade grenade)
 	{
 		//既に含まれていたら追加しない
-		if (!indicatorList.ContainsKey(grenade))
+		if (!indicatorDic.ContainsKey(grenade))
 		{
 			GameObject gameObject = (GameObject)Instantiate(grenadeIndicatorPrefab, this.transform.position, Quaternion.identity);
 			gameObject.transform.SetParent(this.transform);
-			indicatorList.Add(grenade, gameObject);
+			indicatorDic.Add(grenade, gameObject);
 			gameObject.GetComponent<Indicator>().Init(grenade.gameObject);
 		}
 		else
@@ -49,11 +49,11 @@ public class GrenadeIndicatorManager : MonoBehaviour
 	/// </summary>
 	public void DeleteIndicator(Grenade grenade)
 	{
-		if (indicatorList.ContainsKey(grenade))
+		if (indicatorDic.ContainsKey(grenade))
 		{
-			GameObject gameObject = indicatorList[grenade];
+			GameObject gameObject = indicatorDic[grenade];
 			Destroy(gameObject);
-			indicatorList.Remove(grenade);
+			indicatorDic.Remove(grenade);
 		}
 	}
 }

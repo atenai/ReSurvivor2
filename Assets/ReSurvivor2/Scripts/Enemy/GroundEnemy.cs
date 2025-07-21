@@ -501,6 +501,8 @@ public class GroundEnemy : Target
 			IndicatorManager.SingletonInstance.DeleteIndicator(this);
 			IsDead = true;
 		}
+
+		ChaseOn();
 	}
 
 	public void Shaker()

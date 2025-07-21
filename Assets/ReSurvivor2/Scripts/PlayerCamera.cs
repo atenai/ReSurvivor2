@@ -565,7 +565,7 @@ public class PlayerCamera : MonoBehaviour
 				GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
 				if (groundEnemy != null)
 				{
-					groundEnemy.ChaseOn();
+					//groundEnemy.ChaseOn();
 				}
 
 				//地雷を爆破

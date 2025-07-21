@@ -357,4 +357,20 @@ public class FlyingEnemy : Target
 
 		Destroy(this.gameObject);
 	}
+
+	public override void TakeDamage(float amount)
+	{
+		Debug.Log("<color=green>FlyingEnemyのTakeDamage()</color>");
+		CurrentHp = CurrentHp - amount;
+		//Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
+		SliderHp.value = (float)CurrentHp / (float)MaxHp;
+		if (CurrentHp <= 0.0f)
+		{
+			//敵マーカー削除
+			IndicatorManager.SingletonInstance.DeleteIndicator(this);
+			IsDead = true;
+		}
+
+		ChaseOn();
+	}
 }

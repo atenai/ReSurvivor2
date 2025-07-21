@@ -9,7 +9,7 @@ public class IndicatorManager : MonoBehaviour
 	public static IndicatorManager SingletonInstance => singletonInstance;
 	[Tooltip("敵位置表示マーカー用プレハブ")]
 	[SerializeField] private GameObject indicatorPrefab;
-	private Dictionary<Target, GameObject> indicatorList = new Dictionary<Target, GameObject>();   //マーカー一覧
+	private Dictionary<Target, GameObject> indicatorDic = new Dictionary<Target, GameObject>();   //マーカー一覧
 
 	void Awake()
 	{
@@ -33,11 +33,11 @@ public class IndicatorManager : MonoBehaviour
 	public void InstanceIndicator(Target target)
 	{
 		//既に含まれていたら追加しない
-		if (!indicatorList.ContainsKey(target))
+		if (!indicatorDic.ContainsKey(target))
 		{
 			GameObject gameObject = (GameObject)Instantiate(indicatorPrefab, this.transform.position, Quaternion.identity);
 			gameObject.transform.SetParent(this.transform);
-			indicatorList.Add(target, gameObject);
+			indicatorDic.Add(target, gameObject);
 			gameObject.GetComponent<Indicator>().Init(target.gameObject);
 		}
 		else
@@ -52,19 +52,19 @@ public class IndicatorManager : MonoBehaviour
 	/// <param name="target">ターゲット</param>
 	public void DeleteIndicator(Target target)
 	{
-		if (indicatorList.ContainsKey(target))
+		if (indicatorDic.ContainsKey(target))
 		{
-			GameObject gameObject = indicatorList[target];
+			GameObject gameObject = indicatorDic[target];
 			Destroy(gameObject);
-			indicatorList.Remove(target);
+			indicatorDic.Remove(target);
 		}
 	}
 
 	public void ShowIndicator(Target target)
 	{
-		if (indicatorList.ContainsKey(target))
+		if (indicatorDic.ContainsKey(target))
 		{
-			GameObject gameObject = indicatorList[target];
+			GameObject gameObject = indicatorDic[target];
 			gameObject.GetComponent<Indicator>().Show();
 		}
 	}
