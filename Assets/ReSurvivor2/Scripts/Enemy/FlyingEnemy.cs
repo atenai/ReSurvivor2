@@ -205,6 +205,7 @@ public class FlyingEnemy : Target
 	/// </summary>
 	public void ChaseOn()
 	{
+		//Debug.Log("<color=red>FlyingEnemyのChaseOn()</color>");
 		isChase = true;
 		chaseCountTime = chaseTime;
 	}
@@ -371,6 +372,6 @@ public class FlyingEnemy : Target
 			IsDead = true;
 		}
 
-		ChaseOn();
+		//ChaseOn();
 	}
 }

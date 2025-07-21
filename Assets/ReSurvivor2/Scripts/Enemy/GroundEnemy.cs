@@ -289,6 +289,7 @@ public class GroundEnemy : Target
 	/// </summary>
 	public void ChaseOn()
 	{
+		//Debug.Log("<color=red>GroundEnemyのChaseOn()</color>");
 		isChase = true;
 		chaseCountTime = chaseTime;
 	}
@@ -502,7 +503,7 @@ public class GroundEnemy : Target
 			IsDead = true;
 		}
 
-		ChaseOn();
+		//ChaseOn();
 	}
 
 	public void Shaker()

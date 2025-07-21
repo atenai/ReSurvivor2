@@ -561,12 +561,15 @@ public class PlayerCamera : MonoBehaviour
 				//ヒット音を再生
 				SoundManager.SingletonInstance.HitSEPool.GetGameObject(this.transform);
 
+				// GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
+				// if (groundEnemy != null)
+				// {
+				// 	//追跡開始
+				// 	groundEnemy.ChaseOn();
+				// }
+
 				//追跡開始
-				GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
-				if (groundEnemy != null)
-				{
-					//groundEnemy.ChaseOn();
-				}
+				EnemyManager.SingletonInstance.AllChaseOn();
 
 				//地雷を爆破
 				Mine mine = hit.transform.GetComponent<Mine>();
@@ -812,12 +815,15 @@ public class PlayerCamera : MonoBehaviour
 				//ヒット音を再生
 				SoundManager.SingletonInstance.HitSEPool.GetGameObject(this.transform);
 
+				// GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
+				// if (groundEnemy != null)
+				// {
+				// 	//追跡開始
+				// 	groundEnemy.ChaseOn();
+				// }
+
 				//追跡開始
-				GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
-				if (groundEnemy != null)
-				{
-					groundEnemy.ChaseOn();
-				}
+				EnemyManager.SingletonInstance.AllChaseOn();
 
 				//地雷を爆破
 				Mine mine = hit.transform.GetComponent<Mine>();
@@ -1065,12 +1071,15 @@ public class PlayerCamera : MonoBehaviour
 					//ヒット音を再生
 					SoundManager.SingletonInstance.HitSEPool.GetGameObject(this.transform);
 
+					// GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
+					// if (groundEnemy != null)
+					// {
+					// 	//追跡開始
+					// 	groundEnemy.ChaseOn();
+					// }
+
 					//追跡開始
-					GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
-					if (groundEnemy != null)
-					{
-						groundEnemy.ChaseOn();
-					}
+					EnemyManager.SingletonInstance.AllChaseOn();
 
 					//地雷を爆破
 					Mine mine = hit.transform.GetComponent<Mine>();
