@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using Knife.Effects;
 using Cinemachine;
 
@@ -191,7 +190,6 @@ public class GroundEnemy : Target
 		patrolPointNumber = 0;
 		isGrounded = false;
 		InitGunMagazine();
-
 		GroundCheck();
 	}
 
@@ -212,6 +210,15 @@ public class GroundEnemy : Target
 	}
 
 	/// <summary>
+	/// 銃の弾数の初期化処理
+	/// </summary>
+	void InitGunMagazine()
+	{
+		CurrentMagazine = MagazineCapacity;
+		isReloadTimeActive = false;
+	}
+
+	/// <summary>
 	/// 地面に接触しているか？をチェックする関数
 	/// </summary>
 	void GroundCheck()
@@ -219,15 +226,6 @@ public class GroundEnemy : Target
 		Vector3 spherePosition = groundCheckCenter.transform.position;
 		bool centerChecker = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
 		isGrounded = centerChecker;
-	}
-
-	/// <summary>
-	/// 銃の弾数の初期化処理
-	/// </summary>
-	void InitGunMagazine()
-	{
-		CurrentMagazine = MagazineCapacity;
-		isReloadTimeActive = false;
 	}
 
 	/// <summary>
@@ -278,7 +276,8 @@ public class GroundEnemy : Target
 			if (hit.collider.tag == "Player")
 			{
 				//Debug.Log("<color=red>プレイヤーを発見!</color>");
-				ChaseOn();
+				//ChaseOn();
+				EnemyManager.SingletonInstance.AllChaseOn();
 			}
 		}
 		Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.yellow);
@@ -326,58 +325,6 @@ public class GroundEnemy : Target
 	}
 
 	/// <summary>
-	/// 射撃SE
-	/// </summary> 
-	public void FireSE()
-	{
-		UnityEngine.GameObject se = Instantiate(shootSe, this.transform.position, Quaternion.identity);
-		Destroy(se, shootSeDestroyTime);
-	}
-
-	/// <summary>
-	/// リロードSE
-	/// </summary> 
-	public void ReloadSE()
-	{
-		UnityEngine.GameObject se = Instantiate(reloadSe, this.transform.position, Quaternion.identity);
-		Destroy(se, reloadSeDestroyTime);
-	}
-
-	/// <summary>
-	/// 薬莢SE
-	/// </summary>
-	public void BulletCasingSE()
-	{
-		UnityEngine.GameObject se = Instantiate(bulletCasingSe, this.transform.position, Quaternion.identity);
-		Destroy(se, bulletCasingSeDestroyTime);
-	}
-
-	/// <summary>
-	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	public void MuzzleFlashAndShell()
-	{
-		if (shotEmitters != null)
-		{
-			foreach (var effect in shotEmitters)
-			{
-				effect.Emit(1);
-			}
-		}
-	}
-
-	/// <summary>
-	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	public void AfterFireSmoke()
-	{
-		if (afterFireSmoke != null)
-		{
-			afterFireSmoke.Play();
-		}
-	}
-
-	/// <summary>
 	/// デバッグテキスト
 	/// </summary> 
 	void DebugText()
@@ -411,11 +358,6 @@ public class GroundEnemy : Target
 
 		debugEnemy.DebugSystem(debugEnemy.IsDebugMode, Canvas, debugTexts.Length);
 		debugEnemy.SetDebugText(debugTexts);
-	}
-
-	void FixedUpdate()
-	{
-
 	}
 
 	/// <summary>
@@ -503,9 +445,65 @@ public class GroundEnemy : Target
 			IsDead = true;
 		}
 
+		//地雷の攻撃を受けた際にチェイス状態になってほしくは無い
 		//ChaseOn();
 	}
 
+	/// <summary>
+	/// 射撃SE
+	/// </summary> 
+	public void FireSE()
+	{
+		UnityEngine.GameObject se = Instantiate(shootSe, this.transform.position, Quaternion.identity);
+		Destroy(se, shootSeDestroyTime);
+	}
+
+	/// <summary>
+	/// リロードSE
+	/// </summary> 
+	public void ReloadSE()
+	{
+		UnityEngine.GameObject se = Instantiate(reloadSe, this.transform.position, Quaternion.identity);
+		Destroy(se, reloadSeDestroyTime);
+	}
+
+	/// <summary>
+	/// 薬莢SE
+	/// </summary>
+	public void BulletCasingSE()
+	{
+		UnityEngine.GameObject se = Instantiate(bulletCasingSe, this.transform.position, Quaternion.identity);
+		Destroy(se, bulletCasingSeDestroyTime);
+	}
+
+	/// <summary>
+	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
+	/// </summary>
+	public void MuzzleFlashAndShell()
+	{
+		if (shotEmitters != null)
+		{
+			foreach (var effect in shotEmitters)
+			{
+				effect.Emit(1);
+			}
+		}
+	}
+
+	/// <summary>
+	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
+	/// </summary>
+	public void AfterFireSmoke()
+	{
+		if (afterFireSmoke != null)
+		{
+			afterFireSmoke.Play();
+		}
+	}
+
+	/// <summary>
+	/// プレイヤーにダメージを与えた際にカメラを揺らす
+	/// </summary>
 	public void Shaker()
 	{
 		cinemachineImpulseSource.GenerateImpulse();

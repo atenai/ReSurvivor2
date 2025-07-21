@@ -10,18 +10,10 @@ public class FlyingEnemy : Target
 {
 	[UnityEngine.Tooltip("プレイヤー")]
 	GameObject targetPlayer;
-	public GameObject TargetPlayer
-	{
-		get { return targetPlayer; }
-		private set { targetPlayer = value; }
-	}
+	public GameObject TargetPlayer => targetPlayer;
 	[UnityEngine.Tooltip("物理")]
-	[SerializeField] Rigidbody rb;
-	public Rigidbody Rigidbody
-	{
-		get { return rb; }
-		private set { rb = value; }
-	}
+	[SerializeField] Rigidbody enemyRigidbody;
+	public Rigidbody Rigidbody => enemyRigidbody;
 
 	[Header("センサーコライダー用の変数")]
 	[SerializeField] ColliderEventHandler[] colliders = default;
@@ -143,9 +135,9 @@ public class FlyingEnemy : Target
 			targetPlayer = Player.SingletonInstance.gameObject;
 		}
 
-		if (rb == null)
+		if (enemyRigidbody == null)
 		{
-			rb = this.GetComponent<Rigidbody>();
+			enemyRigidbody = this.GetComponent<Rigidbody>();
 		}
 
 		ResetSensorCollider();
@@ -173,7 +165,7 @@ public class FlyingEnemy : Target
 	{
 		base.Update();
 		Eyesight();
-		alert.gameObject.SetActive(isChase);
+		Alert();
 		ChasePlayer();
 
 #if UNITY_EDITOR
@@ -194,7 +186,8 @@ public class FlyingEnemy : Target
 			if (hit.collider.tag == "Player")
 			{
 				//Debug.Log("<color=red>プレイヤーを発見!</color>");
-				ChaseOn();
+				//ChaseOn();
+				EnemyManager.SingletonInstance.AllChaseOn();
 			}
 		}
 		Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.yellow);
@@ -208,6 +201,21 @@ public class FlyingEnemy : Target
 		//Debug.Log("<color=red>FlyingEnemyのChaseOn()</color>");
 		isChase = true;
 		chaseCountTime = chaseTime;
+	}
+
+	/// <summary>
+	/// アラートイメージの表示・非表示
+	/// </summary>
+	void Alert()
+	{
+		if (IsDead == false)
+		{
+			alert.gameObject.SetActive(isChase);
+		}
+		else
+		{
+			alert.gameObject.SetActive(false);
+		}
 	}
 
 	/// <summary>
@@ -372,6 +380,7 @@ public class FlyingEnemy : Target
 			IsDead = true;
 		}
 
+		//地雷の攻撃を受けた際にチェイス状態になってほしくは無い
 		//ChaseOn();
 	}
 }
