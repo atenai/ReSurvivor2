@@ -822,9 +822,6 @@ public class PlayerCamera : MonoBehaviour
 				// 	groundEnemy.ChaseOn();
 				// }
 
-				//追跡開始
-				EnemyManager.SingletonInstance.AllChaseOn();
-
 				//地雷を爆破
 				Mine mine = hit.transform.GetComponent<Mine>();
 				if (mine != null)
@@ -835,6 +832,9 @@ public class PlayerCamera : MonoBehaviour
 
 			ImpactEffect(hit);
 		}
+
+		//追跡開始
+		EnemyManager.SingletonInstance.AllChaseOn();
 	}
 
 	/// <summary>
@@ -1078,9 +1078,6 @@ public class PlayerCamera : MonoBehaviour
 					// 	groundEnemy.ChaseOn();
 					// }
 
-					//追跡開始
-					EnemyManager.SingletonInstance.AllChaseOn();
-
 					//地雷を爆破
 					Mine mine = hit.transform.GetComponent<Mine>();
 					if (mine != null)
@@ -1092,6 +1089,9 @@ public class PlayerCamera : MonoBehaviour
 				ImpactEffect(hit);
 			}
 		}
+
+		//追跡開始
+		EnemyManager.SingletonInstance.AllChaseOn();
 	}
 
 	/// <summary>
