@@ -3,19 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// コンピューター
+/// </summary>
 public class Computer : MonoBehaviour
 {
 	[Tooltip("このコンピューターの名前")]
 	[SerializeField] InGameManager.ComputerTYPE thisComputerName;
 
+	/// <summary>
+	/// 当たり判定
+	/// </summary>
+	/// <param name="collider"></param>
 	void OnTriggerStay(Collider collider)
 	{
-		if (collider.gameObject.CompareTag("Player"))
+		if (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("XInput Y"))
 		{
-			Debug.Log("<color=yellow>プレイヤー</color>");
-			if (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("XInput Y"))
+			Debug.Log("<color=green>Fキー</color>");
+
+			if (collider.gameObject.CompareTag("Player"))
 			{
-				Debug.Log("<color=green>Fキー</color>");
+				Debug.Log("<color=yellow>プレイヤー</color>");
+
 				Save();
 
 				if (InGameManager.SingletonInstance.IsMissionActive == false)
