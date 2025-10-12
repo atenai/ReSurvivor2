@@ -148,6 +148,9 @@ public class GroundEnemy : Target
 	[SerializeField] DebugEnemy debugEnemy;
 	public DebugEnemy DebugEnemy => debugEnemy;
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	new void Start()
 	{
 		base.Start();
@@ -249,6 +252,9 @@ public class GroundEnemy : Target
 		Gizmos.DrawSphere(new Vector3(groundCheckCenter.transform.position.x, groundCheckCenter.transform.position.y, groundCheckCenter.transform.position.z), groundedRadius);
 	}
 
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	new void Update()
 	{
 		base.Update();
@@ -368,6 +374,8 @@ public class GroundEnemy : Target
 	/// <summary>
 	/// センサーコライダーの当たり判定(触れた時)
 	/// </summary>
+	/// <param name="self"></param>
+	/// <param name="collider"></param>
 	void OnTriggerEnterHit(ColliderEventHandler self, Collider collider)
 	{
 		if (collider.tag == "Player")
@@ -394,6 +402,8 @@ public class GroundEnemy : Target
 	/// <summary>
 	/// センサーコライダーの当たり判定(離れた時)
 	/// </summary>
+	/// <param name="self"></param>
+	/// <param name="collider"></param>
 	void OnTriggerExitHit(ColliderEventHandler self, Collider collider)
 	{
 		if (collider.tag == "Player")
@@ -416,6 +426,10 @@ public class GroundEnemy : Target
 		}
 	}
 
+	/// <summary>
+	/// 物理の当たり判定
+	/// </summary>
+	/// <param name="collision"></param>
 	void OnCollisionEnter(Collision collision)
 	{
 		//Debug.Log("Hit");
@@ -437,6 +451,10 @@ public class GroundEnemy : Target
 		//Debug.Log("<color=green>OnTriggerExitHitGround</color>");
 	}
 
+	/// <summary>
+	/// ダメージ処理
+	/// </summary>
+	/// <param name="amount">ダメージ量</param>
 	public override void TakeDamage(float amount)
 	{
 		Debug.Log("<color=green>GroundEnemyのTakeDamage()</color>");

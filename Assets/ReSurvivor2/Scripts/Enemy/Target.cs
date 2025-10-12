@@ -61,6 +61,7 @@ public class Target : MonoBehaviour
 	/// <summary>
 	/// ダメージ処理
 	/// </summary>
+	/// <param name="amount">ダメージ量</param>
 	public virtual void TakeDamage(float amount)
 	{
 		Debug.Log("<color=orange>TargetのTakeDamage()</color>");

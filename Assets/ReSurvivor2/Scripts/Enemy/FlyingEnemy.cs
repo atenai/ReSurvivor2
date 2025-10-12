@@ -103,6 +103,9 @@ public class FlyingEnemy : Target
 		set { isMoveBack = value; }
 	}
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	new void Start()
 	{
 		base.Start();
@@ -161,6 +164,9 @@ public class FlyingEnemy : Target
 		hitCollider = null;
 	}
 
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	new void Update()
 	{
 		base.Update();
@@ -271,6 +277,8 @@ public class FlyingEnemy : Target
 	/// <summary>
 	/// センサーコライダーの当たり判定(触れた時)
 	/// </summary>
+	/// <param name="self"></param>
+	/// <param name="collider"></param>
 	void OnTriggerEnterHit(ColliderEventHandler self, Collider collider)
 	{
 		if (collider.tag == "Player" || collider.tag == "Object")
@@ -297,6 +305,8 @@ public class FlyingEnemy : Target
 	/// <summary>
 	/// センサーコライダーの当たり判定(離れた時)
 	/// </summary>
+	/// <param name="self"></param>
+	/// <param name="collider"></param>
 	void OnTriggerExitHit(ColliderEventHandler self, Collider collider)
 	{
 		if (collider.tag == "Player" || collider.tag == "Object")
@@ -319,6 +329,10 @@ public class FlyingEnemy : Target
 		}
 	}
 
+	/// <summary>
+	/// 物理の当たり判定
+	/// </summary>
+	/// <param name="collision"></param>
 	void OnCollisionEnter(Collision collision)
 	{
 		if (isChase == true)
@@ -372,6 +386,10 @@ public class FlyingEnemy : Target
 		Destroy(this.gameObject);
 	}
 
+	/// <summary>
+	/// ダメージ処理
+	/// </summary>
+	/// <param name="amount">ダメージ量</param>
 	public override void TakeDamage(float amount)
 	{
 		Debug.Log("<color=green>FlyingEnemyのTakeDamage()</color>");
@@ -383,6 +401,7 @@ public class FlyingEnemy : Target
 			//敵マーカー削除
 			IndicatorManager.SingletonInstance.DeleteIndicator(this);
 			IsDead = true;
+			Explosion();
 		}
 
 		//地雷の攻撃を受けた際にチェイス状態になってほしくは無い

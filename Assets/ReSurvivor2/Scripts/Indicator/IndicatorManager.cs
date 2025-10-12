@@ -11,6 +11,9 @@ public class IndicatorManager : MonoBehaviour
 	[SerializeField] private GameObject indicatorPrefab;
 	private Dictionary<Target, GameObject> indicatorDic = new Dictionary<Target, GameObject>();   //マーカー一覧
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -60,6 +63,10 @@ public class IndicatorManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// 敵表示マーカーを表示する
+	/// </summary>
+	/// <param name="target"></param>
 	public void ShowIndicator(Target target)
 	{
 		if (indicatorDic.ContainsKey(target))
