@@ -462,7 +462,7 @@ public class UI : MonoBehaviour
 	{
 		//↓ここをミッションごとに変えるようにする必要がある
 		//各ComputerTYPEに紐づいたミッションリストを取得して、そこから選択されたミッション内容を↓に反映すればいい
-		var result = InGameManager.SingletonInstance.MissionSerch(currentComputerTYPE);
+		var result = InGameManager.SingletonInstance.MissionSerch(currentComputerTYPE, computerMenuSelectedIndex);
 		if (result != null)
 		{
 			Debug.Log("<color=red>ミッション開始</color>");
