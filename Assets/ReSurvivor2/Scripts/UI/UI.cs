@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using UnityEngine.Events;
 
 public class UI : MonoBehaviour
 {
@@ -61,15 +62,37 @@ public class UI : MonoBehaviour
 	[SerializeField] Image imageFade;
 	[Tooltip("フェードの速さ")]
 	float fadeSpeed = 1.0f;
-	[Tooltip("ポーズ")]
-	bool isPause = false;
-	public bool IsPause => isPause;
-	[SerializeField] GameObject panelPause;
+
+	[Tooltip("ポーズメニューパネル")]
+	[SerializeField] GameObject panelPauseMenu;
 	[Tooltip("ポーズメニューオプションのイメージリスト")]
 	[SerializeField] Image[] pauseMenuOptions;
-	int selectedIndex = 0;
+	int pauseMenuSelectedIndex = 0;
+	/// <summary>
+	/// ポーズ中か？
+	/// </summary>
+	bool isPause = false;
+	/// <summary>
+	/// ポーズ中か？
+	/// </summary>
+	public bool IsPause => isPause;
 
 	XInputDPadHandler xInputDPadHandler = new XInputDPadHandler();
+
+	[Tooltip("コンピューターメニューパネル")]
+	[SerializeField] GameObject panelComputerMenu;
+	[Tooltip("ポーズメニューオプションのイメージリスト")]
+	[SerializeField] Image[] computerMenuOptions;
+	int computerMenuSelectedIndex = 0;
+	InGameManager.ComputerTYPE currentComputerTYPE;
+	/// <summary>
+	/// コンピューターメニュー表示中か？
+	/// </summary>
+	bool isComputerMenu = false;
+	/// <summary>
+	/// コンピューターメニュー表示中か？
+	/// </summary>
+	public bool IsComputerMenu => isComputerMenu;
 
 	void Awake()
 	{
@@ -112,6 +135,8 @@ public class UI : MonoBehaviour
 
 		Crosshair();
 		UpdatePauseMenuSystem();
+		UpdateComputerMenuSystem();
+
 		UpdateXInputDPad();
 	}
 
@@ -201,27 +226,27 @@ public class UI : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P) || Input.GetButtonDown("XInput Start"))
 		{
-			Pause();
+			PauseMenuActive();
 		}
 
 		if (isPause == true)
 		{
-			//上下の矢印キーで選択を変更
+			//左右の矢印キーで選択を変更
 			if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || xInputDPadHandler.LeftDown)
 			{
-				selectedIndex--;
-				if (selectedIndex < 0)
+				pauseMenuSelectedIndex--;
+				if (pauseMenuSelectedIndex < 0)
 				{
-					selectedIndex = pauseMenuOptions.Length - 1;
+					pauseMenuSelectedIndex = pauseMenuOptions.Length - 1;
 				}
 				PauseMenu();
 			}
 			else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || xInputDPadHandler.RightDown)
 			{
-				selectedIndex++;
-				if (pauseMenuOptions.Length <= selectedIndex)
+				pauseMenuSelectedIndex++;
+				if (pauseMenuOptions.Length <= pauseMenuSelectedIndex)
 				{
-					selectedIndex = 0;
+					pauseMenuSelectedIndex = 0;
 				}
 				PauseMenu();
 			}
@@ -229,31 +254,31 @@ public class UI : MonoBehaviour
 			//Enterキーで選択を確定
 			if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
 			{
-				ExecuteMenuAction();
+				ExecutePauseMenuAction();
 			}
 		}
 	}
 
 	/// <summary>
-	/// ポーズ
+	/// ポーズメニューのオン/オフ
 	/// </summary>
-	void Pause()
+	void PauseMenuActive()
 	{
 		isPause = isPause ? false : true;
 
 		if (isPause == true)
 		{
 			Time.timeScale = 0f;
-			panelPause.SetActive(true);
+			panelPauseMenu.SetActive(true);
 
 			//各種パラメーターの初期化処理
-			selectedIndex = 0;
+			pauseMenuSelectedIndex = 0;
 			PauseMenu();
 		}
 		else
 		{
 			Time.timeScale = 1f;
-			panelPause.SetActive(false);
+			panelPauseMenu.SetActive(false);
 		}
 	}
 
@@ -265,7 +290,7 @@ public class UI : MonoBehaviour
 		//メニューの見た目を更新
 		for (int i = 0; i < pauseMenuOptions.Length; i++)
 		{
-			if (i == selectedIndex)
+			if (i == pauseMenuSelectedIndex)
 			{
 				//選択中の項目の色を変更
 				pauseMenuOptions[i].color = new Color(pauseMenuOptions[i].color.r, pauseMenuOptions[i].color.g, pauseMenuOptions[i].color.b, 0.5f);
@@ -277,19 +302,12 @@ public class UI : MonoBehaviour
 		}
 	}
 
-	void UpdateXInputDPad()
+	/// <summary>
+	/// ポーズメニューアクションの実行
+	/// </summary>
+	void ExecutePauseMenuAction()
 	{
-		// DPad軸を取得（InputManagerで設定済み or 軸番号で直接）
-		float dpadX = Input.GetAxis("XInput DPad Left&Right");
-		float dpadY = Input.GetAxis("XInput DPad Up&Down");
-
-		// 状態更新
-		xInputDPadHandler.Update(dpadX, dpadY);
-	}
-
-	void ExecuteMenuAction()
-	{
-		switch (selectedIndex)
+		switch (pauseMenuSelectedIndex)
 		{
 			case 0:
 				ReturnToGamePlay();
@@ -305,7 +323,7 @@ public class UI : MonoBehaviour
 	/// </summary>
 	void ReturnToGamePlay()
 	{
-		Pause();
+		PauseMenuActive();
 	}
 
 	/// <summary>
@@ -316,6 +334,9 @@ public class UI : MonoBehaviour
 		Quit();
 	}
 
+	/// <summary>
+	/// ゲーム終了
+	/// </summary>
 	void Quit()
 	{
 #if UNITY_EDITOR
@@ -323,5 +344,132 @@ public class UI : MonoBehaviour
 #elif UNITY_STANDALONE
         UnityEngine.Application.Quit();
 #endif
+	}
+
+	/// <summary>
+	/// XInputのDPadの状態更新
+	/// </summary>
+	void UpdateXInputDPad()
+	{
+		// DPad軸を取得（InputManagerで設定済み or 軸番号で直接）
+		float dpadX = Input.GetAxis("XInput DPad Left&Right");
+		float dpadY = Input.GetAxis("XInput DPad Up&Down");
+
+		// 状態更新
+		xInputDPadHandler.Update(dpadX, dpadY);
+	}
+
+	/// <summary>
+	/// コンピューターメニューの表示
+	/// </summary>
+	public void ShowComputerMenu(InGameManager.ComputerTYPE computerTYPE)
+	{
+		isComputerMenu = true;
+		Time.timeScale = 0f;
+		panelComputerMenu.SetActive(true);
+
+		//各種パラメーターの初期化処理
+		computerMenuSelectedIndex = 0;
+		ComputerMenu();
+
+		currentComputerTYPE = computerTYPE;
+	}
+
+	/// <summary>
+	/// コンピューターメニューの非表示
+	/// </summary>
+	public void HideComputerMenu()
+	{
+		isComputerMenu = false;
+		Time.timeScale = 1f;
+		panelComputerMenu.SetActive(false);
+	}
+
+	/// <summary>
+	/// コンピューターメニュー画面の更新
+	/// </summary> 
+	void UpdateComputerMenuSystem()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P) || Input.GetButtonDown("XInput Start"))
+		{
+			HideComputerMenu();
+			return;
+		}
+
+		if (isComputerMenu == true)
+		{
+			//上下の矢印キーで選択を変更
+			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || xInputDPadHandler.UpDown)
+			{
+				computerMenuSelectedIndex--;
+				if (computerMenuSelectedIndex < 0)
+				{
+					computerMenuSelectedIndex = pauseMenuOptions.Length - 1;
+				}
+				ComputerMenu();
+			}
+			else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || xInputDPadHandler.DownDown)
+			{
+				computerMenuSelectedIndex++;
+				if (computerMenuOptions.Length <= computerMenuSelectedIndex)
+				{
+					computerMenuSelectedIndex = 0;
+				}
+				ComputerMenu();
+			}
+
+			//Enterキーで選択を確定
+			if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
+			{
+				ExecuteComputerMenuAction();
+			}
+		}
+	}
+
+	/// <summary>
+	/// コンピューターメニュー
+	/// </summary> 
+	void ComputerMenu()
+	{
+		//メニューの見た目を更新
+		for (int i = 0; i < computerMenuOptions.Length; i++)
+		{
+			if (i == computerMenuSelectedIndex)
+			{
+				//選択中の項目の色を変更
+				computerMenuOptions[i].color = new Color(computerMenuOptions[i].color.r, computerMenuOptions[i].color.g, computerMenuOptions[i].color.b, 0.5f);
+			}
+			else
+			{
+				computerMenuOptions[i].color = new Color(computerMenuOptions[i].color.r, computerMenuOptions[i].color.g, computerMenuOptions[i].color.b, 0.0f);
+			}
+		}
+	}
+
+	/// <summary>
+	/// コンピューターメニューアクションの実行
+	/// </summary>
+	void ExecuteComputerMenuAction()
+	{
+		ExecuteMission(computerMenuSelectedIndex);
+		HideComputerMenu();
+	}
+
+	/// <summary>
+	/// ミッション実行
+	/// </summary>
+	void ExecuteMission(int computerMenuSelectedIndex)
+	{
+		//↓ここをミッションごとに変えるようにする必要がある
+		//各ComputerTYPEに紐づいたミッションリストを取得して、そこから選択されたミッション内容を↓に反映すればいい
+		var result = InGameManager.SingletonInstance.MissionSerch(currentComputerTYPE);
+		if (result != null)
+		{
+			Debug.Log("<color=red>ミッション開始</color>");
+			InGameManager.SingletonInstance.IsMissionActive = true;
+			InGameManager.SingletonInstance.TargetComputerName = result.TargetComputerName;
+			Player.SingletonInstance.Minute = result.Minute;
+			Player.SingletonInstance.Seconds = result.Seconds;
+		}
 	}
 }

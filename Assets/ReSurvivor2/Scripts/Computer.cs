@@ -24,34 +24,34 @@ public class Computer : MonoBehaviour
 			if (collider.gameObject.CompareTag("Player"))
 			{
 				Debug.Log("<color=yellow>プレイヤー</color>");
-
 				Save();
+				Mission();
+			}
+			else
+			{
+				Debug.Log("<color=red>プレイヤーじゃない</color>");
+			}
+		}
+	}
 
-				if (InGameManager.SingletonInstance.IsMissionActive == false)
-				{
-					//↓ここをミッションごとに変えるようにする必要がある
-					//各ComputerTYPEに紐づいたミッションリストを取得して、そこから選択されたミッション内容を↓に反映すればいい
-					var result = InGameManager.SingletonInstance.MissionSerch(thisComputerName);
-					if (result != null)
-					{
-						Debug.Log("<color=red>ミッション開始</color>");
-						InGameManager.SingletonInstance.IsMissionActive = true;
-						InGameManager.SingletonInstance.TargetComputerName = result.TargetComputerName;
-						Player.SingletonInstance.Minute = result.Minute;
-						Player.SingletonInstance.Seconds = result.Seconds;
-					}
-				}
-				else if (InGameManager.SingletonInstance.IsMissionActive == true)
-				{
-					if (thisComputerName == InGameManager.SingletonInstance.TargetComputerName)
-					{
-						Debug.Log("<color=blue>ミッション終了</color>");
-						InGameManager.SingletonInstance.IsMissionActive = false;
+	/// <summary>
+	/// ミッション
+	/// </summary>
+	void Mission()
+	{
+		if (InGameManager.SingletonInstance.IsMissionActive == false)
+		{
+			UI.SingletonInstance.ShowComputerMenu(thisComputerName);
+		}
+		else if (InGameManager.SingletonInstance.IsMissionActive == true)
+		{
+			if (thisComputerName == InGameManager.SingletonInstance.TargetComputerName)
+			{
+				Debug.Log("<color=blue>ミッション終了</color>");
+				InGameManager.SingletonInstance.IsMissionActive = false;
 
-						//ゲームクリアー処理
-						SceneManager.LoadScene("GameClear");
-					}
-				}
+				//ゲームクリアー処理
+				SceneManager.LoadScene("GameClear");
 			}
 		}
 	}

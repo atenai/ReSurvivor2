@@ -335,6 +335,11 @@ public class Player : MonoBehaviour
 			return;
 		}
 
+		if (UI.SingletonInstance.IsComputerMenu == true)
+		{
+			return;
+		}
+
 		inputHorizontal = Input.GetAxisRaw("Horizontal");
 		inputVertical = Input.GetAxisRaw("Vertical");
 

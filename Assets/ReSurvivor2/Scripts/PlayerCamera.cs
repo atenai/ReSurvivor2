@@ -335,6 +335,11 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
+		if (UI.SingletonInstance.IsComputerMenu == true)
+		{
+			return;
+		}
+
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
