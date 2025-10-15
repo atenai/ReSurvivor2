@@ -1,19 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 /// クレジット
 /// </summary> 
-public class Credits : OutGameManagerBase
+public class Credits : OutGameBase
 {
-    new void Start()
-    {
-        base.Start();
-    }
+	new void Start()
+	{
+		base.Start();
+	}
 
-    new void Update()
-    {
-        base.Update();
-    }
+	new void Update()
+	{
+		base.Update();
+	}
 }

@@ -1,16 +1,15 @@
-
 /// <summary>
 /// ゲームオーバー
 /// </summary>
-public class GameOver : OutGameManagerBase
+public class GameOver : OutGameBase
 {
-    new void Start()
-    {
-        base.Start();
-    }
+	new void Start()
+	{
+		base.Start();
+	}
 
-    new void Update()
-    {
-        base.Update();
-    }
+	new void Update()
+	{
+		base.Update();
+	}
 }

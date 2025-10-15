@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Experimental.Rendering;
 
 /// <summary>
-/// アウトゲームのマネージャー
+/// アウトゲームのベース
 /// </summary>
-public class OutGameManagerBase : MonoBehaviour
+public class OutGameBase : MonoBehaviour
 {
 	ShaderVariantCollection shaderVariantCollection;
 	[SerializeField] protected Slider sliderShaderLoading;
@@ -54,7 +53,8 @@ public class OutGameManagerBase : MonoBehaviour
 
 	/// <summary>
 	/// ロード
-	/// </summary> 
+	/// </summary>
+	/// <param name="nextSceneName">次にロードするシーン名</param>
 	protected void Load(string nextSceneName)
 	{
 		if (isLoadOnce == false)
@@ -67,6 +67,8 @@ public class OutGameManagerBase : MonoBehaviour
 	/// <summary>
 	/// シーンをロードする
 	/// </summary>
+	/// <param name="nextSceneName">次にロードするシーン名</param>
+	/// <returns></returns>
 	IEnumerator SceneLoad(string nextSceneName)
 	{
 		//スライダーの値を最低にする

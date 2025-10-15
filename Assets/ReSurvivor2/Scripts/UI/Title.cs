@@ -8,7 +8,7 @@ using UnityEditor;
 /// <summary>
 /// タイトル
 /// </summary>
-public class Title : OutGameManagerBase
+public class Title : OutGameBase
 {
 	[Tooltip("メニューオプションのイメージリスト")]
 	[SerializeField] Image[] menuOptions;
