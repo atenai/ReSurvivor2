@@ -335,7 +335,7 @@ public class Player : MonoBehaviour
 			return;
 		}
 
-		if (UI.SingletonInstance.IsComputerMenu == true)
+		if (UI.SingletonInstance.IsComputerMenuActive == true)
 		{
 			return;
 		}

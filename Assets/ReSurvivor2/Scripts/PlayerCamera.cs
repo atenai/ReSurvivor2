@@ -335,7 +335,7 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		if (UI.SingletonInstance.IsComputerMenu == true)
+		if (UI.SingletonInstance.IsComputerMenuActive == true)
 		{
 			return;
 		}
