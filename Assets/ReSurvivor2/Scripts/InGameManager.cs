@@ -2,14 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// インゲーム全体のマネージャー
 /// </summary> 
 public class InGameManager : MonoBehaviour
 {
-	//シングルトンで作成（ゲーム中に１つのみにする）
+	/// <summary>
+	/// シングルトンで作成（ゲーム中に１つのみにする）
+	/// </summary>
 	static InGameManager singletonInstance = null;
+	/// <summary>
+	/// シングルトンのプロパティ
+	/// </summary>
 	public static InGameManager SingletonInstance => singletonInstance;
 
 	[Tooltip("エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題やキー入力でプレイヤーが移動してしまう問題の対処用")]
@@ -28,6 +34,9 @@ public class InGameManager : MonoBehaviour
 		set { isMissionActive = value; }
 	}
 
+	/// <summary>
+	/// コンピュータータイプ
+	/// </summary>
 	public enum ComputerTYPE
 	{
 		Stage0Computer = 0,
@@ -37,8 +46,13 @@ public class InGameManager : MonoBehaviour
 		Stage4Computer = 4,
 	}
 
-	[Tooltip("ミッションエンドのコンピューター名")]
+	/// <summary>
+	/// ミッションエンドのコンピューター名
+	/// </summary>
 	ComputerTYPE endComputerName;
+	/// <summary>
+	/// ミッションエンドのコンピューター名のプロパティ
+	/// </summary>
 	public ComputerTYPE EndComputerName
 	{
 		get { return endComputerName; }
@@ -77,6 +91,16 @@ public class InGameManager : MonoBehaviour
 	}
 
 	/// <summary>
+	/// セーブ
+	/// </summary>
+	public void Save()
+	{
+		Debug.Log("<color=cyan>セーブ</color>");
+		PlayerPrefs.SetInt("KeyItem1", KeyItem1);
+		PlayerPrefs.Save();
+	}
+
+	/// <summary>
 	/// ロード
 	/// </summary>
 	void Load()
@@ -106,6 +130,33 @@ public class InGameManager : MonoBehaviour
 		}
 
 		return result;
+	}
+
+	/// <summary>
+	/// ミッション
+	/// </summary>
+	/// <param name="computerName"></param>
+	public void Mission(ComputerTYPE computerName)
+	{
+		if (IsMissionActive == false)
+		{
+			UI.SingletonInstance.ShowComputerMenu(computerName);
+		}
+		else if (IsMissionActive == true)
+		{
+			if (computerName == EndComputerName)
+			{
+				Debug.Log("<color=blue>ミッション終了</color>");
+				IsMissionActive = false;
+
+				//ゲームクリアー処理
+				SceneManager.LoadScene("GameClear");
+			}
+			else
+			{
+				Debug.Log("<color=red>目的のコンピューターではない</color>");
+			}
+		}
 	}
 
 	void Start()

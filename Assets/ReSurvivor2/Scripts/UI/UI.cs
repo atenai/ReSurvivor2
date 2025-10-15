@@ -7,8 +7,14 @@ using UnityEngine.Events;
 
 public class UI : MonoBehaviour
 {
-	//シングルトンで作成（ゲーム中に１つのみにする）
+	/// <summary>
+	/// シングルトンで作成（ゲーム中に１つのみにする）
+	/// </summary>
 	static UI singletonInstance = null;
+	/// <summary>
+	/// シングルトンのプロパティ
+	/// </summary>
+
 	public static UI SingletonInstance => singletonInstance;
 
 	[Tooltip("クロスヘアー")]
@@ -421,7 +427,7 @@ public class UI : MonoBehaviour
 	/// <summary>
 	/// コンピューターメニューの非表示
 	/// </summary>
-	public void HideComputerMenu()
+	void HideComputerMenu()
 	{
 		isComputerMenuActive = false;
 		Time.timeScale = 1f;

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// コンピューター
@@ -24,45 +23,13 @@ public class Computer : MonoBehaviour
 			if (collider.gameObject.CompareTag("Player"))
 			{
 				Debug.Log("<color=yellow>プレイヤー</color>");
-				Save();
-				Mission();
+				InGameManager.SingletonInstance.Save();
+				InGameManager.SingletonInstance.Mission(thisComputerName);
 			}
 			else
 			{
 				Debug.Log("<color=red>プレイヤーじゃない</color>");
 			}
 		}
-	}
-
-	/// <summary>
-	/// ミッション
-	/// </summary>
-	void Mission()
-	{
-		if (InGameManager.SingletonInstance.IsMissionActive == false)
-		{
-			UI.SingletonInstance.ShowComputerMenu(thisComputerName);
-		}
-		else if (InGameManager.SingletonInstance.IsMissionActive == true)
-		{
-			if (thisComputerName == InGameManager.SingletonInstance.EndComputerName)
-			{
-				Debug.Log("<color=blue>ミッション終了</color>");
-				InGameManager.SingletonInstance.IsMissionActive = false;
-
-				//ゲームクリアー処理
-				SceneManager.LoadScene("GameClear");
-			}
-		}
-	}
-
-	/// <summary>
-	/// セーブ
-	/// </summary>
-	private void Save()
-	{
-		Debug.Log("<color=cyan>セーブ</color>");
-		PlayerPrefs.SetInt("KeyItem1", InGameManager.SingletonInstance.KeyItem1);
-		PlayerPrefs.Save();
 	}
 }
