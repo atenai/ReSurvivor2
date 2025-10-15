@@ -7,10 +7,25 @@ public class MasterMissionEntity
 	//publicでExcelデータの1行目と同じパラメータ
 	//また名前をまったく同じにしないといけない
 	//注:Excelファイルの1行目の名称は、Entityクラスのフィールド名と紐づいているため、どちらかを変更した場合はもう片方を合わせる必要があります。ちなみに並び順には影響されません。
+
+	/// <summary>
+	/// ミッションのスタートコンピューター名
+	/// </summary>
 	public InGameManager.ComputerTYPE StartComputerName;
+	/// <summary>
+	/// ミッションのエンドコンピューター名
+	/// </summary>
 	public InGameManager.ComputerTYPE EndComputerName;
+	/// <summary>
+	/// 分：カウントダウンタイマー用
+	/// </summary>
 	public int Minute;
+	/// <summary>
+	/// 秒：カウントダウンタイマー用
+	/// </summary>
 	public int Seconds;
-	public int MissionNumber;
+	/// <summary>
+	/// ミッション名
+	/// </summary>
 	public string MissionName;
 }

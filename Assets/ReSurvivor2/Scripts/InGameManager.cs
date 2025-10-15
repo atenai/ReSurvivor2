@@ -37,12 +37,12 @@ public class InGameManager : MonoBehaviour
 		Stage4Computer = 4,
 	}
 
-	[Tooltip("ミッションターゲットのコンピューター名")]
-	ComputerTYPE targetComputerName;
-	public ComputerTYPE TargetComputerName
+	[Tooltip("ミッションエンドのコンピューター名")]
+	ComputerTYPE endComputerName;
+	public ComputerTYPE EndComputerName
 	{
-		get { return targetComputerName; }
-		set { targetComputerName = value; }
+		get { return endComputerName; }
+		set { endComputerName = value; }
 	}
 
 	[Tooltip("キーアイテム1がアクティブか？どうか")]
@@ -55,6 +55,9 @@ public class InGameManager : MonoBehaviour
 
 	[Tooltip("マスターデータのミッション情報")]
 	[SerializeField] MasterMission masterMission;//２番目で作成したエクセルをスクリプト化したクラスの変数を作成する
+	/// <summary>
+	/// マスターデータのミッション情報のプロパティ
+	/// </summary>
 	public MasterMission MasterMission => masterMission;
 
 	void Awake()

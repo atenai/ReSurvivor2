@@ -382,14 +382,14 @@ public class UI : MonoBehaviour
 	/// <summary>
 	/// コンピューターメニューの表示
 	/// </summary>
-	public void ShowComputerMenu(InGameManager.ComputerTYPE computerTYPE)
+	public void ShowComputerMenu(InGameManager.ComputerTYPE startComputerTYPE)
 	{
 		isComputerMenuActive = true;
 		Time.timeScale = 0f;
 
 		//各種パラメーターの初期化処理
 		missionList.Clear();
-		missionList = InGameManager.SingletonInstance.MissionSerchList(computerTYPE);
+		missionList = InGameManager.SingletonInstance.MissionSerchList(startComputerTYPE);
 		if (missionList.Count == 0)
 		{
 			Debug.Log("<color=red>ミッションがありません</color>");
@@ -515,7 +515,7 @@ public class UI : MonoBehaviour
 		{
 			Debug.Log("<color=red>ミッション開始</color>");
 			InGameManager.SingletonInstance.IsMissionActive = true;
-			InGameManager.SingletonInstance.TargetComputerName = result.EndComputerName;
+			InGameManager.SingletonInstance.EndComputerName = result.EndComputerName;
 			Player.SingletonInstance.Minute = result.Minute;
 			Player.SingletonInstance.Seconds = result.Seconds;
 		}

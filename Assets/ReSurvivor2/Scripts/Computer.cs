@@ -45,7 +45,7 @@ public class Computer : MonoBehaviour
 		}
 		else if (InGameManager.SingletonInstance.IsMissionActive == true)
 		{
-			if (thisComputerName == InGameManager.SingletonInstance.TargetComputerName)
+			if (thisComputerName == InGameManager.SingletonInstance.EndComputerName)
 			{
 				Debug.Log("<color=blue>ミッション終了</color>");
 				InGameManager.SingletonInstance.IsMissionActive = false;
