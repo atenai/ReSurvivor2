@@ -8,8 +8,9 @@ public class MasterMissionEntity
 	//また名前をまったく同じにしないといけない
 	//注:Excelファイルの1行目の名称は、Entityクラスのフィールド名と紐づいているため、どちらかを変更した場合はもう片方を合わせる必要があります。ちなみに並び順には影響されません。
 	public InGameManager.ComputerTYPE StartComputerName;
-	public InGameManager.ComputerTYPE TargetComputerName;
+	public InGameManager.ComputerTYPE EndComputerName;
 	public int Minute;
 	public int Seconds;
 	public int MissionNumber;
+	public string MissionName;
 }

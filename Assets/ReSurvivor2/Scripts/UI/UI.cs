@@ -63,6 +63,7 @@ public class UI : MonoBehaviour
 	[Tooltip("フェードの速さ")]
 	float fadeSpeed = 1.0f;
 
+	[Header("ポーズメニュー")]
 	[Tooltip("ポーズメニューパネル")]
 	[SerializeField] GameObject panelPauseMenu;
 	[Tooltip("ポーズメニューオプションのイメージリスト")]
@@ -85,6 +86,7 @@ public class UI : MonoBehaviour
 	/// </summary>
 	XInputDPadHandler xInputDPadHandler = new XInputDPadHandler();
 
+	[Header("コンピューターメニュー")]
 	[Tooltip("コンピューターメニューパネル")]
 	[SerializeField] GameObject panelComputerMenu;
 	[Tooltip("コンピューターメニューコンテンツ")]
@@ -94,7 +96,7 @@ public class UI : MonoBehaviour
 	/// <summary>
 	/// コンピューターメニューのコンテンツリスト
 	/// </summary>
-	List<Image> computerMenuContentList = new List<Image>();
+	List<ComputerMenu> computerMenuContentList = new List<ComputerMenu>();
 	/// <summary>
 	/// コンピューターメニューのミッションリスト
 	/// </summary>
@@ -406,7 +408,8 @@ public class UI : MonoBehaviour
 		{
 			// プレハブをInstantiateしてContentの子オブジェクトに配置
 			GameObject computerMenuGameObject = Instantiate(computerMenuPrefab, new Vector3(0, 0, 0), Quaternion.identity, computerMenuContent.transform);
-			computerMenuContentList.Add(computerMenuGameObject.GetComponent<Image>());
+			computerMenuGameObject.GetComponent<ComputerMenu>().Initialize(missionList[i].MissionName);
+			computerMenuContentList.Add(computerMenuGameObject.GetComponent<ComputerMenu>());
 		}
 
 		currentComputerMenuSelectedIndex = 0;
@@ -481,11 +484,11 @@ public class UI : MonoBehaviour
 			if (i == currentComputerMenuSelectedIndex)
 			{
 				//選択中の項目の色を変更
-				computerMenuContentList[i].color = new Color(computerMenuContentList[i].color.r, computerMenuContentList[i].color.g, computerMenuContentList[i].color.b, 120.0f / 255.0f);
+				computerMenuContentList[i].Image.color = new Color(computerMenuContentList[i].Image.color.r, computerMenuContentList[i].Image.color.g, computerMenuContentList[i].Image.color.b, 120.0f / 255.0f);
 			}
 			else
 			{
-				computerMenuContentList[i].color = new Color(computerMenuContentList[i].color.r, computerMenuContentList[i].color.g, computerMenuContentList[i].color.b, 0.0f);
+				computerMenuContentList[i].Image.color = new Color(computerMenuContentList[i].Image.color.r, computerMenuContentList[i].Image.color.g, computerMenuContentList[i].Image.color.b, 0.0f);
 			}
 		}
 	}
@@ -495,24 +498,24 @@ public class UI : MonoBehaviour
 	/// </summary>
 	void ExecuteComputerMenuAction()
 	{
-		ExecuteMission(currentComputerMenuSelectedIndex);
+		ExecuteMission();
 		HideComputerMenu();
 	}
 
 	/// <summary>
 	/// ミッション実行
 	/// </summary>
-	void ExecuteMission(int computerMenuSelectedIndex)
+	void ExecuteMission()
 	{
 		//↓ここをミッションごとに変えるようにする必要がある
 		//各ComputerTYPEに紐づいたミッションリストを取得して、そこから選択されたミッション内容を↓に反映すればいい
-		var result = missionList[computerMenuSelectedIndex];
+		var result = missionList[currentComputerMenuSelectedIndex];
 		//ミッション開始
 		if (result != null)
 		{
 			Debug.Log("<color=red>ミッション開始</color>");
 			InGameManager.SingletonInstance.IsMissionActive = true;
-			InGameManager.SingletonInstance.TargetComputerName = result.TargetComputerName;
+			InGameManager.SingletonInstance.TargetComputerName = result.EndComputerName;
 			Player.SingletonInstance.Minute = result.Minute;
 			Player.SingletonInstance.Seconds = result.Seconds;
 		}
