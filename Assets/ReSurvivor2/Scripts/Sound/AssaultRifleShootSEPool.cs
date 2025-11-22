@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
+/// <summary>
+/// アサルトライフルの射撃のSE
+/// </summary>
+
 public class AssaultRifleShootSEPool : MonoBehaviour
 {
 	ObjectPool<GameObject> objectPool;
