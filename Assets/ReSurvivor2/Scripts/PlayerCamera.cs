@@ -573,7 +573,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void HandGunFireSE()
 	{
-		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(Player.SingletonInstance.HandGunMuzzleTransform);
 	}
 
 	/// <summary>
@@ -581,7 +581,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void HandGunReloadSE()
 	{
-		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(Player.SingletonInstance.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -589,7 +589,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	void HandGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(Player.SingletonInstance.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -827,7 +827,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void AssaultRifleFireSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(Player.SingletonInstance.AssaultRifleMuzzleTransform);
 	}
 
 	/// <summary>
@@ -835,7 +835,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void AssaultRifleReloadSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(Player.SingletonInstance.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -843,7 +843,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	void AssaultRifleBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(Player.SingletonInstance.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -1084,7 +1084,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void ShotGunFireSE()
 	{
-		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(Player.SingletonInstance.ShotGunMuzzleTransform);
 	}
 
 	/// <summary>
@@ -1092,7 +1092,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void ShotGunReloadSE()
 	{
-		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(Player.SingletonInstance.ShotGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -1100,7 +1100,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	void ShotGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(Player.SingletonInstance.ShotGunBulletCasingTransform);
 	}
 
 	/// <summary>
