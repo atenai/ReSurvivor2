@@ -101,12 +101,6 @@ public class PlayerCamera : MonoBehaviour
 	[Tooltip("ハンドガンのリロード時間")]
 	readonly float handGunReloadTimeDefine = 1.5f;
 
-	[Tooltip("ハンドガンのリロードのSE")]
-	[SerializeField] GameObject handGunReloadSe;
-
-	[Tooltip("ハンドガンの薬莢のSE")]
-	[SerializeField] GameObject handGunBulletCasingSe;
-
 	//↓アセットストアのプログラム↓//
 	[Tooltip("ハンドガンのマズルフラッシュと薬莢")]
 	[SerializeField] ParticleGroupEmitter[] handGunShotEmitters;
@@ -140,8 +134,6 @@ public class PlayerCamera : MonoBehaviour
 	[Tooltip("アサルトライフルのリロード時間")]
 	readonly float assaultRifleReloadTimeDefine = 1.5f;
 
-	[Tooltip("アサルトライフルの射撃のSE")]
-	[SerializeField] GameObject assaultRifleShootSe;
 	[Tooltip("アサルトライフルのリロードのSE")]
 	[SerializeField] GameObject assaultRifleReloadSe;
 	[Tooltip("アサルトライフルの薬莢のSE")]
@@ -847,7 +839,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void AssaultRifleFireSE()
 	{
-		UnityEngine.GameObject se = Instantiate(assaultRifleShootSe, this.transform.position, Quaternion.identity);
+		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(this.transform);
 	}
 
 	/// <summary>

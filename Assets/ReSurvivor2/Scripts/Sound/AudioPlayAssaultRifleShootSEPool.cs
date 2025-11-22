@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ハンドガンのリロードのSE
+/// アサルトライフルの射撃のSE
 /// </summary>
-public class AudioPlayHandGunReloadSEPool : MonoBehaviour
+public class AudioPlayAssaultRifleShootSEPool : MonoBehaviour
 {
 	[SerializeField] AudioClip audioClip;
 	[SerializeField] AudioSource audioSource;
@@ -20,7 +20,7 @@ public class AudioPlayHandGunReloadSEPool : MonoBehaviour
 		//音声が鳴り終えたら
 		if (audioSource.isPlaying == false)
 		{
-			SoundManager.SingletonInstance.HandGunReloadSEPool.ReleaseGameObject(this.gameObject);
+			SoundManager.SingletonInstance.AssaultRifleShootSEPool.ReleaseGameObject(this.gameObject);
 		}
 	}
 }

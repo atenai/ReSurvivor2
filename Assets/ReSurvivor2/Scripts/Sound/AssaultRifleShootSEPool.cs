@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-/// <summary>
-/// ハンドガンのリロードのSE
-/// </summary>
-public class HandGunReloadSEPool : MonoBehaviour
+public class AssaultRifleShootSEPool : MonoBehaviour
 {
 	ObjectPool<GameObject> objectPool;
 	[SerializeField] GameObject prefab;
-	int defalutCapacity = 7;
-	int maxCount = 70;
+	//int defalutCapacity = PlayerCamera.SingletonInstance.HandGunMagazineCapacity;//本当はこう書きたいが、インスタンスがPlayerCameraより先にされてしまいnullになってしまう
+	int defalutCapacity = 30;
+	//int maxCount = PlayerCamera.SingletonInstance.MaxHandGunAmmo;//本当はこう書きたいが、インスタンスがPlayerCameraより先にされてしまいnullになってしまう
+	int maxCount = 300;
 
 	/// <summary>
 	/// オブジェクトプールの初期化処理
@@ -85,7 +84,7 @@ public class HandGunReloadSEPool : MonoBehaviour
 	{
 		GameObject gameObject = objectPool.Get();
 		gameObject.transform.position = transform.position;
-		gameObject.GetComponent<AudioPlayHandGunReloadSEPool>().PlaySound();
+		gameObject.GetComponent<AudioPlayAssaultRifleShootSEPool>().PlaySound();
 	}
 
 	/// <summary>

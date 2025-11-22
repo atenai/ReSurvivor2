@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ハンドガンの射撃のSE
+/// </summary>
 public class AudioPlayHandGunShootSEPool : MonoBehaviour
 {
 	[SerializeField] AudioClip audioClip;

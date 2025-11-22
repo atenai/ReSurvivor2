@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
+/// <summary>
+/// ハンドガンの射撃のSE
+/// </summary>
 public class HandGunShootSEPool : MonoBehaviour
 {
 	ObjectPool<GameObject> objectPool;
