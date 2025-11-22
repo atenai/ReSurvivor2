@@ -45,6 +45,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: dbd4f5156bb04524d85bf1495ef0c0b3, type: 3}
+--- !u!1 &1169286622805057075
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7422909512554373232}
+  - component: {fileID: 6255249965193222303}
+  m_Layer: 0
+  m_Name: AssaultRifleReloadSEPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7422909512554373232
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169286622805057075}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5320057497165564513}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6255249965193222303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169286622805057075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fe2bfbde70486f42b54ba0387d5c99d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8217214238848448886, guid: e0f7e3a31646cc846ad9350fd73aa2e4, type: 3}
 --- !u!1 &3397379584237891835
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +305,7 @@ Transform:
   - {fileID: 4930809115738147677}
   - {fileID: 5039434354622091559}
   - {fileID: 7726203355104641312}
+  - {fileID: 7422909512554373232}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7168354362244964980
@@ -279,3 +325,4 @@ MonoBehaviour:
   handGunBulletCasingSEPool: {fileID: 7397309471494743204}
   handGunReloadSEPool: {fileID: 2667691702052292538}
   assaultRifleShootSEPool: {fileID: 3098976577434010996}
+  assaultRifleReloadSEPool: {fileID: 6255249965193222303}

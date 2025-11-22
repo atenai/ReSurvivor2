@@ -134,8 +134,6 @@ public class PlayerCamera : MonoBehaviour
 	[Tooltip("アサルトライフルのリロード時間")]
 	readonly float assaultRifleReloadTimeDefine = 1.5f;
 
-	[Tooltip("アサルトライフルのリロードのSE")]
-	[SerializeField] GameObject assaultRifleReloadSe;
 	[Tooltip("アサルトライフルの薬莢のSE")]
 	[SerializeField] GameObject assaultRifleBulletCasingSe;
 
@@ -847,7 +845,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void AssaultRifleReloadSE()
 	{
-		UnityEngine.GameObject se = Instantiate(assaultRifleReloadSe, this.transform.position, Quaternion.identity);
+		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(this.transform);
 	}
 
 	/// <summary>

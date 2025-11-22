@@ -23,6 +23,9 @@ public class SoundManager : MonoBehaviour
 	[SerializeField] AssaultRifleShootSEPool assaultRifleShootSEPool;
 	public AssaultRifleShootSEPool AssaultRifleShootSEPool => assaultRifleShootSEPool;
 
+	[SerializeField] AssaultRifleReloadSEPool assaultRifleReloadSEPool;
+	public AssaultRifleReloadSEPool AssaultRifleReloadSEPool => assaultRifleReloadSEPool;
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。

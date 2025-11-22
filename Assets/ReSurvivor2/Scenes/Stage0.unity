@@ -272,17 +272,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &355445145 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3098976577434010996, guid: bb08814c58f03f242bfc2549a54741ef, type: 3}
-  m_PrefabInstance: {fileID: 800237839550482568}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea9396c463b38584a978614b5801929a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &403809961 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8532304384064273327, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
@@ -1543,10 +1532,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7168354362244964980, guid: bb08814c58f03f242bfc2549a54741ef, type: 3}
-      propertyPath: assaultRifleShootSEPool
-      value: 
-      objectReference: {fileID: 355445145}
     - target: {fileID: 8037639117145374931, guid: bb08814c58f03f242bfc2549a54741ef, type: 3}
       propertyPath: m_Name
       value: SoundManager
