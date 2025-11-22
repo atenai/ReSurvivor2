@@ -134,9 +134,6 @@ public class PlayerCamera : MonoBehaviour
 	[Tooltip("アサルトライフルのリロード時間")]
 	readonly float assaultRifleReloadTimeDefine = 1.5f;
 
-	[Tooltip("アサルトライフルの薬莢のSE")]
-	[SerializeField] GameObject assaultRifleBulletCasingSe;
-
 	//↓アセットストアのプログラム↓//
 	[Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
 	[SerializeField] ParticleGroupEmitter[] assaultRifleShotEmitters;
@@ -853,7 +850,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	void AssaultRifleBulletCasingSE()
 	{
-		UnityEngine.GameObject se = Instantiate(assaultRifleBulletCasingSe, this.transform.position, Quaternion.identity);
+		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(this.transform);
 	}
 
 	/// <summary>

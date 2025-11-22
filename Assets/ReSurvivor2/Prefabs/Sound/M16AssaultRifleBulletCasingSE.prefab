@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7126199428332280945}
   - component: {fileID: 982046144689781064}
-  - component: {fileID: 4552900215750545631}
+  - component: {fileID: -3876750632182243318}
   m_Layer: 0
   m_Name: M16AssaultRifleBulletCasingSE
   m_TagString: Untagged
@@ -129,7 +129,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4552900215750545631
+--- !u!114 &-3876750632182243318
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8217214238848448886}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c39a8570d1481ef47a97d1b081440c58, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e9e80d2a25c80846b91594078db0995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   audioClip: {fileID: 8300000, guid: db126938af0114ac3a37d001b0f8a31a, type: 3}

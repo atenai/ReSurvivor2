@@ -23,6 +23,9 @@ public class SoundManager : MonoBehaviour
 	[SerializeField] AssaultRifleShootSEPool assaultRifleShootSEPool;
 	public AssaultRifleShootSEPool AssaultRifleShootSEPool => assaultRifleShootSEPool;
 
+	[SerializeField] AssaultRifleBulletCasingSEPool assaultRifleBulletCasingSEPool;
+	public AssaultRifleBulletCasingSEPool AssaultRifleBulletCasingSEPool => assaultRifleBulletCasingSEPool;
+
 	[SerializeField] AssaultRifleReloadSEPool assaultRifleReloadSEPool;
 	public AssaultRifleReloadSEPool AssaultRifleReloadSEPool => assaultRifleReloadSEPool;
 
