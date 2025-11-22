@@ -75,14 +75,41 @@ public class Player : MonoBehaviour
 	[SerializeField] GameObject handGunModel;
 	[Tooltip("キャラクターの体についているハンドガンのモデル")]
 	[SerializeField] GameObject handGunModelBodyDecoration;
+	[Tooltip("ハンドガンのマズルフラッシュの生成座標位置")]
+	[SerializeField] Transform handGunMuzzleTransform;
+	public Transform HandGunMuzzleTransform => handGunMuzzleTransform;
+	[Tooltip("ハンドガンの薬莢の生成座標位置")]
+	[SerializeField] Transform handGunBulletCasingTransform;
+	public Transform HandGunBulletCasingTransform => handGunBulletCasingTransform;
+	[Tooltip("ハンドガンの硝煙の生成座標位置")]
+	[SerializeField] Transform handGunAfterFireSmokeTransform;
+	public Transform HandGunAfterFireSmokeTransform => handGunAfterFireSmokeTransform;
 	[Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
 	[SerializeField] GameObject assaultRifleModel;
 	[Tooltip("キャラクターの体についているアサルトライフルのモデル")]
 	[SerializeField] GameObject assaultRifleModelBodyDecoration;
+	[Tooltip("アサルトライフルのマズルフラッシュの生成座標位置")]
+	[SerializeField] Transform assaultRifleMuzzleTransform;
+	public Transform AssaultRifleMuzzleTransform => assaultRifleMuzzleTransform;
+	[Tooltip("アサルトライフルの薬莢の生成座標位置")]
+	[SerializeField] Transform assaultRifleBulletCasingTransform;
+	public Transform AssaultRifleBulletCasingTransform => assaultRifleBulletCasingTransform;
+	[Tooltip("アサルトライフルの硝煙の生成座標位置")]
+	[SerializeField] Transform assaultRifleAfterFireSmokeTransform;
+	public Transform AssaultRifleAfterFireSmokeTransform => assaultRifleAfterFireSmokeTransform;
 	[Tooltip("キャラクターの手に持っているショットガンのモデル")]
 	[SerializeField] GameObject shotGunModel;
 	[Tooltip("キャラクターの体についているショットガンのモデル")]
 	[SerializeField] GameObject shotGunModelBodyDecoration;
+	[Tooltip("ショットガンのマズルフラッシュの生成座標位置")]
+	[SerializeField] Transform shotGunMuzzleTransform;
+	public Transform ShotGunMuzzleTransform => shotGunMuzzleTransform;
+	[Tooltip("ショットガンの薬莢の生成座標位置")]
+	[SerializeField] Transform shotGunBulletCasingTransform;
+	public Transform ShotGunBulletCasingTransform => shotGunBulletCasingTransform;
+	[Tooltip("ショットガンの硝煙の生成座標位置")]
+	[SerializeField] Transform shotGunAfterFireSmokeTransform;
+	public Transform ShotGunAfterFireSmokeTransform => shotGunAfterFireSmokeTransform;
 
 	[Header("UI")]
 	[Tooltip("プレイヤーのキャンバス")]
