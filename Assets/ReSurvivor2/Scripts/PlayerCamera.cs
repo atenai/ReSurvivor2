@@ -169,13 +169,6 @@ public class PlayerCamera : MonoBehaviour
 	[Tooltip("ショットガンのリロード時間")]
 	readonly float shotGunReloadTimeDefine = 1.5f;
 
-	[Tooltip("ショットガンの射撃のSE")]
-	[SerializeField] GameObject shotGunShootSe;
-	[Tooltip("ショットガンのリロードのSE")]
-	[SerializeField] GameObject shotGunReloadSe;
-	[Tooltip("ショットガンの薬莢のSE")]
-	[SerializeField] GameObject shotGunBulletCasingSe;
-
 	//↓アセットストアのプログラム↓//
 	[Tooltip("ショットガンのマズルフラッシュと薬莢")]
 	[SerializeField] ParticleGroupEmitter[] shotGunShotEmitters;
@@ -1091,7 +1084,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void ShotGunFireSE()
 	{
-		UnityEngine.GameObject se = Instantiate(shotGunShootSe, this.transform.position, Quaternion.identity);
+		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(this.transform);
 	}
 
 	/// <summary>
@@ -1099,7 +1092,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void ShotGunReloadSE()
 	{
-		UnityEngine.GameObject se = Instantiate(shotGunReloadSe, this.transform.position, Quaternion.identity);
+		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(this.transform);
 	}
 
 	/// <summary>
@@ -1107,7 +1100,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	void ShotGunBulletCasingSE()
 	{
-		UnityEngine.GameObject se = Instantiate(shotGunBulletCasingSe, this.transform.position, Quaternion.identity);
+		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(this.transform);
 	}
 
 	/// <summary>
