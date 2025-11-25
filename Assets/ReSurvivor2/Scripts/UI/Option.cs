@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using UnityEditor;
 
 /// <summary>
-/// タイトル
+/// オプション
 /// </summary>
-public class Title : OutGameBase
+public class Option : OutGameBase
 {
 	[Tooltip("メニューオプションのイメージリスト")]
 	[SerializeField] Image[] menuOptions;
@@ -23,10 +23,6 @@ public class Title : OutGameBase
 	/// XInputのDPadハンドラー
 	/// </summary>
 	XInputDPadHandler xInputDPadHandler = new XInputDPadHandler();
-	[Tooltip("クレジットシーン名")]
-	[SerializeField] string creditsSceneName;
-	[Tooltip("オプションシーン名")]
-	[SerializeField] string optionSceneName;
 
 	new void Start()
 	{
@@ -100,46 +96,18 @@ public class Title : OutGameBase
 		switch (currentSelectedIndex)
 		{
 			case 0:
-				StartGame();
+
 				break;
 			case 1:
-				ShowCredits();
+
 				break;
 			case 2:
-				ShowOption();
-				//SaveDataDelete();
+				SaveDataDelete();
 				break;
 			case 3:
-				ExitGame();
+				BackToTitle();
 				break;
 		}
-	}
-
-	/// <summary>
-	/// ゲームスタート
-	/// </summary>
-	void StartGame()
-	{
-		isDisableConsecutiveKeystrokes = false;
-		Load(nextSceneName);
-	}
-
-	/// <summary>
-	/// クレジットシーンへ
-	/// </summary>
-	void ShowCredits()
-	{
-		isDisableConsecutiveKeystrokes = false;
-		Load(creditsSceneName);
-	}
-
-	/// <summary>
-	/// オプションシーンへ
-	/// </summary>
-	void ShowOption()
-	{
-		isDisableConsecutiveKeystrokes = false;
-		Load(optionSceneName);
 	}
 
 	/// <summary>
@@ -152,21 +120,12 @@ public class Title : OutGameBase
 	}
 
 	/// <summary>
-	/// ゲーム終了
+	/// タイトルに戻る
 	/// </summary>
-	void ExitGame()
+	void BackToTitle()
 	{
 		isDisableConsecutiveKeystrokes = false;
-		Quit();
-	}
-
-	void Quit()
-	{
-#if UNITY_EDITOR
-		EditorApplication.isPlaying = false;
-#elif UNITY_STANDALONE
-        UnityEngine.Application.Quit();
-#endif
+		Load(nextSceneName);
 	}
 
 	/// <summary>

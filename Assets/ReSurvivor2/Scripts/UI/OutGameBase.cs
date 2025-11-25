@@ -10,9 +10,18 @@ using UnityEngine.SceneManagement;
 public class OutGameBase : MonoBehaviour
 {
 	ShaderVariantCollection shaderVariantCollection;
+	/// <summary>
+	/// シェーダーロード用スライダー
+	/// </summary>
 	[SerializeField] protected Slider sliderShaderLoading;
-	[SerializeField] protected string sceneName;
+	/// <summary>
+	/// シーンロード用スライダー
+	/// </summary>
 	[SerializeField] protected Slider sliderSceneLoading;
+	/// <summary>
+	/// 次にロードするシーン名
+	/// </summary>
+	[SerializeField] protected string nextSceneName;
 	bool isLoadOnce = false;
 
 	protected void Start()
@@ -47,7 +56,7 @@ public class OutGameBase : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
 		{
-			Load(sceneName);
+			Load(nextSceneName);
 		}
 	}
 

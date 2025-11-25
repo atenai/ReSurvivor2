@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -403,7 +402,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SaveDataDelete
+  m_text: 'OPTION
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -430,8 +431,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1365,14 +1366,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sliderShaderLoading: {fileID: 79506344}
-  sceneName: Stage0
   sliderSceneLoading: {fileID: 406762306}
+  nextSceneName: Stage0
   menuOptions:
   - {fileID: 169246709}
   - {fileID: 610658737}
   - {fileID: 1130605704}
   - {fileID: 1497410273}
-  showCreditsSceneName: Credits
+  creditsSceneName: Credits
+  optionSceneName: Option
 --- !u!114 &799749812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1532,7 +1534,7 @@ GameObject:
   - component: {fileID: 1130605705}
   - component: {fileID: 1130605704}
   m_Layer: 5
-  m_Name: Image_SaveDataDelete
+  m_Name: Image_Option
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
