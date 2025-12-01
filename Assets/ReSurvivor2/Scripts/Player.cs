@@ -828,8 +828,6 @@ public class Player : MonoBehaviour
 			return;
 		}
 
-		isDash = false;
-
 		//カメラの方向から、XとZのベクトルを取得 0,0,1 * 1,0,1 = 1,0,1;
 		cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
@@ -862,6 +860,11 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void ChangeMoveSpeed()
 	{
+		if (isAim == true)
+		{
+			isDash = false;
+		}
+
 		if (currentStamina <= tiredStamina)
 		{
 			isDash = false;
