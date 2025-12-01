@@ -1341,14 +1341,16 @@ public class PlayerCamera : MonoBehaviour
 		styleStateYellow.textColor = Color.yellow;
 		styleYellow.normal = styleStateYellow;
 
-		GUI.Box(new Rect(10, 650, 100, 50), "cameraPos", styleRed);
-		GUI.Box(new Rect(350, 650, 100, 50), this.transform.position.ToString(), styleRed);
-		GUI.Box(new Rect(10, 700, 100, 50), "hitName", styleRed);
-		GUI.Box(new Rect(350, 700, 100, 50), hitName, styleRed);
-		GUI.Box(new Rect(10, 750, 100, 50), "localCameraSpeedX", styleRed);
-		GUI.Box(new Rect(350, 750, 100, 50), localCameraSpeedX.ToString(), styleRed);
-		GUI.Box(new Rect(10, 800, 100, 50), "localCameraSpeedY", styleRed);
-		GUI.Box(new Rect(350, 800, 100, 50), localCameraSpeedY.ToString(), styleRed);
+		int lineHeight = 50;
+
+		GUI.Box(new Rect(10, 14 * lineHeight, 100, 50), "cameraPos", styleRed);
+		GUI.Box(new Rect(350, 14 * lineHeight, 100, 50), this.transform.position.ToString(), styleRed);
+		GUI.Box(new Rect(10, 15 * lineHeight, 100, 50), "hitName", styleRed);
+		GUI.Box(new Rect(350, 15 * lineHeight, 100, 50), hitName, styleRed);
+		GUI.Box(new Rect(10, 16 * lineHeight, 100, 50), "localCameraSpeedX", styleRed);
+		GUI.Box(new Rect(350, 16 * lineHeight, 100, 50), localCameraSpeedX.ToString(), styleRed);
+		GUI.Box(new Rect(10, 17 * lineHeight, 100, 50), "localCameraSpeedY", styleRed);
+		GUI.Box(new Rect(350, 17 * lineHeight, 100, 50), localCameraSpeedY.ToString(), styleRed);
 
 #endif //終了  
 	}
