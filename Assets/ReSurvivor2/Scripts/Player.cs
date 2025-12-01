@@ -864,25 +864,22 @@ public class Player : MonoBehaviour
 	{
 		if (currentStamina <= tiredStamina)
 		{
+			isDash = false;
+		}
+
+		if (isDash == true)
+		{
+			//元気な際の移動速度
+			normalMoveSpeed = energeticNormalMoveSpeed;
+			weaponMoveSpeed = energeticWeaponMoveSpeed;
+		}
+		else
+		{
 			//疲れた際の移動速度
 			normalMoveSpeed = tiredNormalMoveSpeed;
 			weaponMoveSpeed = tiredWeaponMoveSpeed;
 		}
-		else
-		{
-			if (isDash == true)
-			{
-				//元気な際の移動速度
-				normalMoveSpeed = energeticNormalMoveSpeed;
-				weaponMoveSpeed = energeticWeaponMoveSpeed;
-			}
-			else
-			{
-				//疲れた際の移動速度
-				normalMoveSpeed = tiredNormalMoveSpeed;
-				weaponMoveSpeed = tiredWeaponMoveSpeed;
-			}
-		}
+
 	}
 
 	void OnCollisionEnter(Collision collision)
