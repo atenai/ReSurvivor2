@@ -41,6 +41,8 @@ public class Player : MonoBehaviour
 	[Tooltip("プレイヤーキャラクターのエイム中移動速度")]
 	float weaponMoveSpeed = 3.0f;
 	public float WeaponMoveSpeed => weaponMoveSpeed;
+	[Tooltip("ダッシュするか？")]
+	bool isDash = false;
 	float inputHorizontal;
 	float inputVertical;
 	Vector3 moveForward;
@@ -380,6 +382,11 @@ public class Player : MonoBehaviour
 			isAim = false;
 		}
 
+		if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("XInput L_Stick Click"))
+		{
+			isDash = true;
+		}
+
 		NormalMoveAnimation();
 
 		//↑ロード中に動かせる処理
@@ -396,7 +403,7 @@ public class Player : MonoBehaviour
 			Heal();
 		}
 
-		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("XInput LB"))
+		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("XInput LB"))
 		{
 			RestoresStamina();
 		}
@@ -787,15 +794,22 @@ public class Player : MonoBehaviour
 			this.transform.rotation = Quaternion.LookRotation(moveForward);
 		}
 
-		if (inputVertical <= -1 || 1 <= inputVertical)//前後移動入力
+		if (isDash == true)
 		{
-			//スタミナ消費
-			ConsumeStamina(2.0f);
-		}
-		else if (inputHorizontal <= -1 || 1 <= inputHorizontal)//左右移動入力
-		{
-			//スタミナ消費
-			ConsumeStamina(2.0f);
+			if (inputVertical <= -1 || 1 <= inputVertical)//前後移動入力
+			{
+				//スタミナ消費
+				ConsumeStamina(2.0f);
+			}
+			else if (inputHorizontal <= -1 || 1 <= inputHorizontal)//左右移動入力
+			{
+				//スタミナ消費
+				ConsumeStamina(2.0f);
+			}
+			else
+			{
+				isDash = false;
+			}
 		}
 
 
@@ -814,6 +828,8 @@ public class Player : MonoBehaviour
 			return;
 		}
 
+		isDash = false;
+
 		//カメラの方向から、XとZのベクトルを取得 0,0,1 * 1,0,1 = 1,0,1;
 		cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
@@ -829,17 +845,6 @@ public class Player : MonoBehaviour
 		if (cameraForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
 		{
 			this.transform.rotation = Quaternion.LookRotation(cameraForward);
-		}
-
-		if (inputVertical <= -1 || 1 <= inputVertical)//前後移動入力
-		{
-			//スタミナ消費
-			ConsumeStamina(2.0f);
-		}
-		else if (inputHorizontal <= -1 || 1 <= inputHorizontal)//左右移動入力
-		{
-			//スタミナ消費
-			ConsumeStamina(2.0f);
 		}
 	}
 
@@ -865,9 +870,18 @@ public class Player : MonoBehaviour
 		}
 		else
 		{
-			//元気な際の移動速度
-			normalMoveSpeed = energeticNormalMoveSpeed;
-			weaponMoveSpeed = energeticWeaponMoveSpeed;
+			if (isDash == true)
+			{
+				//元気な際の移動速度
+				normalMoveSpeed = energeticNormalMoveSpeed;
+				weaponMoveSpeed = energeticWeaponMoveSpeed;
+			}
+			else
+			{
+				//疲れた際の移動速度
+				normalMoveSpeed = tiredNormalMoveSpeed;
+				weaponMoveSpeed = tiredWeaponMoveSpeed;
+			}
 		}
 	}
 
