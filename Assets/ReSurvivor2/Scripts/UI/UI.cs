@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using UnityEngine.Events;
+using TMPro;
 
 public class UI : MonoBehaviour
 {
@@ -95,22 +96,24 @@ public class UI : MonoBehaviour
 	[Header("コンピューターメニュー")]
 	[Tooltip("コンピューターメニューパネル")]
 	[SerializeField] GameObject panelComputerMenu;
-	[Tooltip("コンピューターメニューコンテンツ")]
-	[SerializeField] GameObject computerMenuContent;
-	[Tooltip("コンピューターメニュープレハブ")]
-	[SerializeField] GameObject computerMenuPrefab;
+	[Tooltip("メールリストコンテンツ")]
+	[SerializeField] GameObject mailListContent;
+	[Tooltip("メールプレハブ")]
+	[SerializeField] GameObject mailPrefab;
+	[Tooltip("メールメッセージタイトル")]
+	[SerializeField] TextMeshProUGUI mailMessageTitle;
 	/// <summary>
-	/// コンピューターメニューのコンテンツリスト
+	/// メールリストのコンテンツリスト
 	/// </summary>
-	List<ComputerMenu> computerMenuContentList = new List<ComputerMenu>();
+	List<Mail> mailListContentList = new List<Mail>();
 	/// <summary>
 	/// コンピューターメニューのミッションリスト
 	/// </summary>
 	List<MasterMissionEntity> missionList = new List<MasterMissionEntity>();
 	/// <summary>
-	/// 現在のコンピューターメニュー選択インデックス
+	/// 現在のメールリストの選択インデックス
 	/// </summary>
-	int currentComputerMenuSelectedIndex = 0;
+	int currentMailListSelectedIndex = 0;
 	/// <summary>
 	/// コンピューターメニュー表示中か？
 	/// </summary>
@@ -160,8 +163,12 @@ public class UI : MonoBehaviour
 		//↓ロード中に動かせない処理
 
 		Crosshair();
-		UpdatePauseMenuSystem();
 		UpdateComputerMenuSystem();
+
+
+
+
+		UpdatePauseMenuSystem();
 
 		UpdateXInputDPad();
 	}
@@ -390,9 +397,6 @@ public class UI : MonoBehaviour
 	/// </summary>
 	public void ShowComputerMenu(InGameManager.ComputerTYPE startComputerTYPE)
 	{
-		isComputerMenuActive = true;
-		Time.timeScale = 0f;
-
 		//各種パラメーターの初期化処理
 		missionList.Clear();
 		missionList = InGameManager.SingletonInstance.MissionSerchList(startComputerTYPE);
@@ -403,24 +407,29 @@ public class UI : MonoBehaviour
 			return;
 		}
 
+		//メールリスト
 		//全ての子オブジェクトを破棄
-		foreach (Transform computerMenuTransform in computerMenuContent.transform)
+		foreach (Transform computerMenuTransform in mailListContent.transform)
 		{
 			Destroy(computerMenuTransform.gameObject);
 		}
 
-		computerMenuContentList.Clear();
+		mailListContentList.Clear();
 		for (int i = 0; i < missionList.Count; i++)
 		{
 			// プレハブをInstantiateしてContentの子オブジェクトに配置
-			GameObject computerMenuGameObject = Instantiate(computerMenuPrefab, new Vector3(0, 0, 0), Quaternion.identity, computerMenuContent.transform);
-			computerMenuGameObject.GetComponent<ComputerMenu>().Initialize(missionList[i].MissionName);
-			computerMenuContentList.Add(computerMenuGameObject.GetComponent<ComputerMenu>());
+			GameObject mailGameObject = Instantiate(mailPrefab, new Vector3(0, 0, 0), Quaternion.identity, mailListContent.transform);
+			mailGameObject.GetComponent<Mail>().Initialize(missionList[i].MissionName);
+			mailListContentList.Add(mailGameObject.GetComponent<Mail>());
 		}
 
-		currentComputerMenuSelectedIndex = 0;
-		ChangeColorComputerMenuContentImage();
+		currentMailListSelectedIndex = 0;
+		ChangeColorMailListContentImage();
 
+		//メールメッセージ
+		mailMessageTitle.text = missionList[currentMailListSelectedIndex].MissionName;
+
+		isComputerMenuActive = true;
 		panelComputerMenu.SetActive(true);
 	}
 
@@ -430,7 +439,6 @@ public class UI : MonoBehaviour
 	void HideComputerMenu()
 	{
 		isComputerMenuActive = false;
-		Time.timeScale = 1f;
 		panelComputerMenu.SetActive(false);
 	}
 
@@ -454,21 +462,23 @@ public class UI : MonoBehaviour
 			//上下の矢印キーで選択を変更
 			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || xInputDPadHandler.UpDown)
 			{
-				currentComputerMenuSelectedIndex--;
-				if (currentComputerMenuSelectedIndex < 0)
+				currentMailListSelectedIndex--;
+				if (currentMailListSelectedIndex < 0)
 				{
-					currentComputerMenuSelectedIndex = missionList.Count - 1;
+					currentMailListSelectedIndex = missionList.Count - 1;
 				}
-				ChangeColorComputerMenuContentImage();
+				ChangeColorMailListContentImage();
+				mailMessageTitle.text = missionList[currentMailListSelectedIndex].MissionName;
 			}
 			else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || xInputDPadHandler.DownDown)
 			{
-				currentComputerMenuSelectedIndex++;
-				if (missionList.Count <= currentComputerMenuSelectedIndex)
+				currentMailListSelectedIndex++;
+				if (missionList.Count <= currentMailListSelectedIndex)
 				{
-					currentComputerMenuSelectedIndex = 0;
+					currentMailListSelectedIndex = 0;
 				}
-				ChangeColorComputerMenuContentImage();
+				ChangeColorMailListContentImage();
+				mailMessageTitle.text = missionList[currentMailListSelectedIndex].MissionName;
 			}
 
 			//Enterキーで選択を確定
@@ -480,21 +490,21 @@ public class UI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// コンピューターメニュー
+	/// メールリストの色変更
 	/// </summary> 
-	void ChangeColorComputerMenuContentImage()
+	void ChangeColorMailListContentImage()
 	{
 		//メニューの見た目を更新
 		for (int i = 0; i < missionList.Count; i++)
 		{
-			if (i == currentComputerMenuSelectedIndex)
+			if (i == currentMailListSelectedIndex)
 			{
 				//選択中の項目の色を変更
-				computerMenuContentList[i].Image.color = new Color(computerMenuContentList[i].Image.color.r, computerMenuContentList[i].Image.color.g, computerMenuContentList[i].Image.color.b, 120.0f / 255.0f);
+				mailListContentList[i].Image.color = new Color(mailListContentList[i].Image.color.r, mailListContentList[i].Image.color.g, mailListContentList[i].Image.color.b, 120.0f / 255.0f);
 			}
 			else
 			{
-				computerMenuContentList[i].Image.color = new Color(computerMenuContentList[i].Image.color.r, computerMenuContentList[i].Image.color.g, computerMenuContentList[i].Image.color.b, 0.0f);
+				mailListContentList[i].Image.color = new Color(mailListContentList[i].Image.color.r, mailListContentList[i].Image.color.g, mailListContentList[i].Image.color.b, 0.0f);
 			}
 		}
 	}
@@ -515,7 +525,7 @@ public class UI : MonoBehaviour
 	{
 		//↓ここをミッションごとに変えるようにする必要がある
 		//各ComputerTYPEに紐づいたミッションリストを取得して、そこから選択されたミッション内容を↓に反映すればいい
-		var result = missionList[currentComputerMenuSelectedIndex];
+		var result = missionList[currentMailListSelectedIndex];
 		//ミッション開始
 		if (result != null)
 		{

@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// コンピューターメニュー
+/// メール
 /// </summary>
-public class ComputerMenu : MonoBehaviour
+public class Mail : MonoBehaviour
 {
 	[SerializeField] Image image;
 	public Image Image => image;
