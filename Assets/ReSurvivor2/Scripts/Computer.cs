@@ -5,6 +5,9 @@ using UnityEngine;
 /// <summary>
 /// コンピューター
 /// </summary>
+/// <remarks>
+/// Computer.cs ⇒ InGameManager.cs ⇒ UI.cs
+/// </remarks>
 public class Computer : MonoBehaviour
 {
 	[Tooltip("このコンピューターの名前")]

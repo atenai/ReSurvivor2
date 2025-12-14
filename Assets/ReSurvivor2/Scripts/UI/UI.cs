@@ -417,7 +417,7 @@ public class UI : MonoBehaviour
 		mailListContentList.Clear();
 		for (int i = 0; i < missionList.Count; i++)
 		{
-			// プレハブをInstantiateしてContentの子オブジェクトに配置
+			//プレハブをInstantiateしてContentの子オブジェクトに配置
 			GameObject mailGameObject = Instantiate(mailPrefab, new Vector3(0, 0, 0), Quaternion.identity, mailListContent.transform);
 			mailGameObject.GetComponent<Mail>().Initialize(missionList[i].MissionName);
 			mailListContentList.Add(mailGameObject.GetComponent<Mail>());
