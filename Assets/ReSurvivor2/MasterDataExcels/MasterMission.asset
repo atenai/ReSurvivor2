@@ -13,17 +13,20 @@ MonoBehaviour:
   m_Name: MasterMission
   m_EditorClassIdentifier: 
   Sheet1:
-  - StartComputerName: 0
+  - MissionID: 0
+    StartComputerName: 0
     EndComputerName: 4
     Minute: 10
     Seconds: 30
     MissionName: "MissionName : 0\u21924"
-  - StartComputerName: 0
+  - MissionID: 1
+    StartComputerName: 0
     EndComputerName: 1
     Minute: 5
     Seconds: 0
     MissionName: "MissionName : 0\u21921"
-  - StartComputerName: 4
+  - MissionID: 2
+    StartComputerName: 4
     EndComputerName: 0
     Minute: 4
     Seconds: 10

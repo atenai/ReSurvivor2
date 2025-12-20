@@ -531,6 +531,7 @@ public class UI : MonoBehaviour
 		{
 			Debug.Log("<color=red>ミッション開始</color>");
 			InGameManager.SingletonInstance.IsMissionActive = true;
+			InGameManager.SingletonInstance.CurrentMissionID = result.MissionID;
 			InGameManager.SingletonInstance.EndComputerName = result.EndComputerName;
 			Player.SingletonInstance.Minute = result.Minute;
 			Player.SingletonInstance.Seconds = result.Seconds;

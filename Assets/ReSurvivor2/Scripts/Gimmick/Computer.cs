@@ -26,7 +26,6 @@ public class Computer : MonoBehaviour
 			if (collider.gameObject.CompareTag("Player"))
 			{
 				Debug.Log("<color=yellow>プレイヤー</color>");
-				InGameManager.SingletonInstance.Save();
 				InGameManager.SingletonInstance.Mission(thisComputerName);
 			}
 			else

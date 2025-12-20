@@ -74,6 +74,20 @@ public class InGameManager : MonoBehaviour
 	/// </summary>
 	public MasterMission MasterMission => masterMission;
 
+	[Tooltip("現在のミッションID")]
+	[SerializeField] int currentMissionID = -1;
+	public int CurrentMissionID
+	{
+		get { return currentMissionID; }
+		set { currentMissionID = value; }
+	}
+	[Tooltip("ミッションID0のクリア状況")]
+	int missionID0 = 0;//0 = false , 1 = true
+	[Tooltip("ミッションID1のクリア状況")]
+	int missionID1 = 0;//0 = false , 1 = true
+	[Tooltip("ミッションID2のクリア状況")]
+	int missionID2 = 0;//0 = false , 1 = true
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -96,7 +110,10 @@ public class InGameManager : MonoBehaviour
 	public void Save()
 	{
 		Debug.Log("<color=cyan>セーブ</color>");
-		PlayerPrefs.SetInt("KeyItem1", KeyItem1);
+		PlayerPrefs.SetInt("KeyItem1", keyItem1);
+		PlayerPrefs.SetInt("MissionID0", missionID0);
+		PlayerPrefs.SetInt("MissionID1", missionID1);
+		PlayerPrefs.SetInt("MissionID2", missionID2);
 		PlayerPrefs.Save();
 	}
 
@@ -111,6 +128,24 @@ public class InGameManager : MonoBehaviour
 		{
 			keyItem1 = PlayerPrefs.GetInt("KeyItem1", 0);
 			Debug.Log("<color=purple>キーアイテム1 : " + keyItem1 + "</color>");
+		}
+
+		if (PlayerPrefs.HasKey("MissionID0") == true)
+		{
+			missionID0 = PlayerPrefs.GetInt("MissionID0", 0);
+			Debug.Log("<color=purple>ミッションID0 : " + missionID0 + "</color>");
+		}
+
+		if (PlayerPrefs.HasKey("MissionID1") == true)
+		{
+			missionID1 = PlayerPrefs.GetInt("MissionID1", 0);
+			Debug.Log("<color=purple>ミッションID1 : " + missionID1 + "</color>");
+		}
+
+		if (PlayerPrefs.HasKey("MissionID2") == true)
+		{
+			missionID2 = PlayerPrefs.GetInt("MissionID2", 0);
+			Debug.Log("<color=purple>ミッションID2 : " + missionID2 + "</color>");
 		}
 	}
 
@@ -140,6 +175,7 @@ public class InGameManager : MonoBehaviour
 	{
 		if (IsMissionActive == false)
 		{
+			Save();
 			UI.SingletonInstance.ShowComputerMenu(computerName);
 		}
 		else if (IsMissionActive == true)
@@ -147,15 +183,37 @@ public class InGameManager : MonoBehaviour
 			if (computerName == EndComputerName)
 			{
 				Debug.Log("<color=blue>ミッション終了</color>");
+				if (currentMissionID == 0)
+				{
+					missionID0 = 1;
+				}
+				else if (currentMissionID == 1)
+				{
+					missionID1 = 1;
+				}
+				else if (currentMissionID == 2)
+				{
+					missionID2 = 1;
+				}
 				IsMissionActive = false;
-
-				//ゲームクリアー処理
-				SceneManager.LoadScene("GameClear");
+				currentMissionID = -1;
+				Save();
+				GameClear();
 			}
 			else
 			{
 				Debug.Log("<color=red>目的のコンピューターではない</color>");
 			}
+		}
+	}
+
+	void GameClear()
+	{
+		if (missionID0 == 1 && missionID1 == 1 && missionID2 == 1)
+		{
+			Debug.Log("<color=yellow>ゲームクリアー</color>");
+			//ゲームクリアー処理
+			SceneManager.LoadScene("GameClear");
 		}
 	}
 

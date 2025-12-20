@@ -9,6 +9,10 @@ public class MasterMissionEntity
 	//注:Excelファイルの1行目の名称は、Entityクラスのフィールド名と紐づいているため、どちらかを変更した場合はもう片方を合わせる必要があります。ちなみに並び順には影響されません。
 
 	/// <summary>
+	/// ミッションID
+	/// </summary>
+	public int MissionID;
+	/// <summary>
 	/// ミッションのスタートコンピューター名
 	/// </summary>
 	public InGameManager.ComputerTYPE StartComputerName;
