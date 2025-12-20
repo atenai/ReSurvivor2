@@ -107,7 +107,7 @@ public class InGameManager : MonoBehaviour
 	/// <summary>
 	/// セーブ
 	/// </summary>
-	public void Save()
+	void Save()
 	{
 		Debug.Log("<color=cyan>セーブ</color>");
 		PlayerPrefs.SetInt("KeyItem1", keyItem1);
@@ -173,29 +173,18 @@ public class InGameManager : MonoBehaviour
 	/// <param name="computerName"></param>
 	public void Mission(ComputerTYPE computerName)
 	{
-		if (IsMissionActive == false)
+		if (isMissionActive == false)//ミッション中でない場合
 		{
 			Save();
 			UI.SingletonInstance.ShowComputerMenu(computerName);
 		}
-		else if (IsMissionActive == true)
+		else if (isMissionActive == true)//ミッション中の場合
 		{
 			if (computerName == EndComputerName)
 			{
 				Debug.Log("<color=blue>ミッション終了</color>");
-				if (currentMissionID == 0)
-				{
-					missionID0 = 1;
-				}
-				else if (currentMissionID == 1)
-				{
-					missionID1 = 1;
-				}
-				else if (currentMissionID == 2)
-				{
-					missionID2 = 1;
-				}
-				IsMissionActive = false;
+				MissionIDUpdate();
+				isMissionActive = false;
 				currentMissionID = -1;
 				Save();
 				GameClear();
@@ -207,6 +196,28 @@ public class InGameManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// ミッションIDの状態を更新
+	/// </summary>
+	void MissionIDUpdate()
+	{
+		if (currentMissionID == 0)
+		{
+			missionID0 = 1;
+		}
+		else if (currentMissionID == 1)
+		{
+			missionID1 = 1;
+		}
+		else if (currentMissionID == 2)
+		{
+			missionID2 = 1;
+		}
+	}
+
+	/// <summary>
+	/// ゲームクリアー
+	/// </summary>
 	void GameClear()
 	{
 		if (missionID0 == 1 && missionID1 == 1 && missionID2 == 1)
