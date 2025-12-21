@@ -19,10 +19,6 @@ public class Option : OutGameBase
 	/// メニューボタンを連続でキー入力による選択をできないようにする為の変数
 	/// </summary>
 	bool isDisableConsecutiveKeystrokes = true;
-	/// <summary>
-	/// XInputのDPadハンドラー
-	/// </summary>
-	XInputDPadHandler xInputDPadHandler = new XInputDPadHandler();
 
 	new void Start()
 	{
@@ -43,7 +39,7 @@ public class Option : OutGameBase
 		}
 
 		//上下の矢印キーで選択を変更
-		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || xInputDPadHandler.LeftDown)
+		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || XInputManager.SingletonInstance.XInputDPadHandler.LeftDown)
 		{
 			currentSelectedIndex--;
 			if (currentSelectedIndex < 0)
@@ -52,7 +48,7 @@ public class Option : OutGameBase
 			}
 			Menu();
 		}
-		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || xInputDPadHandler.RightDown)
+		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || XInputManager.SingletonInstance.XInputDPadHandler.RightDown)
 		{
 			currentSelectedIndex++;
 			if (menuOptions.Length <= currentSelectedIndex)
@@ -61,8 +57,6 @@ public class Option : OutGameBase
 			}
 			Menu();
 		}
-
-		UpdateXInputDPad();
 
 		//Enterキーで選択を確定
 		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
@@ -126,18 +120,5 @@ public class Option : OutGameBase
 	{
 		isDisableConsecutiveKeystrokes = false;
 		Load(nextSceneName);
-	}
-
-	/// <summary>
-	/// XInputのDPad状態を更新
-	/// </summary>
-	void UpdateXInputDPad()
-	{
-		// DPad軸を取得（InputManagerで設定済み or 軸番号で直接）
-		float dpadX = Input.GetAxis("XInput DPad Left&Right");
-		float dpadY = Input.GetAxis("XInput DPad Up&Down");
-
-		// 状態更新
-		xInputDPadHandler.Update(dpadX, dpadY);
 	}
 }

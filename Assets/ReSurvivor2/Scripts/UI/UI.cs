@@ -90,11 +90,6 @@ public class UI : MonoBehaviour
 	/// </summary>
 	public bool IsPause => isPause;
 
-	/// <summary>
-	/// XInputのDPad管理クラス
-	/// </summary>
-	XInputDPadHandler xInputDPadHandler = new XInputDPadHandler();
-
 	[Header("コンピューターUI")]
 	[Tooltip("コンピューターメニューパネル")]
 	[SerializeField] GameObject panelComputerMenu;
@@ -181,7 +176,6 @@ public class UI : MonoBehaviour
 		UpdateComputerMenuSystem();
 
 		UpdatePauseMenuSystem();
-		UpdateXInputDPad();
 	}
 
 	/// <summary>
@@ -276,7 +270,7 @@ public class UI : MonoBehaviour
 		if (isPause == true)
 		{
 			//左右の矢印キーで選択を変更
-			if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || xInputDPadHandler.LeftDown)
+			if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || XInputManager.SingletonInstance.XInputDPadHandler.LeftDown)
 			{
 				currentPauseMenuSelectedIndex--;
 				if (currentPauseMenuSelectedIndex < 0)
@@ -285,7 +279,7 @@ public class UI : MonoBehaviour
 				}
 				ChangeColorPauseMenuImage();
 			}
-			else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || xInputDPadHandler.RightDown)
+			else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || XInputManager.SingletonInstance.XInputDPadHandler.RightDown)
 			{
 				currentPauseMenuSelectedIndex++;
 				if (pauseMenuOptions.Length <= currentPauseMenuSelectedIndex)
@@ -391,19 +385,6 @@ public class UI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// XInputのDPadの状態更新
-	/// </summary>
-	void UpdateXInputDPad()
-	{
-		// DPad軸を取得（InputManagerで設定済み or 軸番号で直接）
-		float dpadX = Input.GetAxis("XInput DPad Left&Right");
-		float dpadY = Input.GetAxis("XInput DPad Up&Down");
-
-		// 状態更新
-		xInputDPadHandler.Update(dpadX, dpadY);
-	}
-
-	/// <summary>
 	/// コンピューターメニューの表示
 	/// </summary>
 	public void ShowComputerMenu(InGameManager.ComputerTYPE startComputerTYPE)
@@ -471,7 +452,7 @@ public class UI : MonoBehaviour
 		if (isComputerMenuActive == true)
 		{
 			//上下の矢印キーで選択を変更
-			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || xInputDPadHandler.UpDown)
+			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || XInputManager.SingletonInstance.XInputDPadHandler.UpDown)
 			{
 				currentMailListSelectedIndex--;
 				if (currentMailListSelectedIndex < 0)
@@ -481,7 +462,7 @@ public class UI : MonoBehaviour
 				ChangeColorMailListContentImage();
 				mailMessageTitle.text = missionList[currentMailListSelectedIndex].MissionName;
 			}
-			else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || xInputDPadHandler.DownDown)
+			else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || XInputManager.SingletonInstance.XInputDPadHandler.DownDown)
 			{
 				currentMailListSelectedIndex++;
 				if (missionList.Count <= currentMailListSelectedIndex)
