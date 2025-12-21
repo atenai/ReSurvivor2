@@ -226,12 +226,14 @@ public class Player : MonoBehaviour
 	public void Save()
 	{
 		Debug.Log("<color=cyan>プレイヤーセーブ</color>");
-		PlayerPrefs.SetFloat("Hp", currentHp);
-		PlayerPrefs.SetFloat("Stamina", currentStamina);
-		PlayerPrefs.SetInt("ArmorPlate", currentArmorPlate);
-		PlayerPrefs.SetInt("Food", currentFood);
-		PlayerPrefs.SetInt("Mine", currentMine);
-		PlayerPrefs.Save();
+		ES3.Save<float>("Hp", currentHp);
+		ES3.Save<float>("Stamina", currentStamina);
+		ES3.Save<int>("ArmorPlate", currentArmorPlate);
+		ES3.Save<int>("Food", currentFood);
+		ES3.Save<int>("Mine", currentMine);
+		ES3.Save("PlayerPos", this.transform.position);
+		ES3.Save("PlayerRot", this.transform.rotation);
+		ES3.Save("PlayerScale", this.transform.localScale);
 	}
 
 	/// <summary>
@@ -240,16 +242,31 @@ public class Player : MonoBehaviour
 	void Load()
 	{
 		Debug.Log("<color=purple>プレイヤーロード</color>");
-		currentHp = PlayerPrefs.GetFloat("Hp", maxHp);
+		currentHp = ES3.Load<float>("Hp", maxHp);
 		Debug.Log("<color=purple>HP : " + currentHp + "</color>");
-		currentStamina = PlayerPrefs.GetFloat("Stamina", maxStamina);
+		currentStamina = ES3.Load<float>("Stamina", maxStamina);
 		Debug.Log("<color=purple>スタミナ : " + currentStamina + "</color>");
-		currentArmorPlate = PlayerPrefs.GetInt("ArmorPlate", 2);
+		currentArmorPlate = ES3.Load<int>("ArmorPlate", 2);
 		Debug.Log("<color=purple>アーマープレート : " + currentArmorPlate + "</color>");
-		currentFood = PlayerPrefs.GetInt("Food", 2);
+		currentFood = ES3.Load<int>("Food", 2);
 		Debug.Log("<color=purple>食料 : " + currentFood + "</color>");
-		currentMine = PlayerPrefs.GetInt("Mine", 3);
+		currentMine = ES3.Load<int>("Mine", 3);
 		Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");
+		if (ES3.KeyExists("PlayerPos") == true)
+		{
+			this.transform.position = ES3.Load<Vector3>("PlayerPos");
+			Debug.Log("<color=purple>プレイヤー位置 : " + this.transform.position + "</color>");
+		}
+		if (ES3.KeyExists("PlayerRot") == true)
+		{
+			this.transform.rotation = ES3.Load<Quaternion>("PlayerRot");
+			Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
+		}
+		if (ES3.KeyExists("PlayerScale") == true)
+		{
+			this.transform.localScale = ES3.Load<Vector3>("PlayerScale");
+			Debug.Log("<color=purple>プレイヤースケール : " + this.transform.localScale + "</color>");
+		}
 	}
 
 	void Start()

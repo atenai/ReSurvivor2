@@ -211,13 +211,12 @@ public class PlayerCamera : MonoBehaviour
 	public void Save()
 	{
 		Debug.Log("<color=cyan>プレイヤーカメラセーブ</color>");
-		PlayerPrefs.SetInt("HandGunCurrentMagazine", handGunCurrentMagazine);
-		PlayerPrefs.SetInt("CurrentHandGunAmmo", currentHandGunAmmo);
-		PlayerPrefs.SetInt("AssaultRifleCurrentMagazine", assaultRifleCurrentMagazine);
-		PlayerPrefs.SetInt("CurrentAssaultRifleAmmo", currentAssaultRifleAmmo);
-		PlayerPrefs.SetInt("ShotGunCurrentMagazine", shotGunCurrentMagazine);
-		PlayerPrefs.SetInt("CurrentShotGunAmmo", currentShotGunAmmo);
-		PlayerPrefs.Save();
+		ES3.Save<int>("HandGunCurrentMagazine", handGunCurrentMagazine);
+		ES3.Save<int>("CurrentHandGunAmmo", currentHandGunAmmo);
+		ES3.Save<int>("AssaultRifleCurrentMagazine", assaultRifleCurrentMagazine);
+		ES3.Save<int>("CurrentAssaultRifleAmmo", currentAssaultRifleAmmo);
+		ES3.Save<int>("ShotGunCurrentMagazine", shotGunCurrentMagazine);
+		ES3.Save<int>("CurrentShotGunAmmo", currentShotGunAmmo);
 	}
 
 	/// <summary>
@@ -226,17 +225,17 @@ public class PlayerCamera : MonoBehaviour
 	void Load()
 	{
 		Debug.Log("<color=purple>プレイヤーカメラロード</color>");
-		handGunCurrentMagazine = PlayerPrefs.GetInt("HandGunCurrentMagazine", handGunMagazineCapacity);
+		handGunCurrentMagazine = ES3.Load<int>("HandGunCurrentMagazine", handGunMagazineCapacity);
 		Debug.Log("<color=purple>ハンドガンマガジン : " + handGunCurrentMagazine + "</color>");
-		currentHandGunAmmo = PlayerPrefs.GetInt("CurrentHandGunAmmo", maxHandGunAmmo);
+		currentHandGunAmmo = ES3.Load<int>("CurrentHandGunAmmo", maxHandGunAmmo);
 		Debug.Log("<color=purple>ハンドガン残弾数 : " + currentHandGunAmmo + "</color>");
-		assaultRifleCurrentMagazine = PlayerPrefs.GetInt("AssaultRifleCurrentMagazine", assaultRifleMagazineCapacity);
+		assaultRifleCurrentMagazine = ES3.Load<int>("AssaultRifleCurrentMagazine", assaultRifleMagazineCapacity);
 		Debug.Log("<color=purple>アサルトライフルマガジン : " + assaultRifleCurrentMagazine + "</color>");
-		currentAssaultRifleAmmo = PlayerPrefs.GetInt("CurrentAssaultRifleAmmo", maxAssaultRifleAmmo);
+		currentAssaultRifleAmmo = ES3.Load<int>("CurrentAssaultRifleAmmo", maxAssaultRifleAmmo);
 		Debug.Log("<color=purple>アサルトライフル残弾数 : " + currentAssaultRifleAmmo + "</color>");
-		shotGunCurrentMagazine = PlayerPrefs.GetInt("ShotGunCurrentMagazine", shotGunMagazineCapacity);
+		shotGunCurrentMagazine = ES3.Load<int>("ShotGunCurrentMagazine", shotGunMagazineCapacity);
 		Debug.Log("<color=purple>ショットガンマガジン : " + shotGunCurrentMagazine + "</color>");
-		currentShotGunAmmo = PlayerPrefs.GetInt("CurrentShotGunAmmo", maxShotGunAmmo);
+		currentShotGunAmmo = ES3.Load<int>("CurrentShotGunAmmo", maxShotGunAmmo);
 		Debug.Log("<color=purple>ショットガン残弾数 : " + currentShotGunAmmo + "</color>");
 	}
 

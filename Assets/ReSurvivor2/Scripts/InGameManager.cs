@@ -74,16 +74,16 @@ public class InGameManager : MonoBehaviour
 		set { currentMissionID = value; }
 	}
 	[Tooltip("ミッションID0のクリア状況")]
-	int missionID0 = 0;//0 = false , 1 = true
+	bool missionID0 = false;
 	[Tooltip("ミッションID1のクリア状況")]
-	int missionID1 = 0;//0 = false , 1 = true
+	bool missionID1 = false;
 	[Tooltip("ミッションID2のクリア状況")]
-	int missionID2 = 0;//0 = false , 1 = true
+	bool missionID2 = false;
 
 
 	[Tooltip("キーアイテム1がアクティブか？どうか")]
-	[SerializeField] int keyItem1 = 0;//0 = false , 1 = true
-	public int KeyItem1
+	[SerializeField] bool keyItem1 = false;
+	public bool KeyItem1
 	{
 		get { return keyItem1; }
 		set { keyItem1 = value; }
@@ -111,12 +111,11 @@ public class InGameManager : MonoBehaviour
 	void Save()
 	{
 		Debug.Log("<color=cyan>インゲームマネージャーセーブ</color>");
-		PlayerPrefs.SetInt("Stage", SceneManager.GetActiveScene().name.Replace("Stage", "") != "" ? int.Parse(SceneManager.GetActiveScene().name.Replace("Stage", "")) : 0);
-		PlayerPrefs.SetInt("KeyItem1", keyItem1);
-		PlayerPrefs.SetInt("MissionID0", missionID0);
-		PlayerPrefs.SetInt("MissionID1", missionID1);
-		PlayerPrefs.SetInt("MissionID2", missionID2);
-		PlayerPrefs.Save();
+		ES3.Save<int>("Stage", SceneManager.GetActiveScene().name.Replace("Stage", "") != "" ? int.Parse(SceneManager.GetActiveScene().name.Replace("Stage", "")) : 0);
+		ES3.Save<bool>("KeyItem1", keyItem1);
+		ES3.Save<bool>("MissionID0", missionID0);
+		ES3.Save<bool>("MissionID1", missionID1);
+		ES3.Save<bool>("MissionID2", missionID2);
 		Player.SingletonInstance.Save();
 		PlayerCamera.SingletonInstance.Save();
 	}
@@ -127,30 +126,14 @@ public class InGameManager : MonoBehaviour
 	void Load()
 	{
 		Debug.Log("<color=purple>インゲームマネージャーロード</color>");
-
-		if (PlayerPrefs.HasKey("KeyItem1") == true)
-		{
-			keyItem1 = PlayerPrefs.GetInt("KeyItem1", 0);
-			Debug.Log("<color=purple>キーアイテム1 : " + keyItem1 + "</color>");
-		}
-
-		if (PlayerPrefs.HasKey("MissionID0") == true)
-		{
-			missionID0 = PlayerPrefs.GetInt("MissionID0", 0);
-			Debug.Log("<color=purple>ミッションID0 : " + missionID0 + "</color>");
-		}
-
-		if (PlayerPrefs.HasKey("MissionID1") == true)
-		{
-			missionID1 = PlayerPrefs.GetInt("MissionID1", 0);
-			Debug.Log("<color=purple>ミッションID1 : " + missionID1 + "</color>");
-		}
-
-		if (PlayerPrefs.HasKey("MissionID2") == true)
-		{
-			missionID2 = PlayerPrefs.GetInt("MissionID2", 0);
-			Debug.Log("<color=purple>ミッションID2 : " + missionID2 + "</color>");
-		}
+		keyItem1 = ES3.Load<bool>("KeyItem1", false);
+		Debug.Log("<color=purple>キーアイテム1 : " + keyItem1 + "</color>");
+		missionID0 = ES3.Load<bool>("MissionID0", false);
+		Debug.Log("<color=purple>ミッションID0 : " + missionID0 + "</color>");
+		missionID1 = ES3.Load<bool>("MissionID1", false);
+		Debug.Log("<color=purple>ミッションID1 : " + missionID1 + "</color>");
+		missionID2 = ES3.Load<bool>("MissionID2", false);
+		Debug.Log("<color=purple>ミッションID2 : " + missionID2 + "</color>");
 	}
 
 	/// <summary>
@@ -208,15 +191,15 @@ public class InGameManager : MonoBehaviour
 	{
 		if (currentMissionID == 0)
 		{
-			missionID0 = 1;
+			missionID0 = true;
 		}
 		else if (currentMissionID == 1)
 		{
-			missionID1 = 1;
+			missionID1 = true;
 		}
 		else if (currentMissionID == 2)
 		{
-			missionID2 = 1;
+			missionID2 = true;
 		}
 	}
 
@@ -225,7 +208,7 @@ public class InGameManager : MonoBehaviour
 	/// </summary>
 	void GameClear()
 	{
-		if (missionID0 == 1 && missionID1 == 1 && missionID2 == 1)
+		if (missionID0 == true && missionID1 == true && missionID2 == true)
 		{
 			Debug.Log("<color=yellow>ゲームクリアー</color>");
 			//ゲームクリアー処理

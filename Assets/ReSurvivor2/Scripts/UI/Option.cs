@@ -110,7 +110,7 @@ public class Option : OutGameBase
 	void SaveDataDelete()
 	{
 		Debug.Log("<color=orange>セーブデータを削除しました</color>");
-		PlayerPrefs.DeleteAll();
+		ES3.DeleteFile();
 	}
 
 	/// <summary>

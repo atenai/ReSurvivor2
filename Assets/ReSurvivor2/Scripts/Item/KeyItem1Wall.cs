@@ -7,16 +7,16 @@ using UnityEngine;
 /// </summary> 
 public class KeyItem1Wall : MonoBehaviour
 {
-    void Start()
-    {
-        if (InGameManager.SingletonInstance.KeyItem1 == 1)
-        {
-            Destroy(this.gameObject);
-        }
-    }
+	void Start()
+	{
+		if (InGameManager.SingletonInstance.KeyItem1 == true)
+		{
+			Destroy(this.gameObject);
+		}
+	}
 
-    void Update()
-    {
+	void Update()
+	{
 
-    }
+	}
 }
