@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// インジケーターマネージャー
+/// </summary>
 public class IndicatorManager : MonoBehaviour
 {
 	//シングルトンで作成（ゲーム中に１つのみにする）

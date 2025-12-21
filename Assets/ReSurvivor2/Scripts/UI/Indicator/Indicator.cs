@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 /// <summary>
-/// 
+/// インジケーター
 /// </summary>
 public class Indicator : MonoBehaviour
 {

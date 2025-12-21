@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Knife.Effects;
-using Cinemachine;
-using System.Data;
 
 /// <summary>
 /// プレイヤーカメラ
@@ -246,103 +244,7 @@ public class PlayerCamera : MonoBehaviour
 
 	void Start()
 	{
-		//各種初期化処理
-		InitHandGunMagazine();
-		InitAssaultRifleMagazine();
-		InitShotGunMagazine();
-	}
 
-	/// <summary>
-	/// ハンドガンの弾数の初期化処理
-	/// </summary>
-	void InitHandGunMagazine()
-	{
-		//ハンドガンの残弾数が満タンなら切り上げ
-		if (handGunCurrentMagazine == handGunMagazineCapacity)
-		{
-			return;
-		}
-
-		//弾が0以下なら切り上げ
-		if (currentHandGunAmmo <= 0)
-		{
-			return;
-		}
-
-		int localMagazine = handGunMagazineCapacity - handGunCurrentMagazine;
-		int localAmmo = currentHandGunAmmo - localMagazine;
-		if (localAmmo < 0)
-		{
-			handGunCurrentMagazine = currentHandGunAmmo;
-			currentHandGunAmmo = 0;
-		}
-		else
-		{
-			handGunCurrentMagazine = handGunMagazineCapacity;
-			currentHandGunAmmo = localAmmo;
-		}
-	}
-
-	/// <summary>
-	/// アサルトライフルの弾数の初期化処理
-	/// </summary>
-	void InitAssaultRifleMagazine()
-	{
-		//残弾数が満タンなら切り上げ
-		if (assaultRifleCurrentMagazine == assaultRifleMagazineCapacity)
-		{
-			return;
-		}
-
-		//弾が0以下なら切り上げ
-		if (currentAssaultRifleAmmo <= 0)
-		{
-			return;
-		}
-
-		int localMagazine = assaultRifleMagazineCapacity - assaultRifleCurrentMagazine;
-		int localAmmo = currentAssaultRifleAmmo - localMagazine;
-		if (localAmmo < 0)
-		{
-			assaultRifleCurrentMagazine = currentAssaultRifleAmmo;
-			currentAssaultRifleAmmo = 0;
-		}
-		else
-		{
-			assaultRifleCurrentMagazine = assaultRifleMagazineCapacity;
-			currentAssaultRifleAmmo = localAmmo;
-		}
-	}
-
-	/// <summary>
-	/// ショットガンの弾数の初期化処理
-	/// </summary>
-	void InitShotGunMagazine()
-	{
-		//残弾数が満タンなら切り上げ
-		if (shotGunCurrentMagazine == shotGunMagazineCapacity)
-		{
-			return;
-		}
-
-		//弾が0以下なら切り上げ
-		if (currentShotGunAmmo <= 0)
-		{
-			return;
-		}
-
-		int localMagazine = shotGunMagazineCapacity - shotGunCurrentMagazine;
-		int localAmmo = currentShotGunAmmo - localMagazine;
-		if (localAmmo < 0)
-		{
-			shotGunCurrentMagazine = currentShotGunAmmo;
-			currentShotGunAmmo = 0;
-		}
-		else
-		{
-			shotGunCurrentMagazine = shotGunMagazineCapacity;
-			currentShotGunAmmo = localAmmo;
-		}
 	}
 
 	void Update()
