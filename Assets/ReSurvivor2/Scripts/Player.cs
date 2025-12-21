@@ -231,9 +231,10 @@ public class Player : MonoBehaviour
 		ES3.Save<int>("ArmorPlate", currentArmorPlate);
 		ES3.Save<int>("Food", currentFood);
 		ES3.Save<int>("Mine", currentMine);
-		ES3.Save("PlayerPos", this.transform.position);
-		ES3.Save("PlayerRot", this.transform.rotation);
-		ES3.Save("PlayerScale", this.transform.localScale);
+		//リスポーン位置は各ステージで設定する必要がある
+		// ES3.Save("PlayerPos", this.transform.position);
+		// ES3.Save("PlayerRot", this.transform.rotation);
+		// ES3.Save("PlayerScale", this.transform.localScale);
 	}
 
 	/// <summary>
@@ -252,21 +253,22 @@ public class Player : MonoBehaviour
 		Debug.Log("<color=purple>食料 : " + currentFood + "</color>");
 		currentMine = ES3.Load<int>("Mine", 3);
 		Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");
-		if (ES3.KeyExists("PlayerPos") == true)
-		{
-			this.transform.position = ES3.Load<Vector3>("PlayerPos");
-			Debug.Log("<color=purple>プレイヤー位置 : " + this.transform.position + "</color>");
-		}
-		if (ES3.KeyExists("PlayerRot") == true)
-		{
-			this.transform.rotation = ES3.Load<Quaternion>("PlayerRot");
-			Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
-		}
-		if (ES3.KeyExists("PlayerScale") == true)
-		{
-			this.transform.localScale = ES3.Load<Vector3>("PlayerScale");
-			Debug.Log("<color=purple>プレイヤースケール : " + this.transform.localScale + "</color>");
-		}
+		//リスポーン位置は各ステージで設定する必要がある
+		// if (ES3.KeyExists("PlayerPos") == true)
+		// {
+		// 	this.transform.position = ES3.Load<Vector3>("PlayerPos");
+		// 	Debug.Log("<color=purple>プレイヤー位置 : " + this.transform.position + "</color>");
+		// }
+		// if (ES3.KeyExists("PlayerRot") == true)
+		// {
+		// 	this.transform.rotation = ES3.Load<Quaternion>("PlayerRot");
+		// 	Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
+		// }
+		// if (ES3.KeyExists("PlayerScale") == true)
+		// {
+		// 	this.transform.localScale = ES3.Load<Vector3>("PlayerScale");
+		// 	Debug.Log("<color=purple>プレイヤースケール : " + this.transform.localScale + "</color>");
+		// }
 	}
 
 	void Start()

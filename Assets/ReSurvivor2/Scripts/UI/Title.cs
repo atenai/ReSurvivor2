@@ -117,7 +117,7 @@ public class Title : OutGameBase
 	{
 		isDisableConsecutiveKeystrokes = false;
 		const string Stage = "Stage";
-		string sceneName = Stage + PlayerPrefs.GetInt("Stage", 0).ToString();
+		string sceneName = Stage + ES3.Load<int>("Stage", 0).ToString();
 		Load(sceneName);
 	}
 
