@@ -122,6 +122,37 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &19405846
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 19405847}
+  m_Layer: 0
+  m_Name: "----------\u2193Item\u2193----------"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &19405847
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19405846}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &94765285
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -361,7 +392,7 @@ GameObject:
   m_Component:
   - component: {fileID: 549857154}
   m_Layer: 0
-  m_Name: "----------\u2191CoreSystem\u2191----------"
+  m_Name: "----------\u2193CoreSystem\u2193----------"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2071,7 +2102,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4162473275932356503, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_Name
-      value: GameObject_LoadNextSceneParent
+      value: LoadNextSceneParent
       objectReference: {fileID: 0}
     - target: {fileID: 6449527853449128758, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_LocalScale.x
@@ -2812,6 +2843,7 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 549857154}
   - {fileID: 1200101374}
   - {fileID: 102877996}
   - {fileID: 1828555934}
@@ -2827,14 +2859,14 @@ SceneRoots:
   - {fileID: 7749755990501120919}
   - {fileID: 232306612904644378}
   - {fileID: 3446798713455178679}
+  - {fileID: 8402654267146278143}
+  - {fileID: 19405847}
   - {fileID: 4073991036345387421}
   - {fileID: 627824237}
   - {fileID: 6092897293819980929}
   - {fileID: 5949331974941814223}
   - {fileID: 8100273342398955543}
   - {fileID: 6943016939476751197}
-  - {fileID: 8402654267146278143}
-  - {fileID: 549857154}
   - {fileID: 1334594171}
   - {fileID: 784400729}
   - {fileID: 1540724341}

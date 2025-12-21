@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 /// <summary>
@@ -25,10 +26,13 @@ public class StageManager : MonoBehaviour
 		set { stage = value; }
 	}
 
+	[Tooltip("プレイヤーリスポーンポイント")]
+	[SerializeField] Transform playerRespawnPoint;
+
 	void Start()
 	{
 		StartCoroutine(UI.SingletonInstance.FadeIn());
-
+		Player.SingletonInstance.SetPlayerRespawnPoint(playerRespawnPoint.position, playerRespawnPoint.rotation);
 		UI.SingletonInstance.MapUI.SetCurrentPlayerStageNumber((int)stage);
 	}
 

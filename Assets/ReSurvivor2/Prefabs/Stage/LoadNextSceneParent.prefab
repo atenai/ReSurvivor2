@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 232285510229830891}
   m_Layer: 0
-  m_Name: GameObject_LoadNextSceneParent
+  m_Name: LoadNextSceneParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 6617248888777553093}
   - component: {fileID: 962727797225885184}
   m_Layer: 2
-  m_Name: Cube_LoadNextSceneObject
+  m_Name: LoadNextSceneObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 5221867726554210914}
   - component: {fileID: 6306366895330901120}
   m_Layer: 0
-  m_Name: Cube_SpawnPos
+  m_Name: SpawnPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

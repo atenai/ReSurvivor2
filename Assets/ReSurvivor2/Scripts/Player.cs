@@ -21,6 +21,14 @@ public class Player : MonoBehaviour
 	static Player singletonInstance = null;
 	public static Player SingletonInstance => singletonInstance;
 
+	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]
+	static bool isFirstLoad = true;
+	public static bool IsFirstLoad
+	{
+		get { return isFirstLoad; }
+		set { isFirstLoad = value; }
+	}
+
 	[SerializeField] Animator animator;
 	public Animator Animator => animator;
 	[SerializeField] Rigidbody rb;
@@ -112,6 +120,12 @@ public class Player : MonoBehaviour
 	[Tooltip("ショットガンの硝煙の生成座標位置")]
 	[SerializeField] Transform shotGunAfterFireSmokeTransform;
 	public Transform ShotGunAfterFireSmokeTransform => shotGunAfterFireSmokeTransform;
+
+	[Header("リスポーンポイント")]
+	[Tooltip("プレイヤーのリスポーンポイントの位置")]
+	Vector3 respawnPosition = new Vector3(0.0f, 1.0f, 0.0f);
+	[Tooltip("プレイヤーのリスポーンポイントの回転")]
+	Quaternion respawnRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
 	[Header("UI")]
 	[Tooltip("プレイヤーのキャンバス")]
@@ -206,6 +220,7 @@ public class Player : MonoBehaviour
 
 	void Awake()
 	{
+		Debug.Log("<color=yellow>プレイヤーAwake()</color>");
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
 		if (singletonInstance == null)
 		{
@@ -231,10 +246,8 @@ public class Player : MonoBehaviour
 		ES3.Save<int>("ArmorPlate", currentArmorPlate);
 		ES3.Save<int>("Food", currentFood);
 		ES3.Save<int>("Mine", currentMine);
-		//リスポーン位置は各ステージで設定する必要がある
-		// ES3.Save("PlayerPos", this.transform.position);
-		// ES3.Save("PlayerRot", this.transform.rotation);
-		// ES3.Save("PlayerScale", this.transform.localScale);
+		ES3.Save("PlayerPos", respawnPosition);
+		ES3.Save("PlayerRot", respawnRotation);
 	}
 
 	/// <summary>
@@ -242,6 +255,12 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void Load()
 	{
+		if (isFirstLoad == false)
+		{
+			return;
+		}
+		isFirstLoad = false;
+
 		Debug.Log("<color=purple>プレイヤーロード</color>");
 		currentHp = ES3.Load<float>("Hp", maxHp);
 		Debug.Log("<color=purple>HP : " + currentHp + "</color>");
@@ -253,22 +272,28 @@ public class Player : MonoBehaviour
 		Debug.Log("<color=purple>食料 : " + currentFood + "</color>");
 		currentMine = ES3.Load<int>("Mine", 3);
 		Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");
-		//リスポーン位置は各ステージで設定する必要がある
-		// if (ES3.KeyExists("PlayerPos") == true)
-		// {
-		// 	this.transform.position = ES3.Load<Vector3>("PlayerPos");
-		// 	Debug.Log("<color=purple>プレイヤー位置 : " + this.transform.position + "</color>");
-		// }
-		// if (ES3.KeyExists("PlayerRot") == true)
-		// {
-		// 	this.transform.rotation = ES3.Load<Quaternion>("PlayerRot");
-		// 	Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
-		// }
-		// if (ES3.KeyExists("PlayerScale") == true)
-		// {
-		// 	this.transform.localScale = ES3.Load<Vector3>("PlayerScale");
-		// 	Debug.Log("<color=purple>プレイヤースケール : " + this.transform.localScale + "</color>");
-		// }
+		//ステージが切り替わる度にリスポーン位置が呼ばれるため、リスポーンのオブジェクトは遷移先のステージで敵やオブジェクトにかぶらないように注意すること！！
+		if (ES3.KeyExists("PlayerPos") == true)
+		{
+			this.transform.position = ES3.Load<Vector3>("PlayerPos");
+			Debug.Log("<color=purple>プレイヤー位置 : " + this.transform.position + "</color>");
+		}
+		if (ES3.KeyExists("PlayerRot") == true)
+		{
+			this.transform.rotation = ES3.Load<Quaternion>("PlayerRot");
+			Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
+		}
+	}
+
+	/// <summary>
+	/// プレイヤーのリスポーンポイントを設定する
+	/// </summary>
+	/// <param name="pos">プレイヤー位置</param>
+	/// <param name="rot">プレイヤー回転</param>
+	public void SetPlayerRespawnPoint(Vector3 pos, Quaternion rot)
+	{
+		respawnPosition = pos;
+		respawnRotation = rot;
 	}
 
 	void Start()
@@ -646,9 +671,9 @@ public class Player : MonoBehaviour
 
 		if (minute <= 0 && seconds <= 0.0f)
 		{
-			timerTMP.text = "00" + ":" + "00";
 			//ゲームオーバー処理
-			SceneManager.LoadScene("GameOver");
+			timerTMP.text = "00" + ":" + "00";
+			InGameManager.SingletonInstance.GameOver();
 		}
 		else
 		{
@@ -940,11 +965,10 @@ public class Player : MonoBehaviour
 
 		isDamage = true;
 
-		//PlayerCamera.SingletonInstance.Shake(0.25f, 0.1f);
-
 		if (currentHp <= 0.0f)
 		{
-			SceneManager.LoadScene("GameOver");
+			//ゲームオーバー処理
+			InGameManager.SingletonInstance.GameOver();
 		}
 	}
 

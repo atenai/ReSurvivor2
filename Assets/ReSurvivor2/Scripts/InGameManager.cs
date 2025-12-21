@@ -18,6 +18,14 @@ public class InGameManager : MonoBehaviour
 	/// </summary>
 	public static InGameManager SingletonInstance => singletonInstance;
 
+	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]
+	static bool isFirstLoad = true;
+	public static bool IsFirstLoad
+	{
+		get { return isFirstLoad; }
+		set { isFirstLoad = value; }
+	}
+
 	[Tooltip("エディターで実行ロード時にマウスの座標が入力されてカメラが動いてしまう問題やキー入力でプレイヤーが移動してしまう問題の対処用")]
 	bool isGamePlayReady = false;
 	public bool IsGamePlayReady
@@ -125,6 +133,12 @@ public class InGameManager : MonoBehaviour
 	/// </summary>
 	void Load()
 	{
+		if (isFirstLoad == false)
+		{
+			return;
+		}
+		isFirstLoad = false;
+
 		Debug.Log("<color=purple>インゲームマネージャーロード</color>");
 		keyItem1 = ES3.Load<bool>("KeyItem1", false);
 		Debug.Log("<color=purple>キーアイテム1 : " + keyItem1 + "</color>");
@@ -211,9 +225,24 @@ public class InGameManager : MonoBehaviour
 		if (missionID0 == true && missionID1 == true && missionID2 == true)
 		{
 			Debug.Log("<color=yellow>ゲームクリアー</color>");
+			InGameManager.IsFirstLoad = true;
+			Player.IsFirstLoad = true;
+			PlayerCamera.IsFirstLoad = true;
 			//ゲームクリアー処理
 			SceneManager.LoadScene("GameClear");
 		}
+	}
+
+	/// <summary>
+	/// ゲームオーバー
+	/// </summary>
+	public void GameOver()
+	{
+		InGameManager.IsFirstLoad = true;
+		Player.IsFirstLoad = true;
+		PlayerCamera.IsFirstLoad = true;
+		//ゲームオーバー処理
+		SceneManager.LoadScene("GameOver");
 	}
 
 	void Start()

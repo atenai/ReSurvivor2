@@ -12,6 +12,14 @@ public class PlayerCamera : MonoBehaviour
 	static PlayerCamera singletonInstance = null;
 	public static PlayerCamera SingletonInstance => singletonInstance;
 
+	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]
+	static bool isFirstLoad = true;
+	public static bool IsFirstLoad
+	{
+		get { return isFirstLoad; }
+		set { isFirstLoad = value; }
+	}
+
 	[Header("カメラ")]
 
 	[Tooltip("X軸のカメラの回転スピード")]
@@ -224,6 +232,12 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	void Load()
 	{
+		if (isFirstLoad == false)
+		{
+			return;
+		}
+		isFirstLoad = false;
+
 		Debug.Log("<color=purple>プレイヤーカメラロード</color>");
 		handGunCurrentMagazine = ES3.Load<int>("HandGunCurrentMagazine", handGunMagazineCapacity);
 		Debug.Log("<color=purple>ハンドガンマガジン : " + handGunCurrentMagazine + "</color>");
