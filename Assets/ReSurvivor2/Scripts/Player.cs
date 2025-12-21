@@ -807,12 +807,12 @@ public class Player : MonoBehaviour
 
 		if (isDash == true)
 		{
-			if (inputVertical <= -1 || 1 <= inputVertical)//前後移動入力
+			if (inputVertical <= -0.1f || 0.1f <= inputVertical)//前後移動入力
 			{
 				//スタミナ消費
 				ConsumeStamina(2.0f);
 			}
-			else if (inputHorizontal <= -1 || 1 <= inputHorizontal)//左右移動入力
+			else if (inputHorizontal <= -0.1f || 0.1f <= inputHorizontal)//左右移動入力
 			{
 				//スタミナ消費
 				ConsumeStamina(2.0f);
