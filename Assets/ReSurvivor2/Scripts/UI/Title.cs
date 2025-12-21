@@ -121,7 +121,9 @@ public class Title : OutGameBase
 	void StartGame()
 	{
 		isDisableConsecutiveKeystrokes = false;
-		Load(nextSceneName);
+		const string Stage = "Stage";
+		string sceneName = Stage + PlayerPrefs.GetInt("Stage", 0).ToString();
+		Load(sceneName);
 	}
 
 	/// <summary>
@@ -140,15 +142,6 @@ public class Title : OutGameBase
 	{
 		isDisableConsecutiveKeystrokes = false;
 		Load(optionSceneName);
-	}
-
-	/// <summary>
-	/// セーブデータ削除
-	/// </summary>
-	void SaveDataDelete()
-	{
-		Debug.Log("<color=orange>セーブデータを削除しました</color>");
-		PlayerPrefs.DeleteAll();
 	}
 
 	/// <summary>

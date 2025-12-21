@@ -59,14 +59,6 @@ public class InGameManager : MonoBehaviour
 		set { endComputerName = value; }
 	}
 
-	[Tooltip("キーアイテム1がアクティブか？どうか")]
-	[SerializeField] int keyItem1 = 0;//0 = false , 1 = true
-	public int KeyItem1
-	{
-		get { return keyItem1; }
-		set { keyItem1 = value; }
-	}
-
 	[Tooltip("マスターデータのミッション情報")]
 	[SerializeField] MasterMission masterMission;//２番目で作成したエクセルをスクリプト化したクラスの変数を作成する
 	/// <summary>
@@ -87,6 +79,15 @@ public class InGameManager : MonoBehaviour
 	int missionID1 = 0;//0 = false , 1 = true
 	[Tooltip("ミッションID2のクリア状況")]
 	int missionID2 = 0;//0 = false , 1 = true
+
+
+	[Tooltip("キーアイテム1がアクティブか？どうか")]
+	[SerializeField] int keyItem1 = 0;//0 = false , 1 = true
+	public int KeyItem1
+	{
+		get { return keyItem1; }
+		set { keyItem1 = value; }
+	}
 
 	void Awake()
 	{
@@ -109,12 +110,15 @@ public class InGameManager : MonoBehaviour
 	/// </summary>
 	void Save()
 	{
-		Debug.Log("<color=cyan>セーブ</color>");
+		Debug.Log("<color=cyan>インゲームマネージャーセーブ</color>");
+		PlayerPrefs.SetInt("Stage", SceneManager.GetActiveScene().name.Replace("Stage", "") != "" ? int.Parse(SceneManager.GetActiveScene().name.Replace("Stage", "")) : 0);
 		PlayerPrefs.SetInt("KeyItem1", keyItem1);
 		PlayerPrefs.SetInt("MissionID0", missionID0);
 		PlayerPrefs.SetInt("MissionID1", missionID1);
 		PlayerPrefs.SetInt("MissionID2", missionID2);
 		PlayerPrefs.Save();
+		Player.SingletonInstance.Save();
+		PlayerCamera.SingletonInstance.Save();
 	}
 
 	/// <summary>
@@ -122,7 +126,7 @@ public class InGameManager : MonoBehaviour
 	/// </summary>
 	void Load()
 	{
-		Debug.Log("<color=purple>ロード</color>");
+		Debug.Log("<color=purple>インゲームマネージャーロード</color>");
 
 		if (PlayerPrefs.HasKey("KeyItem1") == true)
 		{

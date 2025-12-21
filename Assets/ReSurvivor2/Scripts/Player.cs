@@ -216,6 +216,40 @@ public class Player : MonoBehaviour
 		{
 			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
 		}
+
+		Load();
+	}
+
+	/// <summary>
+	/// セーブ
+	/// </summary>
+	public void Save()
+	{
+		Debug.Log("<color=cyan>プレイヤーセーブ</color>");
+		PlayerPrefs.SetFloat("Hp", currentHp);
+		PlayerPrefs.SetFloat("Stamina", currentStamina);
+		PlayerPrefs.SetInt("ArmorPlate", currentArmorPlate);
+		PlayerPrefs.SetInt("Food", currentFood);
+		PlayerPrefs.SetInt("Mine", currentMine);
+		PlayerPrefs.Save();
+	}
+
+	/// <summary>
+	/// ロード
+	/// </summary>
+	void Load()
+	{
+		Debug.Log("<color=purple>プレイヤーロード</color>");
+		currentHp = PlayerPrefs.GetFloat("Hp", maxHp);
+		Debug.Log("<color=purple>HP : " + currentHp + "</color>");
+		currentStamina = PlayerPrefs.GetFloat("Stamina", maxStamina);
+		Debug.Log("<color=purple>スタミナ : " + currentStamina + "</color>");
+		currentArmorPlate = PlayerPrefs.GetInt("ArmorPlate", 2);
+		Debug.Log("<color=purple>アーマープレート : " + currentArmorPlate + "</color>");
+		currentFood = PlayerPrefs.GetInt("Food", 2);
+		Debug.Log("<color=purple>食料 : " + currentFood + "</color>");
+		currentMine = PlayerPrefs.GetInt("Mine", 3);
+		Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");
 	}
 
 	void Start()
@@ -257,8 +291,7 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void InitHP()
 	{
-		sliderHp.value = 1;
-		currentHp = maxHp;
+		sliderStamina.value = (float)currentStamina / (float)maxStamina;
 	}
 
 	/// <summary>
@@ -266,8 +299,7 @@ public class Player : MonoBehaviour
 	/// </summary> 
 	void InitStamina()
 	{
-		sliderStamina.value = 1;
-		currentStamina = maxStamina;
+		sliderStamina.value = (float)currentStamina / (float)maxStamina;
 	}
 
 	/// <summary>

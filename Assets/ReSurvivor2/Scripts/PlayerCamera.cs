@@ -205,6 +205,43 @@ public class PlayerCamera : MonoBehaviour
 		{
 			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
 		}
+
+		Load();
+	}
+
+	/// <summary>
+	/// セーブ
+	/// </summary>
+	public void Save()
+	{
+		Debug.Log("<color=cyan>プレイヤーカメラセーブ</color>");
+		PlayerPrefs.SetInt("HandGunCurrentMagazine", handGunCurrentMagazine);
+		PlayerPrefs.SetInt("CurrentHandGunAmmo", currentHandGunAmmo);
+		PlayerPrefs.SetInt("AssaultRifleCurrentMagazine", assaultRifleCurrentMagazine);
+		PlayerPrefs.SetInt("CurrentAssaultRifleAmmo", currentAssaultRifleAmmo);
+		PlayerPrefs.SetInt("ShotGunCurrentMagazine", shotGunCurrentMagazine);
+		PlayerPrefs.SetInt("CurrentShotGunAmmo", currentShotGunAmmo);
+		PlayerPrefs.Save();
+	}
+
+	/// <summary>
+	/// ロード
+	/// </summary>
+	void Load()
+	{
+		Debug.Log("<color=purple>プレイヤーカメラロード</color>");
+		handGunCurrentMagazine = PlayerPrefs.GetInt("HandGunCurrentMagazine", handGunMagazineCapacity);
+		Debug.Log("<color=purple>ハンドガンマガジン : " + handGunCurrentMagazine + "</color>");
+		currentHandGunAmmo = PlayerPrefs.GetInt("CurrentHandGunAmmo", maxHandGunAmmo);
+		Debug.Log("<color=purple>ハンドガン残弾数 : " + currentHandGunAmmo + "</color>");
+		assaultRifleCurrentMagazine = PlayerPrefs.GetInt("AssaultRifleCurrentMagazine", assaultRifleMagazineCapacity);
+		Debug.Log("<color=purple>アサルトライフルマガジン : " + assaultRifleCurrentMagazine + "</color>");
+		currentAssaultRifleAmmo = PlayerPrefs.GetInt("CurrentAssaultRifleAmmo", maxAssaultRifleAmmo);
+		Debug.Log("<color=purple>アサルトライフル残弾数 : " + currentAssaultRifleAmmo + "</color>");
+		shotGunCurrentMagazine = PlayerPrefs.GetInt("ShotGunCurrentMagazine", shotGunMagazineCapacity);
+		Debug.Log("<color=purple>ショットガンマガジン : " + shotGunCurrentMagazine + "</color>");
+		currentShotGunAmmo = PlayerPrefs.GetInt("CurrentShotGunAmmo", maxShotGunAmmo);
+		Debug.Log("<color=purple>ショットガン残弾数 : " + currentShotGunAmmo + "</color>");
 	}
 
 	void Start()
