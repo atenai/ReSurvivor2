@@ -186,6 +186,7 @@ public class InGameManager : MonoBehaviour
 				MissionIDUpdate();
 				isMissionActive = false;
 				currentMissionID = -1;
+				UI.SingletonInstance.MapUI.SetEndComputerStageNumber(-1);
 				Save();
 				GameClear();
 			}

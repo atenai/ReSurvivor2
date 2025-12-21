@@ -200,14 +200,6 @@ public class Player : MonoBehaviour
 	[SerializeField] TextMeshProUGUI textMine;
 	[Tooltip("地雷の所持できる最大数")]
 	int maxMine = 3;
-	[Tooltip("マップイメージ")]
-	[SerializeField] Image imageMap;
-	[SerializeField] MapUI mapUI;
-	public MapUI MapUI
-	{
-		get { return mapUI; }
-		set { mapUI = value; }
-	}
 
 	[SerializeField] private CinemachineImpulseSource cinemachineImpulseSource;
 	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
@@ -416,12 +408,6 @@ public class Player : MonoBehaviour
 		UpdateDamageEffect();
 		UpdateHpHealEffect();
 		UpdateStaminaHealEffect();
-
-		//3Dマップはオミット
-		// if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
-		// {
-		// 	mapUI.EnableMap();
-		// }
 	}
 
 	/// <summary>
@@ -484,10 +470,6 @@ public class Player : MonoBehaviour
 			imageBG.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
 			imageBG.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
 			imageBG.transform.localPosition = new Vector3(150.0f, -100.0f, 0.0f);
-			//マップUI
-			imageMap.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-			imageMap.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
-			imageMap.transform.localPosition = new Vector3(150.0f, 70.0f, 0.0f);
 		}
 		else if (isAim == true)
 		{
@@ -500,10 +482,6 @@ public class Player : MonoBehaviour
 			imageBG.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
 			imageBG.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
 			imageBG.transform.localPosition = new Vector3(85.0f, -20.0f, 0.0f);
-			//マップUI
-			imageMap.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
-			imageMap.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
-			imageMap.transform.localPosition = new Vector3(85.0f, 20.0f, 0.0f);
 		}
 	}
 

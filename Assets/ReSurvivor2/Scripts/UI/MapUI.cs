@@ -8,22 +8,15 @@ using UnityEngine.UI;
 /// </summary>
 public class MapUI : MonoBehaviour
 {
-	[SerializeField] GameObject[] stages;
-	[SerializeField] Sprite currentStageSprite;
-	[SerializeField] Sprite NonStageSprite;
-	int currentStageNumber = 0;
-	public int CurrentStageNumber
-	{
-		get { return currentStageNumber; }
-		set { currentStageNumber = value; }
-	}
-
+	[Tooltip("現在のプレイヤーステージイメージリスト")]
+	[SerializeField] Image[] currentPlayerStages;
+	[Tooltip("ミッション終了のコンピューターステージイメージリスト")]
+	[SerializeField] Image[] endComputerStages;
+	[Tooltip("マップの表示・非表示状態")]
 	bool mapActive = false;
 
 	void Start()
 	{
-		stages[currentStageNumber].gameObject.GetComponent<Image>().sprite = currentStageSprite;
-		stages[currentStageNumber].gameObject.GetComponent<Image>().color = Color.red;
 		this.gameObject.SetActive(mapActive);
 	}
 
@@ -33,21 +26,34 @@ public class MapUI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// ステージ番号の設定
+	/// 現在のプレイヤーステージ番号の設定
 	/// </summary>
-	/// <param name="stageNumber">ステージ番号</param>
-	public void SetStageNumber(int stageNumber)
+	/// <param name="currentPlayerStageNumber">ステージ番号</param>
+	public void SetCurrentPlayerStageNumber(int currentPlayerStageNumber)
 	{
-		currentStageNumber = stageNumber;
-
-		for (int i = 0; i < stages.Length; i++)
+		for (int i = 0; i < currentPlayerStages.Length; i++)
 		{
-			stages[i].gameObject.GetComponent<Image>().sprite = NonStageSprite;
-			stages[i].gameObject.GetComponent<Image>().color = Color.white;
+			currentPlayerStages[i].color = Color.clear;
 		}
 
-		stages[currentStageNumber].gameObject.GetComponent<Image>().sprite = currentStageSprite;
-		stages[currentStageNumber].gameObject.GetComponent<Image>().color = Color.red;
+		currentPlayerStages[currentPlayerStageNumber].color = Color.red;
+	}
+
+	/// <summary>
+	/// ミッション終了のコンピューターステージ番号の設定
+	/// </summary>
+	/// <param name="endComputerStageNumber">ステージ番号</param>
+	public void SetEndComputerStageNumber(int endComputerStageNumber = -1)
+	{
+		for (int i = 0; i < endComputerStages.Length; i++)
+		{
+			endComputerStages[i].color = Color.white;
+		}
+
+		if (endComputerStageNumber != -1)
+		{
+			endComputerStages[endComputerStageNumber].color = Color.blue;
+		}
 	}
 
 	/// <summary>

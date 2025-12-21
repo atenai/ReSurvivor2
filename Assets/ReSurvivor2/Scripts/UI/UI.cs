@@ -546,6 +546,7 @@ public class UI : MonoBehaviour
 			InGameManager.SingletonInstance.EndComputerName = result.EndComputerName;
 			Player.SingletonInstance.Minute = result.Minute;
 			Player.SingletonInstance.Seconds = result.Seconds;
+			UI.SingletonInstance.MapUI.SetEndComputerStageNumber((int)result.EndComputerName);
 		}
 	}
 }
