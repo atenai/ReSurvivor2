@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
-using UnityEngine.Events;
 using TMPro;
 
+/// <summary>
+/// UI管理クラス
+/// </summary>
 public class UI : MonoBehaviour
 {
 	/// <summary>
@@ -70,7 +72,7 @@ public class UI : MonoBehaviour
 	[Tooltip("フェードの速さ")]
 	float fadeSpeed = 1.0f;
 
-	[Header("ポーズメニュー")]
+	[Header("ポーズUI")]
 	[Tooltip("ポーズメニューパネル")]
 	[SerializeField] GameObject panelPauseMenu;
 	[Tooltip("ポーズメニューオプションのイメージリスト")]
@@ -93,7 +95,7 @@ public class UI : MonoBehaviour
 	/// </summary>
 	XInputDPadHandler xInputDPadHandler = new XInputDPadHandler();
 
-	[Header("コンピューターメニュー")]
+	[Header("コンピューターUI")]
 	[Tooltip("コンピューターメニューパネル")]
 	[SerializeField] GameObject panelComputerMenu;
 	[Tooltip("メールリストコンテンツ")]
@@ -122,6 +124,15 @@ public class UI : MonoBehaviour
 	/// コンピューターメニュー表示中か？のプロパティ
 	/// </summary>
 	public bool IsComputerMenuActive => isComputerMenuActive;
+
+	[Header("マップUI")]
+	[Tooltip("マップイメージ")]
+	[SerializeField] MapUI mapUI;
+	public MapUI MapUI
+	{
+		get { return mapUI; }
+		set { mapUI = value; }
+	}
 
 	void Awake()
 	{
@@ -163,13 +174,13 @@ public class UI : MonoBehaviour
 		//↓ロード中に動かせない処理
 
 		Crosshair();
+		if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
+		{
+			mapUI.EnableMap();
+		}
 		UpdateComputerMenuSystem();
 
-
-
-
 		UpdatePauseMenuSystem();
-
 		UpdateXInputDPad();
 	}
 

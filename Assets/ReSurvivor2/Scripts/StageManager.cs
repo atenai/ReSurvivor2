@@ -30,6 +30,7 @@ public class StageManager : MonoBehaviour
 		StartCoroutine(UI.SingletonInstance.FadeIn());
 
 		Player.SingletonInstance.MapUI.SetStageNumber((int)stage);
+		UI.SingletonInstance.MapUI.SetStageNumber((int)stage);
 	}
 
 	void Update()

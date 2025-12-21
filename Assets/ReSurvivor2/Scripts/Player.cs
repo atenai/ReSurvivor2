@@ -417,10 +417,11 @@ public class Player : MonoBehaviour
 		UpdateHpHealEffect();
 		UpdateStaminaHealEffect();
 
-		if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
-		{
-			mapUI.EnableMap();
-		}
+		//3Dマップはオミット
+		// if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
+		// {
+		// 	mapUI.EnableMap();
+		// }
 	}
 
 	/// <summary>
