@@ -967,6 +967,7 @@ public class PlayerCamera : MonoBehaviour
 		ShotGunSmoke();
 
 		ShotGunFireSE();
+		bool isOnceShotGunHitSE = false;
 
 		for (int i = 0; i < shotGunBullet; i++)
 		{
@@ -1002,8 +1003,12 @@ public class PlayerCamera : MonoBehaviour
 					//ヒットレティクルを表示
 					isHitReticule = true;
 
-					//ヒット音を再生
-					SoundManager.SingletonInstance.HitSEPool.GetGameObject(this.transform);
+					if (isOnceShotGunHitSE == false)
+					{
+						isOnceShotGunHitSE = true;
+						//ヒット音を再生
+						SoundManager.SingletonInstance.HitSEPool.GetGameObject(this.transform);
+					}
 
 					// GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
 					// if (groundEnemy != null)

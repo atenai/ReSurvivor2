@@ -12,7 +12,7 @@ public class AssaultRifleShootSEPool : MonoBehaviour
 	ObjectPool<GameObject> objectPool;
 	[SerializeField] GameObject prefab;
 	//int defalutCapacity = PlayerCamera.SingletonInstance.HandGunMagazineCapacity;//本当はこう書きたいが、インスタンスがPlayerCameraより先にされてしまいnullになってしまう
-	int defalutCapacity = 30;
+	int defalutCapacity = 30 * 2;
 	//int maxCount = PlayerCamera.SingletonInstance.MaxHandGunAmmo;//本当はこう書きたいが、インスタンスがPlayerCameraより先にされてしまいnullになってしまう
 	int maxCount = 300;
 
@@ -28,18 +28,28 @@ public class AssaultRifleShootSEPool : MonoBehaviour
 			OnTakeFromPool,
 			OnReturnedToPool,
 			OnDestroyPoolObject,
-			false,
+			true,//必ずtrueにする（二重Releaseが即例外で分かるので、原因特定が一気に楽になります。）
 			defalutCapacity,
 			maxCount
 		);
+
+		List<GameObject> initGameObjectList = new List<GameObject>();
 
 		//オブジェクトプールのゲームオブジェクトを初期生成する
 		//必ずコンポーネントのインスペクターにあるPlay On Awakeのチェックを外すしてOFFにしておくこと！
 		for (int i = 0; i < defalutCapacity; i++)
 		{
-			GameObject gameObject = objectPool.Get();
-			gameObject.transform.position = transform.position;
+			GameObject initGameObject = objectPool.Get();
+			initGameObject.transform.position = transform.position;
+			initGameObjectList.Add(initGameObject);
 		}
+
+		foreach (var initGameObject in initGameObjectList)
+		{
+			ReleaseGameObject(initGameObject);
+		}
+
+		initGameObjectList.Clear();
 	}
 
 	/// <summary>

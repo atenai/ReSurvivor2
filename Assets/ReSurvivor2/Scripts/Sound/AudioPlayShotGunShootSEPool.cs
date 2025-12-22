@@ -10,17 +10,37 @@ public class AudioPlayShotGunShootSEPool : MonoBehaviour
 	[SerializeField] AudioClip audioClip;
 	[SerializeField] AudioSource audioSource;
 
-	public void PlaySound()
+	private bool isReturned = false;
+
+	private void OnEnable()
 	{
-		audioSource.PlayOneShot(audioClip);
+		isReturned = false;
+		CancelInvoke();
 	}
 
-	void Update()
+	public void PlaySound()
 	{
-		//音声が鳴り終えたら
-		if (audioSource.isPlaying == false)
+		if (audioSource == null || audioClip == null)
 		{
-			SoundManager.SingletonInstance.ShotGunShootSEPool.ReleaseGameObject(this.gameObject);
+			return;
 		}
+
+		isReturned = false;
+
+		audioSource.PlayOneShot(audioClip);
+
+		CancelInvoke();
+		Invoke(nameof(ReturnToPool), audioClip.length);
+	}
+
+	private void ReturnToPool()
+	{
+		if (isReturned == true)
+		{
+			return;
+		}
+
+		isReturned = true;
+		SoundManager.SingletonInstance.ShotGunShootSEPool.ReleaseGameObject(this.gameObject);
 	}
 }
