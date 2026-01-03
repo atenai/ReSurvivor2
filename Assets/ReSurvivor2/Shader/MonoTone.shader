@@ -13,7 +13,6 @@ Shader "Custom/MonoTone"
 
 	SubShader
 	{
-		Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
 		Pass
 		{
 			CGPROGRAM
@@ -86,9 +85,7 @@ Shader "Custom/MonoTone"
 				// ➃元の色とグレー色を補間
 				// _GrayAmount = 0 → 元の色
 				// _GrayAmount = 1 → 完全にグレー
-				//c.rgb = lerp(c.rgb, grayRgb, _GrayAmount);
-
-				c.rgb = grayRgb; // 完全グレー化テスト用
+				c.rgb = lerp(c.rgb, grayRgb, _GrayAmount);
 				
 				// ➄最終的な色を返す
 				return c;
