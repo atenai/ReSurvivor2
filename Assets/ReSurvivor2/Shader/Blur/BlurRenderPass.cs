@@ -43,18 +43,20 @@ public class BlurRenderPass : ScriptableRenderPass
 
 	public bool UpdateBlurSettings()
 	{
-		if (_material == null) return false;
+		if (_material == null)
+		{
+			return false;
+		}
 
-		// Use the Volume settings or the default settings if no Volume is set.
+		//ボリュームが設定されていない場合は、デフォルト設定を使用します。
 		var blurVolume = VolumeManager.instance.stack.GetComponent<BlurVolume>();
-		if (blurVolume.IsActive == false) return false;
+		if (blurVolume.IsActive == false)
+		{
+			return false;
+		}
 
-		float horizontalBlur = blurVolume.HorizontalBlur.overrideState
-			? blurVolume.HorizontalBlur.value
-			: _defaultSettings.horizontalBlur;
-		float verticalBlur = blurVolume.VerticalBlur.overrideState
-			? blurVolume.VerticalBlur.value
-			: _defaultSettings.verticalBlur;
+		float horizontalBlur = blurVolume.HorizontalBlur.overrideState ? blurVolume.HorizontalBlur.value : _defaultSettings.horizontalBlur;
+		float verticalBlur = blurVolume.VerticalBlur.overrideState ? blurVolume.VerticalBlur.value : _defaultSettings.verticalBlur;
 		_material.SetFloat(HorizontalBlurId, horizontalBlur);
 		_material.SetFloat(VerticalBlurId, verticalBlur);
 

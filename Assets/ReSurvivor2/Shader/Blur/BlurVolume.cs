@@ -4,7 +4,6 @@ using UnityEngine.Rendering;
 [Serializable]
 public class BlurVolume : VolumeComponent
 {
-	// [HideInInspector] public BoolParameter IsActive = new(true, true);
 	private BoolParameter _active = new(true, true);
 	public bool IsActive => _active.overrideState;
 

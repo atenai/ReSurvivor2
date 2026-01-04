@@ -4,6 +4,7 @@ using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// 1.Universal Renderer Data（URP Asset_my_Renderer）に追加するレンダラー機能 
+/// 参考サイト：https://note.com/hikohiro/n/n3c7c32a85b39 
 /// </summary>
 /// <remarks>
 /// 1.ScriptableRendererFeature(公式クラス)を継承したUniversal Renderer Data（URP Asset_my_Renderer）に追加する
