@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 /// <summary>
@@ -13,7 +13,7 @@ using UnityEngine.Rendering.Universal;
 /// 3.シェーダーを作成してこのクラスのインスペクターにアタッチする 
 /// </remarks> 
 [DisallowMultipleRendererFeature]
-public class BlurRendererFeature : ScriptableRendererFeature
+public sealed class GrayScaleBlitterRendererFeature : ScriptableRendererFeature
 {
 	[Tooltip("シェーダーのセット")]
 	[SerializeField] private Shader _shader;
@@ -23,11 +23,11 @@ public class BlurRendererFeature : ScriptableRendererFeature
 	/// レンダーパス
 	/// </summary>
 	/// <remarks>
-	/// BlurRenderPassはScriptableRenderPass(公式クラス)を継承した自作クラスです。
-	/// ブラー効果を適用するためのレンダーパスを定義しています。
-	/// このクラスは、指定されたシェーダーを使用して、カメラのレンダリングターゲットに対してブラー効果を適用します。
+	/// GrayScaleBlitterRenderPassはScriptableRenderPass(公式クラス)を継承した自作クラスです。
+	/// グレースケール効果を適用するためのレンダーパスを定義しています。
+	/// このクラスは、指定されたシェーダーを使用して、カメラのレンダリングターゲットに対してグレースケール効果を適用します。
 	/// </remarks> 
-	private BlurRenderPass _renderPass;
+	private GrayScaleBlitterRenderPass _renderPass;
 
 	/// <summary>
 	/// シェーダーとレンダーパスの初期化（Unity公式の関数）（絶対必須！）
@@ -38,7 +38,7 @@ public class BlurRendererFeature : ScriptableRendererFeature
 		if (_shader == null)
 		{
 			// 指定パスのシェーダーを見つける
-			_shader = Shader.Find("CustomEffects/Blur");
+			_shader = Shader.Find("Hidden/GrayScaleBlitterVertexFragment");
 		}
 
 		// シェーダーが見つからなかった場合はレンダーパスを作成せず終了
@@ -49,10 +49,7 @@ public class BlurRendererFeature : ScriptableRendererFeature
 		}
 
 		// レンダーパスの作成
-		_renderPass = new BlurRenderPass(_shader)
-		{
-			renderPassEvent = _renderPassEvent
-		};
+		_renderPass = new GrayScaleBlitterRenderPass(_shader, _renderPassEvent);
 	}
 
 	/// <summary>
@@ -62,11 +59,19 @@ public class BlurRendererFeature : ScriptableRendererFeature
 	/// <param name="renderingData"></param>
 	public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
 	{
-		if (renderingData.cameraData.cameraType != CameraType.Game) return;
-
-		if (_renderPass.UpdateBlurSettings() == false) return;
-
 		renderer.EnqueuePass(_renderPass);
+		// ConfigureInputはAddRenderPasses内で呼ぶこと
+		_renderPass.ConfigureInput(ScriptableRenderPassInput.Color);
+	}
+
+	/// <summary>
+	/// レンダーパスのセットアップ（Unity公式の関数）
+	/// </summary>
+	/// <param name="renderer"></param>
+	/// <param name="renderingData"></param>
+	public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
+	{
+		_renderPass.SetRenderTarget(renderer.cameraColorTargetHandle);
 	}
 
 	/// <summary>
@@ -75,13 +80,8 @@ public class BlurRendererFeature : ScriptableRendererFeature
 	/// <param name="disposing"></param>
 	protected override void Dispose(bool disposing)
 	{
-		_renderPass.Dispose();
+		_renderPass.Destroy();
+		_renderPass = null;
+		base.Dispose(disposing);
 	}
-}
-
-[Serializable]
-public class BlurSettings
-{
-	[Range(0, 0.4f)] public float horizontalBlur;
-	[Range(0, 0.4f)] public float verticalBlur;
 }

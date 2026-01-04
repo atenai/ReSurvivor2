@@ -2,6 +2,9 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
+/// <summary>
+/// 2.ScriptableRenderPassを継承した自作クラス
+/// </summary>
 public class BlurRenderPass : ScriptableRenderPass
 {
 	private const string RENDER_PASS_NAME = nameof(BlurRenderPass);
@@ -13,12 +16,21 @@ public class BlurRenderPass : ScriptableRenderPass
 	private static readonly int HorizontalBlurId = Shader.PropertyToID("_HorizontalBlur");
 	private static readonly int VerticalBlurId = Shader.PropertyToID("_VerticalBlur");
 
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="shader"></param>
 	public BlurRenderPass(Shader shader)
 	{
 		_material = CoreUtils.CreateEngineMaterial(shader);
 		_renderTextureDescriptor = new RenderTextureDescriptor(Screen.width, Screen.height, RenderTextureFormat.Default, 0);
 	}
 
+	/// <summary>
+	/// カメラセットアップ時の処理（Unity公式の関数）
+	/// </summary>
+	/// <param name="cmd"></param>
+	/// <param name="cameraTextureDescriptor"></param>
 	public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
 	{
 		// Set the blur texture size to be the same as the camera target size.
@@ -49,6 +61,11 @@ public class BlurRenderPass : ScriptableRenderPass
 		return true;
 	}
 
+	/// <summary>
+	/// レンダーパスの実行（Unity公式の関数）（絶対必須！）
+	/// </summary>
+	/// <param name="context"></param>
+	/// <param name="renderingData"></param>
 	public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
 	{
 		//Get a CommandBuffer from pool.
@@ -68,6 +85,9 @@ public class BlurRenderPass : ScriptableRenderPass
 		CommandBufferPool.Release(cmd);
 	}
 
+	/// <summary>
+	/// リソースの解放（Unity公式の関数）（絶対必須！）
+	/// </summary>
 	public void Dispose()
 	{
 		CoreUtils.Destroy(_material);
