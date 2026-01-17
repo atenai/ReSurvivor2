@@ -45,9 +45,9 @@ public class PlayerCamera : MonoBehaviour
 	[Tooltip("ローカルで計算する為のY軸のカメラの回転スピード")]
 	float localCameraSpeedY;
 	[Tooltip("カメラのスピードを遅くする")]
-	[Range(1.0f, 4.0f)] float slowDownCameraSpeed = 4.0f;
+	[Range(1.0f, 4.0f)] float slowDownCameraSpeed = 2.0f;
 	[Tooltip("カメラのスピードを少し遅くする")]
-	[Range(1.0f, 4.0f)] float lowSlowDownCameraSpeed = 2.0f;
+	[Range(1.0f, 4.0f)] float littleSlowDownCameraSpeed = 1.5f;
 
 	[Tooltip("通常カメラのy位置")]
 	const float normalUpPos = 1.6f;
@@ -75,7 +75,9 @@ public class PlayerCamera : MonoBehaviour
 	[Tooltip("ヒットしたオブジェクトの名前")]
 	string hitName = "";
 	[Tooltip("レイの長さ")]
-	[SerializeField] float range = 100.0f;
+	[SerializeField] float raycastRange = 100.0f;
+	[Tooltip("スフィアレイキャストの半径")]
+	[Range(0.5f, 1.0f)] float sphereRayCastRadius = 1.0f;
 	[Tooltip("銃のダメージ")]
 	[SerializeField] float damage = 10.0f;
 	[Tooltip("着弾した物体を後ろに押す")]
@@ -467,9 +469,9 @@ public class PlayerCamera : MonoBehaviour
 		HandGunFireSE();
 
 		Ray ray = new Ray(this.transform.position, this.transform.forward);
-		Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
+		Debug.DrawRay(ray.origin, ray.direction * raycastRange, Color.red, 10.0f);
 		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
+		if (Physics.Raycast(ray, out hit, raycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
 		{
 			hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 
@@ -721,9 +723,9 @@ public class PlayerCamera : MonoBehaviour
 		direction = Quaternion.AngleAxis(Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), this.transform.right) * direction;
 
 		Ray ray = new Ray(this.transform.position, direction);
-		Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
+		Debug.DrawRay(ray.origin, ray.direction * raycastRange, Color.red, 10.0f);
 		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
+		if (Physics.Raycast(ray, out hit, raycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
 		{
 			hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 
@@ -978,9 +980,9 @@ public class PlayerCamera : MonoBehaviour
 			direction = Quaternion.AngleAxis(Random.Range(-shotGunRandomAngle, shotGunRandomAngle), this.transform.right) * direction;
 
 			Ray ray = new Ray(this.transform.position, direction);
-			Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
+			Debug.DrawRay(ray.origin, ray.direction * raycastRange, Color.red, 10.0f);
 			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
+			if (Physics.Raycast(ray, out hit, raycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
 			{
 				hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 
@@ -1201,29 +1203,28 @@ public class PlayerCamera : MonoBehaviour
 			localCameraSpeedY = aimCameraSpeedY;
 			isTargethit = false;
 
-			Debug.DrawRay(this.transform.position, this.transform.forward * range, Color.blue, 1.0f);
-			//ターゲットにあたった際にカメラを遅くする処理(SphereCast)
-			float sphereCastRadius = 1.0f;
+			//ターゲットにあたった際にカメラを少し遅くする処理(スフィアレイキャスト)
+			Debug.DrawRay(this.transform.position, this.transform.forward * raycastRange, Color.yellow, 1.0f);
 			RaycastHit sphereHit;
-			if (Physics.SphereCast(this.transform.position, sphereCastRadius, this.transform.forward, out sphereHit, range) == true)
+			if (Physics.SphereCast(this.transform.position, sphereRayCastRadius, this.transform.forward, out sphereHit, raycastRange) == true)
 			{
 				if (sphereHit.collider.gameObject.CompareTag("Enemy") || sphereHit.collider.gameObject.CompareTag("FlyingEnemy") || sphereHit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 				{
-					//カメラの速さを遅くする
-					localCameraSpeedX = aimCameraSpeedX / lowSlowDownCameraSpeed;
-					localCameraSpeedY = aimCameraSpeedY / lowSlowDownCameraSpeed;
+					//カメラのスピードを少し遅くする
+					localCameraSpeedX = aimCameraSpeedX / littleSlowDownCameraSpeed;
+					localCameraSpeedY = aimCameraSpeedY / littleSlowDownCameraSpeed;
 				}
 			}
 
-			//ターゲットにあたった際にカメラを遅くする処理
+			//ターゲットにあたった際にカメラを遅くする処理(通常のレイキャスト)
 			Ray ray = new Ray(this.transform.position, this.transform.forward);
-			Debug.DrawRay(ray.origin, ray.direction * range, Color.gray, 1.0f);
+			Debug.DrawRay(ray.origin, ray.direction * raycastRange, Color.red, 1.0f);
 			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit, range) == true) // もしRayを投射して何らかのコライダーに衝突したら
+			if (Physics.Raycast(ray, out hit, raycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
 			{
 				if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 				{
-					//カメラの速さを遅くする
+					//カメラのスピードを遅くする
 					localCameraSpeedX = aimCameraSpeedX / slowDownCameraSpeed;
 					localCameraSpeedY = aimCameraSpeedY / slowDownCameraSpeed;
 					isTargethit = true;
