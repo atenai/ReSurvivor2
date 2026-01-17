@@ -45,7 +45,9 @@ public class PlayerCamera : MonoBehaviour
 	[Tooltip("ローカルで計算する為のY軸のカメラの回転スピード")]
 	float localCameraSpeedY;
 	[Tooltip("カメラのスピードを遅くする")]
-	[Range(1.0f, 4.0f)] float slowDownCameraSpeed = 2.0f;
+	[Range(1.0f, 4.0f)] float slowDownCameraSpeed = 4.0f;
+	[Tooltip("カメラのスピードを少し遅くする")]
+	[Range(1.0f, 4.0f)] float lowSlowDownCameraSpeed = 2.0f;
 
 	[Tooltip("通常カメラのy位置")]
 	const float normalUpPos = 1.6f;
@@ -1198,6 +1200,20 @@ public class PlayerCamera : MonoBehaviour
 			localCameraSpeedX = aimCameraSpeedX;
 			localCameraSpeedY = aimCameraSpeedY;
 			isTargethit = false;
+
+			Debug.DrawRay(this.transform.position, this.transform.forward * range, Color.blue, 1.0f);
+			//ターゲットにあたった際にカメラを遅くする処理(SphereCast)
+			float sphereCastRadius = 1.0f;
+			RaycastHit sphereHit;
+			if (Physics.SphereCast(this.transform.position, sphereCastRadius, this.transform.forward, out sphereHit, range) == true)
+			{
+				if (sphereHit.collider.gameObject.CompareTag("Enemy") || sphereHit.collider.gameObject.CompareTag("FlyingEnemy") || sphereHit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+				{
+					//カメラの速さを遅くする
+					localCameraSpeedX = aimCameraSpeedX / lowSlowDownCameraSpeed;
+					localCameraSpeedY = aimCameraSpeedY / lowSlowDownCameraSpeed;
+				}
+			}
 
 			//ターゲットにあたった際にカメラを遅くする処理
 			Ray ray = new Ray(this.transform.position, this.transform.forward);
