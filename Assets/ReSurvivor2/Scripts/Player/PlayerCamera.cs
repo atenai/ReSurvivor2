@@ -219,18 +219,21 @@ public class PlayerCamera : MonoBehaviour
 		{
 			case GunTYPE.HandGun:
 				handGun.HandGunShoot();
+				handGun.ResetCountTimer();
 				handGun.HandGunAutoReload();
 				handGun.HandGunManualReload();
 				handGun.HandGunReload();
 				break;
 			case GunTYPE.AssaultRifle:
 				assaultRifle.AssaultRifleShoot();
+				assaultRifle.ResetCountTimer();
 				assaultRifle.AssaultRifleAutoReload();
 				assaultRifle.AssaultRifleManualReload();
 				assaultRifle.AssaultRifleReload();
 				break;
 			case GunTYPE.ShotGun:
 				shotGun.ShotGunShoot();
+				shotGun.ResetCountTimer();
 				shotGun.ShotGunAutoReload();
 				shotGun.ShotGunManualReload();
 				shotGun.ShotGunReload();

@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// ハンドガン
 /// </summary>
+[Serializable]
 public class HandGun
 {
 	[Header("ベース")]
@@ -82,7 +84,13 @@ public class HandGun
 				}
 			}
 		}
+	}
 
+	/// <summary>
+	/// カウントタイマーリセット
+	/// </summary>
+	public void ResetCountTimer()
+	{
 		//カウントタイマーが0以上なら中身を実行する
 		if (0.0f < handGunCountTimer)
 		{

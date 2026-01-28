@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// アサルトライフル
 /// </summary>
+[Serializable]
 public class AssaultRifle
 {
 	[Header("ベース")]
@@ -84,7 +86,13 @@ public class AssaultRifle
 				}
 			}
 		}
+	}
 
+	/// <summary>
+	/// カウントタイマーリセット
+	/// </summary>
+	public void ResetCountTimer()
+	{
 		//カウントタイマーが0以上なら中身を実行する
 		if (0.0f < assaultRifleCountTimer)
 		{
@@ -194,8 +202,8 @@ public class AssaultRifle
 		AssaultRifleFireSE();
 
 		Vector3 direction = PlayerCamera.SingletonInstance.transform.forward;
-		direction = Quaternion.AngleAxis(Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), PlayerCamera.SingletonInstance.transform.up) * direction;
-		direction = Quaternion.AngleAxis(Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), PlayerCamera.SingletonInstance.transform.right) * direction;
+		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), PlayerCamera.SingletonInstance.transform.up) * direction;
+		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), PlayerCamera.SingletonInstance.transform.right) * direction;
 
 		Ray ray = new Ray(PlayerCamera.SingletonInstance.transform.position, direction);
 		Debug.DrawRay(ray.origin, ray.direction * PlayerCamera.SingletonInstance.RaycastRange, Color.red, 10.0f);

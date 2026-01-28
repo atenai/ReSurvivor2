@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// ショットガン
 /// </summary>
+[Serializable]
 public class ShotGun
 {
 	[Header("ベース")]
@@ -15,7 +17,7 @@ public class ShotGun
 
 	[Header("ショットガン")]
 	[Tooltip("ショットガンを何秒間隔で撃つか")]
-	[SerializeField] float shotGunFireRate = 0.1f;
+	[SerializeField] float shotGunFireRate = 0.2f;
 	[Tooltip("ショットガンの射撃間隔の時間カウント用のタイマー")]
 	float shotGunCountTimer = 0.0f;
 	[Tooltip("ショットガンの散乱角度")]
@@ -87,6 +89,14 @@ public class ShotGun
 			}
 		}
 
+
+	}
+
+	/// <summary>
+	/// カウントタイマーリセット
+	/// </summary>
+	public void ResetCountTimer()
+	{
 		//カウントタイマーが0以上なら中身を実行する
 		if (0.0f < shotGunCountTimer)
 		{
@@ -199,8 +209,8 @@ public class ShotGun
 		for (int i = 0; i < shotGunBullet; i++)
 		{
 			Vector3 direction = PlayerCamera.SingletonInstance.transform.forward;
-			direction = Quaternion.AngleAxis(Random.Range(-shotGunRandomAngle, shotGunRandomAngle), PlayerCamera.SingletonInstance.transform.up) * direction;
-			direction = Quaternion.AngleAxis(Random.Range(-shotGunRandomAngle, shotGunRandomAngle), PlayerCamera.SingletonInstance.transform.right) * direction;
+			direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-shotGunRandomAngle, shotGunRandomAngle), PlayerCamera.SingletonInstance.transform.up) * direction;
+			direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-shotGunRandomAngle, shotGunRandomAngle), PlayerCamera.SingletonInstance.transform.right) * direction;
 
 			Ray ray = new Ray(PlayerCamera.SingletonInstance.transform.position, direction);
 			Debug.DrawRay(ray.origin, ray.direction * PlayerCamera.SingletonInstance.RaycastRange, Color.red, 10.0f);
