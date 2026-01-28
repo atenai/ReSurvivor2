@@ -11,7 +11,7 @@ public class AssaultRifleAmmo : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			if (PlayerCamera.SingletonInstance.AssaultRifle.MaxAssaultRifleAmmo <= PlayerCamera.SingletonInstance.AssaultRifle.CurrentAssaultRifleAmmo)
+			if (PlayerCamera.SingletonInstance.AssaultRifle.MaxAssaultRifleAmmo <= PlayerCamera.SingletonInstance.AssaultRifle.CurrentAmmo)
 			{
 				return;
 			}

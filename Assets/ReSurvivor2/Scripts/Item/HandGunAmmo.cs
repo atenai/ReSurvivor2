@@ -11,7 +11,7 @@ public class HandGunAmmo : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			if (PlayerCamera.SingletonInstance.HandGun.MaxHandGunAmmo <= PlayerCamera.SingletonInstance.HandGun.CurrentHandGunAmmo)
+			if (PlayerCamera.SingletonInstance.HandGun.MaxHandGunAmmo <= PlayerCamera.SingletonInstance.HandGun.CurrentAmmo)
 			{
 				return;
 			}

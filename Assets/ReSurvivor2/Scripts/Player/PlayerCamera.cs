@@ -196,7 +196,7 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary> 
 	void SwitchWeapon()
 	{
-		if (handGun.IsHandGunReloadTimeActive == false && assaultRifle.IsAssaultRifleReloadTimeActive == false && shotGun.IsShotGunReloadTimeActive == false)
+		if (handGun.IsReloadTimeActive == false && assaultRifle.IsReloadTimeActive == false && shotGun.IsReloadTimeActive == false)
 		{
 			if (Input.GetKeyDown(KeyCode.Alpha1) || 0.5 < Input.GetAxisRaw("XInput DPad Left&Right"))
 			{
@@ -218,25 +218,25 @@ public class PlayerCamera : MonoBehaviour
 		switch (gunTYPE)
 		{
 			case GunTYPE.HandGun:
-				handGun.HandGunShoot();
-				handGun.ResetCountTimer();
-				handGun.HandGunAutoReload();
-				handGun.HandGunManualReload();
-				handGun.HandGunReload();
+				handGun.Shoot();
+				handGun.ResetFireCountTimer();
+				handGun.AutoReloadTrigger();
+				handGun.ManualReloadTrigger();
+				handGun.ReloadSystem();
 				break;
 			case GunTYPE.AssaultRifle:
-				assaultRifle.AssaultRifleShoot();
-				assaultRifle.ResetCountTimer();
-				assaultRifle.AssaultRifleAutoReload();
-				assaultRifle.AssaultRifleManualReload();
-				assaultRifle.AssaultRifleReload();
+				assaultRifle.Shoot();
+				assaultRifle.ResetFireCountTimer();
+				assaultRifle.AutoReloadTrigger();
+				assaultRifle.ManualReloadTrigger();
+				assaultRifle.ReloadSystem();
 				break;
 			case GunTYPE.ShotGun:
-				shotGun.ShotGunShoot();
-				shotGun.ResetCountTimer();
-				shotGun.ShotGunAutoReload();
-				shotGun.ShotGunManualReload();
-				shotGun.ShotGunReload();
+				shotGun.Shoot();
+				shotGun.ResetFireCountTimer();
+				shotGun.AutoReloadTrigger();
+				shotGun.ManualReloadTrigger();
+				shotGun.ReloadSystem();
 				break;
 		}
 	}

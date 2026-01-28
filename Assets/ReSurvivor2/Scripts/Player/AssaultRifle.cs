@@ -7,37 +7,24 @@ using System;
 /// アサルトライフル
 /// </summary>
 [Serializable]
-public class AssaultRifle
+public class AssaultRifle : GunBase
 {
-	[Header("ベース")]
-	[Tooltip("銃のダメージ")]
-	[SerializeField] float damage = 10.0f;
-	[Tooltip("着弾した物体を後ろに押す力")]
-	[SerializeField] float impactForce = 30.0f;
-
 	[Header("アサルトライフル")]
-	[Tooltip("アサルトライフルを何秒間隔で撃つか")]
-	[SerializeField] float assaultRifleFireRate = 0.1f;
-	[Tooltip("アサルトライフルの射撃間隔の時間カウント用のタイマー")]
-	float assaultRifleCountTimer = 0.0f;
+
 	[Tooltip("アサルトライフルの散乱角度")]
 	[SerializeField] float assaultRifleRandomAngle = 1.0f;
-	[Tooltip("アサルトライフルの現在のマガジンの弾数")]
-	int assaultRifleCurrentMagazine;
-	public int AssaultRifleCurrentMagazine => assaultRifleCurrentMagazine;
+
 	[Tooltip("アサルトライフルの最大マガジン数")]
 	readonly int assaultRifleMagazineCapacity = 30;
 	public int AssaultRifleMagazineCapacity => assaultRifleMagazineCapacity;
-	[Tooltip("アサルトライフルの現在の残弾数")]
-	int currentAssaultRifleAmmo = 150;
-	public int CurrentAssaultRifleAmmo => currentAssaultRifleAmmo;
+
+	[Tooltip("アサルトライフルの初期残弾数")]
+	readonly int initCurrentAssaultRifleAmmoDefine = 150;
+
 	[Tooltip("アサルトライフルの最大残弾数")]
 	readonly int maxAssaultRifleAmmo = 300;//将来的には拡張マガジンポーチを取得すると増える的なものを入れるかも
 	public int MaxAssaultRifleAmmo => maxAssaultRifleAmmo;
-	[Tooltip("アサルトライフルのリロードのオン・オフ")]
-	bool isAssaultRifleReloadTimeActive = false;
-	public bool IsAssaultRifleReloadTimeActive => isAssaultRifleReloadTimeActive;
-	float assaultRifleReloadTime = 0.0f;
+
 	[Tooltip("アサルトライフルのリロード時間")]
 	readonly float assaultRifleReloadTimeDefine = 1.5f;
 
@@ -47,8 +34,8 @@ public class AssaultRifle
 	public void Save()
 	{
 		Debug.Log("<color=blue>アサルトライフルセーブ</color>");
-		ES3.Save<int>("AssaultRifleCurrentMagazine", assaultRifleCurrentMagazine);
-		ES3.Save<int>("CurrentAssaultRifleAmmo", currentAssaultRifleAmmo);
+		ES3.Save<int>("AssaultRifleCurrentMagazine", currentMagazine);
+		ES3.Save<int>("CurrentAssaultRifleAmmo", currentAmmo);
 	}
 
 	/// <summary>
@@ -57,99 +44,101 @@ public class AssaultRifle
 	public void Load()
 	{
 		Debug.Log("<color=blue>アサルトライフルロード</color>");
-		assaultRifleCurrentMagazine = ES3.Load<int>("AssaultRifleCurrentMagazine", assaultRifleMagazineCapacity);
-		Debug.Log("<color=purple>アサルトライフルマガジン : " + assaultRifleCurrentMagazine + "</color>");
-		currentAssaultRifleAmmo = ES3.Load<int>("CurrentAssaultRifleAmmo", maxAssaultRifleAmmo);
-		Debug.Log("<color=purple>アサルトライフル残弾数 : " + currentAssaultRifleAmmo + "</color>");
+
+		currentMagazine = ES3.Load<int>("AssaultRifleCurrentMagazine", assaultRifleMagazineCapacity);
+		Debug.Log("<color=purple>アサルトライフルマガジン : " + currentMagazine + "</color>");
+
+		currentAmmo = ES3.Load<int>("CurrentAssaultRifleAmmo", initCurrentAssaultRifleAmmoDefine);
+		Debug.Log("<color=purple>アサルトライフル残弾数 : " + currentAmmo + "</color>");
 	}
 
 	/// <summary>
 	/// アサルトライフルで射撃
 	/// </summary> 
-	public void AssaultRifleShoot()
+	public void Shoot()
 	{
 		if (Player.SingletonInstance.IsAim == false)
 		{
 			return;
 		}
 
-		if (assaultRifleCurrentMagazine == 0)
+		if (currentMagazine == 0)
 		{
 			return;
 		}
 
-		if (isAssaultRifleReloadTimeActive == true)
+		if (isReloadTimeActive == true)
 		{
 			return;
 		}
 
 		if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || 0.5f < Input.GetAxisRaw("XInput RT"))//左クリックまたはEnterを押している場合に中身を実行する
 		{
-			if (assaultRifleCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
+			if (fireCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 			{
-				assaultRifleCurrentMagazine = assaultRifleCurrentMagazine - 1;//現在のマガジンの弾数を-1する
+				currentMagazine = currentMagazine - 1;//現在のマガジンの弾数を-1する
 				AssaultRifleFire();
-				assaultRifleCountTimer = assaultRifleFireRate;//カウントタイマーに射撃を待つ時間を入れる
+				fireCountTimer = fireRate;//カウントタイマーに射撃を待つ時間を入れる
 			}
 		}
 	}
 
 	/// <summary>
-	/// カウントタイマーリセット
+	/// 射撃カウントタイマーリセット
 	/// </summary>
-	public void ResetCountTimer()
+	public void ResetFireCountTimer()
 	{
 		//カウントタイマーが0以上なら中身を実行する
-		if (0.0f < assaultRifleCountTimer)
+		if (0.0f < fireCountTimer)
 		{
 			//カウントタイマーを減らす
-			assaultRifleCountTimer = assaultRifleCountTimer - Time.deltaTime;
+			fireCountTimer = fireCountTimer - Time.deltaTime;
 		}
 	}
 
 	/// <summary>
 	/// アサルトライフルのオートリロード
 	/// </summary> 
-	public void AssaultRifleAutoReload()
+	public void AutoReloadTrigger()
 	{
 		//残弾数が0かつの弾薬が1発以上あるとき
-		if (assaultRifleCurrentMagazine == 0 && 0 < currentAssaultRifleAmmo)
+		if (currentMagazine == 0 && 0 < currentAmmo)
 		{
-			isAssaultRifleReloadTimeActive = true;//リロードのオン
+			isReloadTimeActive = true;//リロードのオン
 		}
 	}
 
 	/// <summary>
 	/// アサルトライフルの手動リロード
 	/// </summary> 
-	public void AssaultRifleManualReload()
+	public void ManualReloadTrigger()
 	{
 		//残弾数が満タンなら切り上げ
-		if (assaultRifleCurrentMagazine == assaultRifleMagazineCapacity)
+		if (currentMagazine == assaultRifleMagazineCapacity)
 		{
 			return;
 		}
 
 		//弾が0以下なら切り上げ
-		if (currentAssaultRifleAmmo <= 0)
+		if (currentAmmo <= 0)
 		{
 			return;
 		}
 
 		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("XInput X"))
 		{
-			isAssaultRifleReloadTimeActive = true;//リロードのオン
+			isReloadTimeActive = true;//リロードのオン
 		}
 	}
 
 	/// <summary>
 	/// アサルトライフルのリロード
 	/// </summary> 
-	public void AssaultRifleReload()
+	public void ReloadSystem()
 	{
-		if (isAssaultRifleReloadTimeActive == true)//リロードがオンになったら
+		if (isReloadTimeActive == true)//リロードがオンになったら
 		{
-			if (assaultRifleReloadTime == 0)
+			if (reloadCountTimer == 0)
 			{
 				//アサルトライフルのリロードアニメーションをオン
 				Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
@@ -158,37 +147,37 @@ public class AssaultRifle
 			}
 
 			//リロード中画像
-			assaultRifleReloadTime += Time.deltaTime;//リロードタイムをプラス
+			reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
 
-			if (assaultRifleReloadTimeDefine <= assaultRifleReloadTime)//リロードタイムが10以上になったら
+			if (assaultRifleReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
 			{
 				//弾リセット
-				int oldMagazine = assaultRifleCurrentMagazine;
-				int localMagazine = assaultRifleMagazineCapacity - assaultRifleCurrentMagazine;
-				int localAmmo = currentAssaultRifleAmmo - localMagazine;
+				int oldMagazine = currentMagazine;
+				int localMagazine = assaultRifleMagazineCapacity - currentMagazine;
+				int localAmmo = currentAmmo - localMagazine;
 				if (localAmmo < 0)
 				{
-					if (currentAssaultRifleAmmo + oldMagazine < assaultRifleMagazineCapacity)
+					if (currentAmmo + oldMagazine < assaultRifleMagazineCapacity)
 					{
-						assaultRifleCurrentMagazine = currentAssaultRifleAmmo + oldMagazine;
-						currentAssaultRifleAmmo = 0;
+						currentMagazine = currentAmmo + oldMagazine;
+						currentAmmo = 0;
 					}
 					else
 					{
-						assaultRifleCurrentMagazine = assaultRifleMagazineCapacity;
-						int totalAmmo = currentAssaultRifleAmmo + oldMagazine;
+						currentMagazine = assaultRifleMagazineCapacity;
+						int totalAmmo = currentAmmo + oldMagazine;
 						int resultAmmo = totalAmmo - assaultRifleMagazineCapacity;
-						currentAssaultRifleAmmo = resultAmmo;
+						currentAmmo = resultAmmo;
 					}
 				}
 				else
 				{
-					assaultRifleCurrentMagazine = assaultRifleMagazineCapacity;
-					currentAssaultRifleAmmo = localAmmo;
+					currentMagazine = assaultRifleMagazineCapacity;
+					currentAmmo = localAmmo;
 				}
 
-				assaultRifleReloadTime = 0.0f;//リロードタイムをリセット
-				isAssaultRifleReloadTimeActive = false;//リロードのオフ
+				reloadCountTimer = 0.0f;//リロードタイムをリセット
+				isReloadTimeActive = false;//リロードのオフ
 
 				//アサルトライフルのリロードアニメーションをオフ
 				Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", false);
@@ -292,17 +281,17 @@ public class AssaultRifle
 	/// <summary>
 	/// アサルトライフルの弾を取得
 	/// </summary> 
-	public void AcquireAssaultRifleAmmo()
+	public void AcquireAssaultRifleAmmo(int amount = 10)
 	{
-		if (maxAssaultRifleAmmo <= currentAssaultRifleAmmo)
+		if (maxAssaultRifleAmmo <= currentAmmo)
 		{
 			return;
 		}
 
-		currentAssaultRifleAmmo = currentAssaultRifleAmmo + 10;
-		if (maxAssaultRifleAmmo <= currentAssaultRifleAmmo)
+		currentAmmo = currentAmmo + amount;
+		if (maxAssaultRifleAmmo <= currentAmmo)
 		{
-			currentAssaultRifleAmmo = maxAssaultRifleAmmo;
+			currentAmmo = maxAssaultRifleAmmo;
 		}
 	}
 }

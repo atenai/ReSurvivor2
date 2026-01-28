@@ -404,16 +404,16 @@ public class Player : MonoBehaviour
 		switch (PlayerCamera.SingletonInstance.gunTYPE)
 		{
 			case PlayerCamera.GunTYPE.HandGun:
-				textMagazine.text = PlayerCamera.SingletonInstance.HandGun.HandGunCurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.HandGun.CurrentHandGunAmmo.ToString();
+				textMagazine.text = PlayerCamera.SingletonInstance.HandGun.CurrentMagazine.ToString();
+				textAmmo.text = PlayerCamera.SingletonInstance.HandGun.CurrentAmmo.ToString();
 				break;
 			case PlayerCamera.GunTYPE.AssaultRifle:
-				textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifle.AssaultRifleCurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentAssaultRifleAmmo.ToString();
+				textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentMagazine.ToString();
+				textAmmo.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentAmmo.ToString();
 				break;
 			case PlayerCamera.GunTYPE.ShotGun:
-				textMagazine.text = PlayerCamera.SingletonInstance.ShotGun.ShotGunCurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.ShotGun.CurrentShotGunAmmo.ToString();
+				textMagazine.text = PlayerCamera.SingletonInstance.ShotGun.CurrentMagazine.ToString();
+				textAmmo.text = PlayerCamera.SingletonInstance.ShotGun.CurrentAmmo.ToString();
 				break;
 		}
 	}
@@ -597,7 +597,7 @@ public class Player : MonoBehaviour
 		switch (PlayerCamera.SingletonInstance.gunTYPE)
 		{
 			case PlayerCamera.GunTYPE.HandGun:
-				if (PlayerCamera.SingletonInstance.HandGun.IsHandGunReloadTimeActive == true)
+				if (PlayerCamera.SingletonInstance.HandGun.IsReloadTimeActive == true)
 				{
 					if (reloadColor.a <= 1)
 					{
@@ -606,7 +606,7 @@ public class Player : MonoBehaviour
 					}
 				}
 
-				if (PlayerCamera.SingletonInstance.HandGun.IsHandGunReloadTimeActive == false)
+				if (PlayerCamera.SingletonInstance.HandGun.IsReloadTimeActive == false)
 				{
 					if (reloadColor.a >= 0)
 					{
@@ -616,7 +616,7 @@ public class Player : MonoBehaviour
 				}
 				break;
 			case PlayerCamera.GunTYPE.AssaultRifle:
-				if (PlayerCamera.SingletonInstance.AssaultRifle.IsAssaultRifleReloadTimeActive == true)
+				if (PlayerCamera.SingletonInstance.AssaultRifle.IsReloadTimeActive == true)
 				{
 					if (reloadColor.a <= 1)
 					{
@@ -625,7 +625,7 @@ public class Player : MonoBehaviour
 					}
 				}
 
-				if (PlayerCamera.SingletonInstance.AssaultRifle.IsAssaultRifleReloadTimeActive == false)
+				if (PlayerCamera.SingletonInstance.AssaultRifle.IsReloadTimeActive == false)
 				{
 					if (reloadColor.a >= 0)
 					{
@@ -635,7 +635,7 @@ public class Player : MonoBehaviour
 				}
 				break;
 			case PlayerCamera.GunTYPE.ShotGun:
-				if (PlayerCamera.SingletonInstance.ShotGun.IsShotGunReloadTimeActive == true)
+				if (PlayerCamera.SingletonInstance.ShotGun.IsReloadTimeActive == true)
 				{
 					if (reloadColor.a <= 1)
 					{
@@ -644,7 +644,7 @@ public class Player : MonoBehaviour
 					}
 				}
 
-				if (PlayerCamera.SingletonInstance.ShotGun.IsShotGunReloadTimeActive == false)
+				if (PlayerCamera.SingletonInstance.ShotGun.IsReloadTimeActive == false)
 				{
 					if (reloadColor.a >= 0)
 					{
@@ -664,16 +664,16 @@ public class Player : MonoBehaviour
 		switch (PlayerCamera.SingletonInstance.gunTYPE)
 		{
 			case PlayerCamera.GunTYPE.HandGun:
-				textMagazine.text = PlayerCamera.SingletonInstance.HandGun.HandGunCurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.HandGun.CurrentHandGunAmmo.ToString();
+				textMagazine.text = PlayerCamera.SingletonInstance.HandGun.CurrentMagazine.ToString();
+				textAmmo.text = PlayerCamera.SingletonInstance.HandGun.CurrentAmmo.ToString();
 				break;
 			case PlayerCamera.GunTYPE.AssaultRifle:
-				textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifle.AssaultRifleCurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentAssaultRifleAmmo.ToString();
+				textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentMagazine.ToString();
+				textAmmo.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentAmmo.ToString();
 				break;
 			case PlayerCamera.GunTYPE.ShotGun:
-				textMagazine.text = PlayerCamera.SingletonInstance.ShotGun.ShotGunCurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.ShotGun.CurrentShotGunAmmo.ToString();
+				textMagazine.text = PlayerCamera.SingletonInstance.ShotGun.CurrentMagazine.ToString();
+				textAmmo.text = PlayerCamera.SingletonInstance.ShotGun.CurrentAmmo.ToString();
 				break;
 		}
 	}

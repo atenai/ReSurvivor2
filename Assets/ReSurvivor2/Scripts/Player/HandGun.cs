@@ -7,35 +7,23 @@ using System;
 /// ハンドガン
 /// </summary>
 [Serializable]
-public class HandGun
+public class HandGun : GunBase
 {
-	[Header("ベース")]
-	[Tooltip("銃のダメージ")]
-	[SerializeField] float damage = 10.0f;
-	[Tooltip("着弾した物体を後ろに押す力")]
-	[SerializeField] float impactForce = 30.0f;
-
 	[Header("ハンドガン")]
-	[Tooltip("ハンドガンを何秒間隔で撃つか")]
-	[SerializeField] float handGunFireRate = 0.1f;
-	[Tooltip("ハンドガンの射撃間隔の時間カウント用のタイマー")]
-	float handGunCountTimer = 0.0f;
-	[Tooltip("ハンドガンの現在のマガジンの弾数")]
-	int handGunCurrentMagazine;
-	public int HandGunCurrentMagazine => handGunCurrentMagazine;
+
+
 	[Tooltip("ハンドガンの最大マガジン数")]
 	readonly int handGunMagazineCapacity = 7;
 	public int HandGunMagazineCapacity => handGunMagazineCapacity;
-	[Tooltip("ハンドガンの現在の残弾数")]
-	int currentHandGunAmmo = 35;
-	public int CurrentHandGunAmmo => currentHandGunAmmo;
+
+	[Tooltip("ハンドガンの初期残弾数")]
+	readonly int initCurrentHandGunAmmoDefine = 35;
+
 	[Tooltip("ハンドガンの最大残弾数")]
 	readonly int maxHandGunAmmo = 70;//将来的には拡張マガジンポーチを取得すると増える的なものを入れるかも
 	public int MaxHandGunAmmo => maxHandGunAmmo;
-	[Tooltip("ハンドガンのリロードのオン・オフ")]
-	bool isHandGunReloadTimeActive = false;
-	public bool IsHandGunReloadTimeActive => isHandGunReloadTimeActive;
-	float handGunReloadTime = 0.0f;
+
+
 	[Tooltip("ハンドガンのリロード時間")]
 	readonly float handGunReloadTimeDefine = 1.5f;
 
@@ -45,8 +33,8 @@ public class HandGun
 	public void Save()
 	{
 		Debug.Log("<color=red>ハンドガンセーブ</color>");
-		ES3.Save<int>("HandGunCurrentMagazine", handGunCurrentMagazine);
-		ES3.Save<int>("CurrentHandGunAmmo", currentHandGunAmmo);
+		ES3.Save<int>("HandGunCurrentMagazine", currentMagazine);
+		ES3.Save<int>("CurrentHandGunAmmo", currentAmmo);
 	}
 
 	/// <summary>
@@ -55,99 +43,101 @@ public class HandGun
 	public void Load()
 	{
 		Debug.Log("<color=red>ハンドガンロード</color>");
-		handGunCurrentMagazine = ES3.Load<int>("HandGunCurrentMagazine", handGunMagazineCapacity);
-		Debug.Log("<color=purple>ハンドガンマガジン : " + handGunCurrentMagazine + "</color>");
-		currentHandGunAmmo = ES3.Load<int>("CurrentHandGunAmmo", maxHandGunAmmo);
-		Debug.Log("<color=purple>ハンドガン残弾数 : " + currentHandGunAmmo + "</color>");
+
+		currentMagazine = ES3.Load<int>("HandGunCurrentMagazine", handGunMagazineCapacity);
+		Debug.Log("<color=purple>ハンドガンマガジン : " + currentMagazine + "</color>");
+
+		currentAmmo = ES3.Load<int>("CurrentHandGunAmmo", initCurrentHandGunAmmoDefine);
+		Debug.Log("<color=purple>ハンドガン残弾数 : " + currentAmmo + "</color>");
 	}
 
 	/// <summary>
 	/// ハンドガンで射撃
 	/// </summary> 
-	public void HandGunShoot()
+	public void Shoot()
 	{
 		if (Player.SingletonInstance.IsAim == false)
 		{
 			return;
 		}
 
-		if (handGunCurrentMagazine == 0)
+		if (currentMagazine == 0)
 		{
 			return;
 		}
 
-		if (isHandGunReloadTimeActive == true)
+		if (isReloadTimeActive == true)
 		{
 			return;
 		}
 
 		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.Down)//左クリックまたはEnterを押している場合に中身を実行する
 		{
-			if (handGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
+			if (fireCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 			{
-				handGunCurrentMagazine = handGunCurrentMagazine - 1;//現在のマガジンの弾数を-1する
+				currentMagazine = currentMagazine - 1;//現在のマガジンの弾数を-1する
 				HandGunFire();
-				handGunCountTimer = handGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
+				fireCountTimer = fireRate;//カウントタイマーに射撃を待つ時間を入れる
 			}
 		}
 	}
 
 	/// <summary>
-	/// カウントタイマーリセット
+	/// 射撃カウントタイマーリセット
 	/// </summary>
-	public void ResetCountTimer()
+	public void ResetFireCountTimer()
 	{
 		//カウントタイマーが0以上なら中身を実行する
-		if (0.0f < handGunCountTimer)
+		if (0.0f < fireCountTimer)
 		{
 			//カウントタイマーを減らす
-			handGunCountTimer = handGunCountTimer - Time.deltaTime;
+			fireCountTimer = fireCountTimer - Time.deltaTime;
 		}
 	}
 
 	/// <summary>
 	/// ハンドガンのオートリロード
 	/// </summary> 
-	public void HandGunAutoReload()
+	public void AutoReloadTrigger()
 	{
 		//残弾数が0かつ弾薬が1発以上あるとき
-		if (handGunCurrentMagazine == 0 && 0 < currentHandGunAmmo)
+		if (currentMagazine == 0 && 0 < currentAmmo)
 		{
-			isHandGunReloadTimeActive = true;//リロードのオン
+			isReloadTimeActive = true;//リロードのオン
 		}
 	}
 
 	/// <summary>
 	/// ハンドガンの手動リロード
 	/// </summary> 
-	public void HandGunManualReload()
+	public void ManualReloadTrigger()
 	{
 		//残弾数が満タンなら切り上げ
-		if (handGunCurrentMagazine == handGunMagazineCapacity)
+		if (currentMagazine == handGunMagazineCapacity)
 		{
 			return;
 		}
 
 		//弾が0以下なら切り上げ
-		if (currentHandGunAmmo <= 0)
+		if (currentAmmo <= 0)
 		{
 			return;
 		}
 
 		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("XInput X"))
 		{
-			isHandGunReloadTimeActive = true;//リロードのオン
+			isReloadTimeActive = true;//リロードのオン
 		}
 	}
 
 	/// <summary>
 	/// ハンドガンのリロード
 	/// </summary> 
-	public void HandGunReload()
+	public void ReloadSystem()
 	{
-		if (isHandGunReloadTimeActive == true)//リロードがオンになったら
+		if (isReloadTimeActive == true)//リロードがオンになったら
 		{
-			if (handGunReloadTime == 0)
+			if (reloadCountTimer == 0)
 			{
 				//ハンドガンのリロードアニメーションをオン
 				Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", true);
@@ -156,37 +146,37 @@ public class HandGun
 			}
 
 			//リロード中画像
-			handGunReloadTime += Time.deltaTime;//リロードタイムをプラス
+			reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
 
-			if (handGunReloadTimeDefine <= handGunReloadTime)//リロードタイムが10以上になったら
+			if (handGunReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
 			{
 				//弾リセット
-				int oldMagazine = handGunCurrentMagazine;
-				int localMagazine = handGunMagazineCapacity - handGunCurrentMagazine;
-				int localAmmo = currentHandGunAmmo - localMagazine;
+				int oldMagazine = currentMagazine;
+				int localMagazine = handGunMagazineCapacity - currentMagazine;
+				int localAmmo = currentAmmo - localMagazine;
 				if (localAmmo < 0)
 				{
-					if (currentHandGunAmmo + oldMagazine < handGunMagazineCapacity)
+					if (currentAmmo + oldMagazine < handGunMagazineCapacity)
 					{
-						handGunCurrentMagazine = currentHandGunAmmo + oldMagazine;
-						currentHandGunAmmo = 0;
+						currentMagazine = currentAmmo + oldMagazine;
+						currentAmmo = 0;
 					}
 					else
 					{
-						handGunCurrentMagazine = handGunMagazineCapacity;
-						int totalAmmo = currentHandGunAmmo + oldMagazine;
+						currentMagazine = handGunMagazineCapacity;
+						int totalAmmo = currentAmmo + oldMagazine;
 						int resultAmmo = totalAmmo - handGunMagazineCapacity;
-						currentHandGunAmmo = resultAmmo;
+						currentAmmo = resultAmmo;
 					}
 				}
 				else
 				{
-					handGunCurrentMagazine = handGunMagazineCapacity;
-					currentHandGunAmmo = localAmmo;
+					currentMagazine = handGunMagazineCapacity;
+					currentAmmo = localAmmo;
 				}
 
-				handGunReloadTime = 0.0f;//リロードタイムをリセット
-				isHandGunReloadTimeActive = false;//リロードのオフ
+				reloadCountTimer = 0.0f;//リロードタイムをリセット
+				isReloadTimeActive = false;//リロードのオフ
 
 				//ハンドガンのリロードアニメーションをオフ
 				Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", false);
@@ -286,17 +276,17 @@ public class HandGun
 	/// <summary>
 	/// ハンドガンの弾を取得
 	/// </summary> 
-	public void AcquireHandGunAmmo()
+	public void AcquireHandGunAmmo(int amount = 10)
 	{
-		if (maxHandGunAmmo <= currentHandGunAmmo)
+		if (maxHandGunAmmo <= currentAmmo)
 		{
 			return;
 		}
 
-		currentHandGunAmmo = currentHandGunAmmo + 10;
-		if (maxHandGunAmmo <= currentHandGunAmmo)
+		currentAmmo = currentAmmo + amount;
+		if (maxHandGunAmmo <= currentAmmo)
 		{
-			currentHandGunAmmo = maxHandGunAmmo;
+			currentAmmo = maxHandGunAmmo;
 		}
 	}
 }
