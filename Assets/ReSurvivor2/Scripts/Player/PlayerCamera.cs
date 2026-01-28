@@ -7,7 +7,9 @@ using UnityEngine;
 /// </summary> 
 public class PlayerCamera : MonoBehaviour
 {
-	//シングルトンで作成（ゲーム中に１つのみにする）
+	/// <summary>
+	/// シングルトンで作成（ゲーム中に１つのみにする）
+	/// </summary>
 	static PlayerCamera singletonInstance = null;
 	public static PlayerCamera SingletonInstance => singletonInstance;
 
@@ -71,6 +73,11 @@ public class PlayerCamera : MonoBehaviour
 	}
 
 	[Header("レイキャスト")]
+	[Tooltip("レイの長さ")]
+	[SerializeField] float raycastRange = 100.0f;
+	public float RaycastRange => raycastRange;
+	[Tooltip("スフィアレイキャストの半径")]
+	[Range(0.5f, 1.0f)] float sphereRayCastRadius = 1.0f;
 	[Tooltip("ヒットしたオブジェクトの名前")]
 	string hitName = "";
 	public string HitName
@@ -78,10 +85,6 @@ public class PlayerCamera : MonoBehaviour
 		get { return hitName; }
 		set { hitName = value; }
 	}
-	[Tooltip("レイの長さ")]
-	[SerializeField] float raycastRange = 100.0f;
-	[Tooltip("スフィアレイキャストの半径")]
-	[Range(0.5f, 1.0f)] float sphereRayCastRadius = 1.0f;
 	[Tooltip("ヒットレティクル")]
 	bool isHitReticule = false;
 	public bool IsHitReticule
@@ -109,13 +112,6 @@ public class PlayerCamera : MonoBehaviour
 	/// </summary>
 	ShotGun shotGun = new ShotGun();
 	public ShotGun ShotGun => shotGun;
-
-	[Header("着弾エフェクト")]
-	//パス(Assets/Knife/PRO Effects FPS Muzzle flashes & Impacts/Particles/Prefabs/Impacts)
-	[Tooltip("血の着弾エフェクト")]
-	[SerializeField] GameObject bloodImpactEffect;
-	[Tooltip("煙の着弾エフェクト")]
-	[SerializeField] GameObject rockImpactEffect;
 
 	public enum GunTYPE
 	{
@@ -246,23 +242,6 @@ public class PlayerCamera : MonoBehaviour
 				shotGun.ShotGunManualReload();
 				shotGun.ShotGunReload();
 				break;
-		}
-	}
-
-	/// <summary>
-	/// 着弾エフェクト
-	/// </summary> 
-	public void ImpactEffect(RaycastHit hit)
-	{
-		if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
-		{
-			GameObject impactGameObject = Instantiate(bloodImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-			Destroy(impactGameObject, 2.0f);
-		}
-		else
-		{
-			GameObject impactGameObject = Instantiate(rockImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-			Destroy(impactGameObject, 2.0f);
 		}
 	}
 

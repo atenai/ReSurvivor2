@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// サウンドマネージャー
+/// </summary>
 public class SoundManager : MonoBehaviour
 {
-	//シングルトンで作成（ゲーム中に１つのみにする）
+	/// <summary>
+	/// シングルトンで作成（ゲーム中に１つのみにする）
+	/// </summary>
 	static SoundManager singletonInstance = null;
 	public static SoundManager SingletonInstance => singletonInstance;
 
@@ -50,10 +55,5 @@ public class SoundManager : MonoBehaviour
 		{
 			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
 		}
-	}
-
-	void Update()
-	{
-
 	}
 }

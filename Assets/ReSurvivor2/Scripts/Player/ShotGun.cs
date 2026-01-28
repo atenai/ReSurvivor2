@@ -8,8 +8,6 @@ using UnityEngine;
 public class ShotGun
 {
 	[Header("ベース")]
-	[Tooltip("レイの長さ")]
-	[SerializeField] float raycastRange = 100.0f;
 	[Tooltip("銃のダメージ")]
 	[SerializeField] float damage = 10.0f;
 	[Tooltip("着弾した物体を後ろに押す")]
@@ -204,9 +202,9 @@ public class ShotGun
 			direction = Quaternion.AngleAxis(Random.Range(-shotGunRandomAngle, shotGunRandomAngle), PlayerCamera.SingletonInstance.transform.right) * direction;
 
 			Ray ray = new Ray(PlayerCamera.SingletonInstance.transform.position, direction);
-			Debug.DrawRay(ray.origin, ray.direction * raycastRange, Color.red, 10.0f);
+			Debug.DrawRay(ray.origin, ray.direction * PlayerCamera.SingletonInstance.RaycastRange, Color.red, 10.0f);
 			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit, raycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
+			if (Physics.Raycast(ray, out hit, PlayerCamera.SingletonInstance.RaycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
 			{
 #if UNITY_EDITOR//Unityエディター上での処理
 				PlayerCamera.SingletonInstance.HitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
@@ -254,7 +252,7 @@ public class ShotGun
 					}
 				}
 
-				PlayerCamera.SingletonInstance.ImpactEffect(hit);
+				EffectManager.SingletonInstance.ImpactEffect(hit);
 			}
 		}
 
