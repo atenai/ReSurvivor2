@@ -10,7 +10,7 @@ public class AssaultRifle
 	[Header("ベース")]
 	[Tooltip("銃のダメージ")]
 	[SerializeField] float damage = 10.0f;
-	[Tooltip("着弾した物体を後ろに押す")]
+	[Tooltip("着弾した物体を後ろに押す力")]
 	[SerializeField] float impactForce = 30.0f;
 
 	[Header("アサルトライフル")]
@@ -175,7 +175,8 @@ public class AssaultRifle
 
 				assaultRifleReloadTime = 0.0f;//リロードタイムをリセット
 				isAssaultRifleReloadTimeActive = false;//リロードのオフ
-													   //アサルトライフルのリロードアニメーションをオフ
+
+				//アサルトライフルのリロードアニメーションをオフ
 				Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", false);
 			}
 		}

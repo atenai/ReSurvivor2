@@ -10,7 +10,7 @@ public class HandGun
 	[Header("ベース")]
 	[Tooltip("銃のダメージ")]
 	[SerializeField] float damage = 10.0f;
-	[Tooltip("着弾した物体を後ろに押す")]
+	[Tooltip("着弾した物体を後ろに押す力")]
 	[SerializeField] float impactForce = 30.0f;
 
 	[Header("ハンドガン")]
@@ -173,7 +173,8 @@ public class HandGun
 
 				handGunReloadTime = 0.0f;//リロードタイムをリセット
 				isHandGunReloadTimeActive = false;//リロードのオフ
-												  //ハンドガンのリロードアニメーションをオフ
+
+				//ハンドガンのリロードアニメーションをオフ
 				Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", false);
 			}
 		}

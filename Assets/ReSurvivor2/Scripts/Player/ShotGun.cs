@@ -10,7 +10,7 @@ public class ShotGun
 	[Header("ベース")]
 	[Tooltip("銃のダメージ")]
 	[SerializeField] float damage = 10.0f;
-	[Tooltip("着弾した物体を後ろに押す")]
+	[Tooltip("着弾した物体を後ろに押す力")]
 	[SerializeField] float impactForce = 30.0f;
 
 	[Header("ショットガン")]
@@ -177,7 +177,8 @@ public class ShotGun
 
 				shotGunReloadTime = 0.0f;//リロードタイムをリセット
 				isShotGunReloadTimeActive = false;//リロードのオフ
-												  //ショットガンのリロードアニメーションをオフ
+
+				//ショットガンのリロードアニメーションをオフ
 				Player.SingletonInstance.Animator.SetBool("b_isShotGunReload", false);
 			}
 		}
