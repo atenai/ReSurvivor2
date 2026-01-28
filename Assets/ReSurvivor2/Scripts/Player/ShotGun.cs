@@ -17,7 +17,7 @@ public class ShotGun
 
 	[Header("ショットガン")]
 	[Tooltip("ショットガンを何秒間隔で撃つか")]
-	[SerializeField] float shotGunFireRate = 0.2f;
+	[SerializeField] float shotGunFireRate = 0.1f;
 	[Tooltip("ショットガンの射撃間隔の時間カウント用のタイマー")]
 	float shotGunCountTimer = 0.0f;
 	[Tooltip("ショットガンの散乱角度")]
@@ -70,26 +70,30 @@ public class ShotGun
 	/// </summary> 
 	public void ShotGunShoot()
 	{
-		if (Player.SingletonInstance.IsAim == true)
+		if (Player.SingletonInstance.IsAim == false)
 		{
-			if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.Down)//左クリックまたはEnterを押している場合に中身を実行する
-			{
-				if (shotGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
-				{
-					if (shotGunCurrentMagazine != 0)
-					{
-						if (isShotGunReloadTimeActive == false)
-						{
-							shotGunCurrentMagazine = shotGunCurrentMagazine - 1;//現在のマガジンの弾数を-1する
-							ShotGunFire();
-							shotGunCountTimer = shotGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
-						}
-					}
-				}
-			}
+			return;
 		}
 
+		if (shotGunCurrentMagazine == 0)
+		{
+			return;
+		}
 
+		if (isShotGunReloadTimeActive == true)
+		{
+			return;
+		}
+
+		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.Down)//左クリックまたはEnterを押している場合に中身を実行する
+		{
+			if (shotGunCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
+			{
+				shotGunCurrentMagazine = shotGunCurrentMagazine - 1;//現在のマガジンの弾数を-1する
+				ShotGunFire();
+				shotGunCountTimer = shotGunFireRate;//カウントタイマーに射撃を待つ時間を入れる
+			}
+		}
 	}
 
 	/// <summary>

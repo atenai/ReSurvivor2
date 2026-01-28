@@ -92,19 +92,19 @@ public class PlayerCamera : MonoBehaviour
 	/// <summary>
 	/// ハンドガン
 	/// </summary>
-	HandGun handGun = new HandGun();
+	[SerializeField] HandGun handGun = new HandGun();
 	public HandGun HandGun => handGun;
 
 	/// <summary>
 	/// アサルトライフル
 	/// </summary>
-	AssaultRifle assaultRifle = new AssaultRifle();
+	[SerializeField] AssaultRifle assaultRifle = new AssaultRifle();
 	public AssaultRifle AssaultRifle => assaultRifle;
 
 	/// <summary>
 	/// ショットガン
 	/// </summary>
-	ShotGun shotGun = new ShotGun();
+	[SerializeField] ShotGun shotGun = new ShotGun();
 	public ShotGun ShotGun => shotGun;
 
 	public enum GunTYPE

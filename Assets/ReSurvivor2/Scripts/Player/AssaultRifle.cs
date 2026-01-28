@@ -68,22 +68,28 @@ public class AssaultRifle
 	/// </summary> 
 	public void AssaultRifleShoot()
 	{
-		if (Player.SingletonInstance.IsAim == true)
+		if (Player.SingletonInstance.IsAim == false)
 		{
-			if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || 0.5f < Input.GetAxisRaw("XInput RT"))//左クリックまたはEnterを押している場合に中身を実行する
+			return;
+		}
+
+		if (assaultRifleCurrentMagazine == 0)
+		{
+			return;
+		}
+
+		if (isAssaultRifleReloadTimeActive == true)
+		{
+			return;
+		}
+
+		if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || 0.5f < Input.GetAxisRaw("XInput RT"))//左クリックまたはEnterを押している場合に中身を実行する
+		{
+			if (assaultRifleCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 			{
-				if (assaultRifleCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
-				{
-					if (assaultRifleCurrentMagazine != 0)
-					{
-						if (isAssaultRifleReloadTimeActive == false)
-						{
-							assaultRifleCurrentMagazine = assaultRifleCurrentMagazine - 1;//現在のマガジンの弾数を-1する
-							AssaultRifleFire();
-							assaultRifleCountTimer = assaultRifleFireRate;//カウントタイマーに射撃を待つ時間を入れる
-						}
-					}
-				}
+				assaultRifleCurrentMagazine = assaultRifleCurrentMagazine - 1;//現在のマガジンの弾数を-1する
+				AssaultRifleFire();
+				assaultRifleCountTimer = assaultRifleFireRate;//カウントタイマーに射撃を待つ時間を入れる
 			}
 		}
 	}
