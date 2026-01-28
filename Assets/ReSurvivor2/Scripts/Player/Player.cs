@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Cinemachine;
+using Knife.Effects;
 
 /// <summary>
 /// プレイヤー
@@ -94,6 +95,13 @@ public class Player : MonoBehaviour
 	[Tooltip("ハンドガンの硝煙の生成座標位置")]
 	[SerializeField] Transform handGunAfterFireSmokeTransform;
 	public Transform HandGunAfterFireSmokeTransform => handGunAfterFireSmokeTransform;
+	//↓アセットストアのプログラム↓//
+	[Tooltip("ハンドガンのマズルフラッシュと薬莢")]
+	[SerializeField] ParticleGroupEmitter[] handGunShotEmitters;
+	[Tooltip("ハンドガンの硝煙")]
+	[SerializeField] ParticleGroupPlayer handGunAfterFireSmoke;
+	//↑アセットストアのプログラム↑//
+
 	[Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
 	[SerializeField] GameObject assaultRifleModel;
 	[Tooltip("キャラクターの体についているアサルトライフルのモデル")]
@@ -114,12 +122,25 @@ public class Player : MonoBehaviour
 	[Tooltip("ショットガンのマズルフラッシュの生成座標位置")]
 	[SerializeField] Transform shotGunMuzzleTransform;
 	public Transform ShotGunMuzzleTransform => shotGunMuzzleTransform;
+	//↓アセットストアのプログラム↓//
+	[Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
+	[SerializeField] ParticleGroupEmitter[] assaultRifleShotEmitters;
+	[Tooltip("アサルトライフルの硝煙")]
+	[SerializeField] ParticleGroupPlayer assaultRifleAfterFireSmoke;
+	//↑アセットストアのプログラム↑//
+
 	[Tooltip("ショットガンの薬莢の生成座標位置")]
 	[SerializeField] Transform shotGunBulletCasingTransform;
 	public Transform ShotGunBulletCasingTransform => shotGunBulletCasingTransform;
 	[Tooltip("ショットガンの硝煙の生成座標位置")]
 	[SerializeField] Transform shotGunAfterFireSmokeTransform;
 	public Transform ShotGunAfterFireSmokeTransform => shotGunAfterFireSmokeTransform;
+	//↓アセットストアのプログラム↓//
+	[Tooltip("ショットガンのマズルフラッシュと薬莢")]
+	[SerializeField] ParticleGroupEmitter[] shotGunShotEmitters;
+	[Tooltip("ショットガンの硝煙")]
+	[SerializeField] ParticleGroupPlayer shotGunAfterFireSmoke;
+	//↑アセットストアのプログラム↑//
 
 	[Header("リスポーンポイント")]
 	[Tooltip("プレイヤーのリスポーンポイントの位置")]
@@ -1156,6 +1177,81 @@ public class Player : MonoBehaviour
 
 		currentMine = currentMine + 1;
 		textMine.text = currentMine.ToString();
+	}
+
+	/// <summary>
+	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
+	/// </summary>
+	public void HandGunMuzzleFlashAndShell()
+	{
+		if (handGunShotEmitters != null)
+		{
+			foreach (var effect in handGunShotEmitters)
+			{
+				effect.Emit(1);
+			}
+		}
+	}
+
+	/// <summary>
+	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
+	/// </summary>
+	public void HandGunSmoke()
+	{
+		if (handGunAfterFireSmoke != null)
+		{
+			handGunAfterFireSmoke.Play();
+		}
+	}
+
+	/// <summary>
+	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
+	/// </summary>
+	public void AssaultRifleMuzzleFlashAndShell()
+	{
+		if (assaultRifleShotEmitters != null)
+		{
+			foreach (var effect in assaultRifleShotEmitters)
+			{
+				effect.Emit(1);
+			}
+		}
+	}
+
+	/// <summary>
+	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
+	/// </summary>
+	public void AssaultRifleSmoke()
+	{
+		if (assaultRifleAfterFireSmoke != null)
+		{
+			assaultRifleAfterFireSmoke.Play();
+		}
+	}
+
+	/// <summary>
+	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
+	/// </summary>
+	public void ShotGunMuzzleFlashAndShell()
+	{
+		if (shotGunShotEmitters != null)
+		{
+			foreach (var effect in shotGunShotEmitters)
+			{
+				effect.Emit(1);
+			}
+		}
+	}
+
+	/// <summary>
+	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
+	/// </summary>
+	public void ShotGunSmoke()
+	{
+		if (shotGunAfterFireSmoke != null)
+		{
+			shotGunAfterFireSmoke.Play();
+		}
 	}
 
 	void OnGUI()

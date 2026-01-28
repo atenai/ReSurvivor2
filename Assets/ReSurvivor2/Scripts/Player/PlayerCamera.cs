@@ -111,13 +111,6 @@ public class PlayerCamera : MonoBehaviour
 	[Tooltip("ハンドガンのリロード時間")]
 	readonly float handGunReloadTimeDefine = 1.5f;
 
-	//↓アセットストアのプログラム↓//
-	[Tooltip("ハンドガンのマズルフラッシュと薬莢")]
-	[SerializeField] ParticleGroupEmitter[] handGunShotEmitters;
-	[Tooltip("ハンドガンの硝煙")]
-	[SerializeField] ParticleGroupPlayer handGunAfterFireSmoke;
-	//↑アセットストアのプログラム↑//
-
 	[Header("アサルトライフル")]
 	[Tooltip("アサルトライフルを何秒間隔で撃つか")]
 	[SerializeField] float assaultRifleFireRate = 0.1f;
@@ -143,13 +136,6 @@ public class PlayerCamera : MonoBehaviour
 	float assaultRifleReloadTime = 0.0f;
 	[Tooltip("アサルトライフルのリロード時間")]
 	readonly float assaultRifleReloadTimeDefine = 1.5f;
-
-	//↓アセットストアのプログラム↓//
-	[Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
-	[SerializeField] ParticleGroupEmitter[] assaultRifleShotEmitters;
-	[Tooltip("アサルトライフルの硝煙")]
-	[SerializeField] ParticleGroupPlayer assaultRifleAfterFireSmoke;
-	//↑アセットストアのプログラム↑//
 
 	[Header("ショットガン")]
 	[Tooltip("ショットガンを何秒間隔で撃つか")]
@@ -178,13 +164,6 @@ public class PlayerCamera : MonoBehaviour
 	float shotGunReloadTime = 0.0f;
 	[Tooltip("ショットガンのリロード時間")]
 	readonly float shotGunReloadTimeDefine = 1.5f;
-
-	//↓アセットストアのプログラム↓//
-	[Tooltip("ショットガンのマズルフラッシュと薬莢")]
-	[SerializeField] ParticleGroupEmitter[] shotGunShotEmitters;
-	[Tooltip("ショットガンの硝煙")]
-	[SerializeField] ParticleGroupPlayer shotGunAfterFireSmoke;
-	//↑アセットストアのプログラム↑//
 
 	[Header("着弾エフェクト")]
 	//パス(Assets/Knife/PRO Effects FPS Muzzle flashes & Impacts/Particles/Prefabs/Impacts)
@@ -463,8 +442,8 @@ public class PlayerCamera : MonoBehaviour
 	void HandGunFire()
 	{
 		HandGunBulletCasingSE();
-		HandGunMuzzleFlashAndShell();
-		HandGunSmoke();
+		Player.SingletonInstance.HandGunMuzzleFlashAndShell();
+		Player.SingletonInstance.HandGunSmoke();
 
 		HandGunFireSE();
 
@@ -543,31 +522,6 @@ public class PlayerCamera : MonoBehaviour
 	void HandGunBulletCasingSE()
 	{
 		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(Player.SingletonInstance.HandGunBulletCasingTransform);
-	}
-
-	/// <summary>
-	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	void HandGunMuzzleFlashAndShell()
-	{
-		if (handGunShotEmitters != null)
-		{
-			foreach (var effect in handGunShotEmitters)
-			{
-				effect.Emit(1);
-			}
-		}
-	}
-
-	/// <summary>
-	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	void HandGunSmoke()
-	{
-		if (handGunAfterFireSmoke != null)
-		{
-			handGunAfterFireSmoke.Play();
-		}
 	}
 
 	/// <summary>
@@ -713,8 +667,8 @@ public class PlayerCamera : MonoBehaviour
 	void AssaultRifleFire()
 	{
 		AssaultRifleBulletCasingSE();
-		AssaultRifleMuzzleFlashAndShell();
-		AssaultRifleSmoke();
+		Player.SingletonInstance.AssaultRifleMuzzleFlashAndShell();
+		Player.SingletonInstance.AssaultRifleSmoke();
 
 		AssaultRifleFireSE();
 
@@ -797,31 +751,6 @@ public class PlayerCamera : MonoBehaviour
 	void AssaultRifleBulletCasingSE()
 	{
 		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(Player.SingletonInstance.AssaultRifleBulletCasingTransform);
-	}
-
-	/// <summary>
-	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	void AssaultRifleMuzzleFlashAndShell()
-	{
-		if (assaultRifleShotEmitters != null)
-		{
-			foreach (var effect in assaultRifleShotEmitters)
-			{
-				effect.Emit(1);
-			}
-		}
-	}
-
-	/// <summary>
-	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	void AssaultRifleSmoke()
-	{
-		if (assaultRifleAfterFireSmoke != null)
-		{
-			assaultRifleAfterFireSmoke.Play();
-		}
 	}
 
 	/// <summary>
@@ -967,8 +896,8 @@ public class PlayerCamera : MonoBehaviour
 	void ShotGunFire()
 	{
 		ShotGunBulletCasingSE();
-		ShotGunMuzzleFlashAndShell();
-		ShotGunSmoke();
+		Player.SingletonInstance.ShotGunMuzzleFlashAndShell();
+		Player.SingletonInstance.ShotGunSmoke();
 
 		ShotGunFireSE();
 		bool isOnceShotGunHitSE = false;
@@ -1059,31 +988,6 @@ public class PlayerCamera : MonoBehaviour
 	void ShotGunBulletCasingSE()
 	{
 		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(Player.SingletonInstance.ShotGunBulletCasingTransform);
-	}
-
-	/// <summary>
-	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	void ShotGunMuzzleFlashAndShell()
-	{
-		if (shotGunShotEmitters != null)
-		{
-			foreach (var effect in shotGunShotEmitters)
-			{
-				effect.Emit(1);
-			}
-		}
-	}
-
-	/// <summary>
-	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	void ShotGunSmoke()
-	{
-		if (shotGunAfterFireSmoke != null)
-		{
-			shotGunAfterFireSmoke.Play();
-		}
 	}
 
 	/// <summary>
