@@ -78,6 +78,8 @@ public class PlayerCamera : MonoBehaviour
 	public float RaycastRange => raycastRange;
 	[Tooltip("スフィアレイキャストの半径")]
 	[Range(0.5f, 1.0f)] float sphereRayCastRadius = 1.0f;
+
+#if UNITY_EDITOR//Unityエディター上での処理
 	[Tooltip("ヒットしたオブジェクトの名前")]
 	string hitName = "";
 	public string HitName
@@ -85,6 +87,7 @@ public class PlayerCamera : MonoBehaviour
 		get { return hitName; }
 		set { hitName = value; }
 	}
+#endif //終了  
 
 	/// <summary>
 	/// ハンドガン

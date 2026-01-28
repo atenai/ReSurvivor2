@@ -30,7 +30,7 @@ public class UI : MonoBehaviour
 		get { return imageHitReticule; }
 		set { imageHitReticule = value; }
 	}
-	[Tooltip("ヒットレティクルがオンかオフか")]
+	[Tooltip("ヒットレティクルが表示か非表示か")]
 	bool isHitReticule = false;
 	public bool IsHitReticule
 	{
@@ -191,7 +191,7 @@ public class UI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// クロスヘア（レティクル）のオン/オフかつ色の切り替え
+	/// クロスヘア（レティクル）の表示/非表示かつ色の切り替え
 	/// </summary>
 	void Crosshair()
 	{
