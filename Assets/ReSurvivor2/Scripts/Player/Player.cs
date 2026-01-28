@@ -403,8 +403,8 @@ public class Player : MonoBehaviour
 				textAmmo.text = PlayerCamera.SingletonInstance.HandGun.CurrentHandGunAmmo.ToString();
 				break;
 			case PlayerCamera.GunTYPE.AssaultRifle:
-				textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifleCurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.CurrentAssaultRifleAmmo.ToString();
+				textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifle.AssaultRifleCurrentMagazine.ToString();
+				textAmmo.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentAssaultRifleAmmo.ToString();
 				break;
 			case PlayerCamera.GunTYPE.ShotGun:
 				textMagazine.text = PlayerCamera.SingletonInstance.ShotGunCurrentMagazine.ToString();
@@ -611,7 +611,7 @@ public class Player : MonoBehaviour
 				}
 				break;
 			case PlayerCamera.GunTYPE.AssaultRifle:
-				if (PlayerCamera.SingletonInstance.IsAssaultRifleReloadTimeActive == true)
+				if (PlayerCamera.SingletonInstance.AssaultRifle.IsAssaultRifleReloadTimeActive == true)
 				{
 					if (reloadColor.a <= 1)
 					{
@@ -620,7 +620,7 @@ public class Player : MonoBehaviour
 					}
 				}
 
-				if (PlayerCamera.SingletonInstance.IsAssaultRifleReloadTimeActive == false)
+				if (PlayerCamera.SingletonInstance.AssaultRifle.IsAssaultRifleReloadTimeActive == false)
 				{
 					if (reloadColor.a >= 0)
 					{
@@ -663,8 +663,8 @@ public class Player : MonoBehaviour
 				textAmmo.text = PlayerCamera.SingletonInstance.HandGun.CurrentHandGunAmmo.ToString();
 				break;
 			case PlayerCamera.GunTYPE.AssaultRifle:
-				textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifleCurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.CurrentAssaultRifleAmmo.ToString();
+				textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifle.AssaultRifleCurrentMagazine.ToString();
+				textAmmo.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentAssaultRifleAmmo.ToString();
 				break;
 			case PlayerCamera.GunTYPE.ShotGun:
 				textMagazine.text = PlayerCamera.SingletonInstance.ShotGunCurrentMagazine.ToString();

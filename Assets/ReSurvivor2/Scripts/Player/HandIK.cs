@@ -38,7 +38,7 @@ public class HandIK : MonoBehaviour
 		}
 		else if (PlayerCamera.SingletonInstance.gunTYPE == PlayerCamera.GunTYPE.AssaultRifle)
 		{
-			if (PlayerCamera.SingletonInstance.IsAssaultRifleReloadTimeActive == false)
+			if (PlayerCamera.SingletonInstance.AssaultRifle.IsAssaultRifleReloadTimeActive == false)
 			{
 				//キャラクターの左手の位置と角度を合わせる
 				animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);

@@ -105,7 +105,7 @@ public partial class SROptions
 	[Sort(5)]
 	public void AcquireAssaultRifleAmmo()
 	{
-		PlayerCamera.SingletonInstance.AcquireAssaultRifleAmmo();
+		PlayerCamera.SingletonInstance.AssaultRifle.AcquireAssaultRifleAmmo();
 	}
 
 	[Category("Player")]

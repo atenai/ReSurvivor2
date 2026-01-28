@@ -44,7 +44,7 @@ public class HandGun
 	/// </summary>
 	public void Save()
 	{
-		Debug.Log("<color=cyan>ハンドガンセーブ</color>");
+		Debug.Log("<color=red>ハンドガンセーブ</color>");
 		ES3.Save<int>("HandGunCurrentMagazine", handGunCurrentMagazine);
 		ES3.Save<int>("CurrentHandGunAmmo", currentHandGunAmmo);
 	}
@@ -54,7 +54,7 @@ public class HandGun
 	/// </summary>
 	public void Load()
 	{
-		Debug.Log("<color=purple>プレイヤーカメラロード</color>");
+		Debug.Log("<color=red>ハンドガンロード</color>");
 		handGunCurrentMagazine = ES3.Load<int>("HandGunCurrentMagazine", handGunMagazineCapacity);
 		Debug.Log("<color=purple>ハンドガンマガジン : " + handGunCurrentMagazine + "</color>");
 		currentHandGunAmmo = ES3.Load<int>("CurrentHandGunAmmo", maxHandGunAmmo);
