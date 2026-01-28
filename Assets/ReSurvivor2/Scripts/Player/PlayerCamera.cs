@@ -73,6 +73,11 @@ public class PlayerCamera : MonoBehaviour
 	[Header("レイキャスト")]
 	[Tooltip("ヒットしたオブジェクトの名前")]
 	string hitName = "";
+	public string HitName
+	{
+		get { return hitName; }
+		set { hitName = value; }
+	}
 	[Tooltip("レイの長さ")]
 	[SerializeField] float raycastRange = 100.0f;
 	[Tooltip("スフィアレイキャストの半径")]

@@ -10,8 +10,6 @@ public class HandGun
 	[Header("ベース")]
 	[Tooltip("レイの長さ")]
 	[SerializeField] float raycastRange = 100.0f;
-	[Tooltip("ヒットしたオブジェクトの名前")]
-	string hitName = "";
 	[Tooltip("銃のダメージ")]
 	[SerializeField] float damage = 10.0f;
 	[Tooltip("着弾した物体を後ろに押す")]
@@ -199,8 +197,9 @@ public class HandGun
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, raycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
 		{
-			hitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
-
+#if UNITY_EDITOR//Unityエディター上での処理
+			PlayerCamera.SingletonInstance.HitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
+#endif //終了  
 			if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy") || hit.collider.gameObject.CompareTag("Mine"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 			{
 				//ダメージ
