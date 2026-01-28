@@ -18,7 +18,9 @@ public class Player : MonoBehaviour
 	//引数名は「小文字」から始める（test）
 	//アニメーション変数名は「型の最初の文字の_小文字から始める」（f_test）
 
-	//シングルトンで作成（ゲーム中に１つのみにする）
+	/// <summary>
+	/// シングルトンで作成（ゲーム中に１つのみにする）
+	/// </summary>
 	static Player singletonInstance = null;
 	public static Player SingletonInstance => singletonInstance;
 
@@ -82,6 +84,8 @@ public class Player : MonoBehaviour
 	[Tooltip("肩のYボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
 	//const float armAimAnimationRotY = 12.5f;//←型のボーンを曲げると銃の持つ位置がずれてしまう
 	const float armAimAnimationRotY = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
+
+	[Header("ハンドガンモデル")]
 	[Tooltip("キャラクターの手に持っているハンドガンのモデル")]
 	[SerializeField] GameObject handGunModel;
 	[Tooltip("キャラクターの体についているハンドガンのモデル")]
@@ -102,6 +106,7 @@ public class Player : MonoBehaviour
 	[SerializeField] ParticleGroupPlayer handGunAfterFireSmoke;
 	//↑アセットストアのプログラム↑//
 
+	[Header("アサルトライフルモデル")]
 	[Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
 	[SerializeField] GameObject assaultRifleModel;
 	[Tooltip("キャラクターの体についているアサルトライフルのモデル")]
@@ -129,6 +134,7 @@ public class Player : MonoBehaviour
 	[SerializeField] ParticleGroupPlayer assaultRifleAfterFireSmoke;
 	//↑アセットストアのプログラム↑//
 
+	[Header("ショットガンモデル")]
 	[Tooltip("ショットガンの薬莢の生成座標位置")]
 	[SerializeField] Transform shotGunBulletCasingTransform;
 	public Transform ShotGunBulletCasingTransform => shotGunBulletCasingTransform;
