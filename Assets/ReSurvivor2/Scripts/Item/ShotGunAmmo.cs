@@ -2,20 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ショットガンの弾薬
+/// </summary>
 public class ShotGunAmmo : MonoBehaviour
 {
-    void OnTriggerEnter(Collider collider)
-    {
-        if (collider.CompareTag("Player"))
-        {
-            if (PlayerCamera.SingletonInstance.MaxShotGunAmmo <= PlayerCamera.SingletonInstance.CurrentShotGunAmmo)
-            {
-                return;
-            }
+	void OnTriggerEnter(Collider collider)
+	{
+		if (collider.CompareTag("Player"))
+		{
+			if (PlayerCamera.SingletonInstance.ShotGun.MaxShotGunAmmo <= PlayerCamera.SingletonInstance.ShotGun.CurrentShotGunAmmo)
+			{
+				return;
+			}
 
-            PlayerCamera.SingletonInstance.AcquireShotGunAmmo();
+			PlayerCamera.SingletonInstance.ShotGun.AcquireShotGunAmmo();
 
-            Destroy(this.gameObject);//このオブジェクトを削除            
-        }
-    }
+			Destroy(this.gameObject);//このオブジェクトを削除            
+		}
+	}
 }

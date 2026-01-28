@@ -113,7 +113,7 @@ public partial class SROptions
 	[Sort(6)]
 	public void AcquireShotGunAmmo()
 	{
-		PlayerCamera.SingletonInstance.AcquireShotGunAmmo();
+		PlayerCamera.SingletonInstance.ShotGun.AcquireShotGunAmmo();
 	}
 
 	#endregion
