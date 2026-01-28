@@ -85,15 +85,6 @@ public class PlayerCamera : MonoBehaviour
 		get { return hitName; }
 		set { hitName = value; }
 	}
-	[Tooltip("ヒットレティクル")]
-	bool isHitReticule = false;
-	public bool IsHitReticule
-	{
-		get { return isHitReticule; }
-		set { isHitReticule = value; }
-	}
-	[Tooltip("ヒットレティクルが消失するスピード")]
-	float hitReticuleSpeed = 10.0f;
 
 	/// <summary>
 	/// ハンドガン
@@ -195,7 +186,6 @@ public class PlayerCamera : MonoBehaviour
 		}
 
 		SwitchWeapon();
-		UpdateHitReticule();
 	}
 
 	/// <summary>
@@ -243,24 +233,6 @@ public class PlayerCamera : MonoBehaviour
 				shotGun.ShotGunReload();
 				break;
 		}
-	}
-
-	/// <summary>
-	/// ヒットレティクル
-	/// </summary> 
-	void UpdateHitReticule()
-	{
-		if (isHitReticule == true)
-		{
-			UI.SingletonInstance.ImageHitReticule.color = new Color32(255, 0, 0, 150);
-		}
-
-		if (isHitReticule == false)
-		{
-			UI.SingletonInstance.ImageHitReticule.color = Color.Lerp(UI.SingletonInstance.ImageHitReticule.color, Color.clear, Time.deltaTime * hitReticuleSpeed);
-		}
-
-		isHitReticule = false;
 	}
 
 	void FixedUpdate()

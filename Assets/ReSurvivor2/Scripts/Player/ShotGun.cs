@@ -228,7 +228,7 @@ public class ShotGun
 					}
 
 					//ヒットレティクルを表示
-					PlayerCamera.SingletonInstance.IsHitReticule = true;
+					UI.SingletonInstance.IsHitReticule = true;
 
 					if (isOnceShotGunHitSE == false)
 					{

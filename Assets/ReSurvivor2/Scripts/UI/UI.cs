@@ -22,6 +22,7 @@ public class UI : MonoBehaviour
 
 	[Tooltip("クロスヘアー")]
 	[SerializeField] Image imageCrosshair;
+
 	[Tooltip("ヒットレティクル")]
 	[SerializeField] Image imageHitReticule;
 	public Image ImageHitReticule
@@ -29,6 +30,15 @@ public class UI : MonoBehaviour
 		get { return imageHitReticule; }
 		set { imageHitReticule = value; }
 	}
+	[Tooltip("ヒットレティクルがオンかオフか")]
+	bool isHitReticule = false;
+	public bool IsHitReticule
+	{
+		get { return isHitReticule; }
+		set { isHitReticule = value; }
+	}
+	[Tooltip("ヒットレティクルが消失するスピード")]
+	float hitReticuleSpeed = 10.0f;
 
 	[SerializeField] GameObject panelLoading;
 	public GameObject PanelLoading
@@ -169,6 +179,8 @@ public class UI : MonoBehaviour
 		//↓ロード中に動かせない処理
 
 		Crosshair();
+		UpdateHitReticule();
+
 		if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
 		{
 			mapUI.EnableMap();
@@ -200,6 +212,24 @@ public class UI : MonoBehaviour
 				imageCrosshair.color = new Color32(255, 255, 255, 150);
 			}
 		}
+	}
+
+	/// <summary>
+	/// ヒットレティクル
+	/// </summary> 
+	void UpdateHitReticule()
+	{
+		if (isHitReticule == true)
+		{
+			UI.SingletonInstance.ImageHitReticule.color = new Color32(255, 0, 0, 150);
+		}
+
+		if (isHitReticule == false)
+		{
+			UI.SingletonInstance.ImageHitReticule.color = Color.Lerp(UI.SingletonInstance.ImageHitReticule.color, Color.clear, Time.deltaTime * hitReticuleSpeed);
+		}
+
+		isHitReticule = false;
 	}
 
 	/// <summary>
