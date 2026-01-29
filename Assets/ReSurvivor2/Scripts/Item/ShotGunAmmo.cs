@@ -16,7 +16,7 @@ public class ShotGunAmmo : MonoBehaviour
 				return;
 			}
 
-			PlayerCamera.SingletonInstance.ShotGun.AcquireShotGunAmmo();
+			PlayerCamera.SingletonInstance.ShotGun.AcquireAmmo();
 
 			Destroy(this.gameObject);//このオブジェクトを削除            
 		}

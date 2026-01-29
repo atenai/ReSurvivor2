@@ -16,7 +16,7 @@ public class AssaultRifleAmmo : MonoBehaviour
 				return;
 			}
 
-			PlayerCamera.SingletonInstance.AssaultRifle.AcquireAssaultRifleAmmo();
+			PlayerCamera.SingletonInstance.AssaultRifle.AcquireAmmo();
 
 			Destroy(this.gameObject);//このオブジェクトを削除            
 		}

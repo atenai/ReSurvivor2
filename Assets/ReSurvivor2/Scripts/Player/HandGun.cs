@@ -54,7 +54,7 @@ public class HandGun : GunBase
 	/// <summary>
 	/// ハンドガンで射撃
 	/// </summary> 
-	public void Shoot()
+	public override void Shoot()
 	{
 		if (Player.SingletonInstance.IsAim == false)
 		{
@@ -76,41 +76,16 @@ public class HandGun : GunBase
 			if (fireCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 			{
 				currentMagazine = currentMagazine - 1;//現在のマガジンの弾数を-1する
-				HandGunFire();
+				Fire();
 				fireCountTimer = fireRate;//カウントタイマーに射撃を待つ時間を入れる
 			}
 		}
 	}
 
 	/// <summary>
-	/// 射撃カウントタイマーリセット
-	/// </summary>
-	public void ResetFireCountTimer()
-	{
-		//カウントタイマーが0以上なら中身を実行する
-		if (0.0f < fireCountTimer)
-		{
-			//カウントタイマーを減らす
-			fireCountTimer = fireCountTimer - Time.deltaTime;
-		}
-	}
-
-	/// <summary>
-	/// ハンドガンのオートリロード
+	/// 手動リロード
 	/// </summary> 
-	public void AutoReloadTrigger()
-	{
-		//残弾数が0かつ弾薬が1発以上あるとき
-		if (currentMagazine == 0 && 0 < currentAmmo)
-		{
-			isReloadTimeActive = true;//リロードのオン
-		}
-	}
-
-	/// <summary>
-	/// ハンドガンの手動リロード
-	/// </summary> 
-	public void ManualReloadTrigger()
+	public override void ManualReloadTrigger()
 	{
 		//残弾数が満タンなら切り上げ
 		if (currentMagazine == handGunMagazineCapacity)
@@ -131,9 +106,9 @@ public class HandGun : GunBase
 	}
 
 	/// <summary>
-	/// ハンドガンのリロード
+	/// リロード
 	/// </summary> 
-	public void ReloadSystem()
+	public override void ReloadSystem()
 	{
 		if (isReloadTimeActive == true)//リロードがオンになったら
 		{
@@ -185,9 +160,9 @@ public class HandGun : GunBase
 	}
 
 	/// <summary>
-	/// ハンドガンの弾を発射
+	/// 弾を発射
 	/// </summary> 
-	void HandGunFire()
+	protected override void Fire()
 	{
 		HandGunBulletCasingSE();
 		Player.SingletonInstance.HandGunMuzzleFlashAndShell();
@@ -274,9 +249,9 @@ public class HandGun : GunBase
 	}
 
 	/// <summary>
-	/// ハンドガンの弾を取得
+	/// 弾を取得
 	/// </summary> 
-	public void AcquireHandGunAmmo(int amount = 10)
+	public override void AcquireAmmo(int amount = 10)
 	{
 		if (maxHandGunAmmo <= currentAmmo)
 		{

@@ -16,7 +16,7 @@ public class HandGunAmmo : MonoBehaviour
 				return;
 			}
 
-			PlayerCamera.SingletonInstance.HandGun.AcquireHandGunAmmo();
+			PlayerCamera.SingletonInstance.HandGun.AcquireAmmo();
 
 			Destroy(this.gameObject);//このオブジェクトを削除            
 		}

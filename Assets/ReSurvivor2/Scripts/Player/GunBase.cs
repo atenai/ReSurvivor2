@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunBase
+/// <summary>
+/// 銃のベース
+/// </summary>
+public abstract class GunBase
 {
 	[Header("銃のベース")]
 	[Tooltip("銃のダメージ")]
@@ -26,4 +29,54 @@ public class GunBase
 
 	[Tooltip("リロード時間用のカウントタイマー")]
 	protected float reloadCountTimer = 0.0f;
+
+	/// <summary>
+	/// 射撃
+	/// </summary> 
+	public abstract void Shoot();
+
+	/// <summary>
+	/// 射撃カウントタイマーリセット
+	/// </summary>
+	public void ResetFireCountTimer()
+	{
+		//カウントタイマーが0以上なら中身を実行する
+		if (0.0f < fireCountTimer)
+		{
+			//カウントタイマーを減らす
+			fireCountTimer = fireCountTimer - Time.deltaTime;
+		}
+	}
+
+	/// <summary>
+	/// オートリロード
+	/// </summary> 
+	public void AutoReloadTrigger()
+	{
+		//残弾数が0かつの弾薬が1発以上あるとき
+		if (currentMagazine == 0 && 0 < currentAmmo)
+		{
+			isReloadTimeActive = true;//リロードのオン
+		}
+	}
+
+	/// <summary>
+	/// 手動リロード
+	/// </summary> 
+	public abstract void ManualReloadTrigger();
+
+	/// <summary>
+	/// リロード
+	/// </summary> 
+	public abstract void ReloadSystem();
+
+	/// <summary>
+	/// 弾を発射
+	/// </summary> 
+	protected abstract void Fire();
+
+	// <summary>
+	/// 弾を取得
+	/// </summary> 
+	public abstract void AcquireAmmo(int amount = 10);
 }

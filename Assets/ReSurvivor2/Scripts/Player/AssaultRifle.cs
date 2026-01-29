@@ -53,9 +53,9 @@ public class AssaultRifle : GunBase
 	}
 
 	/// <summary>
-	/// アサルトライフルで射撃
+	/// 射撃
 	/// </summary> 
-	public void Shoot()
+	public override void Shoot()
 	{
 		if (Player.SingletonInstance.IsAim == false)
 		{
@@ -77,41 +77,16 @@ public class AssaultRifle : GunBase
 			if (fireCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
 			{
 				currentMagazine = currentMagazine - 1;//現在のマガジンの弾数を-1する
-				AssaultRifleFire();
+				Fire();
 				fireCountTimer = fireRate;//カウントタイマーに射撃を待つ時間を入れる
 			}
 		}
 	}
 
 	/// <summary>
-	/// 射撃カウントタイマーリセット
-	/// </summary>
-	public void ResetFireCountTimer()
-	{
-		//カウントタイマーが0以上なら中身を実行する
-		if (0.0f < fireCountTimer)
-		{
-			//カウントタイマーを減らす
-			fireCountTimer = fireCountTimer - Time.deltaTime;
-		}
-	}
-
-	/// <summary>
-	/// アサルトライフルのオートリロード
+	/// 手動リロード
 	/// </summary> 
-	public void AutoReloadTrigger()
-	{
-		//残弾数が0かつの弾薬が1発以上あるとき
-		if (currentMagazine == 0 && 0 < currentAmmo)
-		{
-			isReloadTimeActive = true;//リロードのオン
-		}
-	}
-
-	/// <summary>
-	/// アサルトライフルの手動リロード
-	/// </summary> 
-	public void ManualReloadTrigger()
+	public override void ManualReloadTrigger()
 	{
 		//残弾数が満タンなら切り上げ
 		if (currentMagazine == assaultRifleMagazineCapacity)
@@ -132,9 +107,9 @@ public class AssaultRifle : GunBase
 	}
 
 	/// <summary>
-	/// アサルトライフルのリロード
+	/// リロード
 	/// </summary> 
-	public void ReloadSystem()
+	public override void ReloadSystem()
 	{
 		if (isReloadTimeActive == true)//リロードがオンになったら
 		{
@@ -186,9 +161,9 @@ public class AssaultRifle : GunBase
 	}
 
 	/// <summary>
-	/// アサルトライフルの弾を発射
+	/// 弾を発射
 	/// </summary> 
-	void AssaultRifleFire()
+	protected override void Fire()
 	{
 		AssaultRifleBulletCasingSE();
 		Player.SingletonInstance.AssaultRifleMuzzleFlashAndShell();
@@ -279,9 +254,9 @@ public class AssaultRifle : GunBase
 	}
 
 	/// <summary>
-	/// アサルトライフルの弾を取得
+	/// 弾を取得
 	/// </summary> 
-	public void AcquireAssaultRifleAmmo(int amount = 10)
+	public override void AcquireAmmo(int amount = 10)
 	{
 		if (maxAssaultRifleAmmo <= currentAmmo)
 		{
