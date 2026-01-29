@@ -177,7 +177,7 @@ public class InGameManager : MonoBehaviour
 		if (isMissionActive == false)//ミッション中でない場合
 		{
 			Save();
-			UI.SingletonInstance.ShowComputerMenu(computerName);
+			ScreenUI.SingletonInstance.ShowComputerMenu(computerName);
 		}
 		else if (isMissionActive == true)//ミッション中の場合
 		{
@@ -187,7 +187,7 @@ public class InGameManager : MonoBehaviour
 				MissionIDUpdate();
 				isMissionActive = false;
 				currentMissionID = -1;
-				UI.SingletonInstance.MapUI.SetEndComputerStageNumber(-1);
+				ScreenUI.SingletonInstance.MapUI.SetEndComputerStageNumber(-1);
 				Save();
 				GameClear();
 			}

@@ -222,10 +222,25 @@ public class Player : MonoBehaviour
 	float totalTime = 0.0f;
 	[Tooltip("ダメージ画像エフェクトトリガー")]
 	bool isDamage = false;
+	public bool IsDamage
+	{
+		get { return isDamage; }
+		set { isDamage = value; }
+	}
 	[Tooltip("HP回復画像エフェクトトリガー")]
 	bool isHpHeal = false;
+	public bool IsHpHeal
+	{
+		get { return isHpHeal; }
+		set { isHpHeal = value; }
+	}
 	[Tooltip("スタミナ回復画像エフェクトトリガー")]
 	bool isStaminaHeal = false;
+	public bool IsStaminaHeal
+	{
+		get { return isStaminaHeal; }
+		set { isStaminaHeal = value; }
+	}
 	[Tooltip("地雷のプレファブ")]
 	[SerializeField] GameObject minePrefab;
 	[Tooltip("キャラクターからの地雷の生成距離")]
@@ -453,12 +468,12 @@ public class Player : MonoBehaviour
 
 	void Update()
 	{
-		if (UI.SingletonInstance.IsPause == true)
+		if (ScreenUI.SingletonInstance.IsPause == true)
 		{
 			return;
 		}
 
-		if (UI.SingletonInstance.IsComputerMenuActive == true)
+		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
 		{
 			return;
 		}
@@ -507,9 +522,6 @@ public class Player : MonoBehaviour
 		UpdateImageReload();
 		UpdateTextMagazine();
 		UpdateTimerSystem();
-		UpdateDamageEffect();
-		UpdateHpHealEffect();
-		UpdateStaminaHealEffect();
 	}
 
 	/// <summary>
@@ -999,24 +1011,6 @@ public class Player : MonoBehaviour
 	}
 
 	/// <summary>
-	/// ダメージ画像エフェクト
-	/// </summary> 
-	void UpdateDamageEffect()
-	{
-		if (isDamage == true)
-		{
-			UI.SingletonInstance.ImageDamage.color = new Color(0.5f, 0f, 0f, 0.5f);
-		}
-
-		if (isDamage == false)
-		{
-			UI.SingletonInstance.ImageDamage.color = Color.Lerp(UI.SingletonInstance.ImageDamage.color, Color.clear, Time.deltaTime);
-		}
-
-		isDamage = false;
-	}
-
-	/// <summary>
 	/// HPを回復
 	/// </summary>
 	void Heal()
@@ -1038,24 +1032,6 @@ public class Player : MonoBehaviour
 		sliderHp.value = (float)currentHp / (float)maxHp;
 
 		isHpHeal = true;
-	}
-
-	/// <summary>
-	/// HP回復画像エフェクト
-	/// </summary> 
-	void UpdateHpHealEffect()
-	{
-		if (isHpHeal == true)
-		{
-			UI.SingletonInstance.ImageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
-		}
-
-		if (isHpHeal == false)
-		{
-			UI.SingletonInstance.ImageHpHeal.color = Color.Lerp(UI.SingletonInstance.ImageHpHeal.color, Color.clear, Time.deltaTime);
-		}
-
-		isHpHeal = false;
 	}
 
 	/// <summary>
@@ -1123,24 +1099,6 @@ public class Player : MonoBehaviour
 		sliderStamina.value = (float)currentStamina / (float)maxStamina;
 
 		isStaminaHeal = true;
-	}
-
-	/// <summary>
-	/// スタミナ回復画像エフェクト
-	/// </summary> 
-	void UpdateStaminaHealEffect()
-	{
-		if (isStaminaHeal == true)
-		{
-			UI.SingletonInstance.ImageStaminaHeal.color = new Color(0.5f, 0.5f, 0f, 0.5f);
-		}
-
-		if (isStaminaHeal == false)
-		{
-			UI.SingletonInstance.ImageStaminaHeal.color = Color.Lerp(UI.SingletonInstance.ImageStaminaHeal.color, Color.clear, Time.deltaTime);
-		}
-
-		isStaminaHeal = false;
 	}
 
 	/// <summary>

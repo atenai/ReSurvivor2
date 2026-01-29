@@ -6,19 +6,19 @@ using UnityEditor;
 using TMPro;
 
 /// <summary>
-/// UI管理クラス
+/// スクリーンUI管理クラス
 /// </summary>
-public class UI : MonoBehaviour
+public class ScreenUI : MonoBehaviour
 {
 	/// <summary>
 	/// シングルトンで作成（ゲーム中に１つのみにする）
 	/// </summary>
-	static UI singletonInstance = null;
+	static ScreenUI singletonInstance = null;
 	/// <summary>
 	/// シングルトンのプロパティ
 	/// </summary>
 
-	public static UI SingletonInstance => singletonInstance;
+	public static ScreenUI SingletonInstance => singletonInstance;
 
 	[Tooltip("クロスヘアー")]
 	[SerializeField] Image imageCrosshair;
@@ -180,6 +180,9 @@ public class UI : MonoBehaviour
 
 		Crosshair();
 		UpdateHitReticule();
+		UpdateDamageEffect();
+		UpdateHpHealEffect();
+		UpdateStaminaHealEffect();
 
 		if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
 		{
@@ -221,15 +224,69 @@ public class UI : MonoBehaviour
 	{
 		if (isHitReticule == true)
 		{
-			UI.SingletonInstance.ImageHitReticule.color = new Color32(255, 0, 0, 150);
+			ImageHitReticule.color = new Color32(255, 0, 0, 150);
 		}
 
 		if (isHitReticule == false)
 		{
-			UI.SingletonInstance.ImageHitReticule.color = Color.Lerp(UI.SingletonInstance.ImageHitReticule.color, Color.clear, Time.deltaTime * hitReticuleSpeed);
+			ImageHitReticule.color = Color.Lerp(ImageHitReticule.color, Color.clear, Time.deltaTime * hitReticuleSpeed);
 		}
 
 		isHitReticule = false;
+	}
+
+	/// <summary>
+	/// ダメージ画像エフェクト
+	/// </summary> 
+	public void UpdateDamageEffect()
+	{
+		if (Player.SingletonInstance.IsDamage == true)
+		{
+			ImageDamage.color = new Color(0.5f, 0f, 0f, 0.5f);
+		}
+
+		if (Player.SingletonInstance.IsDamage == false)
+		{
+			ImageDamage.color = Color.Lerp(ImageDamage.color, Color.clear, Time.deltaTime);
+		}
+
+		Player.SingletonInstance.IsDamage = false;
+	}
+
+	/// <summary>
+	/// HP回復画像エフェクト
+	/// </summary> 
+	public void UpdateHpHealEffect()
+	{
+		if (Player.SingletonInstance.IsHpHeal == true)
+		{
+			ImageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
+		}
+
+		if (Player.SingletonInstance.IsHpHeal == false)
+		{
+			ImageHpHeal.color = Color.Lerp(ImageHpHeal.color, Color.clear, Time.deltaTime);
+		}
+
+		Player.SingletonInstance.IsHpHeal = false;
+	}
+
+	/// <summary>
+	/// スタミナ回復画像エフェクト
+	/// </summary> 
+	public void UpdateStaminaHealEffect()
+	{
+		if (Player.SingletonInstance.IsStaminaHeal == true)
+		{
+			ImageStaminaHeal.color = new Color(0.5f, 0.5f, 0f, 0.5f);
+		}
+
+		if (Player.SingletonInstance.IsStaminaHeal == false)
+		{
+			ImageStaminaHeal.color = Color.Lerp(ImageStaminaHeal.color, Color.clear, Time.deltaTime);
+		}
+
+		Player.SingletonInstance.IsStaminaHeal = false;
 	}
 
 	/// <summary>
@@ -557,7 +614,7 @@ public class UI : MonoBehaviour
 			InGameManager.SingletonInstance.EndComputerName = result.EndComputerName;
 			Player.SingletonInstance.Minute = result.Minute;
 			Player.SingletonInstance.Seconds = result.Seconds;
-			UI.SingletonInstance.MapUI.SetEndComputerStageNumber((int)result.EndComputerName);
+			MapUI.SetEndComputerStageNumber((int)result.EndComputerName);
 		}
 	}
 }

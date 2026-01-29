@@ -166,12 +166,12 @@ public class PlayerCamera : MonoBehaviour
 
 	void Update()
 	{
-		if (UI.SingletonInstance.IsPause == true)
+		if (ScreenUI.SingletonInstance.IsPause == true)
 		{
 			return;
 		}
 
-		if (UI.SingletonInstance.IsComputerMenuActive == true)
+		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
 		{
 			return;
 		}

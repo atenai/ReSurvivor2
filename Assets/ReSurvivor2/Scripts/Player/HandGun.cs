@@ -197,7 +197,7 @@ public class HandGun : GunBase
 				}
 
 				//ヒットレティクルを表示
-				UI.SingletonInstance.IsHitReticule = true;
+				ScreenUI.SingletonInstance.IsHitReticule = true;
 
 				//ヒット音を再生
 				SoundManager.SingletonInstance.HitSEPool.GetGameObject(PlayerCamera.SingletonInstance.transform);
