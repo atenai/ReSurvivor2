@@ -7,9 +7,12 @@ using UnityEngine.Rendering.Universal;
 /// </summary>
 public sealed class GrayScaleBlitterRenderPass : ScriptableRenderPass
 {
-	private const string RENDER_PASS_NAME = nameof(GrayScaleBlitterRenderPass);
+	private const string PASS_NAME = nameof(GrayScaleBlitterRenderPass);
+
 	private readonly Material _material;
+
 	private RTHandle _cameraColorTarget;
+	private RTHandle _tempColorTexture;
 
 	/// <summary>
 	/// コンストラクタ
@@ -18,7 +21,10 @@ public sealed class GrayScaleBlitterRenderPass : ScriptableRenderPass
 	/// <param name="passEvent"></param>
 	public GrayScaleBlitterRenderPass(Shader shader, RenderPassEvent passEvent)
 	{
-		if (shader == null) return;
+		if (shader == null)
+		{
+			return;
+		}
 
 		_material = CoreUtils.CreateEngineMaterial(shader);
 		renderPassEvent = passEvent;
@@ -36,6 +42,18 @@ public sealed class GrayScaleBlitterRenderPass : ScriptableRenderPass
 	/// <param name="renderingData"></param>
 	public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
 	{
+		// カメラのRenderTextureDescriptorを取得
+		RenderTextureDescriptor desc = renderingData.cameraData.cameraTargetDescriptor;
+		desc.depthBufferBits = 0;
+
+		// Temp RTを確保（URP推奨のRTHandle管理）
+		RenderingUtils.ReAllocateIfNeeded(
+			ref _tempColorTexture,
+			desc,
+			name: "_GrayScaleTempColorTexture"
+		);
+
+		// このPassの出力先（最終的にはカメラカラーへ戻す）
 		ConfigureTarget(_cameraColorTarget);
 	}
 
@@ -46,13 +64,27 @@ public sealed class GrayScaleBlitterRenderPass : ScriptableRenderPass
 	/// <param name="renderingData"></param>
 	public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
 	{
-		if (_material == null) return;
+		if (_material == null)
+		{
+			return;
+		}
 
-		var cmd = CommandBufferPool.Get(RENDER_PASS_NAME);
-		Blitter.BlitCameraTexture(cmd, _cameraColorTarget, _cameraColorTarget, _material, 0);
+		CommandBuffer cmd = CommandBufferPool.Get(PASS_NAME);
+
+		// ① カメラカラー → Temp（シェーダー適用）
+		Blitter.BlitCameraTexture(cmd, _cameraColorTarget, _tempColorTexture, _material, 0);
+
+		// ② Temp → カメラカラー（結果を書き戻す）
+		Blitter.BlitCameraTexture(cmd, _tempColorTexture, _cameraColorTarget);
 
 		context.ExecuteCommandBuffer(cmd);
 		CommandBufferPool.Release(cmd);
+	}
+
+	public override void OnCameraCleanup(CommandBuffer cmd)
+	{
+		// 毎フレーム解放はしない（RTHandle管理に任せる）
+		// どうしても解放したいなら Destroy() でまとめてやる
 	}
 
 	/// <summary>
@@ -60,6 +92,12 @@ public sealed class GrayScaleBlitterRenderPass : ScriptableRenderPass
 	/// </summary>
 	public void Destroy()
 	{
+		if (_tempColorTexture != null)
+		{
+			_tempColorTexture.Release();
+			_tempColorTexture = null;
+		}
+
 		CoreUtils.Destroy(_material);
 	}
 }

@@ -377,6 +377,8 @@ public class Player : MonoBehaviour
 	void InitHP()
 	{
 		sliderStamina.value = (float)currentStamina / (float)maxStamina;
+		//シェーダーへ値を渡す（これだけでOK）
+		Shader.SetGlobalFloat("HP", currentHp / maxHp);
 	}
 
 	/// <summary>
@@ -1000,7 +1002,8 @@ public class Player : MonoBehaviour
 		currentHp = currentHp - amount;
 		//Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
 		sliderHp.value = (float)currentHp / (float)maxHp;
-
+		//シェーダーへ値を渡す（これだけでOK）
+		Shader.SetGlobalFloat("HP", currentHp / maxHp);
 		isDamage = true;
 
 		if (currentHp <= 0.0f)
@@ -1030,7 +1033,8 @@ public class Player : MonoBehaviour
 
 		currentHp = maxHp;
 		sliderHp.value = (float)currentHp / (float)maxHp;
-
+		//シェーダーへ値を渡す（これだけでOK）
+		Shader.SetGlobalFloat("HP", currentHp / maxHp);
 		isHpHeal = true;
 	}
 
