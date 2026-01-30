@@ -376,7 +376,7 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void InitHP()
 	{
-		sliderStamina.value = (float)currentStamina / (float)maxStamina;
+		sliderHp.value = (float)currentHp / (float)maxHp;
 		//シェーダーへ値を渡す（これだけでOK）
 		Shader.SetGlobalFloat("HP", currentHp / maxHp);
 	}
