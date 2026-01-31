@@ -55,7 +55,10 @@ public class ShotGun : GunBase
 		Debug.Log("<color=purple>ショットガン残弾数 : " + currentAmmo + "</color>");
 	}
 
-	public override void AllSystem()
+	/// <summary>
+	/// 銃の更新
+	/// </summary>
+	public override void UpdateGun()
 	{
 		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.Down)//左クリックまたはEnterを押している場合に中身を実行する
 		{

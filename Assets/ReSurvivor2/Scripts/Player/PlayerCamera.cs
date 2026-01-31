@@ -218,13 +218,13 @@ public class PlayerCamera : MonoBehaviour
 		switch (gunTYPE)
 		{
 			case GunTYPE.HandGun:
-				handGun.AllSystem();
+				handGun.UpdateGun();
 				break;
 			case GunTYPE.AssaultRifle:
-				assaultRifle.AllSystem();
+				assaultRifle.UpdateGun();
 				break;
 			case GunTYPE.ShotGun:
-				shotGun.AllSystem();
+				shotGun.UpdateGun();
 				break;
 		}
 	}

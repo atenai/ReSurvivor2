@@ -52,7 +52,10 @@ public class AssaultRifle : GunBase
 		Debug.Log("<color=purple>アサルトライフル残弾数 : " + currentAmmo + "</color>");
 	}
 
-	public override void AllSystem()
+	/// <summary>
+	/// 銃の更新
+	/// </summary>
+	public override void UpdateGun()
 	{
 		if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || 0.5f < Input.GetAxisRaw("XInput RT"))//左クリックまたはEnterを押している場合に中身を実行する
 		{

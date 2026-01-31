@@ -30,7 +30,10 @@ public abstract class GunBase
 	[Tooltip("リロード時間用のカウントタイマー")]
 	protected float reloadCountTimer = 0.0f;
 
-	public abstract void AllSystem();
+	/// <summary>
+	/// 銃の更新
+	/// </summary>
+	public abstract void UpdateGun();
 
 	/// <summary>
 	/// 射撃
