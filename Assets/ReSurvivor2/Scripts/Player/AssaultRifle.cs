@@ -52,64 +52,25 @@ public class AssaultRifle : GunBase
 		Debug.Log("<color=purple>アサルトライフル残弾数 : " + currentAmmo + "</color>");
 	}
 
-	/// <summary>
-	/// 射撃
-	/// </summary> 
-	public override void Shoot()
+	public override void AllSystem()
 	{
-		if (Player.SingletonInstance.IsAim == false)
-		{
-			return;
-		}
-
-		if (currentMagazine == 0)
-		{
-			return;
-		}
-
-		if (isReloadTimeActive == true)
-		{
-			return;
-		}
-
 		if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || 0.5f < Input.GetAxisRaw("XInput RT"))//左クリックまたはEnterを押している場合に中身を実行する
 		{
-			if (fireCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
-			{
-				currentMagazine = currentMagazine - 1;//現在のマガジンの弾数を-1する
-				Fire();
-				fireCountTimer = fireRate;//カウントタイマーに射撃を待つ時間を入れる
-			}
+			Shoot();
 		}
-	}
-
-	/// <summary>
-	/// 手動リロード
-	/// </summary> 
-	public override void ManualReloadTrigger()
-	{
-		//残弾数が満タンなら切り上げ
-		if (currentMagazine == assaultRifleMagazineCapacity)
-		{
-			return;
-		}
-
-		//弾が0以下なら切り上げ
-		if (currentAmmo <= 0)
-		{
-			return;
-		}
-
+		ResetFireCountTimer();
+		AutoReloadTrigger();
 		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("XInput X"))
 		{
-			isReloadTimeActive = true;//リロードのオン
+			ManualReloadTrigger(assaultRifleMagazineCapacity);
 		}
+		ReloadSystem();
 	}
 
 	/// <summary>
 	/// リロード
 	/// </summary> 
-	public override void ReloadSystem()
+	protected override void ReloadSystem()
 	{
 		if (isReloadTimeActive == true)//リロードがオンになったら
 		{

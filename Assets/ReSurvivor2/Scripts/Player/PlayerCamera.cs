@@ -218,25 +218,13 @@ public class PlayerCamera : MonoBehaviour
 		switch (gunTYPE)
 		{
 			case GunTYPE.HandGun:
-				handGun.Shoot();
-				handGun.ResetFireCountTimer();
-				handGun.AutoReloadTrigger();
-				handGun.ManualReloadTrigger();
-				handGun.ReloadSystem();
+				handGun.AllSystem();
 				break;
 			case GunTYPE.AssaultRifle:
-				assaultRifle.Shoot();
-				assaultRifle.ResetFireCountTimer();
-				assaultRifle.AutoReloadTrigger();
-				assaultRifle.ManualReloadTrigger();
-				assaultRifle.ReloadSystem();
+				assaultRifle.AllSystem();
 				break;
 			case GunTYPE.ShotGun:
-				shotGun.Shoot();
-				shotGun.ResetFireCountTimer();
-				shotGun.AutoReloadTrigger();
-				shotGun.ManualReloadTrigger();
-				shotGun.ReloadSystem();
+				shotGun.AllSystem();
 				break;
 		}
 	}

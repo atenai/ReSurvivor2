@@ -30,15 +30,40 @@ public abstract class GunBase
 	[Tooltip("リロード時間用のカウントタイマー")]
 	protected float reloadCountTimer = 0.0f;
 
+	public abstract void AllSystem();
+
 	/// <summary>
 	/// 射撃
 	/// </summary> 
-	public abstract void Shoot();
+	protected void Shoot()
+	{
+		if (Player.SingletonInstance.IsAim == false)
+		{
+			return;
+		}
+
+		if (currentMagazine == 0)
+		{
+			return;
+		}
+
+		if (isReloadTimeActive == true)
+		{
+			return;
+		}
+
+		if (fireCountTimer <= 0.0f)//カウントタイマーが0以下の場合は中身を実行する
+		{
+			currentMagazine = currentMagazine - 1;//現在のマガジンの弾数を-1する
+			Fire();
+			fireCountTimer = fireRate;//カウントタイマーに射撃を待つ時間を入れる
+		}
+	}
 
 	/// <summary>
 	/// 射撃カウントタイマーリセット
 	/// </summary>
-	public void ResetFireCountTimer()
+	protected void ResetFireCountTimer()
 	{
 		//カウントタイマーが0以上なら中身を実行する
 		if (0.0f < fireCountTimer)
@@ -51,10 +76,16 @@ public abstract class GunBase
 	/// <summary>
 	/// オートリロード
 	/// </summary> 
-	public void AutoReloadTrigger()
+	protected void AutoReloadTrigger()
 	{
-		//残弾数が0かつの弾薬が1発以上あるとき
-		if (currentMagazine == 0 && 0 < currentAmmo)
+		//弾が0以下なら切り上げ
+		if (currentAmmo <= 0)
+		{
+			return;
+		}
+
+		//残弾数が0以下なら
+		if (currentMagazine <= 0)
 		{
 			isReloadTimeActive = true;//リロードのオン
 		}
@@ -63,12 +94,27 @@ public abstract class GunBase
 	/// <summary>
 	/// 手動リロード
 	/// </summary> 
-	public abstract void ManualReloadTrigger();
+	protected void ManualReloadTrigger(int magazineCapacity)
+	{
+		//残弾数が満タンなら切り上げ
+		if (currentMagazine == magazineCapacity)
+		{
+			return;
+		}
+
+		//弾が0以下なら切り上げ
+		if (currentAmmo <= 0)
+		{
+			return;
+		}
+
+		isReloadTimeActive = true;//リロードのオン
+	}
 
 	/// <summary>
 	/// リロード
 	/// </summary> 
-	public abstract void ReloadSystem();
+	protected abstract void ReloadSystem();
 
 	/// <summary>
 	/// 弾を発射
