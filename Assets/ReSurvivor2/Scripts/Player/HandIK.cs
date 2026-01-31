@@ -21,7 +21,7 @@ public class HandIK : MonoBehaviour
 	/// </summary> 
 	void OnAnimatorIK()
 	{
-		if (PlayerCamera.SingletonInstance.gunTYPE == PlayerCamera.GunTYPE.HandGun)
+		if (PlayerCamera.SingletonInstance.GetGunTYPE == PlayerCamera.GunTYPE.HandGun)
 		{
 			if (PlayerCamera.SingletonInstance.HandGun.IsReloadTimeActive == false)
 			{
@@ -36,7 +36,7 @@ public class HandIK : MonoBehaviour
 
 			}
 		}
-		else if (PlayerCamera.SingletonInstance.gunTYPE == PlayerCamera.GunTYPE.AssaultRifle)
+		else if (PlayerCamera.SingletonInstance.GetGunTYPE == PlayerCamera.GunTYPE.AssaultRifle)
 		{
 			if (PlayerCamera.SingletonInstance.AssaultRifle.IsReloadTimeActive == false)
 			{
@@ -51,7 +51,7 @@ public class HandIK : MonoBehaviour
 
 			}
 		}
-		else if (PlayerCamera.SingletonInstance.gunTYPE == PlayerCamera.GunTYPE.ShotGun)
+		else if (PlayerCamera.SingletonInstance.GetGunTYPE == PlayerCamera.GunTYPE.ShotGun)
 		{
 			if (PlayerCamera.SingletonInstance.ShotGun.IsReloadTimeActive == false)
 			{

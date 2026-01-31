@@ -113,7 +113,8 @@ public class PlayerCamera : MonoBehaviour
 		AssaultRifle = 2,
 		ShotGun = 3,
 	}
-	public GunTYPE gunTYPE = GunTYPE.AssaultRifle;
+	GunTYPE gunTYPE = GunTYPE.HandGun;
+	public GunTYPE GetGunTYPE => gunTYPE;
 
 	void Awake()
 	{

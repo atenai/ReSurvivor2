@@ -418,7 +418,7 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void StartTextMagazine()
 	{
-		switch (PlayerCamera.SingletonInstance.gunTYPE)
+		switch (PlayerCamera.SingletonInstance.GetGunTYPE)
 		{
 			case PlayerCamera.GunTYPE.HandGun:
 				textMagazine.text = PlayerCamera.SingletonInstance.HandGun.CurrentMagazine.ToString();
@@ -541,7 +541,7 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void SwitchWeaponModel()
 	{
-		switch (PlayerCamera.SingletonInstance.gunTYPE)
+		switch (PlayerCamera.SingletonInstance.GetGunTYPE)
 		{
 			case PlayerCamera.GunTYPE.HandGun:
 				handGunModel.SetActive(true);
@@ -608,7 +608,7 @@ public class Player : MonoBehaviour
 	{
 		imageReload.GetComponent<RectTransform>().transform.Rotate(0.0f, 0.0f, RotateSpeed * Time.deltaTime);
 
-		switch (PlayerCamera.SingletonInstance.gunTYPE)
+		switch (PlayerCamera.SingletonInstance.GetGunTYPE)
 		{
 			case PlayerCamera.GunTYPE.HandGun:
 				if (PlayerCamera.SingletonInstance.HandGun.IsReloadTimeActive == true)
@@ -675,7 +675,7 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void UpdateTextMagazine()
 	{
-		switch (PlayerCamera.SingletonInstance.gunTYPE)
+		switch (PlayerCamera.SingletonInstance.GetGunTYPE)
 		{
 			case PlayerCamera.GunTYPE.HandGun:
 				textMagazine.text = PlayerCamera.SingletonInstance.HandGun.CurrentMagazine.ToString();
