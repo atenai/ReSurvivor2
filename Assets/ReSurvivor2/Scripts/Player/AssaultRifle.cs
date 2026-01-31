@@ -75,52 +75,54 @@ public class AssaultRifle : GunBase
 	/// </summary> 
 	protected override void ReloadSystem()
 	{
-		if (isReloadTimeActive == true)//リロードがオンになったら
+		if (isReloadTimeActive == false)
 		{
-			if (reloadCountTimer == 0)
+			return;
+		}
+
+		if (reloadCountTimer == 0)
+		{
+			//アサルトライフルのリロードアニメーションをオン
+			Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
+
+			AssaultRifleReloadSE();
+		}
+
+		//リロード中画像
+		reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
+
+		if (assaultRifleReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
+		{
+			//弾リセット
+			int oldMagazine = currentMagazine;
+			int localMagazine = assaultRifleMagazineCapacity - currentMagazine;
+			int localAmmo = currentAmmo - localMagazine;
+			if (localAmmo < 0)
 			{
-				//アサルトライフルのリロードアニメーションをオン
-				Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
-
-				AssaultRifleReloadSE();
-			}
-
-			//リロード中画像
-			reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
-
-			if (assaultRifleReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
-			{
-				//弾リセット
-				int oldMagazine = currentMagazine;
-				int localMagazine = assaultRifleMagazineCapacity - currentMagazine;
-				int localAmmo = currentAmmo - localMagazine;
-				if (localAmmo < 0)
+				if (currentAmmo + oldMagazine < assaultRifleMagazineCapacity)
 				{
-					if (currentAmmo + oldMagazine < assaultRifleMagazineCapacity)
-					{
-						currentMagazine = currentAmmo + oldMagazine;
-						currentAmmo = 0;
-					}
-					else
-					{
-						currentMagazine = assaultRifleMagazineCapacity;
-						int totalAmmo = currentAmmo + oldMagazine;
-						int resultAmmo = totalAmmo - assaultRifleMagazineCapacity;
-						currentAmmo = resultAmmo;
-					}
+					currentMagazine = currentAmmo + oldMagazine;
+					currentAmmo = 0;
 				}
 				else
 				{
 					currentMagazine = assaultRifleMagazineCapacity;
-					currentAmmo = localAmmo;
+					int totalAmmo = currentAmmo + oldMagazine;
+					int resultAmmo = totalAmmo - assaultRifleMagazineCapacity;
+					currentAmmo = resultAmmo;
 				}
-
-				reloadCountTimer = 0.0f;//リロードタイムをリセット
-				isReloadTimeActive = false;//リロードのオフ
-
-				//アサルトライフルのリロードアニメーションをオフ
-				Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", false);
 			}
+			else
+			{
+				currentMagazine = assaultRifleMagazineCapacity;
+				currentAmmo = localAmmo;
+			}
+
+			reloadCountTimer = 0.0f;//リロードタイムをリセット
+			isReloadTimeActive = false;//リロードのオフ
+
+			//アサルトライフルのリロードアニメーションをオフ
+			Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", false);
 		}
 	}
 

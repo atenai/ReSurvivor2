@@ -74,52 +74,54 @@ public class HandGun : GunBase
 	/// </summary> 
 	protected override void ReloadSystem()
 	{
-		if (isReloadTimeActive == true)//リロードがオンになったら
+		if (isReloadTimeActive == false)
 		{
-			if (reloadCountTimer == 0)
+			return;
+		}
+
+		if (reloadCountTimer == 0)
+		{
+			//ハンドガンのリロードアニメーションをオン
+			Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", true);
+
+			HandGunReloadSE();
+		}
+
+		//リロード中画像
+		reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
+
+		if (handGunReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
+		{
+			//弾リセット
+			int oldMagazine = currentMagazine;
+			int localMagazine = handGunMagazineCapacity - currentMagazine;
+			int localAmmo = currentAmmo - localMagazine;
+			if (localAmmo < 0)
 			{
-				//ハンドガンのリロードアニメーションをオン
-				Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", true);
-
-				HandGunReloadSE();
-			}
-
-			//リロード中画像
-			reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
-
-			if (handGunReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
-			{
-				//弾リセット
-				int oldMagazine = currentMagazine;
-				int localMagazine = handGunMagazineCapacity - currentMagazine;
-				int localAmmo = currentAmmo - localMagazine;
-				if (localAmmo < 0)
+				if (currentAmmo + oldMagazine < handGunMagazineCapacity)
 				{
-					if (currentAmmo + oldMagazine < handGunMagazineCapacity)
-					{
-						currentMagazine = currentAmmo + oldMagazine;
-						currentAmmo = 0;
-					}
-					else
-					{
-						currentMagazine = handGunMagazineCapacity;
-						int totalAmmo = currentAmmo + oldMagazine;
-						int resultAmmo = totalAmmo - handGunMagazineCapacity;
-						currentAmmo = resultAmmo;
-					}
+					currentMagazine = currentAmmo + oldMagazine;
+					currentAmmo = 0;
 				}
 				else
 				{
 					currentMagazine = handGunMagazineCapacity;
-					currentAmmo = localAmmo;
+					int totalAmmo = currentAmmo + oldMagazine;
+					int resultAmmo = totalAmmo - handGunMagazineCapacity;
+					currentAmmo = resultAmmo;
 				}
-
-				reloadCountTimer = 0.0f;//リロードタイムをリセット
-				isReloadTimeActive = false;//リロードのオフ
-
-				//ハンドガンのリロードアニメーションをオフ
-				Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", false);
 			}
+			else
+			{
+				currentMagazine = handGunMagazineCapacity;
+				currentAmmo = localAmmo;
+			}
+
+			reloadCountTimer = 0.0f;//リロードタイムをリセット
+			isReloadTimeActive = false;//リロードのオフ
+
+			//ハンドガンのリロードアニメーションをオフ
+			Player.SingletonInstance.Animator.SetBool("b_isHandGunReload", false);
 		}
 	}
 

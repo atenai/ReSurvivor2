@@ -96,7 +96,8 @@ public abstract class GunBase
 
 	/// <summary>
 	/// 手動リロード
-	/// </summary> 
+	/// </summary>
+	/// <param name="magazineCapacity">銃の最大残弾数</param>
 	protected void ManualReloadTrigger(int magazineCapacity)
 	{
 		//残弾数が満タンなら切り上げ
@@ -124,8 +125,9 @@ public abstract class GunBase
 	/// </summary> 
 	protected abstract void Fire();
 
-	// <summary>
+	/// <summary>
 	/// 弾を取得
-	/// </summary> 
+	/// </summary>
+	/// <param name="amount">追加する弾数</param>
 	public abstract void AcquireAmmo(int amount = 10);
 }
