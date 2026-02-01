@@ -11,13 +11,7 @@ public class ShotGunAmmo : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			if (PlayerCamera.SingletonInstance.ShotGun.MaxShotGunAmmo <= PlayerCamera.SingletonInstance.ShotGun.CurrentAmmo)
-			{
-				return;
-			}
-
-			PlayerCamera.SingletonInstance.ShotGun.AcquireAmmo();
-
+			PlayerCamera.SingletonInstance.GetGunFacade.AcquireShotGunAmmo();
 			Destroy(this.gameObject);//このオブジェクトを削除            
 		}
 	}

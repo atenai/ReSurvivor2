@@ -418,21 +418,8 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void StartTextMagazine()
 	{
-		switch (PlayerCamera.SingletonInstance.GetGunTYPE)
-		{
-			case PlayerCamera.GunTYPE.HandGun:
-				textMagazine.text = PlayerCamera.SingletonInstance.HandGun.CurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.HandGun.CurrentAmmo.ToString();
-				break;
-			case PlayerCamera.GunTYPE.AssaultRifle:
-				textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentAmmo.ToString();
-				break;
-			case PlayerCamera.GunTYPE.ShotGun:
-				textMagazine.text = PlayerCamera.SingletonInstance.ShotGun.CurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.ShotGun.CurrentAmmo.ToString();
-				break;
-		}
+		textMagazine.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
+		textAmmo.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
 	}
 
 	/// <summary>
@@ -541,31 +528,29 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void SwitchWeaponModel()
 	{
-		switch (PlayerCamera.SingletonInstance.GetGunTYPE)
+		handGunModel.SetActive(false);
+		handGunModelBodyDecoration.SetActive(false);
+		assaultRifleModel.SetActive(false);
+		assaultRifleModelBodyDecoration.SetActive(false);
+		shotGunModel.SetActive(false);
+		shotGunModelBodyDecoration.SetActive(false);
+
+		switch (PlayerCamera.SingletonInstance.GetGunFacade.GetGunTYPE)
 		{
-			case PlayerCamera.GunTYPE.HandGun:
+			case GunFacade.GunTYPE.HandGun:
 				handGunModel.SetActive(true);
-				handGunModelBodyDecoration.SetActive(false);
-				assaultRifleModel.SetActive(false);
 				assaultRifleModelBodyDecoration.SetActive(true);
-				shotGunModel.SetActive(false);
 				shotGunModelBodyDecoration.SetActive(true);
 				break;
-			case PlayerCamera.GunTYPE.AssaultRifle:
-				handGunModel.SetActive(false);
+			case GunFacade.GunTYPE.AssaultRifle:
 				handGunModelBodyDecoration.SetActive(true);
 				assaultRifleModel.SetActive(true);
-				assaultRifleModelBodyDecoration.SetActive(false);
-				shotGunModel.SetActive(false);
 				shotGunModelBodyDecoration.SetActive(true);
 				break;
-			case PlayerCamera.GunTYPE.ShotGun:
-				handGunModel.SetActive(false);
+			case GunFacade.GunTYPE.ShotGun:
 				handGunModelBodyDecoration.SetActive(true);
-				assaultRifleModel.SetActive(false);
 				assaultRifleModelBodyDecoration.SetActive(true);
 				shotGunModel.SetActive(true);
-				shotGunModelBodyDecoration.SetActive(false);
 				break;
 		}
 	}
@@ -608,65 +593,21 @@ public class Player : MonoBehaviour
 	{
 		imageReload.GetComponent<RectTransform>().transform.Rotate(0.0f, 0.0f, RotateSpeed * Time.deltaTime);
 
-		switch (PlayerCamera.SingletonInstance.GetGunTYPE)
+		if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
 		{
-			case PlayerCamera.GunTYPE.HandGun:
-				if (PlayerCamera.SingletonInstance.HandGun.IsReloadTimeActive == true)
-				{
-					if (reloadColor.a <= 1)
-					{
-						reloadColor.a += Time.deltaTime * 2.0f;
-						imageReload.GetComponent<Image>().color = reloadColor;
-					}
-				}
-
-				if (PlayerCamera.SingletonInstance.HandGun.IsReloadTimeActive == false)
-				{
-					if (reloadColor.a >= 0)
-					{
-						reloadColor.a -= Time.deltaTime * 2.0f;
-						imageReload.GetComponent<Image>().color = reloadColor;
-					}
-				}
-				break;
-			case PlayerCamera.GunTYPE.AssaultRifle:
-				if (PlayerCamera.SingletonInstance.AssaultRifle.IsReloadTimeActive == true)
-				{
-					if (reloadColor.a <= 1)
-					{
-						reloadColor.a += Time.deltaTime * 2.0f;
-						imageReload.GetComponent<Image>().color = reloadColor;
-					}
-				}
-
-				if (PlayerCamera.SingletonInstance.AssaultRifle.IsReloadTimeActive == false)
-				{
-					if (reloadColor.a >= 0)
-					{
-						reloadColor.a -= Time.deltaTime * 2.0f;
-						imageReload.GetComponent<Image>().color = reloadColor;
-					}
-				}
-				break;
-			case PlayerCamera.GunTYPE.ShotGun:
-				if (PlayerCamera.SingletonInstance.ShotGun.IsReloadTimeActive == true)
-				{
-					if (reloadColor.a <= 1)
-					{
-						reloadColor.a += Time.deltaTime * 2.0f;
-						imageReload.GetComponent<Image>().color = reloadColor;
-					}
-				}
-
-				if (PlayerCamera.SingletonInstance.ShotGun.IsReloadTimeActive == false)
-				{
-					if (reloadColor.a >= 0)
-					{
-						reloadColor.a -= Time.deltaTime * 2.0f;
-						imageReload.GetComponent<Image>().color = reloadColor;
-					}
-				}
-				break;
+			if (reloadColor.a <= 1)
+			{
+				reloadColor.a += Time.deltaTime * 2.0f;
+				imageReload.GetComponent<Image>().color = reloadColor;
+			}
+		}
+		else if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
+		{
+			if (reloadColor.a >= 0)
+			{
+				reloadColor.a -= Time.deltaTime * 2.0f;
+				imageReload.GetComponent<Image>().color = reloadColor;
+			}
 		}
 	}
 
@@ -675,21 +616,8 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void UpdateTextMagazine()
 	{
-		switch (PlayerCamera.SingletonInstance.GetGunTYPE)
-		{
-			case PlayerCamera.GunTYPE.HandGun:
-				textMagazine.text = PlayerCamera.SingletonInstance.HandGun.CurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.HandGun.CurrentAmmo.ToString();
-				break;
-			case PlayerCamera.GunTYPE.AssaultRifle:
-				textMagazine.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.AssaultRifle.CurrentAmmo.ToString();
-				break;
-			case PlayerCamera.GunTYPE.ShotGun:
-				textMagazine.text = PlayerCamera.SingletonInstance.ShotGun.CurrentMagazine.ToString();
-				textAmmo.text = PlayerCamera.SingletonInstance.ShotGun.CurrentAmmo.ToString();
-				break;
-		}
+		textMagazine.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
+		textAmmo.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
 	}
 
 	/// <summary>

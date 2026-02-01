@@ -89,35 +89,8 @@ public class PlayerCamera : MonoBehaviour
 	}
 #endif //終了  
 
-	/// <summary>
-	/// ハンドガン
-	/// </summary>
-	[SerializeField] HandGun handGun = new HandGun();
-	public HandGun HandGun => handGun;
-
-	/// <summary>
-	/// アサルトライフル
-	/// </summary>
-	[SerializeField] AssaultRifle assaultRifle = new AssaultRifle();
-	public AssaultRifle AssaultRifle => assaultRifle;
-
-	/// <summary>
-	/// ショットガン
-	/// </summary>
-	[SerializeField] ShotGun shotGun = new ShotGun();
-	public ShotGun ShotGun => shotGun;
-
-	GunBase gunBase;
-	public GunBase GetGunBase => gunBase;
-
-	public enum GunTYPE
-	{
-		HandGun = 1,
-		AssaultRifle = 2,
-		ShotGun = 3,
-	}
-	GunTYPE gunTYPE = GunTYPE.HandGun;
-	public GunTYPE GetGunTYPE => gunTYPE;
+	[SerializeField] GunFacade gunFacade = new GunFacade();
+	public GunFacade GetGunFacade => gunFacade;
 
 	void Awake()
 	{
@@ -141,9 +114,7 @@ public class PlayerCamera : MonoBehaviour
 	public void Save()
 	{
 		Debug.Log("<color=cyan>プレイヤーカメラセーブ</color>");
-		handGun.Save();
-		assaultRifle.Save();
-		shotGun.Save();
+		gunFacade.Save();
 	}
 
 	/// <summary>
@@ -158,29 +129,8 @@ public class PlayerCamera : MonoBehaviour
 		isFirstLoad = false;
 
 		Debug.Log("<color=purple>プレイヤーカメラロード</color>");
-		handGun.Load();
-		assaultRifle.Load();
-		shotGun.Load();
-		InitSwitchWeapon();
-	}
-
-	/// <summary>
-	/// 武器の切り替え初期化処理
-	/// </summary> 
-	void InitSwitchWeapon()
-	{
-		switch (gunTYPE)
-		{
-			case GunTYPE.HandGun:
-				gunBase = handGun;
-				break;
-			case GunTYPE.AssaultRifle:
-				gunBase = assaultRifle;
-				break;
-			case GunTYPE.ShotGun:
-				gunBase = shotGun;
-				break;
-		}
+		gunFacade.Load();
+		gunFacade.InitSwitchWeapon();
 	}
 
 	void Start()
@@ -212,37 +162,8 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		UpdateSwitchWeapon();
-	}
-
-	/// <summary>
-	/// 武器の切り替え更新処理
-	/// </summary> 
-	void UpdateSwitchWeapon()
-	{
-		if (gunBase.IsReloadTimeActive == false)
-		{
-			if (Input.GetKeyDown(KeyCode.Alpha1) || 0.5 < Input.GetAxisRaw("XInput DPad Left&Right"))
-			{
-				//Debug.Log("ハンドガン");
-				gunTYPE = GunTYPE.HandGun;
-				gunBase = handGun;
-			}
-			else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
-			{
-				//Debug.Log("アサルトライフル");
-				gunTYPE = GunTYPE.AssaultRifle;
-				gunBase = assaultRifle;
-			}
-			else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetAxisRaw("XInput DPad Up&Down") < -0.5f)
-			{
-				//Debug.Log("ショットガン");
-				gunTYPE = GunTYPE.ShotGun;
-				gunBase = shotGun;
-			}
-		}
-
-		gunBase.UpdateGun();
+		gunFacade.UpdateSwitchWeapon();
+		gunFacade.UpdateGun();
 	}
 
 	void FixedUpdate()

@@ -97,7 +97,7 @@ public partial class SROptions
 	[Sort(4)]
 	public void AcquireHandGunAmmo()
 	{
-		PlayerCamera.SingletonInstance.HandGun.AcquireAmmo();
+		PlayerCamera.SingletonInstance.GetGunFacade.AcquireHandGunAmmo();
 	}
 
 	[Category("Player")]
@@ -105,7 +105,7 @@ public partial class SROptions
 	[Sort(5)]
 	public void AcquireAssaultRifleAmmo()
 	{
-		PlayerCamera.SingletonInstance.AssaultRifle.AcquireAmmo();
+		PlayerCamera.SingletonInstance.GetGunFacade.AcquireAssaultRifleAmmo();
 	}
 
 	[Category("Player")]
@@ -113,7 +113,7 @@ public partial class SROptions
 	[Sort(6)]
 	public void AcquireShotGunAmmo()
 	{
-		PlayerCamera.SingletonInstance.ShotGun.AcquireAmmo();
+		PlayerCamera.SingletonInstance.GetGunFacade.AcquireShotGunAmmo();
 	}
 
 	#endregion
