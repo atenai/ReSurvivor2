@@ -32,9 +32,17 @@ public class ShotGun : GunBase
 	readonly float shotGunReloadTimeDefine = 1.5f;
 
 	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	public ShotGun()
+	{
+		this.gunType = GunFacade.GunTYPE.ShotGun;
+	}
+
+	/// <summary>
 	/// セーブ
 	/// </summary>
-	public void Save()
+	public override void Save()
 	{
 		Debug.Log("<color=green>ショットガンセーブ</color>");
 		ES3.Save<int>("ShotGunCurrentMagazine", currentMagazine);
@@ -44,7 +52,7 @@ public class ShotGun : GunBase
 	/// <summary>
 	/// ロード
 	/// </summary>
-	public void Load()
+	public override void Load()
 	{
 		Debug.Log("<color=green>ショットガンロード</color>");
 

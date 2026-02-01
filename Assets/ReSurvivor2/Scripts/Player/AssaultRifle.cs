@@ -28,10 +28,15 @@ public class AssaultRifle : GunBase
 	[Tooltip("アサルトライフルのリロード時間")]
 	readonly float assaultRifleReloadTimeDefine = 1.5f;
 
+	public AssaultRifle()
+	{
+		this.gunType = GunFacade.GunTYPE.AssaultRifle;
+	}
+
 	/// <summary>
 	/// セーブ
 	/// </summary>
-	public void Save()
+	public override void Save()
 	{
 		Debug.Log("<color=blue>アサルトライフルセーブ</color>");
 		ES3.Save<int>("AssaultRifleCurrentMagazine", currentMagazine);
@@ -41,7 +46,7 @@ public class AssaultRifle : GunBase
 	/// <summary>
 	/// ロード
 	/// </summary>
-	public void Load()
+	public override void Load()
 	{
 		Debug.Log("<color=blue>アサルトライフルロード</color>");
 

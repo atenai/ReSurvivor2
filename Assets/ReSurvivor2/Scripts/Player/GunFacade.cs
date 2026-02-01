@@ -39,15 +39,28 @@ public class GunFacade
 	GunBase gunBase;
 	public GunBase GetGunBase => gunBase;
 
+	List<GunBase> gunBaseList = new List<GunBase>();
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	public GunFacade()
+	{
+		gunBaseList.Add(handGun);
+		gunBaseList.Add(assaultRifle);
+		gunBaseList.Add(ShotGun);
+	}
+
 	/// <summary>
 	/// セーブ
 	/// </summary>
 	public void Save()
 	{
 		Debug.Log("<color=cyan>ガンファサードセーブ</color>");
-		handGun.Save();
-		assaultRifle.Save();
-		shotGun.Save();
+		foreach (var gun in gunBaseList)
+		{
+			gun.Save();
+		}
 		ES3.Save<GunTYPE>("CurrentGunType", gunTYPE);
 	}
 
@@ -57,35 +70,31 @@ public class GunFacade
 	public void Load()
 	{
 		Debug.Log("<color=purple>ガンファサードロード</color>");
-		handGun.Load();
-		assaultRifle.Load();
-		shotGun.Load();
+		foreach (var gun in gunBaseList)
+		{
+			gun.Load();
+		}
 		gunTYPE = ES3.Load<GunTYPE>("CurrentGunType", GunTYPE.HandGun);
 	}
 
 	/// <summary>
 	/// 武器の切り替え初期化処理
 	/// </summary> 
-	public void InitSwitchWeapon()
+	public void SwitchWeapon()
 	{
-		switch (gunTYPE)
+		foreach (var gun in gunBaseList)
 		{
-			case GunTYPE.HandGun:
-				gunBase = handGun;
-				break;
-			case GunTYPE.AssaultRifle:
-				gunBase = assaultRifle;
-				break;
-			case GunTYPE.ShotGun:
-				gunBase = shotGun;
-				break;
+			if (gunTYPE == gun.GetGunType)
+			{
+				gunBase = gun;
+			}
 		}
 	}
 
 	/// <summary>
-	/// 武器の切り替え更新処理
+	/// 武器の切り替えトリガー
 	/// </summary> 
-	public void UpdateSwitchWeapon()
+	public void SwitchWeaponTrigger()
 	{
 		if (gunBase.IsReloadTimeActive == true)
 		{
@@ -96,19 +105,16 @@ public class GunFacade
 		{
 			//Debug.Log("ハンドガン");
 			gunTYPE = GunTYPE.HandGun;
-			gunBase = handGun;
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
 		{
 			//Debug.Log("アサルトライフル");
 			gunTYPE = GunTYPE.AssaultRifle;
-			gunBase = assaultRifle;
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetAxisRaw("XInput DPad Up&Down") < -0.5f)
 		{
 			//Debug.Log("ショットガン");
 			gunTYPE = GunTYPE.ShotGun;
-			gunBase = shotGun;
 		}
 	}
 

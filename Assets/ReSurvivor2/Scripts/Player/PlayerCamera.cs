@@ -130,7 +130,7 @@ public class PlayerCamera : MonoBehaviour
 
 		Debug.Log("<color=purple>プレイヤーカメラロード</color>");
 		gunFacade.Load();
-		gunFacade.InitSwitchWeapon();
+		gunFacade.SwitchWeapon();
 	}
 
 	void Start()
@@ -162,7 +162,8 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		gunFacade.UpdateSwitchWeapon();
+		gunFacade.SwitchWeaponTrigger();
+		gunFacade.SwitchWeapon();
 		gunFacade.UpdateGun();
 	}
 

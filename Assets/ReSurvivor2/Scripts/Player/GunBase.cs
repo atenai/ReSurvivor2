@@ -8,6 +8,9 @@ using UnityEngine;
 public abstract class GunBase
 {
 	[Header("銃のベース")]
+	protected GunFacade.GunTYPE gunType;
+	public GunFacade.GunTYPE GetGunType => gunType;
+
 	[Tooltip("銃のダメージ")]
 	[SerializeField] protected float damage = 10.0f;
 	[Tooltip("着弾した物体を後ろに押す力")]
@@ -29,6 +32,16 @@ public abstract class GunBase
 
 	[Tooltip("リロード時間用のカウントタイマー")]
 	protected float reloadCountTimer = 0.0f;
+
+	/// <summary>
+	/// セーブ
+	/// </summary>
+	public abstract void Save();
+
+	/// <summary>
+	/// ロード
+	/// </summary>
+	public abstract void Load();
 
 	/// <summary>
 	/// 銃の更新
