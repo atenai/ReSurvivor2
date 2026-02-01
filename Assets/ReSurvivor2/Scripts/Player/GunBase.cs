@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// 銃のベース
@@ -142,5 +143,5 @@ public abstract class GunBase
 	/// 弾を取得
 	/// </summary>
 	/// <param name="amount">追加する弾数</param>
-	public abstract void AcquireAmmo(int amount = 10);
+	public abstract void AcquireAmmo(int amount = 10, UnityAction unityAction = null);
 }

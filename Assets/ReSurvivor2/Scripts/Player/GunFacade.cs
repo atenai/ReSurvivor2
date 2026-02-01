@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// ガンファサード
@@ -56,12 +58,12 @@ public class GunFacade
 	/// </summary>
 	public void Save()
 	{
-		Debug.Log("<color=cyan>ガンファサードセーブ</color>");
+		UnityEngine.Debug.Log("<color=cyan>ガンファサードセーブ</color>");
 		foreach (var gun in gunBaseList)
 		{
 			gun.Save();
 		}
-		ES3.Save<GunTYPE>("CurrentGunType", gunTYPE);
+		ES3.Save<GunTYPE>("CurrentGunType", this.gunTYPE);
 	}
 
 	/// <summary>
@@ -69,12 +71,12 @@ public class GunFacade
 	/// </summary>
 	public void Load()
 	{
-		Debug.Log("<color=purple>ガンファサードロード</color>");
+		UnityEngine.Debug.Log("<color=purple>ガンファサードロード</color>");
 		foreach (var gun in gunBaseList)
 		{
 			gun.Load();
 		}
-		gunTYPE = ES3.Load<GunTYPE>("CurrentGunType", GunTYPE.HandGun);
+		this.gunTYPE = ES3.Load<GunTYPE>("CurrentGunType", GunTYPE.HandGun);
 	}
 
 	/// <summary>
@@ -84,7 +86,7 @@ public class GunFacade
 	{
 		foreach (var gun in gunBaseList)
 		{
-			if (gunTYPE == gun.GetGunType)
+			if (this.gunTYPE == gun.GetGunType)
 			{
 				gunBase = gun;
 			}
@@ -104,17 +106,17 @@ public class GunFacade
 		if (Input.GetKeyDown(KeyCode.Alpha1) || 0.5 < Input.GetAxisRaw("XInput DPad Left&Right"))
 		{
 			//Debug.Log("ハンドガン");
-			gunTYPE = GunTYPE.HandGun;
+			this.gunTYPE = GunTYPE.HandGun;
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
 		{
 			//Debug.Log("アサルトライフル");
-			gunTYPE = GunTYPE.AssaultRifle;
+			this.gunTYPE = GunTYPE.AssaultRifle;
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetAxisRaw("XInput DPad Up&Down") < -0.5f)
 		{
 			//Debug.Log("ショットガン");
-			gunTYPE = GunTYPE.ShotGun;
+			this.gunTYPE = GunTYPE.ShotGun;
 		}
 	}
 
@@ -127,26 +129,16 @@ public class GunFacade
 	}
 
 	/// <summary>
-	/// ハンドガンの弾を取得
+	/// 弾を取得
 	/// </summary>
-	public void AcquireHandGunAmmo()
+	public void AcquireAmmo(GunTYPE gunTYPE, int amount = 10, UnityAction unityAction = null)
 	{
-		handGun.AcquireAmmo();
-	}
-
-	/// <summary>
-	/// アサルトライフルの弾を取得
-	/// </summary>
-	public void AcquireAssaultRifleAmmo()
-	{
-		assaultRifle.AcquireAmmo();
-	}
-
-	/// <summary>
-	/// ショットガンの弾を取得
-	/// </summary>
-	public void AcquireShotGunAmmo()
-	{
-		shotGun.AcquireAmmo();
+		foreach (var gun in gunBaseList)
+		{
+			if (gunTYPE == gun.GetGunType)
+			{
+				gun.AcquireAmmo(amount, unityAction);
+			}
+		}
 	}
 }

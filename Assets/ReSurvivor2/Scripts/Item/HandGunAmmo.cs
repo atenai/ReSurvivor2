@@ -7,17 +7,22 @@ using UnityEngine;
 /// </summary>
 public class HandGunAmmo : MonoBehaviour
 {
+	[Tooltip("弾薬の追加数")]
+	[SerializeField] int amount = 10;
+
 	void OnTriggerEnter(Collider collider)
 	{
 		if (collider.CompareTag("Player"))
 		{
-			//弾薬がフルの状態でこのオブジェクトにあたってもデストロイさせない為
-			if (PlayerCamera.SingletonInstance.GetGunFacade.HandGun.MaxHandGunAmmo <= PlayerCamera.SingletonInstance.GetGunFacade.HandGun.CurrentAmmo)
-			{
-				return;
-			}
-			PlayerCamera.SingletonInstance.GetGunFacade.AcquireHandGunAmmo();
-			Destroy(this.gameObject);//このオブジェクトを削除            
+			PlayerCamera.SingletonInstance.GetGunFacade.AcquireAmmo(GunFacade.GunTYPE.HandGun, amount, DestroySelf);
 		}
+	}
+
+	/// <summary>
+	/// このゲームオブジェクトを削除する
+	/// </summary>
+	void DestroySelf()
+	{
+		Destroy(this.gameObject);
 	}
 }

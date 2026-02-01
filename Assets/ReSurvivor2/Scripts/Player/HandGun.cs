@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Events;
 
 /// <summary>
 /// ハンドガン
@@ -223,7 +224,7 @@ public class HandGun : GunBase
 	/// <summary>
 	/// 弾を取得
 	/// </summary> 
-	public override void AcquireAmmo(int amount = 10)
+	public override void AcquireAmmo(int amount = 10, UnityAction unityAction = null)
 	{
 		if (maxHandGunAmmo <= currentAmmo)
 		{
@@ -235,5 +236,7 @@ public class HandGun : GunBase
 		{
 			currentAmmo = maxHandGunAmmo;
 		}
+
+		unityAction?.Invoke();
 	}
 }
