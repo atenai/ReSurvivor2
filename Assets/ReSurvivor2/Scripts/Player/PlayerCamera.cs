@@ -107,6 +107,9 @@ public class PlayerCamera : MonoBehaviour
 	[SerializeField] ShotGun shotGun = new ShotGun();
 	public ShotGun ShotGun => shotGun;
 
+	GunBase gunBase;
+	public GunBase GetGunBase => gunBase;
+
 	public enum GunTYPE
 	{
 		HandGun = 1,
@@ -158,6 +161,26 @@ public class PlayerCamera : MonoBehaviour
 		handGun.Load();
 		assaultRifle.Load();
 		shotGun.Load();
+		InitSwitchWeapon();
+	}
+
+	/// <summary>
+	/// 武器の切り替え初期化処理
+	/// </summary> 
+	void InitSwitchWeapon()
+	{
+		switch (gunTYPE)
+		{
+			case GunTYPE.HandGun:
+				gunBase = handGun;
+				break;
+			case GunTYPE.AssaultRifle:
+				gunBase = assaultRifle;
+				break;
+			case GunTYPE.ShotGun:
+				gunBase = shotGun;
+				break;
+		}
 	}
 
 	void Start()
@@ -189,45 +212,37 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		SwitchWeapon();
+		UpdateSwitchWeapon();
 	}
 
 	/// <summary>
-	/// 武器の切り替え
+	/// 武器の切り替え更新処理
 	/// </summary> 
-	void SwitchWeapon()
+	void UpdateSwitchWeapon()
 	{
-		if (handGun.IsReloadTimeActive == false && assaultRifle.IsReloadTimeActive == false && shotGun.IsReloadTimeActive == false)
+		if (gunBase.IsReloadTimeActive == false)
 		{
 			if (Input.GetKeyDown(KeyCode.Alpha1) || 0.5 < Input.GetAxisRaw("XInput DPad Left&Right"))
 			{
 				//Debug.Log("ハンドガン");
 				gunTYPE = GunTYPE.HandGun;
+				gunBase = handGun;
 			}
 			else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
 			{
 				//Debug.Log("アサルトライフル");
 				gunTYPE = GunTYPE.AssaultRifle;
+				gunBase = assaultRifle;
 			}
 			else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetAxisRaw("XInput DPad Up&Down") < -0.5f)
 			{
 				//Debug.Log("ショットガン");
 				gunTYPE = GunTYPE.ShotGun;
+				gunBase = shotGun;
 			}
 		}
 
-		switch (gunTYPE)
-		{
-			case GunTYPE.HandGun:
-				handGun.UpdateGun();
-				break;
-			case GunTYPE.AssaultRifle:
-				assaultRifle.UpdateGun();
-				break;
-			case GunTYPE.ShotGun:
-				shotGun.UpdateGun();
-				break;
-		}
+		gunBase.UpdateGun();
 	}
 
 	void FixedUpdate()
