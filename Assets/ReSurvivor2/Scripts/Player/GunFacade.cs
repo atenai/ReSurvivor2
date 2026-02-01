@@ -21,20 +21,20 @@ public class GunFacade
 	GunTYPE gunTYPE;
 	public GunTYPE GetGunTYPE => gunTYPE;
 
-	/// <summary>
-	/// ハンドガン
-	/// </summary>
+	[Tooltip("ハンドガン")]
 	[SerializeField] HandGun handGun = new HandGun();
+	/// <summary>ハンドガン </summary>
+	public HandGun HandGun => handGun;
 
-	/// <summary>
-	/// アサルトライフル
-	/// </summary>
+	[Tooltip("アサルトライフル")]
 	[SerializeField] AssaultRifle assaultRifle = new AssaultRifle();
+	/// <summary>アサルトライフル</summary>
+	public AssaultRifle AssaultRifle => assaultRifle;
 
-	/// <summary>
-	/// ショットガン
-	/// </summary>
+	[Tooltip("ショットガン")]
 	[SerializeField] ShotGun shotGun = new ShotGun();
+	/// <summary> ショットガン </summary>
+	public ShotGun ShotGun => shotGun;
 
 	GunBase gunBase;
 	public GunBase GetGunBase => gunBase;
@@ -125,11 +125,6 @@ public class GunFacade
 	/// </summary>
 	public void AcquireHandGunAmmo()
 	{
-		if (handGun.MaxHandGunAmmo <= handGun.CurrentAmmo)
-		{
-			return;
-		}
-
 		handGun.AcquireAmmo();
 	}
 
@@ -138,11 +133,6 @@ public class GunFacade
 	/// </summary>
 	public void AcquireAssaultRifleAmmo()
 	{
-		if (assaultRifle.MaxAssaultRifleAmmo <= assaultRifle.CurrentAmmo)
-		{
-			return;
-		}
-
 		assaultRifle.AcquireAmmo();
 	}
 
@@ -151,11 +141,6 @@ public class GunFacade
 	/// </summary>
 	public void AcquireShotGunAmmo()
 	{
-		if (shotGun.MaxShotGunAmmo <= shotGun.CurrentAmmo)
-		{
-			return;
-		}
-
 		shotGun.AcquireAmmo();
 	}
 }

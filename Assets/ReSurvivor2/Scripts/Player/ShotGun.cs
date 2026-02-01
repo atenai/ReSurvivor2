@@ -19,14 +19,14 @@ public class ShotGun : GunBase
 
 	[Tooltip("ショットガンの最大マガジン数")]
 	readonly int shotGunMagazineCapacity = 8;
-	public int ShotGunMagazineCapacity => shotGunMagazineCapacity;
+	public int ShotGunMagazineCapacity => shotGunMagazineCapacity;//SE Pool用にいるかも
 
 	[Tooltip("ショットガンの初期残弾数")]
 	readonly int initCurrentShotGunAmmoDefine = 40;
 
 	[Tooltip("ショットガンの最大残弾数")]
 	readonly int maxShotGunAmmo = 80;//将来的には拡張マガジンポーチを取得すると増える的なものを入れるかも
-	public int MaxShotGunAmmo => maxShotGunAmmo;
+	public int MaxShotGunAmmo => maxShotGunAmmo;//SE Pool用にいるかも
 
 	[Tooltip("ショットガンのリロード時間")]
 	readonly float shotGunReloadTimeDefine = 1.5f;

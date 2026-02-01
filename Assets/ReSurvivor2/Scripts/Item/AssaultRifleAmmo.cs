@@ -11,6 +11,11 @@ public class AssaultRifleAmmo : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
+			//弾薬がフルの状態でこのオブジェクトにあたってもデストロイさせない為
+			if (PlayerCamera.SingletonInstance.GetGunFacade.AssaultRifle.MaxAssaultRifleAmmo <= PlayerCamera.SingletonInstance.GetGunFacade.AssaultRifle.CurrentAmmo)
+			{
+				return;
+			}
 			PlayerCamera.SingletonInstance.GetGunFacade.AcquireAssaultRifleAmmo();
 			Destroy(this.gameObject);//このオブジェクトを削除            
 		}
