@@ -224,6 +224,8 @@ public class HandGun : GunBase
 	/// <summary>
 	/// 弾を取得
 	/// </summary> 
+	/// <param name="amount">追加する弾数</param>
+	/// <param name="unityAction">イベント</param>
 	public override void AcquireAmmo(int amount = 10, UnityAction unityAction = null)
 	{
 		if (maxHandGunAmmo <= currentAmmo)

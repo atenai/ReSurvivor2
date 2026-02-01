@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -131,6 +130,9 @@ public class GunFacade
 	/// <summary>
 	/// 弾を取得
 	/// </summary>
+	/// <param name="gunTYPE">銃のタイプ</param>
+	/// <param name="amount">追加する弾数</param>
+	/// <param name="unityAction">イベント</param>
 	public void AcquireAmmo(GunTYPE gunTYPE, int amount = 10, UnityAction unityAction = null)
 	{
 		foreach (var gun in gunBaseList)
