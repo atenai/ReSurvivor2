@@ -8,6 +8,9 @@ using UnityEngine;
 [System.Serializable]
 public class GunFacade
 {
+	/// <summary>
+	/// 銃のタイプ
+	/// </summary>
 	public enum GunTYPE
 	{
 		HandGun = 1,

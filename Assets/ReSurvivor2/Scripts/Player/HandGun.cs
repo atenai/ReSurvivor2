@@ -11,7 +11,6 @@ public class HandGun : GunBase
 {
 	[Header("ハンドガン")]
 
-
 	[Tooltip("ハンドガンの最大マガジン数")]
 	readonly int handGunMagazineCapacity = 7;
 	public int HandGunMagazineCapacity => handGunMagazineCapacity;
@@ -22,7 +21,6 @@ public class HandGun : GunBase
 	[Tooltip("ハンドガンの最大残弾数")]
 	readonly int maxHandGunAmmo = 70;//将来的には拡張マガジンポーチを取得すると増える的なものを入れるかも
 	public int MaxHandGunAmmo => maxHandGunAmmo;
-
 
 	[Tooltip("ハンドガンのリロード時間")]
 	readonly float handGunReloadTimeDefine = 1.5f;
