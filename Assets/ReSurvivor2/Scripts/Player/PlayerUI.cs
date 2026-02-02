@@ -45,7 +45,7 @@ public class PlayerUI : MonoBehaviour
 		set { textFood = value; }
 	}
 	[Tooltip("リロード画像")]
-	[SerializeField] GameObject imageReload;
+	[SerializeField] Image imageReload;
 	Color reloadColor = new Color(255.0f, 255.0f, 255.0f, 0.0f);
 	[Tooltip("マガジン弾数テキスト")]
 	[SerializeField] TextMeshProUGUI textMagazine;
@@ -113,7 +113,7 @@ public class PlayerUI : MonoBehaviour
 	/// </summary>
 	void StartImageReload()
 	{
-		imageReload.GetComponent<Image>().color = reloadColor;
+		imageReload.color = reloadColor;
 	}
 
 	/// <summary>
@@ -186,14 +186,14 @@ public class PlayerUI : MonoBehaviour
 	void UpdateImageReload()
 	{
 		const float Rotate_Speed = -500.0f;
-		imageReload.GetComponent<RectTransform>().transform.Rotate(0.0f, 0.0f, Rotate_Speed * Time.deltaTime);
+		imageReload.gameObject.GetComponent<RectTransform>().transform.Rotate(0.0f, 0.0f, Rotate_Speed * Time.deltaTime);
 
 		if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
 		{
 			if (reloadColor.a <= 1)
 			{
 				reloadColor.a += Time.deltaTime * 2.0f;
-				imageReload.GetComponent<Image>().color = reloadColor;
+				imageReload.color = reloadColor;
 			}
 		}
 		else if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
@@ -201,7 +201,7 @@ public class PlayerUI : MonoBehaviour
 			if (reloadColor.a >= 0)
 			{
 				reloadColor.a -= Time.deltaTime * 2.0f;
-				imageReload.GetComponent<Image>().color = reloadColor;
+				imageReload.color = reloadColor;
 			}
 		}
 	}
