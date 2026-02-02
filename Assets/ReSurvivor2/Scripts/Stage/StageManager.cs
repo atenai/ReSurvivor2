@@ -8,19 +8,9 @@ using UnityEngine;
 /// </summary>
 public class StageManager : MonoBehaviour
 {
-	public enum StageTYPE
-	{
-		Stage0 = 0,
-		Stage1 = 1,
-		Stage2 = 2,
-		Stage3 = 3,
-		Stage4 = 4,
-		Stage5 = 5,
-	}
-
 	[Tooltip("ステージ名")]
-	[SerializeField] StageTYPE stage;
-	public StageTYPE Stage
+	[SerializeField] EnumManager.StageTYPE stage;
+	public EnumManager.StageTYPE Stage
 	{
 		get { return stage; }
 		set { stage = value; }

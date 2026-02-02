@@ -34,7 +34,7 @@ public class AssaultRifle : GunBase
 	/// </summary>
 	public AssaultRifle()
 	{
-		this.gunType = GunFacade.GunTYPE.AssaultRifle;
+		this.gunType = EnumManager.GunTYPE.AssaultRifle;
 	}
 
 	/// <summary>

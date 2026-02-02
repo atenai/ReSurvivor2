@@ -37,7 +37,7 @@ public class ShotGun : GunBase
 	/// </summary>
 	public ShotGun()
 	{
-		this.gunType = GunFacade.GunTYPE.ShotGun;
+		this.gunType = EnumManager.GunTYPE.ShotGun;
 	}
 
 	/// <summary>

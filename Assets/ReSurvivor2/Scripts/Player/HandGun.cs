@@ -31,7 +31,7 @@ public class HandGun : GunBase
 	/// </summary>
 	public HandGun()
 	{
-		this.gunType = GunFacade.GunTYPE.HandGun;
+		this.gunType = EnumManager.GunTYPE.HandGun;
 	}
 
 	/// <summary>

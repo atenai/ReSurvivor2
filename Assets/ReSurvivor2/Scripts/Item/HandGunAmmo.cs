@@ -14,7 +14,7 @@ public class HandGunAmmo : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			PlayerCamera.SingletonInstance.GetGunFacade.AcquireAmmo(GunFacade.GunTYPE.HandGun, amount, DestroySelf);
+			PlayerCamera.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.HandGun, amount, DestroySelf);
 		}
 	}
 

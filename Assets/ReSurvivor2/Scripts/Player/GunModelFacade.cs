@@ -26,7 +26,7 @@ public class GunModelFacade
 	/// <summary>
 	/// 銃のモデルを切り替え
 	/// </summary>
-	public void SwitchWeaponModel(GunFacade.GunTYPE gunTYPE)
+	public void SwitchWeaponModel(EnumManager.GunTYPE gunTYPE)
 	{
 		handGunModel.GetHandGunModel.SetActive(false);
 		handGunModel.GetHandGunModelBodyDecoration.SetActive(false);
@@ -37,17 +37,17 @@ public class GunModelFacade
 
 		switch (gunTYPE)
 		{
-			case GunFacade.GunTYPE.HandGun:
+			case EnumManager.GunTYPE.HandGun:
 				handGunModel.GetHandGunModel.SetActive(true);
 				assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(true);
 				shotGunModel.GetShotGunModelBodyDecoration.SetActive(true);
 				break;
-			case GunFacade.GunTYPE.AssaultRifle:
+			case EnumManager.GunTYPE.AssaultRifle:
 				handGunModel.GetHandGunModelBodyDecoration.SetActive(true);
 				assaultRifleModel.GetAssaultRifleModel.SetActive(true);
 				shotGunModel.GetShotGunModelBodyDecoration.SetActive(true);
 				break;
-			case GunFacade.GunTYPE.ShotGun:
+			case EnumManager.GunTYPE.ShotGun:
 				handGunModel.GetHandGunModelBodyDecoration.SetActive(true);
 				assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(true);
 				shotGunModel.GetShotGunModel.SetActive(true);

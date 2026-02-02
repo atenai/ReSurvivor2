@@ -43,25 +43,13 @@ public class InGameManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// コンピュータータイプ
-	/// </summary>
-	public enum ComputerTYPE
-	{
-		Stage0Computer = 0,
-		Stage1Computer = 1,
-		Stage2Computer = 2,
-		Stage3Computer = 3,
-		Stage4Computer = 4,
-	}
-
-	/// <summary>
 	/// ミッションエンドのコンピューター名
 	/// </summary>
-	ComputerTYPE endComputerName;
+	EnumManager.ComputerTYPE endComputerName;
 	/// <summary>
 	/// ミッションエンドのコンピューター名のプロパティ
 	/// </summary>
-	public ComputerTYPE EndComputerName
+	public EnumManager.ComputerTYPE EndComputerName
 	{
 		get { return endComputerName; }
 		set { endComputerName = value; }
@@ -155,7 +143,7 @@ public class InGameManager : MonoBehaviour
 	/// </summary>
 	/// <param name="computerTYPE">コンピュータータイプ</param>
 	/// <returns>ミッションリスト</returns>
-	public List<MasterMissionEntity> MissionSerchList(ComputerTYPE computerTYPE)
+	public List<MasterMissionEntity> MissionSerchList(EnumManager.ComputerTYPE computerTYPE)
 	{
 		//引数のコンピュータータイプからマスターデータのミッション情報を照らし合わせて、StartComputerNameと一致したコンピュータータイプの情報を全て取得する
 		List<MasterMissionEntity> result = MasterMission.Sheet1.Where((MasterMissionEntity excelLine) => excelLine.StartComputerName == computerTYPE).ToList();
@@ -172,7 +160,7 @@ public class InGameManager : MonoBehaviour
 	/// ミッション
 	/// </summary>
 	/// <param name="computerName"></param>
-	public void Mission(ComputerTYPE computerName)
+	public void Mission(EnumManager.ComputerTYPE computerName)
 	{
 		if (isMissionActive == false)//ミッション中でない場合
 		{

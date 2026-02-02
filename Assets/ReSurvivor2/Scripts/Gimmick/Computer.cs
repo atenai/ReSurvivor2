@@ -11,7 +11,7 @@ using UnityEngine;
 public class Computer : MonoBehaviour
 {
 	[Tooltip("このコンピューターの名前")]
-	[SerializeField] InGameManager.ComputerTYPE thisComputerName;
+	[SerializeField] EnumManager.ComputerTYPE thisComputerName;
 
 	/// <summary>
 	/// 当たり判定

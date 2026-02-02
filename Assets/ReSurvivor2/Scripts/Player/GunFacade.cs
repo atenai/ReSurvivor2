@@ -9,19 +9,6 @@ using UnityEngine.Events;
 [System.Serializable]
 public class GunFacade
 {
-	/// <summary>
-	/// 銃のタイプ
-	/// </summary>
-	public enum GunTYPE
-	{
-		HandGun = 1,
-		AssaultRifle = 2,
-		ShotGun = 3,
-	}
-
-	GunTYPE gunTYPE;
-	public GunTYPE GetGunTYPE => gunTYPE;
-
 	[Tooltip("ハンドガン")]
 	[SerializeField] HandGun handGun = new HandGun();
 
@@ -35,6 +22,9 @@ public class GunFacade
 	public GunBase GetGunBase => gunBase;
 
 	List<GunBase> gunBaseList = new List<GunBase>();
+
+	EnumManager.GunTYPE gunTYPE;
+	public EnumManager.GunTYPE GetGunTYPE => gunTYPE;
 
 	/// <summary>
 	/// コンストラクタ
@@ -56,7 +46,7 @@ public class GunFacade
 		{
 			gun.Save();
 		}
-		ES3.Save<GunTYPE>("CurrentGunType", this.gunTYPE);
+		ES3.Save<EnumManager.GunTYPE>("CurrentGunType", this.gunTYPE);
 	}
 
 	/// <summary>
@@ -69,7 +59,7 @@ public class GunFacade
 		{
 			gun.Load();
 		}
-		this.gunTYPE = ES3.Load<GunTYPE>("CurrentGunType", GunTYPE.HandGun);
+		this.gunTYPE = ES3.Load<EnumManager.GunTYPE>("CurrentGunType", EnumManager.GunTYPE.HandGun);
 	}
 
 	/// <summary>
@@ -99,19 +89,19 @@ public class GunFacade
 		if (Input.GetKeyDown(KeyCode.Alpha1) || 0.5 < Input.GetAxisRaw("XInput DPad Left&Right"))
 		{
 			//Debug.Log("ハンドガン");
-			this.gunTYPE = GunTYPE.HandGun;
+			this.gunTYPE = EnumManager.GunTYPE.HandGun;
 			Player.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
 		{
 			//Debug.Log("アサルトライフル");
-			this.gunTYPE = GunTYPE.AssaultRifle;
+			this.gunTYPE = EnumManager.GunTYPE.AssaultRifle;
 			Player.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetAxisRaw("XInput DPad Up&Down") < -0.5f)
 		{
 			//Debug.Log("ショットガン");
-			this.gunTYPE = GunTYPE.ShotGun;
+			this.gunTYPE = EnumManager.GunTYPE.ShotGun;
 			Player.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
 		}
 	}
@@ -130,7 +120,7 @@ public class GunFacade
 	/// <param name="gunTYPE">銃のタイプ</param>
 	/// <param name="amount">追加する弾数</param>
 	/// <param name="unityAction">イベント</param>
-	public void AcquireAmmo(GunTYPE gunTYPE, int amount = 10, UnityAction unityAction = null)
+	public void AcquireAmmo(EnumManager.GunTYPE gunTYPE, int amount = 10, UnityAction unityAction = null)
 	{
 		foreach (var gun in gunBaseList)
 		{

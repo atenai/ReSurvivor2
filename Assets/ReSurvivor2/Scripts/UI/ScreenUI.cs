@@ -474,7 +474,7 @@ public class ScreenUI : MonoBehaviour
 	/// <summary>
 	/// コンピューターメニューの表示
 	/// </summary>
-	public void ShowComputerMenu(InGameManager.ComputerTYPE startComputerTYPE)
+	public void ShowComputerMenu(EnumManager.ComputerTYPE startComputerTYPE)
 	{
 		//各種パラメーターの初期化処理
 		missionList.Clear();

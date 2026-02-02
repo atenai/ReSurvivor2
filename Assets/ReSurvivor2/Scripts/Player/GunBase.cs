@@ -9,8 +9,8 @@ using UnityEngine.Events;
 public abstract class GunBase
 {
 	[Header("銃のベース")]
-	protected GunFacade.GunTYPE gunType;
-	public GunFacade.GunTYPE GetGunType => gunType;
+	protected EnumManager.GunTYPE gunType;
+	public EnumManager.GunTYPE GetGunType => gunType;
 
 	[Tooltip("銃のダメージ")]
 	[SerializeField] protected float damage = 10.0f;
