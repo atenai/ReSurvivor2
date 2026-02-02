@@ -138,8 +138,8 @@ public class HandGun : GunBase
 	protected override void Fire()
 	{
 		HandGunBulletCasingSE();
-		Player.SingletonInstance.HandGunMuzzleFlashAndShell();
-		Player.SingletonInstance.HandGunSmoke();
+		Player.SingletonInstance.HandGunModel.HandGunMuzzleFlashAndShell();
+		Player.SingletonInstance.HandGunModel.HandGunSmoke();
 
 		HandGunFireSE();
 
@@ -202,7 +202,7 @@ public class HandGun : GunBase
 	/// </summary> 
 	void HandGunFireSE()
 	{
-		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(Player.SingletonInstance.HandGunMuzzleTransform);
+		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(Player.SingletonInstance.HandGunModel.HandGunMuzzleTransform);
 	}
 
 	/// <summary>
@@ -210,7 +210,7 @@ public class HandGun : GunBase
 	/// </summary> 
 	void HandGunReloadSE()
 	{
-		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(Player.SingletonInstance.HandGunBulletCasingTransform);
+		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(Player.SingletonInstance.HandGunModel.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -218,7 +218,7 @@ public class HandGun : GunBase
 	/// </summary>
 	void HandGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(Player.SingletonInstance.HandGunBulletCasingTransform);
+		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(Player.SingletonInstance.HandGunModel.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>

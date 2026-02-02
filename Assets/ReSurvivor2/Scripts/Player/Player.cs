@@ -90,67 +90,19 @@ public class Player : MonoBehaviour
 	const float armAimAnimationRotY = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
 
 	[Header("ハンドガンモデル")]
-	[Tooltip("キャラクターの手に持っているハンドガンのモデル")]
-	[SerializeField] GameObject handGunModel;
-	[Tooltip("キャラクターの体についているハンドガンのモデル")]
-	[SerializeField] GameObject handGunModelBodyDecoration;
-	[Tooltip("ハンドガンのマズルフラッシュの生成座標位置")]
-	[SerializeField] Transform handGunMuzzleTransform;
-	public Transform HandGunMuzzleTransform => handGunMuzzleTransform;
-	[Tooltip("ハンドガンの薬莢の生成座標位置")]
-	[SerializeField] Transform handGunBulletCasingTransform;
-	public Transform HandGunBulletCasingTransform => handGunBulletCasingTransform;
-	[Tooltip("ハンドガンの硝煙の生成座標位置")]
-	[SerializeField] Transform handGunAfterFireSmokeTransform;
-	public Transform HandGunAfterFireSmokeTransform => handGunAfterFireSmokeTransform;
-	//↓アセットストアのプログラム↓//
-	[Tooltip("ハンドガンのマズルフラッシュと薬莢")]
-	[SerializeField] ParticleGroupEmitter[] handGunShotEmitters;
-	[Tooltip("ハンドガンの硝煙")]
-	[SerializeField] ParticleGroupPlayer handGunAfterFireSmoke;
-	//↑アセットストアのプログラム↑//
+	[Tooltip("ハンドガンのモデル")]
+	[SerializeField] HandGunModel handGunModel;
+	public HandGunModel HandGunModel => handGunModel;
 
 	[Header("アサルトライフルモデル")]
-	[Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
-	[SerializeField] GameObject assaultRifleModel;
-	[Tooltip("キャラクターの体についているアサルトライフルのモデル")]
-	[SerializeField] GameObject assaultRifleModelBodyDecoration;
-	[Tooltip("アサルトライフルのマズルフラッシュの生成座標位置")]
-	[SerializeField] Transform assaultRifleMuzzleTransform;
-	public Transform AssaultRifleMuzzleTransform => assaultRifleMuzzleTransform;
-	[Tooltip("アサルトライフルの薬莢の生成座標位置")]
-	[SerializeField] Transform assaultRifleBulletCasingTransform;
-	public Transform AssaultRifleBulletCasingTransform => assaultRifleBulletCasingTransform;
-	[Tooltip("アサルトライフルの硝煙の生成座標位置")]
-	[SerializeField] Transform assaultRifleAfterFireSmokeTransform;
-	public Transform AssaultRifleAfterFireSmokeTransform => assaultRifleAfterFireSmokeTransform;
-	//↓アセットストアのプログラム↓//
-	[Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
-	[SerializeField] ParticleGroupEmitter[] assaultRifleShotEmitters;
-	[Tooltip("アサルトライフルの硝煙")]
-	[SerializeField] ParticleGroupPlayer assaultRifleAfterFireSmoke;
-	//↑アセットストアのプログラム↑//
+	[Tooltip("アサルトライフルのモデル")]
+	[SerializeField] AssaultRifleModel assaultRifleModel;
+	public AssaultRifleModel AssaultRifleModel => assaultRifleModel;
 
 	[Header("ショットガンモデル")]
-	[Tooltip("キャラクターの手に持っているショットガンのモデル")]
-	[SerializeField] GameObject shotGunModel;
-	[Tooltip("キャラクターの体についているショットガンのモデル")]
-	[SerializeField] GameObject shotGunModelBodyDecoration;
-	[Tooltip("ショットガンのマズルフラッシュの生成座標位置")]
-	[SerializeField] Transform shotGunMuzzleTransform;
-	public Transform ShotGunMuzzleTransform => shotGunMuzzleTransform;
-	[Tooltip("ショットガンの薬莢の生成座標位置")]
-	[SerializeField] Transform shotGunBulletCasingTransform;
-	public Transform ShotGunBulletCasingTransform => shotGunBulletCasingTransform;
-	[Tooltip("ショットガンの硝煙の生成座標位置")]
-	[SerializeField] Transform shotGunAfterFireSmokeTransform;
-	public Transform ShotGunAfterFireSmokeTransform => shotGunAfterFireSmokeTransform;
-	//↓アセットストアのプログラム↓//
-	[Tooltip("ショットガンのマズルフラッシュと薬莢")]
-	[SerializeField] ParticleGroupEmitter[] shotGunShotEmitters;
-	[Tooltip("ショットガンの硝煙")]
-	[SerializeField] ParticleGroupPlayer shotGunAfterFireSmoke;
-	//↑アセットストアのプログラム↑//
+	[Tooltip("ショットガンのモデル")]
+	[SerializeField] ShotGunModel shotGunModel;
+	public ShotGunModel ShotGunModel => shotGunModel;
 
 	[Header("リスポーンポイント")]
 	[Tooltip("プレイヤーのリスポーンポイントの位置")]
@@ -460,29 +412,29 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void SwitchWeaponModel()
 	{
-		handGunModel.SetActive(false);
-		handGunModelBodyDecoration.SetActive(false);
-		assaultRifleModel.SetActive(false);
-		assaultRifleModelBodyDecoration.SetActive(false);
-		shotGunModel.SetActive(false);
-		shotGunModelBodyDecoration.SetActive(false);
+		handGunModel.GetHandGunModel.SetActive(false);
+		handGunModel.GetHandGunModelBodyDecoration.SetActive(false);
+		assaultRifleModel.GetAssaultRifleModel.SetActive(false);
+		assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(false);
+		shotGunModel.GetShotGunModel.SetActive(false);
+		shotGunModel.GetShotGunModelBodyDecoration.SetActive(false);
 
 		switch (PlayerCamera.SingletonInstance.GetGunFacade.GetGunTYPE)
 		{
 			case GunFacade.GunTYPE.HandGun:
-				handGunModel.SetActive(true);
-				assaultRifleModelBodyDecoration.SetActive(true);
-				shotGunModelBodyDecoration.SetActive(true);
+				handGunModel.GetHandGunModel.SetActive(true);
+				assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(true);
+				shotGunModel.GetShotGunModelBodyDecoration.SetActive(true);
 				break;
 			case GunFacade.GunTYPE.AssaultRifle:
-				handGunModelBodyDecoration.SetActive(true);
-				assaultRifleModel.SetActive(true);
-				shotGunModelBodyDecoration.SetActive(true);
+				handGunModel.GetHandGunModelBodyDecoration.SetActive(true);
+				assaultRifleModel.GetAssaultRifleModel.SetActive(true);
+				shotGunModel.GetShotGunModelBodyDecoration.SetActive(true);
 				break;
 			case GunFacade.GunTYPE.ShotGun:
-				handGunModelBodyDecoration.SetActive(true);
-				assaultRifleModelBodyDecoration.SetActive(true);
-				shotGunModel.SetActive(true);
+				handGunModel.GetHandGunModelBodyDecoration.SetActive(true);
+				assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(true);
+				shotGunModel.GetShotGunModel.SetActive(true);
 				break;
 		}
 	}
@@ -939,81 +891,6 @@ public class Player : MonoBehaviour
 
 		currentMine = currentMine + 1;
 		playerUI.TextMine.text = currentMine.ToString();
-	}
-
-	/// <summary>
-	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	public void HandGunMuzzleFlashAndShell()
-	{
-		if (handGunShotEmitters != null)
-		{
-			foreach (var effect in handGunShotEmitters)
-			{
-				effect.Emit(1);
-			}
-		}
-	}
-
-	/// <summary>
-	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	public void HandGunSmoke()
-	{
-		if (handGunAfterFireSmoke != null)
-		{
-			handGunAfterFireSmoke.Play();
-		}
-	}
-
-	/// <summary>
-	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	public void AssaultRifleMuzzleFlashAndShell()
-	{
-		if (assaultRifleShotEmitters != null)
-		{
-			foreach (var effect in assaultRifleShotEmitters)
-			{
-				effect.Emit(1);
-			}
-		}
-	}
-
-	/// <summary>
-	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	public void AssaultRifleSmoke()
-	{
-		if (assaultRifleAfterFireSmoke != null)
-		{
-			assaultRifleAfterFireSmoke.Play();
-		}
-	}
-
-	/// <summary>
-	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	public void ShotGunMuzzleFlashAndShell()
-	{
-		if (shotGunShotEmitters != null)
-		{
-			foreach (var effect in shotGunShotEmitters)
-			{
-				effect.Emit(1);
-			}
-		}
-	}
-
-	/// <summary>
-	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
-	/// </summary>
-	public void ShotGunSmoke()
-	{
-		if (shotGunAfterFireSmoke != null)
-		{
-			shotGunAfterFireSmoke.Play();
-		}
 	}
 
 	void OnGUI()
