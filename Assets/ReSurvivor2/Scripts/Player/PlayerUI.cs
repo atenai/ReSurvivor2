@@ -14,8 +14,6 @@ public class PlayerUI : MonoBehaviour
 	[SerializeField] Canvas canvasPlayer;
 	[Tooltip("バックグラウンドイメージ")]
 	[SerializeField] Image imageBG;
-	[Tooltip("プレイヤーUIのY軸の傾き")]
-	float playerUIRotY = 0.2f;
 	[Tooltip("HPバー")]
 	[SerializeField] Slider sliderHp;
 	public Slider SliderHp
@@ -74,6 +72,8 @@ public class PlayerUI : MonoBehaviour
 		StartTextFood();
 		StartImageReload();
 		StartTextMagazine();
+		StartTextTimer();
+		UpdateUITransform();
 	}
 
 	/// <summary>
@@ -125,6 +125,14 @@ public class PlayerUI : MonoBehaviour
 		textAmmo.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
 	}
 
+	/// <summary>
+	/// タイマーテキストの初期化処理
+	/// </summary>
+	void StartTextTimer()
+	{
+		textTimer.text = "--" + ":" + "--"; ;
+	}
+
 	void Update()
 	{
 		if (ScreenUI.SingletonInstance.IsPause == true)
@@ -144,7 +152,7 @@ public class PlayerUI : MonoBehaviour
 		}
 		//↓ロード中に動かせない処理
 
-		UI();
+		UpdateUITransform();
 		UpdateImageReload();
 		UpdateTextMagazine();
 	}
@@ -152,7 +160,7 @@ public class PlayerUI : MonoBehaviour
 	/// <summary>
 	/// プレイヤーキャラクターの右横にある3DのUI
 	/// </summary> 
-	void UI()
+	void UpdateUITransform()
 	{
 		if (Player.SingletonInstance.IsAim == false)
 		{
@@ -161,10 +169,13 @@ public class PlayerUI : MonoBehaviour
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
 			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(Player.SingletonInstance.transform.position.x, Player.SingletonInstance.transform.position.y + PlayerCamera.SingletonInstance.NormalUpPos, Player.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
-			//HP、スタミナ、弾薬、タイマーUI
-			imageBG.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-			imageBG.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
-			imageBG.transform.localPosition = new Vector3(150.0f, -100.0f, 0.0f);
+			const float Normal_Scale = 0.8f;
+			const float Normal_RotY = 0.4f;
+			const float Normal_RightPos = 125.0f;
+			const float Normal_UpPos = -60.0f;
+			imageBG.transform.localScale = new Vector3(Normal_Scale, Normal_Scale, 1.0f);
+			imageBG.transform.localRotation = Quaternion.Euler(0.0f, Normal_RotY, 0.0f);
+			imageBG.transform.localPosition = new Vector3(Normal_RightPos, Normal_UpPos, 0.0f);
 		}
 		else if (Player.SingletonInstance.IsAim == true)
 		{
@@ -173,10 +184,13 @@ public class PlayerUI : MonoBehaviour
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
 			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(Player.SingletonInstance.transform.position.x, Player.SingletonInstance.transform.position.y + PlayerCamera.SingletonInstance.AimUpPos, Player.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
-			//HP、スタミナ、弾薬、タイマーUI
-			imageBG.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
-			imageBG.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
-			imageBG.transform.localPosition = new Vector3(85.0f, -20.0f, 0.0f);
+			const float Aim_Scale = 0.2f;
+			const float Aim_RotY = 0.2f;
+			const float Aim_RightPos = 85.0f;
+			const float Aim_UpPos = -20.0f;
+			imageBG.transform.localScale = new Vector3(Aim_Scale, Aim_Scale, 1.0f);
+			imageBG.transform.localRotation = Quaternion.Euler(0.0f, Aim_RotY, 0.0f);
+			imageBG.transform.localPosition = new Vector3(Aim_RightPos, Aim_UpPos, 0.0f);
 		}
 	}
 
