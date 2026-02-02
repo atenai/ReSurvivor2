@@ -92,6 +92,7 @@ public class OutGameBase : MonoBehaviour
 		{
 			//ロード数値をスライダーに反映
 			sliderSceneLoading.value = async.progress;
+			Debug.Log("<color=red>読み込み進捗: " + async.progress * 100 + "%</color>");
 
 			//ロード数値が0.9より同じかそれ以上大きくなったら かつ シェーダーロードが1と同じかそれ以上になったら 中身を実行する
 			if (0.9f <= async.progress && 1.0f <= GetShaderWarmupProgressRate())

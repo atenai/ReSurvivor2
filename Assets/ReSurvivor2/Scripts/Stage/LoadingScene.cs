@@ -59,6 +59,7 @@ public class LoadingScene : MonoBehaviour
 		{
 			//ロード数値をスライダーに反映
 			ScreenUI.SingletonInstance.SliderLoading.value = async.progress;
+			Debug.Log("<color=red>読み込み進捗: " + async.progress * 100 + "%</color>");
 
 			//ロード数値が0.9より同じかそれ以上大きくなったら中身を実行する
 			if (0.9f <= async.progress)
