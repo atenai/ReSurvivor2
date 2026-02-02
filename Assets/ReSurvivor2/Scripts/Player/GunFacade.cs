@@ -100,16 +100,19 @@ public class GunFacade
 		{
 			//Debug.Log("ハンドガン");
 			this.gunTYPE = GunTYPE.HandGun;
+			Player.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
 		{
 			//Debug.Log("アサルトライフル");
 			this.gunTYPE = GunTYPE.AssaultRifle;
+			Player.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetAxisRaw("XInput DPad Up&Down") < -0.5f)
 		{
 			//Debug.Log("ショットガン");
 			this.gunTYPE = GunTYPE.ShotGun;
+			Player.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
 		}
 	}
 

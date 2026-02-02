@@ -6,7 +6,7 @@ using Knife.Effects;
 /// <summary>
 /// ショットガンモデル
 /// </summary>
-public class ShotGunModel : MonoBehaviour
+public class ShotGunModel : GunModelBase
 {
 	[Header("ショットガンモデル")]
 	[Tooltip("キャラクターの手に持っているショットガンのモデル")]
@@ -30,31 +30,6 @@ public class ShotGunModel : MonoBehaviour
 	[Tooltip("ショットガンの硝煙")]
 	[SerializeField] ParticleGroupPlayer shotGunAfterFireSmoke;
 	//↑アセットストアのプログラム↑//
-
-	void Start()
-	{
-
-	}
-
-	void Update()
-	{
-		if (ScreenUI.SingletonInstance.IsPause == true)
-		{
-			return;
-		}
-
-		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
-		{
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
-	}
 
 	/// <summary>
 	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）

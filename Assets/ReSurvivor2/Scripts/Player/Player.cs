@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
-using Knife.Effects;
 
 /// <summary>
 /// プレイヤー
@@ -66,44 +65,6 @@ public class Player : MonoBehaviour
 	float weaponMoveSpeed = 3.0f;
 	public float WeaponMoveSpeed => weaponMoveSpeed;
 
-	[Header("キャラクターモデル")]
-	[Tooltip("キャラクターの首ボーン")]
-	[SerializeField] Transform neck_01;
-	[Tooltip("キャラクターの首ボーンの初期値")]
-	float neck_01_InitEulerAnglesY;
-	bool isNeck01AnimationRotInit = false;
-	[Tooltip("キャラクターの脊椎ボーン")]
-	[SerializeField] Transform spine_03;
-	[Tooltip("キャラクターの脊椎ボーンの初期値")]
-	float spine_03_InitEulerAnglesX;
-	bool isSpine03AnimationRotInit = false;
-	//※型のボーンを曲げると銃の持つ位置がずれておかしくなる為、首と背骨のボーンを曲げる事によって型のボーンを曲げずに済むようにする必要がある
-	[Tooltip("キャラクターの右肩ボーン")]
-	[SerializeField] Transform upperarm_r;
-	[Tooltip("キャラクターの左肩ボーン")]
-	[SerializeField] Transform upperarm_l;
-	[Tooltip("肩のXボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
-	//const float armAimAnimationRotX = 5.0f;//←型のボーンを曲げると銃の持つ位置がずれてしまう
-	const float armAimAnimationRotX = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
-	[Tooltip("肩のYボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
-	//const float armAimAnimationRotY = 12.5f;//←型のボーンを曲げると銃の持つ位置がずれてしまう
-	const float armAimAnimationRotY = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
-
-	[Header("ハンドガンモデル")]
-	[Tooltip("ハンドガンのモデル")]
-	[SerializeField] HandGunModel handGunModel;
-	public HandGunModel HandGunModel => handGunModel;
-
-	[Header("アサルトライフルモデル")]
-	[Tooltip("アサルトライフルのモデル")]
-	[SerializeField] AssaultRifleModel assaultRifleModel;
-	public AssaultRifleModel AssaultRifleModel => assaultRifleModel;
-
-	[Header("ショットガンモデル")]
-	[Tooltip("ショットガンのモデル")]
-	[SerializeField] ShotGunModel shotGunModel;
-	public ShotGunModel ShotGunModel => shotGunModel;
-
 	[Header("リスポーンポイント")]
 	[Tooltip("プレイヤーのリスポーンポイントの位置")]
 	Vector3 respawnPosition = new Vector3(0.0f, 1.0f, 0.0f);
@@ -114,7 +75,7 @@ public class Player : MonoBehaviour
 	float currentHp = 100.0f;
 	public float CurrentHp => currentHp;
 	[Tooltip("HPの最大値")]
-	[SerializeField] float maxHp = 100.0f;
+	float maxHp = 100.0f;
 	public float MaxHp => maxHp;
 	[Tooltip("現在のスタミナ")]
 	float currentStamina = 1000.0f;
@@ -122,8 +83,8 @@ public class Player : MonoBehaviour
 	[Tooltip("スタミナの最大値")]
 	float maxStamina = 1000.0f;
 	public float MaxStamina => maxStamina;
-	[Tooltip("疲れた時のスタミナ値")]
-	[SerializeField] float tiredStamina = 100.0f;
+	[Tooltip("疲れてダッシュできなくなる時のスタミナ値")]
+	float tiredStamina = 100.0f;
 	[Tooltip("現在のアーマープレート数")]
 	int currentArmorPlate = 2;
 	public int CurrentArmorPlate => currentArmorPlate;
@@ -192,6 +153,34 @@ public class Player : MonoBehaviour
 
 	[SerializeField] private CinemachineImpulseSource cinemachineImpulseSource;
 	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
+
+	[Header("キャラクターモデル")]
+	[Tooltip("キャラクターの首ボーン")]
+	[SerializeField] Transform neck_01;
+	[Tooltip("キャラクターの首ボーンの初期値")]
+	float neck_01_InitEulerAnglesY;
+	bool isNeck01AnimationRotInit = false;
+	[Tooltip("キャラクターの脊椎ボーン")]
+	[SerializeField] Transform spine_03;
+	[Tooltip("キャラクターの脊椎ボーンの初期値")]
+	float spine_03_InitEulerAnglesX;
+	bool isSpine03AnimationRotInit = false;
+	//※型のボーンを曲げると銃の持つ位置がずれておかしくなる為、首と背骨のボーンを曲げる事によって型のボーンを曲げずに済むようにする必要がある
+	[Tooltip("キャラクターの右肩ボーン")]
+	[SerializeField] Transform upperarm_r;
+	[Tooltip("キャラクターの左肩ボーン")]
+	[SerializeField] Transform upperarm_l;
+	[Tooltip("肩のXボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
+	//const float armAimAnimationRotX = 5.0f;//←型のボーンを曲げると銃の持つ位置がずれてしまう
+	const float armAimAnimationRotX = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
+	[Tooltip("肩のYボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
+	//const float armAimAnimationRotY = 12.5f;//←型のボーンを曲げると銃の持つ位置がずれてしまう
+	const float armAimAnimationRotY = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
+
+	[Header("ガンモデル")]
+	[Tooltip("ガンモデルファサード")]
+	[SerializeField] GunModelFacade gunModelFacade = new GunModelFacade();
+	public GunModelFacade GunModelFacade => gunModelFacade;
 
 	void Awake()
 	{
@@ -381,8 +370,6 @@ public class Player : MonoBehaviour
 		}
 		//↓ロード中に動かせない処理
 
-		SwitchWeaponModel();
-
 		if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("XInput RB"))
 		{
 			Heal();
@@ -405,38 +392,6 @@ public class Player : MonoBehaviour
 		animator.SetFloat("f_moveSpeedX", inputHorizontal);
 		animator.SetFloat("f_moveSpeedY", inputVertical);
 		animator.SetBool("b_isAim", isAim);
-	}
-
-	/// <summary>
-	/// 銃のモデルを切り替え
-	/// </summary>
-	void SwitchWeaponModel()
-	{
-		handGunModel.GetHandGunModel.SetActive(false);
-		handGunModel.GetHandGunModelBodyDecoration.SetActive(false);
-		assaultRifleModel.GetAssaultRifleModel.SetActive(false);
-		assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(false);
-		shotGunModel.GetShotGunModel.SetActive(false);
-		shotGunModel.GetShotGunModelBodyDecoration.SetActive(false);
-
-		switch (PlayerCamera.SingletonInstance.GetGunFacade.GetGunTYPE)
-		{
-			case GunFacade.GunTYPE.HandGun:
-				handGunModel.GetHandGunModel.SetActive(true);
-				assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(true);
-				shotGunModel.GetShotGunModelBodyDecoration.SetActive(true);
-				break;
-			case GunFacade.GunTYPE.AssaultRifle:
-				handGunModel.GetHandGunModelBodyDecoration.SetActive(true);
-				assaultRifleModel.GetAssaultRifleModel.SetActive(true);
-				shotGunModel.GetShotGunModelBodyDecoration.SetActive(true);
-				break;
-			case GunFacade.GunTYPE.ShotGun:
-				handGunModel.GetHandGunModelBodyDecoration.SetActive(true);
-				assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(true);
-				shotGunModel.GetShotGunModel.SetActive(true);
-				break;
-		}
 	}
 
 	/// <summary>

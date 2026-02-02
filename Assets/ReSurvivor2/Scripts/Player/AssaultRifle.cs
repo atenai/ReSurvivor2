@@ -141,8 +141,8 @@ public class AssaultRifle : GunBase
 	protected override void Fire()
 	{
 		AssaultRifleBulletCasingSE();
-		Player.SingletonInstance.AssaultRifleModel.AssaultRifleMuzzleFlashAndShell();
-		Player.SingletonInstance.AssaultRifleModel.AssaultRifleSmoke();
+		Player.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleFlashAndShell();
+		Player.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleSmoke();
 
 		AssaultRifleFireSE();
 
@@ -209,7 +209,7 @@ public class AssaultRifle : GunBase
 	/// </summary> 
 	void AssaultRifleFireSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(Player.SingletonInstance.AssaultRifleModel.AssaultRifleMuzzleTransform);
+		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleTransform);
 	}
 
 	/// <summary>
@@ -217,7 +217,7 @@ public class AssaultRifle : GunBase
 	/// </summary> 
 	void AssaultRifleReloadSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(Player.SingletonInstance.AssaultRifleModel.AssaultRifleBulletCasingTransform);
+		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -225,7 +225,7 @@ public class AssaultRifle : GunBase
 	/// </summary>
 	void AssaultRifleBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(Player.SingletonInstance.AssaultRifleModel.AssaultRifleBulletCasingTransform);
+		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>

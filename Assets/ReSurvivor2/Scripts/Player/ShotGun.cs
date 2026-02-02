@@ -144,8 +144,8 @@ public class ShotGun : GunBase
 	protected override void Fire()
 	{
 		ShotGunBulletCasingSE();
-		Player.SingletonInstance.ShotGunModel.ShotGunMuzzleFlashAndShell();
-		Player.SingletonInstance.ShotGunModel.ShotGunSmoke();
+		Player.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunMuzzleFlashAndShell();
+		Player.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunSmoke();
 
 		ShotGunFireSE();
 		bool isOnceShotGunHitSE = false;
@@ -220,7 +220,7 @@ public class ShotGun : GunBase
 	/// </summary> 
 	void ShotGunFireSE()
 	{
-		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(Player.SingletonInstance.ShotGunModel.ShotGunMuzzleTransform);
+		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunMuzzleTransform);
 	}
 
 	/// <summary>
@@ -228,7 +228,7 @@ public class ShotGun : GunBase
 	/// </summary> 
 	void ShotGunReloadSE()
 	{
-		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(Player.SingletonInstance.ShotGunModel.ShotGunBulletCasingTransform);
+		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -236,7 +236,7 @@ public class ShotGun : GunBase
 	/// </summary>
 	void ShotGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(Player.SingletonInstance.ShotGunModel.ShotGunBulletCasingTransform);
+		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
 	}
 
 	/// <summary>

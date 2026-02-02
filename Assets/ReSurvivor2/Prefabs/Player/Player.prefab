@@ -108,9 +108,10 @@ MonoBehaviour:
   spine_03: {fileID: 8951071322393462715}
   upperarm_r: {fileID: 3247915256232972873}
   upperarm_l: {fileID: 7338203176264424074}
-  handGunModel: {fileID: 8057301629818621534}
-  assaultRifleModel: {fileID: 7988927343523470063}
-  shotGunModel: {fileID: 2865624344731666239}
+  gunModelFacade:
+    handGunModel: {fileID: 8057301629818621534}
+    assaultRifleModel: {fileID: 7988927343523470063}
+    shotGunModel: {fileID: 2865624344731666239}
   maxHp: 100
   tiredStamina: 100
   minute: 10

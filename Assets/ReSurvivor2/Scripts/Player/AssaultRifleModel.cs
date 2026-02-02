@@ -6,7 +6,7 @@ using Knife.Effects;
 /// <summary>
 /// アサルトライフルモデル
 /// </summary>
-public class AssaultRifleModel : MonoBehaviour
+public class AssaultRifleModel : GunModelBase
 {
 	[Header("アサルトライフルモデル")]
 	[Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
@@ -30,31 +30,6 @@ public class AssaultRifleModel : MonoBehaviour
 	[Tooltip("アサルトライフルの硝煙")]
 	[SerializeField] ParticleGroupPlayer assaultRifleAfterFireSmoke;
 	//↑アセットストアのプログラム↑//
-
-	void Start()
-	{
-
-	}
-
-	void Update()
-	{
-		if (ScreenUI.SingletonInstance.IsPause == true)
-		{
-			return;
-		}
-
-		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
-		{
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
-	}
 
 	/// <summary>
 	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
