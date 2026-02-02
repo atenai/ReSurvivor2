@@ -24,18 +24,12 @@ public class GunFacade
 
 	[Tooltip("ハンドガン")]
 	[SerializeField] HandGun handGun = new HandGun();
-	/// <summary>ハンドガン </summary>
-	public HandGun HandGun => handGun;
 
 	[Tooltip("アサルトライフル")]
 	[SerializeField] AssaultRifle assaultRifle = new AssaultRifle();
-	/// <summary>アサルトライフル</summary>
-	public AssaultRifle AssaultRifle => assaultRifle;
 
 	[Tooltip("ショットガン")]
 	[SerializeField] ShotGun shotGun = new ShotGun();
-	/// <summary> ショットガン </summary>
-	public ShotGun ShotGun => shotGun;
 
 	GunBase gunBase;
 	public GunBase GetGunBase => gunBase;
@@ -49,7 +43,7 @@ public class GunFacade
 	{
 		gunBaseList.Add(handGun);
 		gunBaseList.Add(assaultRifle);
-		gunBaseList.Add(ShotGun);
+		gunBaseList.Add(shotGun);
 	}
 
 	/// <summary>
