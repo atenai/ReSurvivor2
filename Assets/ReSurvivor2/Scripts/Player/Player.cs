@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using Cinemachine;
 using Knife.Effects;
 
@@ -31,11 +29,28 @@ public class Player : MonoBehaviour
 		set { isFirstLoad = value; }
 	}
 
+	[Tooltip("アニメーター")]
 	[SerializeField] Animator animator;
 	public Animator Animator => animator;
+	[Tooltip("リジッドボディ")]
 	[SerializeField] Rigidbody rb;
+	[Tooltip("プレイヤーUI")]
+	[SerializeField] PlayerUI playerUI;
 
 	[Header("プレイヤーキャラクターの移動関連")]
+	/// <summary>縦入力</summary>
+	float inputVertical;
+	/// <summary>横入力</summary>
+	float inputHorizontal;
+	/// <summary>プレイヤーの前方向</summary>
+	Vector3 moveForward;
+	/// <summary>カメラの前方向</summary>
+	Vector3 cameraForward;
+	/// <summary>ダッシュするか？</summary>
+	bool isDash = false;
+	/// <summary>エイムしているか？</summary>
+	bool isAim = false;
+	public bool IsAim => isAim;
 	[Tooltip("プレイヤーキャラクターの元気な時の通常移動速度")]
 	[SerializeField] float energeticNormalMoveSpeed = 5.0f;
 	[Tooltip("プレイヤーキャラクターの元気な時のエイム中移動速度")]
@@ -44,22 +59,12 @@ public class Player : MonoBehaviour
 	float tiredNormalMoveSpeed = 4.0f;
 	[Tooltip("プレイヤーキャラクターの疲れた時のエイム中移動速度")]
 	float tiredWeaponMoveSpeed = 2.0f;
-
 	[Tooltip("プレイヤーキャラクターの通常移動速度")]
 	float normalMoveSpeed = 5.0f;
 	public float NormalMoveSpeed => normalMoveSpeed;
 	[Tooltip("プレイヤーキャラクターのエイム中移動速度")]
 	float weaponMoveSpeed = 3.0f;
 	public float WeaponMoveSpeed => weaponMoveSpeed;
-	[Tooltip("ダッシュするか？")]
-	bool isDash = false;
-	float inputHorizontal;
-	float inputVertical;
-	Vector3 moveForward;
-	Vector3 cameraForward;
-	[Tooltip("エイムしているか？")]
-	bool isAim = false;
-	public bool IsAim => isAim;
 
 	[Header("キャラクターモデル")]
 	[Tooltip("キャラクターの首ボーン")]
@@ -119,13 +124,6 @@ public class Player : MonoBehaviour
 	[Tooltip("アサルトライフルの硝煙の生成座標位置")]
 	[SerializeField] Transform assaultRifleAfterFireSmokeTransform;
 	public Transform AssaultRifleAfterFireSmokeTransform => assaultRifleAfterFireSmokeTransform;
-	[Tooltip("キャラクターの手に持っているショットガンのモデル")]
-	[SerializeField] GameObject shotGunModel;
-	[Tooltip("キャラクターの体についているショットガンのモデル")]
-	[SerializeField] GameObject shotGunModelBodyDecoration;
-	[Tooltip("ショットガンのマズルフラッシュの生成座標位置")]
-	[SerializeField] Transform shotGunMuzzleTransform;
-	public Transform ShotGunMuzzleTransform => shotGunMuzzleTransform;
 	//↓アセットストアのプログラム↓//
 	[Tooltip("アサルトライフルのマズルフラッシュと薬莢")]
 	[SerializeField] ParticleGroupEmitter[] assaultRifleShotEmitters;
@@ -134,6 +132,13 @@ public class Player : MonoBehaviour
 	//↑アセットストアのプログラム↑//
 
 	[Header("ショットガンモデル")]
+	[Tooltip("キャラクターの手に持っているショットガンのモデル")]
+	[SerializeField] GameObject shotGunModel;
+	[Tooltip("キャラクターの体についているショットガンのモデル")]
+	[SerializeField] GameObject shotGunModelBodyDecoration;
+	[Tooltip("ショットガンのマズルフラッシュの生成座標位置")]
+	[SerializeField] Transform shotGunMuzzleTransform;
+	public Transform ShotGunMuzzleTransform => shotGunMuzzleTransform;
 	[Tooltip("ショットガンの薬莢の生成座標位置")]
 	[SerializeField] Transform shotGunBulletCasingTransform;
 	public Transform ShotGunBulletCasingTransform => shotGunBulletCasingTransform;
@@ -153,25 +158,18 @@ public class Player : MonoBehaviour
 	[Tooltip("プレイヤーのリスポーンポイントの回転")]
 	Quaternion respawnRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
-	[Header("UI")]
-	[Tooltip("プレイヤーのキャンバス")]
-	[SerializeField] Canvas canvasPlayer;
-	[Tooltip("バックグラウンドイメージ")]
-	[SerializeField] Image imageBG;
-	[Tooltip("プレイヤーUIのY軸の傾き")]
-	float playerUIRotY = 0.2f;
 	[Tooltip("現在のHP")]
 	float currentHp = 100.0f;
+	public float CurrentHp => currentHp;
 	[Tooltip("HPの最大値")]
 	[SerializeField] float maxHp = 100.0f;
-	[Tooltip("HPバー")]
-	[SerializeField] Slider sliderHp;
+	public float MaxHp => maxHp;
 	[Tooltip("現在のスタミナ")]
 	float currentStamina = 1000.0f;
+	public float CurrentStamina => currentStamina;
 	[Tooltip("スタミナの最大値")]
 	float maxStamina = 1000.0f;
-	[Tooltip("スタミナバー")]
-	[SerializeField] Slider sliderStamina;
+	public float MaxStamina => maxStamina;
 	[Tooltip("疲れた時のスタミナ値")]
 	[SerializeField] float tiredStamina = 100.0f;
 	[Tooltip("現在のアーマープレート数")]
@@ -182,8 +180,6 @@ public class Player : MonoBehaviour
 	public int MaxArmorPlate => maxArmorPlate;
 	[Tooltip("アーマープレートの所持できる限界最大数")]
 	int limitMaximumArmorPlate = 10;
-	[Tooltip("アーマープレートテキスト")]
-	[SerializeField] TextMeshProUGUI textArmorPlate;
 	[Tooltip("現在の食料数")]
 	int currentFood = 2;
 	public int CurrentFood => currentFood;
@@ -192,18 +188,6 @@ public class Player : MonoBehaviour
 	public int MaxFood => maxFood;
 	[Tooltip("食料の所持できる限界最大数")]
 	int limitMaximumFood = 10;
-	[Tooltip("食料テキスト")]
-	[SerializeField] TextMeshProUGUI textFood;
-	[Tooltip("リロード画像")]
-	[SerializeField] GameObject imageReload;
-	Color reloadColor = new Color(255.0f, 255.0f, 255.0f, 0.0f);
-	float RotateSpeed = -500.0f;
-	[Tooltip("マガジン弾数テキスト")]
-	[SerializeField] TextMeshProUGUI textMagazine;
-	[Tooltip("弾薬数テキスト")]
-	[SerializeField] TextMeshProUGUI textAmmo;
-	[Tooltip("タイマーテキスト")]
-	[SerializeField] TextMeshProUGUI timerTMP;
 	[Tooltip("分")]
 	[SerializeField] int minute = 10;
 	public int Minute
@@ -251,8 +235,6 @@ public class Player : MonoBehaviour
 	float mineSpawnCount;
 	[Tooltip("現在の地雷数")]
 	int currentMine = 3;
-	[Tooltip("地雷テキスト")]
-	[SerializeField] TextMeshProUGUI textMine;
 	[Tooltip("地雷の所持できる最大数")]
 	int maxMine = 3;
 
@@ -342,11 +324,6 @@ public class Player : MonoBehaviour
 		InitBoneNeck01();
 		InitBoneSpine03();
 		InitHP();
-		InitStamina();
-		StartTextArmorPlate();
-		StartTextFood();
-		StartImageReload();
-		StartTextMagazine();
 		StartDamageEffect();
 		StartHpHealEffect();
 		StartStaminaHealEffect();
@@ -376,54 +353,12 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void InitHP()
 	{
-		sliderHp.value = (float)currentHp / (float)maxHp;
 		//シェーダーへ値を渡す（これだけでOK）
 		Shader.SetGlobalFloat("HP", currentHp / maxHp);
 	}
 
 	/// <summary>
-	/// スタミナの初期化処理
-	/// </summary> 
-	void InitStamina()
-	{
-		sliderStamina.value = (float)currentStamina / (float)maxStamina;
-	}
-
-	/// <summary>
-	/// アーマープレートテキストの初期化処理
-	/// </summary> 
-	void StartTextArmorPlate()
-	{
-		textArmorPlate.text = currentArmorPlate.ToString();
-	}
-
-	/// <summary>
-	/// 食料テキストの初期化処理
-	/// </summary> 
-	void StartTextFood()
-	{
-		textFood.text = currentFood.ToString();
-	}
-
-	/// <summary>
-	/// リロードイメージの初期化処理
-	/// </summary>
-	void StartImageReload()
-	{
-		imageReload.GetComponent<Image>().color = reloadColor;
-	}
-
-	/// <summary>
-	/// 残弾テキストの初期化処理
-	/// </summary>
-	void StartTextMagazine()
-	{
-		textMagazine.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
-		textAmmo.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
-	}
-
-	/// <summary>
-	/// ダメージ画像エフェクト
+	/// ダメージ画像エフェクトの初期化処理
 	/// </summary> 
 	void StartDamageEffect()
 	{
@@ -431,7 +366,7 @@ public class Player : MonoBehaviour
 	}
 
 	/// <summary>
-	/// HP回復画像エフェクト
+	/// HP回復画像エフェクトの初期化処理
 	/// </summary> 
 	void StartHpHealEffect()
 	{
@@ -439,7 +374,7 @@ public class Player : MonoBehaviour
 	}
 
 	/// <summary>
-	/// スタミナ回復画像エフェクト
+	/// スタミナ回復画像エフェクトの初期化処理
 	/// </summary> 
 	void StartStaminaHealEffect()
 	{
@@ -452,7 +387,7 @@ public class Player : MonoBehaviour
 	void InitMine()
 	{
 		mineSpawnCount = mineSpawnTimer;
-		textMine.text = currentMine.ToString();
+		playerUI.TextMine.text = currentMine.ToString();
 	}
 
 	void Update()
@@ -507,9 +442,6 @@ public class Player : MonoBehaviour
 		}
 
 		PlaceMine();
-		PlayerUI();
-		UpdateImageReload();
-		UpdateTextMagazine();
 		UpdateTimerSystem();
 	}
 
@@ -556,78 +488,13 @@ public class Player : MonoBehaviour
 	}
 
 	/// <summary>
-	/// プレイヤーキャラクターの右横にある3DのUI
-	/// </summary> 
-	void PlayerUI()
-	{
-		if (isAim == false)
-		{
-			//常にキャンバスをメインカメラの方を向かせる
-			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
-			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
-			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(this.transform.position.x, this.transform.position.y + PlayerCamera.SingletonInstance.NormalUpPos, this.transform.position.z);
-			//SRT(スケール→トランスフォーム→ローテーション)
-			//HP、スタミナ、弾薬、タイマーUI
-			imageBG.transform.localScale = new Vector3(1.0f, 1.0f, 1f);
-			imageBG.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
-			imageBG.transform.localPosition = new Vector3(150.0f, -100.0f, 0.0f);
-		}
-		else if (isAim == true)
-		{
-			//常にキャンバスをメインカメラの方を向かせる
-			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
-			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
-			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(this.transform.position.x, this.transform.position.y + PlayerCamera.SingletonInstance.AimUpPos, this.transform.position.z);
-			//SRT(スケール→トランスフォーム→ローテーション)
-			//HP、スタミナ、弾薬、タイマーUI
-			imageBG.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
-			imageBG.transform.localRotation = Quaternion.Euler(0.0f, playerUIRotY, 0.0f);
-			imageBG.transform.localPosition = new Vector3(85.0f, -20.0f, 0.0f);
-		}
-	}
-
-	/// <summary>
-	/// リロードイメージの処理
-	/// </summary>
-	void UpdateImageReload()
-	{
-		imageReload.GetComponent<RectTransform>().transform.Rotate(0.0f, 0.0f, RotateSpeed * Time.deltaTime);
-
-		if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
-		{
-			if (reloadColor.a <= 1)
-			{
-				reloadColor.a += Time.deltaTime * 2.0f;
-				imageReload.GetComponent<Image>().color = reloadColor;
-			}
-		}
-		else if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
-		{
-			if (reloadColor.a >= 0)
-			{
-				reloadColor.a -= Time.deltaTime * 2.0f;
-				imageReload.GetComponent<Image>().color = reloadColor;
-			}
-		}
-	}
-
-	/// <summary>
-	/// 残弾テキスト
-	/// </summary>
-	void UpdateTextMagazine()
-	{
-		textMagazine.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
-		textAmmo.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
-	}
-
-	/// <summary>
 	/// 時間経過の処理
 	/// </summary>
 	void UpdateTimerSystem()
 	{
 		if (InGameManager.SingletonInstance.IsMissionActive == false)
 		{
-			timerTMP.text = "--" + ":" + "--";
+			playerUI.TextTimer.text = "--" + ":" + "--";
 			return;
 		}
 
@@ -640,12 +507,12 @@ public class Player : MonoBehaviour
 		if (minute <= 0 && seconds <= 0.0f)
 		{
 			//ゲームオーバー処理
-			timerTMP.text = "00" + ":" + "00";
+			playerUI.TextTimer.text = "00" + ":" + "00";
 			InGameManager.SingletonInstance.GameOver();
 		}
 		else
 		{
-			timerTMP.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
+			playerUI.TextTimer.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
 		}
 	}
 
@@ -672,7 +539,7 @@ public class Player : MonoBehaviour
 			{
 				mineSpawnCount = 0.0f;
 				currentMine = currentMine - 1;
-				textMine.text = currentMine.ToString();
+				playerUI.TextMine.text = currentMine.ToString();
 
 				Vector3 localPosition = new Vector3(this.transform.position.x, 0.0f, this.transform.position.z);
 				// キャラクターの前方にオブジェクトを生成
@@ -929,7 +796,7 @@ public class Player : MonoBehaviour
 	{
 		currentHp = currentHp - amount;
 		//Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
-		sliderHp.value = (float)currentHp / (float)maxHp;
+		playerUI.SliderHp.value = (float)currentHp / (float)maxHp;
 		//シェーダーへ値を渡す（これだけでOK）
 		Shader.SetGlobalFloat("HP", currentHp / maxHp);
 		isDamage = true;
@@ -957,10 +824,10 @@ public class Player : MonoBehaviour
 		}
 
 		currentArmorPlate = currentArmorPlate - 1;
-		textArmorPlate.text = currentArmorPlate.ToString();
+		playerUI.TextArmorPlate.text = currentArmorPlate.ToString();
 
 		currentHp = maxHp;
-		sliderHp.value = (float)currentHp / (float)maxHp;
+		playerUI.SliderHp.value = (float)currentHp / (float)maxHp;
 		//シェーダーへ値を渡す（これだけでOK）
 		Shader.SetGlobalFloat("HP", currentHp / maxHp);
 		isHpHeal = true;
@@ -977,7 +844,7 @@ public class Player : MonoBehaviour
 		}
 
 		currentArmorPlate = currentArmorPlate + 1;
-		textArmorPlate.text = currentArmorPlate.ToString();
+		playerUI.TextArmorPlate.text = currentArmorPlate.ToString();
 	}
 
 	/// <summary>
@@ -1006,7 +873,7 @@ public class Player : MonoBehaviour
 
 		currentStamina = currentStamina - amount;
 		//Debug.Log("<color=orange>currentStamina : " + currentStamina + "</color>");
-		sliderStamina.value = (float)currentStamina / (float)maxStamina;
+		playerUI.SliderStamina.value = (float)currentStamina / (float)maxStamina;
 	}
 
 	/// <summary>
@@ -1025,10 +892,10 @@ public class Player : MonoBehaviour
 		}
 
 		currentFood = currentFood - 1;
-		textFood.text = currentFood.ToString();
+		playerUI.TextFood.text = currentFood.ToString();
 
 		currentStamina = maxStamina;
-		sliderStamina.value = (float)currentStamina / (float)maxStamina;
+		playerUI.SliderStamina.value = (float)currentStamina / (float)maxStamina;
 
 		isStaminaHeal = true;
 	}
@@ -1044,7 +911,7 @@ public class Player : MonoBehaviour
 		}
 
 		currentFood = currentFood + 1;
-		textFood.text = currentFood.ToString();
+		playerUI.TextFood.text = currentFood.ToString();
 	}
 
 	/// <summary>
@@ -1071,7 +938,7 @@ public class Player : MonoBehaviour
 		}
 
 		currentMine = currentMine + 1;
-		textMine.text = currentMine.ToString();
+		playerUI.TextMine.text = currentMine.ToString();
 	}
 
 	/// <summary>
