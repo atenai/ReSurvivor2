@@ -45,9 +45,9 @@ public abstract class GunBase
 	public abstract void Load();
 
 	/// <summary>
-	/// 銃の更新
+	/// 一連の全ての処理
 	/// </summary>
-	public abstract void UpdateGun();
+	public abstract void AllSystem();
 
 	/// <summary>
 	/// 射撃

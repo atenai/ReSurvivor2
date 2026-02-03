@@ -60,26 +60,22 @@ public class GunFacade
 			gun.Load();
 		}
 		this.gunTYPE = ES3.Load<EnumManager.GunTYPE>("CurrentGunType", EnumManager.GunTYPE.HandGun);
+		SwitchWeapon(this.gunTYPE);
 	}
 
 	/// <summary>
-	/// 武器の切り替え初期化処理
-	/// </summary> 
-	public void SwitchWeapon()
+	/// 銃の更新処理
+	/// </summary>
+	public void UpdateGun()
 	{
-		foreach (var gun in gunBaseList)
-		{
-			if (this.gunTYPE == gun.GetGunType)
-			{
-				gunBase = gun;
-			}
-		}
+		SwitchWeaponTrigger();
+		gunBase.AllSystem();
 	}
 
 	/// <summary>
 	/// 武器の切り替えトリガー
 	/// </summary> 
-	public void SwitchWeaponTrigger()
+	void SwitchWeaponTrigger()
 	{
 		if (gunBase.IsReloadTimeActive == true)
 		{
@@ -90,28 +86,36 @@ public class GunFacade
 		{
 			//Debug.Log("ハンドガン");
 			this.gunTYPE = EnumManager.GunTYPE.HandGun;
-			Player.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			SwitchWeapon(this.gunTYPE);
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
 		{
 			//Debug.Log("アサルトライフル");
 			this.gunTYPE = EnumManager.GunTYPE.AssaultRifle;
-			Player.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			SwitchWeapon(this.gunTYPE);
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetAxisRaw("XInput DPad Up&Down") < -0.5f)
 		{
 			//Debug.Log("ショットガン");
 			this.gunTYPE = EnumManager.GunTYPE.ShotGun;
-			Player.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			SwitchWeapon(this.gunTYPE);
 		}
 	}
 
 	/// <summary>
-	/// 武器の更新
-	/// </summary>
-	public void UpdateGun()
+	/// 武器の切り替え初期化処理
+	/// </summary> 
+	void SwitchWeapon(EnumManager.GunTYPE gunTYPE)
 	{
-		gunBase.UpdateGun();
+		foreach (var gun in gunBaseList)
+		{
+			if (gun.GetGunType == gunTYPE)
+			{
+				gunBase = gun;
+			}
+		}
+
+		Player.SingletonInstance.GunModelFacade.SwitchWeaponModel(gunTYPE);
 	}
 
 	/// <summary>
@@ -124,7 +128,7 @@ public class GunFacade
 	{
 		foreach (var gun in gunBaseList)
 		{
-			if (gunTYPE == gun.GetGunType)
+			if (gun.GetGunType == gunTYPE)
 			{
 				gun.AcquireAmmo(amount, unityAction);
 			}

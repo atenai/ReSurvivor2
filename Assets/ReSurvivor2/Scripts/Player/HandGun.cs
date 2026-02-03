@@ -59,9 +59,9 @@ public class HandGun : GunBase
 	}
 
 	/// <summary>
-	/// 銃の更新
+	/// 一連の全ての処理
 	/// </summary>
-	public override void UpdateGun()
+	public override void AllSystem()
 	{
 		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.Down)//左クリックまたはEnterを押している場合に中身を実行する
 		{
