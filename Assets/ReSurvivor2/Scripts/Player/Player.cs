@@ -221,12 +221,12 @@ public class Player : MonoBehaviour
 		//ステージが切り替わる度にリスポーン位置が呼ばれるため、リスポーンのオブジェクトは遷移先のステージで敵やオブジェクトにかぶらないように注意すること！！
 		if (ES3.KeyExists("PlayerPos") == true)
 		{
-			this.transform.position = ES3.Load<Vector3>("PlayerPos");
+			respawnPosition = ES3.Load<Vector3>("PlayerPos");
 			Debug.Log("<color=purple>プレイヤー位置 : " + this.transform.position + "</color>");
 		}
 		if (ES3.KeyExists("PlayerRot") == true)
 		{
-			this.transform.rotation = ES3.Load<Quaternion>("PlayerRot");
+			respawnRotation = ES3.Load<Quaternion>("PlayerRot");
 			Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
 		}
 	}
@@ -249,6 +249,7 @@ public class Player : MonoBehaviour
 		StartHpHealEffect();
 		StartStaminaHealEffect();
 		InitMine();
+		InitRespawnPos();
 	}
 
 	/// <summary>
@@ -291,6 +292,15 @@ public class Player : MonoBehaviour
 	{
 		mineSpawnCount = mineSpawnTimer;
 		playerUI.TextMine.text = currentMine.ToString();
+	}
+
+	/// <summary>
+	/// リスポーン座標
+	/// </summary>
+	void InitRespawnPos()
+	{
+		this.transform.position = respawnPosition;
+		this.transform.rotation = respawnRotation;
 	}
 
 	void Update()

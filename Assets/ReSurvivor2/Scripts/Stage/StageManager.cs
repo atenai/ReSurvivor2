@@ -16,13 +16,24 @@ public class StageManager : MonoBehaviour
 		set { stage = value; }
 	}
 
-	[Tooltip("プレイヤーリスポーンポイント")]
-	[SerializeField] Transform playerRespawnPoint;
+	[Tooltip("プレイヤーリスポーンポイント")]//必ず設定するようにする、設定されていなければエラーログを出すようにする
+	[SerializeField] Transform playerRespawnPoint = null;
+
+	void Awake()
+	{
+		if (playerRespawnPoint != null)
+		{
+			Player.SingletonInstance.SetPlayerRespawnPoint(playerRespawnPoint.position, playerRespawnPoint.rotation);
+		}
+		else
+		{
+			UnityEngine.Debug.LogError("リスポーンポイントが設定されていません。");
+		}
+	}
 
 	void Start()
 	{
 		StartCoroutine(ScreenUI.SingletonInstance.FadeIn());
-		Player.SingletonInstance.SetPlayerRespawnPoint(playerRespawnPoint.position, playerRespawnPoint.rotation);
 		ScreenUI.SingletonInstance.MapUI.SetCurrentPlayerStageNumber((int)stage);
 	}
 
