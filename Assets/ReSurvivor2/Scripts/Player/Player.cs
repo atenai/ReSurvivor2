@@ -9,11 +9,6 @@ using Cinemachine;
 /// </summary>
 public class Player : MonoBehaviour
 {
-	//変数名は「小文字」から始める（test）
-	//関数名は「大文字」から始める（Test）
-	//引数名は「小文字」から始める（test）
-	//アニメーション変数名は「型の最初の文字の_小文字から始める」（f_test）
-
 	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static Player singletonInstance = null;
 	/// <summary>シングルトンのプロパティ</summary>
