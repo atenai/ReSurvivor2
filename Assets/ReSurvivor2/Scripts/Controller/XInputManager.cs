@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class XInputManager : MonoBehaviour
 {
-	//シングルトンで作成（ゲーム中に１つのみにする）
+	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static XInputManager singletonInstance = null;
+	/// <summary>シングルトンのプロパティ</summary>
 	public static XInputManager SingletonInstance => singletonInstance;
 
 	[Tooltip("XInputのDPadハンドラー")]

@@ -7,10 +7,9 @@ using UnityEngine;
 /// </summary> 
 public class PlayerCamera : MonoBehaviour
 {
-	/// <summary>
-	/// シングルトンで作成（ゲーム中に１つのみにする）
-	/// </summary>
+	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static PlayerCamera singletonInstance = null;
+	/// <summary>シングルトンのプロパティ</summary>
 	public static PlayerCamera SingletonInstance => singletonInstance;
 
 	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]

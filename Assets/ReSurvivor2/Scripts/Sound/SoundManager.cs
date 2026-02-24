@@ -7,10 +7,9 @@ using UnityEngine;
 /// </summary>
 public class SoundManager : MonoBehaviour
 {
-	/// <summary>
-	/// シングルトンで作成（ゲーム中に１つのみにする）
-	/// </summary>
+	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static SoundManager singletonInstance = null;
+	/// <summary>シングルトンのプロパティ</summary>
 	public static SoundManager SingletonInstance => singletonInstance;
 
 	[SerializeField] HitSEPool hitSEPool;

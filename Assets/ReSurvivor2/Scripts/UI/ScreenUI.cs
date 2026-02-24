@@ -10,14 +10,9 @@ using TMPro;
 /// </summary>
 public class ScreenUI : MonoBehaviour
 {
-	/// <summary>
-	/// シングルトンで作成（ゲーム中に１つのみにする）
-	/// </summary>
+	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static ScreenUI singletonInstance = null;
-	/// <summary>
-	/// シングルトンのプロパティ
-	/// </summary>
-
+	/// <summary>シングルトンのプロパティ</summary>
 	public static ScreenUI SingletonInstance => singletonInstance;
 
 	[Tooltip("クロスヘアー")]
@@ -615,8 +610,8 @@ public class ScreenUI : MonoBehaviour
 			InGameManager.SingletonInstance.IsMissionActive = true;
 			InGameManager.SingletonInstance.CurrentMissionID = result.MissionID;
 			InGameManager.SingletonInstance.EndComputerName = result.EndComputerName;
-			Player.SingletonInstance.Minute = result.Minute;
-			Player.SingletonInstance.Seconds = result.Seconds;
+			TimerManager.SingletonInstance.Minute = result.Minute;
+			TimerManager.SingletonInstance.Seconds = result.Seconds;
 			MapUI.SetEndComputerStageNumber((int)result.EndComputerName);
 		}
 	}

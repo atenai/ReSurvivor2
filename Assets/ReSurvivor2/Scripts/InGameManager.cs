@@ -9,13 +9,9 @@ using UnityEngine.SceneManagement;
 /// </summary> 
 public class InGameManager : MonoBehaviour
 {
-	/// <summary>
-	/// シングルトンで作成（ゲーム中に１つのみにする）
-	/// </summary>
+	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static InGameManager singletonInstance = null;
-	/// <summary>
-	/// シングルトンのプロパティ
-	/// </summary>
+	/// <summary>シングルトンのプロパティ</summary>
 	public static InGameManager SingletonInstance => singletonInstance;
 
 	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]

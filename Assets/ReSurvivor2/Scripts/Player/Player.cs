@@ -14,10 +14,9 @@ public class Player : MonoBehaviour
 	//引数名は「小文字」から始める（test）
 	//アニメーション変数名は「型の最初の文字の_小文字から始める」（f_test）
 
-	/// <summary>
-	/// シングルトンで作成（ゲーム中に１つのみにする）
-	/// </summary>
+	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static Player singletonInstance = null;
+	/// <summary>シングルトンのプロパティ</summary>
 	public static Player SingletonInstance => singletonInstance;
 
 	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]
@@ -35,6 +34,7 @@ public class Player : MonoBehaviour
 	[SerializeField] Rigidbody rb;
 	[Tooltip("プレイヤーUI")]
 	[SerializeField] PlayerUI playerUI;
+	public PlayerUI PlayerUI => playerUI;
 
 	[Header("プレイヤーキャラクターの移動関連")]
 	/// <summary>縦入力</summary>
@@ -101,22 +101,7 @@ public class Player : MonoBehaviour
 	public int MaxFood => maxFood;
 	[Tooltip("食料の所持できる限界最大数")]
 	int limitMaximumFood = 10;
-	[Tooltip("分")]
-	[SerializeField] int minute = 10;
-	public int Minute
-	{
-		get { return minute; }
-		set { minute = value; }
-	}
-	[Tooltip("秒")]
-	[SerializeField] float seconds = 0.0f;
-	public float Seconds
-	{
-		get { return seconds; }
-		set { seconds = value; }
-	}
-	[Tooltip("totalTImeは秒で集計されている")]
-	float totalTime = 0.0f;
+
 	[Tooltip("ダメージ画像エフェクトトリガー")]
 	bool isDamage = false;
 	public bool IsDamage
@@ -166,7 +151,6 @@ public class Player : MonoBehaviour
 
 	void Awake()
 	{
-		Debug.Log("<color=yellow>プレイヤーAwake()</color>");
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
 		if (singletonInstance == null)
 		{
@@ -353,7 +337,6 @@ public class Player : MonoBehaviour
 		}
 
 		PlaceMine();
-		UpdateTimerSystem();
 	}
 
 	/// <summary>
@@ -364,35 +347,6 @@ public class Player : MonoBehaviour
 		animator.SetFloat("f_moveSpeedX", inputHorizontal);
 		animator.SetFloat("f_moveSpeedY", inputVertical);
 		animator.SetBool("b_isAim", isAim);
-	}
-
-	/// <summary>
-	/// 時間経過の処理
-	/// </summary>
-	void UpdateTimerSystem()
-	{
-		if (InGameManager.SingletonInstance.IsMissionActive == false)
-		{
-			playerUI.TextTimer.text = "--" + ":" + "--";
-			return;
-		}
-
-		totalTime = (minute * 60) + seconds;
-		totalTime = totalTime - Time.deltaTime;
-
-		minute = (int)totalTime / 60;
-		seconds = totalTime - (minute * 60);
-
-		if (minute <= 0 && seconds <= 0.0f)
-		{
-			//ゲームオーバー処理
-			playerUI.TextTimer.text = "00" + ":" + "00";
-			InGameManager.SingletonInstance.GameOver();
-		}
-		else
-		{
-			playerUI.TextTimer.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
-		}
 	}
 
 	/// <summary>

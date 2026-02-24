@@ -7,10 +7,9 @@ using UnityEngine;
 /// </summary>
 public class EffectManager : MonoBehaviour
 {
-	/// <summary>
-	/// シングルトンで作成（ゲーム中に１つのみにする）
-	/// </summary>
+	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static EffectManager singletonInstance = null;
+	/// <summary>シングルトンのプロパティ</summary>
 	public static EffectManager SingletonInstance => singletonInstance;
 
 	[Header("着弾エフェクト")]

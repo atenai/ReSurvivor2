@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// グレネード位置表示マーカーの管理クラス
+/// </summary>
 public class GrenadeIndicatorManager : MonoBehaviour
 {
-	//シングルトンで作成（ゲーム中に１つのみにする）
+	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static GrenadeIndicatorManager singletonInstance = null;
+	/// <summary>シングルトンのプロパティ</summary>
 	public static GrenadeIndicatorManager SingletonInstance => singletonInstance;
 	[Tooltip("グレネード位置表示マーカー用プレハブ")]
 	[SerializeField] private GameObject grenadeIndicatorPrefab;

@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// エネミーマネージャー
+/// </summary>
 public class EnemyManager : MonoBehaviour
 {
-	//シングルトンで作成（ゲーム中に１つのみにする）
+	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static EnemyManager singletonInstance = null;
+	/// <summary>シングルトンのプロパティ</summary>
 	public static EnemyManager SingletonInstance => singletonInstance;
 
 	[SerializeField] GroundEnemy[] groundEnemies;
