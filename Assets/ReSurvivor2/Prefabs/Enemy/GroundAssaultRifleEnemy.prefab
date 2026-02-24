@@ -198,9 +198,9 @@ MonoBehaviour:
         Ground Enemy Dead Conditional","Instant":true},{"Type":"GroundEnemyDeadAction","NodeData":{"Offset":"(-1.8371048,147.726166)"},"ID":7,"Name":"Ground
         Enemy Dead Action","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-247.5409,152.4591)"},"ID":8,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyChaseConditional","NodeData":{"Offset":"(-419.999756,151.4281)"},"ID":9,"Name":"Can
         Ground Enemy Chase Conditional","Instant":true},{"Type":"CanGroundEnemyTrackingRangeConditional","NodeData":{"Offset":"(-182.950531,153.009338)"},"ID":10,"Name":"Can
-        Ground Enemy Tracking Range Conditional","Instant":true,"Singlerange":40},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-1.18015289,145.714355)"},"ID":11,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-850,200)"},"ID":12,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyReloadConditional","NodeData":{"Offset":"(-133.521729,150.392456)"},"ID":13,"Name":"Can
-        Ground Enemy Reload Conditional","Instant":true},{"Type":"GroundEnemyReloadAction","NodeData":{"Offset":"(80,150)"},"ID":14,"Name":"Ground
-        Enemy Reload Action","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-354.093,197.577637)"},"ID":15,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyAwayFromTheTargetConditional","NodeData":{"Offset":"(-162.6978,147.278)"},"ID":16,"Name":"Can
+        Ground Enemy Tracking Range Conditional","Instant":true,"Singlerange":40},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-1.18015289,145.714355)"},"ID":11,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-850,200)"},"ID":12,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyReloadConditional","NodeData":{"Offset":"(-122.590836,150.392456)"},"ID":13,"Name":"Can
+        Ground Enemy Reload Conditional","Instant":true},{"Type":"GroundEnemyAssaultRifleReloadAction","NodeData":{"Offset":"(109.41111,152.958527)"},"ID":14,"Name":"Ground
+        Enemy Assault Rifle Reload Action","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-354.093,197.577637)"},"ID":15,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyAwayFromTheTargetConditional","NodeData":{"Offset":"(-162.6978,147.278)"},"ID":16,"Name":"Can
         Ground Enemy Away From The Target Conditional","Instant":true},{"Type":"GroundEnemyMoveTargetAction","NodeData":{"Offset":"(68.13437,153.269043)"},"ID":17,"Name":"Ground
         Enemy Move Target Action","Instant":true,"SingleendPos":2.5}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(45.23804,199.523941)"},"ID":18,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyWithinSpecificDistanceConditional","NodeData":{"Offset":"(-80.79617,151.254883)"},"ID":19,"Name":"Can
         Ground Enemy Within Specific Distance Conditional","Instant":true},{"Type":"SelfMadeRandom","NodeData":{"Offset":"(130,150)"},"ID":20,"Name":"Self
@@ -221,7 +221,7 @@ MonoBehaviour:
         - {fileID: 5312225446664324175, guid: da37bcfce523686419f000b4d8c2200b, type: 3}
         byteData: 
         byteDataArray: 
-      Version: 1.7.7
+      Version: 1.7.13
   gizmoViewMode: 2
   showBehaviorDesignerGizmo: 1
 --- !u!114 &3045641993606833947
@@ -261,9 +261,6 @@ MonoBehaviour:
   groundedRadius: 0.2
   shootingDistance: 14
   magazineCapacity: 30
-  shootSe: {fileID: 8217214238848448886, guid: cb79abab45b525d4bb855cc4f856f2f7, type: 3}
-  reloadSe: {fileID: 8217214238848448886, guid: a86a0a4f0eb7bc2429ce1e1624dd7845, type: 3}
-  bulletCasingSe: {fileID: 8217214238848448886, guid: 0b7a2882204ab784bb1f500c5a6eb54e, type: 3}
   shotEmitters:
   - {fileID: 1717239033193219912}
   - {fileID: 7646512579346927600}

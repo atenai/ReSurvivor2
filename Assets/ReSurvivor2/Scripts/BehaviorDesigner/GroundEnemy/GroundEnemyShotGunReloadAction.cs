@@ -6,7 +6,7 @@ using UnityEngine;
 /// リロードするタスク
 /// </summary>
 [TaskCategory("GroundEnemy")]
-public class GroundEnemyReloadAction : Action
+public class GroundEnemyShotGunReloadAction : Action
 {
 	GroundEnemy groundEnemy;
 
@@ -47,9 +47,7 @@ public class GroundEnemyReloadAction : Action
 	void InitReload()
 	{
 		groundEnemy.IsReloadTimeActive = true;
-
-		groundEnemy.AssaultRifleReloadSE();
-		//groundEnemy.ShotGunReloadSE();
+		groundEnemy.ShotGunReloadSE();
 	}
 
 	// Tick毎に呼ばれる
