@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// XInputの状態を管理するクラス
+/// </summary>
 public class XInputManager : MonoBehaviour
 {
 	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
@@ -11,16 +14,12 @@ public class XInputManager : MonoBehaviour
 
 	[Tooltip("XInputのDPadハンドラー")]
 	XInputDPadHandler xInputDPadHandler = new XInputDPadHandler();
-	/// <summary>
-	/// XInputのDPadハンドラー
-	/// </summary>
+	/// <summary> XInputのDPadハンドラー </summary>
 	public XInputDPadHandler XInputDPadHandler => xInputDPadHandler;
 
 	[Tooltip("XInputのトリガーハンドラー")]
 	XInputTriggerHandler xInputTriggerHandler = new XInputTriggerHandler();
-	/// <summary>
-	/// XInputのトリガーハンドラー
-	/// </summary>
+	/// <summary> XInputのトリガーハンドラー</summary>
 	public XInputTriggerHandler XInputTriggerHandler => xInputTriggerHandler;
 
 	void Awake()
@@ -35,11 +34,6 @@ public class XInputManager : MonoBehaviour
 		{
 			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
 		}
-	}
-
-	void Start()
-	{
-
 	}
 
 	void Update()

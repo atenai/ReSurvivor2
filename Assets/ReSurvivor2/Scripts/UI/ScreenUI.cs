@@ -186,8 +186,8 @@ public class ScreenUI : MonoBehaviour
 		{
 			mapUI.EnableMap();
 		}
-		UpdateComputerMenuSystem();
 
+		UpdateComputerMenuSystem();
 		UpdatePauseMenuSystem();
 	}
 

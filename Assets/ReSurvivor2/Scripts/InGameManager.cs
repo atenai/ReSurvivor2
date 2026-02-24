@@ -208,7 +208,7 @@ public class InGameManager : MonoBehaviour
 	{
 		if (missionID0 == true && missionID1 == true && missionID2 == true)
 		{
-			Debug.Log("<color=yellow>ゲームクリアー</color>");
+			Debug.Log("<color=blue>ゲームクリアー</color>");
 			InGameManager.IsFirstLoad = true;
 			Player.IsFirstLoad = true;
 			PlayerCamera.IsFirstLoad = true;
@@ -222,20 +222,11 @@ public class InGameManager : MonoBehaviour
 	/// </summary>
 	public void GameOver()
 	{
+		Debug.Log("<color=red>ゲームオーバー</color>");
 		InGameManager.IsFirstLoad = true;
 		Player.IsFirstLoad = true;
 		PlayerCamera.IsFirstLoad = true;
 		//ゲームオーバー処理
 		SceneManager.LoadScene("GameOver");
-	}
-
-	void Start()
-	{
-
-	}
-
-	void Update()
-	{
-
 	}
 }

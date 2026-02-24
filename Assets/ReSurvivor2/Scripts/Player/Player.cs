@@ -289,11 +289,13 @@ public class Player : MonoBehaviour
 
 	void Update()
 	{
+		//ポーズ中は切り上げる
 		if (ScreenUI.SingletonInstance.IsPause == true)
 		{
 			return;
 		}
 
+		//コンピュータを使用中は切り上げる
 		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
 		{
 			return;

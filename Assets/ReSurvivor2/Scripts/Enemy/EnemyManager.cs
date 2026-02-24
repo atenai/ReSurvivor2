@@ -28,16 +28,6 @@ public class EnemyManager : MonoBehaviour
 		}
 	}
 
-	void Start()
-	{
-
-	}
-
-	void Update()
-	{
-
-	}
-
 	public void AllChaseOn()
 	{
 		Debug.Log("<color=yellow>EnemyManagerのAllChaseOn()</color>");

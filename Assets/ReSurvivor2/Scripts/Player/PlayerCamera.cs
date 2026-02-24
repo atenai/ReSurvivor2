@@ -138,11 +138,13 @@ public class PlayerCamera : MonoBehaviour
 
 	void Update()
 	{
+		//ポーズ中は切り上げる
 		if (ScreenUI.SingletonInstance.IsPause == true)
 		{
 			return;
 		}
 
+		//コンピュータを使用中は切り上げる
 		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
 		{
 			return;
@@ -155,6 +157,7 @@ public class PlayerCamera : MonoBehaviour
 		}
 		//↓ロード中に動かせない処理
 
+		//シネマシーンカメラがアクティブの場合は切り上げる
 		if (isCinemachineActive == true)
 		{
 			return;
@@ -165,6 +168,7 @@ public class PlayerCamera : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		//シネマシーンカメラがアクティブの場合は切り上げる
 		if (isCinemachineActive == true)
 		{
 			return;
