@@ -116,16 +116,6 @@ public class GroundEnemy : Target
 	readonly float reloadTimeDefine = 1.5f;
 	public float ReloadTimeDefine => reloadTimeDefine;
 
-	[Tooltip("射撃のSE")]
-	[SerializeField] GameObject shootSe;
-	float shootSeDestroyTime = 1.0f;
-	[Tooltip("リロードのSE")]
-	[SerializeField] GameObject reloadSe;
-	float reloadSeDestroyTime = 1.0f;
-	[Tooltip("薬莢のSE")]
-	[SerializeField] GameObject bulletCasingSe;
-	float bulletCasingSeDestroyTime = 1.0f;
-
 	//↓アセットストアのプログラム↓//
 	[Tooltip("マズルフラッシュと薬莢")]
 	[SerializeField] ParticleGroupEmitter[] shotEmitters;
@@ -473,30 +463,75 @@ public class GroundEnemy : Target
 	}
 
 	/// <summary>
-	/// 射撃SE
+	/// ハンドガンの射撃SE
 	/// </summary> 
-	public void FireSE()
+	public void HandGunFireSE()
 	{
-		UnityEngine.GameObject se = Instantiate(shootSe, this.transform.position, Quaternion.identity);
-		Destroy(se, shootSeDestroyTime);
+		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.HandGunModel.HandGunMuzzleTransform);
 	}
 
 	/// <summary>
-	/// リロードSE
+	/// ハンドガンのリロードSE
 	/// </summary> 
-	public void ReloadSE()
+	public void HandGunReloadSE()
 	{
-		UnityEngine.GameObject se = Instantiate(reloadSe, this.transform.position, Quaternion.identity);
-		Destroy(se, reloadSeDestroyTime);
+		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>
-	/// 薬莢SE
+	/// ハンドガンの薬莢SE
 	/// </summary>
-	public void BulletCasingSE()
+	public void HandGunBulletCasingSE()
 	{
-		UnityEngine.GameObject se = Instantiate(bulletCasingSe, this.transform.position, Quaternion.identity);
-		Destroy(se, bulletCasingSeDestroyTime);
+		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
+	}
+
+	/// <summary>
+	/// アサルトライフルの射撃SE
+	/// </summary> 
+	public void AssaultRifleFireSE()
+	{
+		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(this.transform);
+	}
+
+	/// <summary>
+	/// アサルトライフルのリロードSE
+	/// </summary> 
+	public void AssaultRifleReloadSE()
+	{
+		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(this.transform);
+	}
+
+	/// <summary>
+	/// アサルトライフルの薬莢SE
+	/// </summary>
+	public void AssaultRifleBulletCasingSE()
+	{
+		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(this.transform);
+	}
+
+	/// <summary>
+	/// ショットガンの射撃SE
+	/// </summary> 
+	public void ShotGunFireSE()
+	{
+		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(this.transform);
+	}
+
+	/// <summary>
+	/// ショットガンのリロードSE
+	/// </summary> 
+	public void ShotGunReloadSE()
+	{
+		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(this.transform);
+	}
+
+	/// <summary>
+	/// ショットガンの薬莢SE
+	/// </summary>
+	public void ShotGunBulletCasingSE()
+	{
+		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(this.transform);
 	}
 
 	/// <summary>

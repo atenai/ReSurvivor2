@@ -10,7 +10,7 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 {
 	ObjectPool<GameObject> objectPool;
 	[SerializeField] GameObject prefab;
-	int defalutCapacity = 30 * 2;
+	int defalutCapacity = 30 * 5;
 	int maxCount = 300;
 
 	/// <summary>

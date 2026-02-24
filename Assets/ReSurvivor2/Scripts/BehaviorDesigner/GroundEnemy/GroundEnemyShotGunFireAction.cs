@@ -131,11 +131,11 @@ public class GroundEnemyShotGunFireAction : Action
 	/// </summary> 
 	void Fire()
 	{
-		groundEnemy.BulletCasingSE();
+		groundEnemy.ShotGunBulletCasingSE();
 		groundEnemy.MuzzleFlashAndShell();
 		groundEnemy.AfterFireSmoke();
 
-		groundEnemy.FireSE();
+		groundEnemy.ShotGunFireSE();
 
 		for (int i = 0; i < shotGunBullet; i++)
 		{

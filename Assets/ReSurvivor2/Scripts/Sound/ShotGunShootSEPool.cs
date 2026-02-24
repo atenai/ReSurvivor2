@@ -10,9 +10,7 @@ public class ShotGunShootSEPool : MonoBehaviour
 {
 	ObjectPool<GameObject> objectPool;
 	[SerializeField] GameObject prefab;
-	//int defalutCapacity = PlayerCamera.SingletonInstance.HandGunMagazineCapacity;//本当はこう書きたいが、インスタンスがPlayerCameraより先にされてしまいnullになってしまう
-	int defalutCapacity = 8 * 2;
-	//int maxCount = PlayerCamera.SingletonInstance.MaxHandGunAmmo;//本当はこう書きたいが、インスタンスがPlayerCameraより先にされてしまいnullになってしまう
+	int defalutCapacity = 8 * 3;
 	int maxCount = 40;
 
 	/// <summary>

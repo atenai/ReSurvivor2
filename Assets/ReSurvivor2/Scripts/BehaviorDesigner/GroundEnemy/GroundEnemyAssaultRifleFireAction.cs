@@ -141,11 +141,11 @@ public class GroundEnemyAssaultRifleFireAction : Action
 	/// </summary> 
 	void Fire()
 	{
-		groundEnemy.BulletCasingSE();
+		groundEnemy.AssaultRifleBulletCasingSE();
 		groundEnemy.MuzzleFlashAndShell();
 		groundEnemy.AfterFireSmoke();
 
-		groundEnemy.FireSE();
+		groundEnemy.AssaultRifleFireSE();
 
 		Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 1f, this.transform.position.z);
 

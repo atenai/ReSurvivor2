@@ -17,14 +17,12 @@ public class AssaultRifle : GunBase
 
 	[Tooltip("アサルトライフルの最大マガジン数")]
 	readonly int assaultRifleMagazineCapacity = 30;
-	public int AssaultRifleMagazineCapacity => assaultRifleMagazineCapacity;//SE Pool用にいるかも
 
 	[Tooltip("アサルトライフルの初期残弾数")]
 	readonly int initCurrentAssaultRifleAmmoDefine = 150;
 
 	[Tooltip("アサルトライフルの最大残弾数")]
 	readonly int maxAssaultRifleAmmo = 300;//将来的には拡張マガジンポーチを取得すると増える的なものを入れるかも
-	public int MaxAssaultRifleAmmo => maxAssaultRifleAmmo;//SE Pool用にいるかも
 
 	[Tooltip("アサルトライフルのリロード時間")]
 	readonly float assaultRifleReloadTimeDefine = 1.5f;

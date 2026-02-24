@@ -10,7 +10,7 @@ public class HandGunBulletCasingSEPool : MonoBehaviour
 {
 	ObjectPool<GameObject> objectPool;
 	[SerializeField] GameObject prefab;
-	int defalutCapacity = 7 * 2;
+	int defalutCapacity = 7 * 3;
 	int maxCount = 70;
 
 	/// <summary>
