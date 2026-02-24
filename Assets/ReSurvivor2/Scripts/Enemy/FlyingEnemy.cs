@@ -399,7 +399,7 @@ public class FlyingEnemy : Target
 		if (CurrentHp <= 0.0f)
 		{
 			//敵マーカー削除
-			IndicatorManager.SingletonInstance.DeleteIndicator(this);
+			EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 			IsDead = true;
 			Explosion();
 		}

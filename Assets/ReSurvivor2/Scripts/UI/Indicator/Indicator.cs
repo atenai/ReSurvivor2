@@ -10,20 +10,21 @@ using DG.Tweening;
 public class Indicator : MonoBehaviour
 {
 	[SerializeField] Image image;
-	Transform enemy;
+	//インジケーターの対象とするターゲットゲームオブジェクトのTransform
+	Transform target;
 	Sequence sequence;
 
 	public void Init(GameObject gameObject)
 	{
-		enemy = gameObject.transform;
+		target = gameObject.transform;
 	}
 
 	void Update()
 	{
-		if (enemy != null)
+		if (target != null)
 		{
 			this.gameObject.SetActive(true);
-			UnityEngine.Quaternion rot = Quaternion.LookRotation(enemy.position - Player.SingletonInstance.gameObject.transform.position);
+			UnityEngine.Quaternion rot = Quaternion.LookRotation(target.position - Player.SingletonInstance.gameObject.transform.position);
 			float angle = (PlayerCamera.SingletonInstance.gameObject.transform.eulerAngles - rot.eulerAngles).y;
 			this.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, angle);
 		}

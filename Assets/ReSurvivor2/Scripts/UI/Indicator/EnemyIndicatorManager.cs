@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// エネミーインジケーターマネージャー
+/// エネミー位置表示マーカーの管理クラス
 /// </summary>
-public class IndicatorManager : MonoBehaviour
+public class EnemyIndicatorManager : MonoBehaviour
 {
 	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
-	static IndicatorManager singletonInstance = null;
+	static EnemyIndicatorManager singletonInstance = null;
 	/// <summary>シングルトンのプロパティ</summary>
-	public static IndicatorManager SingletonInstance => singletonInstance;
+	public static EnemyIndicatorManager SingletonInstance => singletonInstance;
 	[Tooltip("敵位置表示マーカー用プレハブ")]
 	[SerializeField] private GameObject indicatorPrefab;
 	private Dictionary<Target, GameObject> indicatorDic = new Dictionary<Target, GameObject>();   //マーカー一覧

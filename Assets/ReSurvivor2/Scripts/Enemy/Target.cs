@@ -40,7 +40,7 @@ public class Target : MonoBehaviour
 		currentHp = maxHp;
 		isDead = false;
 		//敵マーカー作成
-		IndicatorManager.SingletonInstance.InstanceIndicator(this);
+		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
 	}
 
 	public void Update()
@@ -55,7 +55,7 @@ public class Target : MonoBehaviour
 	void OnDisable()
 	{
 		//敵マーカー削除
-		IndicatorManager.SingletonInstance.DeleteIndicator(this);
+		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 	}
 
 	/// <summary>
@@ -71,7 +71,7 @@ public class Target : MonoBehaviour
 		if (currentHp <= 0.0f)
 		{
 			//敵マーカー削除
-			IndicatorManager.SingletonInstance.DeleteIndicator(this);
+			EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 			Destroy(this.gameObject);
 		}
 	}

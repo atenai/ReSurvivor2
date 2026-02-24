@@ -167,7 +167,7 @@ public class GroundEnemyAssaultRifleFireAction : Action
 					player.TakeDamage(Damage);
 					groundEnemy.Shaker();
 					//敵マーカー表示
-					IndicatorManager.SingletonInstance.ShowIndicator(groundEnemy);
+					EnemyIndicatorManager.SingletonInstance.ShowIndicator(groundEnemy);
 				}
 			}
 		}
