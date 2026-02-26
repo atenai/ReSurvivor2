@@ -169,7 +169,7 @@ public class PlayerUI : MonoBehaviour
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
 			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(Player.SingletonInstance.transform.position.x, Player.SingletonInstance.transform.position.y + PlayerCamera.SingletonInstance.NormalUpPos, Player.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
-			const float Normal_Scale = 0.8f;
+			const float Normal_Scale = 0.6f;
 			const float Normal_RotY = 0.4f;
 			const float Normal_RightPos = 125.0f;
 			const float Normal_UpPos = -60.0f;

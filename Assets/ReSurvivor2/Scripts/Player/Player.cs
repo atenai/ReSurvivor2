@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
 	Vector3 cameraForward;
 	/// <summary>ダッシュするか？</summary>
 	bool isDash = false;
+	public bool IsDash => isDash;
 	/// <summary>エイムしているか？</summary>
 	bool isAim = false;
 	public bool IsAim => isAim;

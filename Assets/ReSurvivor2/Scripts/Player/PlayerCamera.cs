@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 /// <summary>
 /// プレイヤーカメラ
@@ -21,6 +22,9 @@ public class PlayerCamera : MonoBehaviour
 	}
 
 	[Header("カメラ")]
+
+	[Tooltip("子のメインカメラ")]
+	[SerializeField] CinemachineVirtualCamera childMainDashMoveVirtualCamera;
 
 	[Tooltip("X軸のカメラの回転スピード")]
 	[Range(50, 150)][SerializeField] float normalCameraSpeedX = 100;
@@ -53,7 +57,7 @@ public class PlayerCamera : MonoBehaviour
 	const float normalUpPos = 1.6f;
 	public float NormalUpPos => normalUpPos;
 	[Tooltip("通常カメラのz位置")]
-	const float normalForwardPos = -4.0f;
+	const float normalForwardPos = -3.5f;
 
 	[Tooltip("肩越しカメラのx位置")]
 	const float aimRightPos = 0.5f;
@@ -184,6 +188,16 @@ public class PlayerCamera : MonoBehaviour
 			CameraAimMove();
 		}
 
+		if (Player.SingletonInstance.IsDash == true)
+		{
+			//徐々に子カメラをダッシュ時の位置にする
+			childMainDashMoveVirtualCamera.Priority = 200;
+		}
+		else
+		{
+			//徐々に子カメラを通常時の位置にする
+			childMainDashMoveVirtualCamera.Priority = 10;
+		}
 
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)

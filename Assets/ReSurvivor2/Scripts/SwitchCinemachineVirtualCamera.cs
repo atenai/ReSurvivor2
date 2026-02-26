@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
+/// <summary>
+/// CinemachineVirtualCameraを切り替えるスクリプト
+/// </summary>
 public class SwitchCinemachineVirtualCamera : MonoBehaviour
 {
-	[SerializeField]
 	[Tooltip("切り替え後のカメラ")]
-	private CinemachineVirtualCamera virtualCamera;
+	[SerializeField] CinemachineVirtualCamera virtualCamera;
 	// 切り替え後のカメラの元々のPriorityを保持しておく
-	private int defaultPriority;
+	int defaultPriority;
 
 	void Start()
 	{
@@ -22,17 +24,9 @@ public class SwitchCinemachineVirtualCamera : MonoBehaviour
 		if (collider.gameObject.CompareTag("Player"))
 		{
 			PlayerCamera.SingletonInstance.IsCinemachineActive = true;
-			StartCoroutine(ChangePriority());
+			// 他のvirtualCameraよりも高い優先度にすることで切り替わる
+			virtualCamera.Priority = 300;
 		}
-	}
-
-	IEnumerator ChangePriority()
-	{
-		//1フレーム停止
-		yield return null;
-
-		// 他のvirtualCameraよりも高い優先度にすることで切り替わる
-		virtualCamera.Priority = 150;
 	}
 
 	private void OnTriggerExit(Collider collider)
