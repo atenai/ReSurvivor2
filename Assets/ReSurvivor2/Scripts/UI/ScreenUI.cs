@@ -103,7 +103,9 @@ public class ScreenUI : MonoBehaviour
 	[Tooltip("メールプレハブ")]
 	[SerializeField] GameObject mailPrefab;
 	[Tooltip("メールメッセージタイトル")]
-	[SerializeField] TextMeshProUGUI mailMessageTitle;
+	[SerializeField] TextMeshProUGUI mailTitleMessage;
+	[Tooltip("メールメッセージ本文")]
+	[SerializeField] TextMeshProUGUI mailMainMessage;
 	/// <summary>
 	/// ミッションリスト
 	/// </summary>
@@ -516,11 +518,13 @@ public class ScreenUI : MonoBehaviour
 		if (this.missionList.Count != 0)
 		{
 			//メールメッセージ
-			mailMessageTitle.text = this.missionList[currentMailListSelectedIndex].MissionName;
+			mailTitleMessage.text = this.missionList[currentMailListSelectedIndex].MailTitleMessage;
+			mailMainMessage.text = this.missionList[currentMailListSelectedIndex].MailMainMessage;
 		}
 		else
 		{
-			mailMessageTitle.text = "-----";
+			mailTitleMessage.text = "-----";
+			mailMainMessage.text = "-----";
 		}
 
 		isComputerMenuActive = true;
@@ -570,7 +574,8 @@ public class ScreenUI : MonoBehaviour
 				currentMailListSelectedIndex = this.missionList.Count - 1;
 			}
 			ChangeColorMailListContentImage();
-			mailMessageTitle.text = this.missionList[currentMailListSelectedIndex].MissionName;
+			mailTitleMessage.text = this.missionList[currentMailListSelectedIndex].MailTitleMessage;
+			mailMainMessage.text = this.missionList[currentMailListSelectedIndex].MailMainMessage;
 		}
 		else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || XInputManager.SingletonInstance.XInputDPadHandler.DownDown)
 		{
@@ -580,7 +585,8 @@ public class ScreenUI : MonoBehaviour
 				currentMailListSelectedIndex = 0;
 			}
 			ChangeColorMailListContentImage();
-			mailMessageTitle.text = this.missionList[currentMailListSelectedIndex].MissionName;
+			mailTitleMessage.text = this.missionList[currentMailListSelectedIndex].MailTitleMessage;
+			mailMainMessage.text = this.missionList[currentMailListSelectedIndex].MailMainMessage;
 		}
 
 		//Enterキーで選択を確定
@@ -601,11 +607,12 @@ public class ScreenUI : MonoBehaviour
 			if (i == currentMailListSelectedIndex)
 			{
 				//選択中の項目の色を変更
-				mailListContentList[i].Image_MailBG.color = new Color(mailListContentList[i].Image_MailBG.color.r, mailListContentList[i].Image_MailBG.color.g, mailListContentList[i].Image_MailBG.color.b, 120.0f / 255.0f);
+				mailListContentList[i].Image_MailBG.color = new Color32(0, 100, 255, 120);
 			}
 			else
 			{
-				mailListContentList[i].Image_MailBG.color = new Color(mailListContentList[i].Image_MailBG.color.r, mailListContentList[i].Image_MailBG.color.g, mailListContentList[i].Image_MailBG.color.b, 0.0f);
+				//選択中でない項目の色を変更
+				mailListContentList[i].Image_MailBG.color = new Color32(100, 100, 100, 120);
 			}
 		}
 	}

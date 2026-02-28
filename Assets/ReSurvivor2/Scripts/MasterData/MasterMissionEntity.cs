@@ -32,4 +32,12 @@ public class MasterMissionEntity
 	/// ミッション名
 	/// </summary>
 	public string MissionName;
+	/// <summary>
+	/// メールのタイトルメッセージ
+	/// </summary>
+	public string MailTitleMessage;
+	/// <summary>
+	/// メールのメインメッセージ
+	/// </summary>	
+	public string MailMainMessage;
 }
