@@ -348,20 +348,20 @@ public class Player : MonoBehaviour
 			RestoresStamina();
 		}
 
-		//MineHoldKey();
+		MineHoldKey();
 		MineHoldXInput();
 	}
 
 	void MineHoldKey()
 	{
-		//キーを押しているかを判定
+		//押しているかを判定
 		if (Input.GetKey(KeyCode.Alpha4) || Input.GetKey(KeyCode.G))
 		{
 			mineSpawnCount = mineSpawnCount + Time.deltaTime;
 			Debug.Log("押しているフレーム数 : " + mineSpawnCount);
 		}
 
-		//キーを離した瞬間を判定
+		//離した瞬間を判定
 		if (Input.GetKeyUp(KeyCode.Alpha4) || Input.GetKeyUp(KeyCode.G))
 		{
 			//長押しを判定
@@ -377,9 +377,24 @@ public class Player : MonoBehaviour
 
 	void MineHoldXInput()
 	{
-		if (XInputManager.SingletonInstance.XInputDPadHandler.UpDown == true)
+		//押しているかを判定
+		if (XInputManager.SingletonInstance.XInputDPadHandler.UpHold)
 		{
-			PlaceMine();
+			mineSpawnCount = mineSpawnCount + Time.deltaTime;
+			Debug.Log("押しているフレーム数 : " + mineSpawnCount);
+		}
+
+		//離した瞬間を判定
+		if (XInputManager.SingletonInstance.XInputDPadHandler.UpUp)
+		{
+			//長押しを判定
+			if (Mine_Hold_Time <= mineSpawnCount)
+			{
+				Debug.Log("長押し");
+				PlaceMine();
+			}
+
+			mineSpawnCount = 0.0f;
 		}
 	}
 
