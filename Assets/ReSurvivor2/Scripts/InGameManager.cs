@@ -184,6 +184,32 @@ public class InGameManager : MonoBehaviour
 	}
 
 	/// <summary>
+	/// ミッションがクリアされているかどうかの判定
+	/// </summary>
+	/// <param name="missionID"></param>
+	/// <returns></returns>
+	public bool IsMissionIDClearCheck(int missionID)
+	{
+		if (missionID == 0)
+		{
+			return missionID0;
+		}
+		else if (missionID == 1)
+		{
+			return missionID1;
+		}
+		else if (missionID == 2)
+		{
+			return missionID2;
+		}
+		else
+		{
+			Debug.LogError("ミッションIDの値が不正です。");
+			return false;
+		}
+	}
+
+	/// <summary>
 	/// ゲームクリアー
 	/// </summary>
 	void GameClear()

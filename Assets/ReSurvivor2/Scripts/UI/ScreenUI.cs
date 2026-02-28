@@ -499,9 +499,9 @@ public class ScreenUI : MonoBehaviour
 		for (int i = 0; i < this.missionList.Count; i++)
 		{
 			//プレハブをInstantiateしてContentの子オブジェクトに配置
-			GameObject mailGameObject = Instantiate(mailPrefab, new Vector3(0, 0, 0), Quaternion.identity, mailListContent.transform);
-			mailGameObject.GetComponent<Mail>().Initialize(this.missionList[i].MissionName);
-			mailListContentList.Add(mailGameObject.GetComponent<Mail>());
+			Mail mailGameObject = Instantiate(mailPrefab, new Vector3(0, 0, 0), Quaternion.identity, mailListContent.transform).GetComponent<Mail>();
+			mailGameObject.Initialize(this.missionList[i].MissionID, this.missionList[i].MissionName);
+			mailListContentList.Add(mailGameObject);
 		}
 	}
 
@@ -601,11 +601,11 @@ public class ScreenUI : MonoBehaviour
 			if (i == currentMailListSelectedIndex)
 			{
 				//選択中の項目の色を変更
-				mailListContentList[i].Image.color = new Color(mailListContentList[i].Image.color.r, mailListContentList[i].Image.color.g, mailListContentList[i].Image.color.b, 120.0f / 255.0f);
+				mailListContentList[i].Image_MailBG.color = new Color(mailListContentList[i].Image_MailBG.color.r, mailListContentList[i].Image_MailBG.color.g, mailListContentList[i].Image_MailBG.color.b, 120.0f / 255.0f);
 			}
 			else
 			{
-				mailListContentList[i].Image.color = new Color(mailListContentList[i].Image.color.r, mailListContentList[i].Image.color.g, mailListContentList[i].Image.color.b, 0.0f);
+				mailListContentList[i].Image_MailBG.color = new Color(mailListContentList[i].Image_MailBG.color.r, mailListContentList[i].Image_MailBG.color.g, mailListContentList[i].Image_MailBG.color.b, 0.0f);
 			}
 		}
 	}
