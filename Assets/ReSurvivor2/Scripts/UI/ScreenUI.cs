@@ -108,10 +108,7 @@ public class ScreenUI : MonoBehaviour
 	/// メールリストのコンテンツリスト
 	/// </summary>
 	List<Mail> mailListContentList = new List<Mail>();
-	/// <summary>
-	/// コンピューターメニューのミッションリスト
-	/// </summary>
-	List<MasterMissionEntity> missionList = new List<MasterMissionEntity>();
+
 	/// <summary>
 	/// 現在のメールリストの選択インデックス
 	/// </summary>
@@ -469,42 +466,61 @@ public class ScreenUI : MonoBehaviour
 #endif
 	}
 
+	List<MasterMissionEntity> missionList = new List<MasterMissionEntity>();
+
 	/// <summary>
-	/// コンピューターメニューの表示
+	/// コンピューターメニューのミッションリストの初期化
 	/// </summary>
-	public void ShowComputerMenu(EnumManager.ComputerTYPE startComputerTYPE)
+	/// <param name="missionList"></param>
+	public void InitComputerMenuMissionList(List<MasterMissionEntity> missionList)
 	{
-		//各種パラメーターの初期化処理
-		missionList.Clear();
-		missionList = InGameManager.SingletonInstance.MissionSerchList(startComputerTYPE);
-		if (missionList.Count == 0)
-		{
-			Debug.Log("<color=red>ミッションがありません</color>");
-			HideComputerMenu();
-			return;
-		}
+		this.missionList.Clear();
+		this.missionList = missionList;
+	}
 
-		//メールリスト
-		//全ての子オブジェクトを破棄
-		foreach (Transform computerMenuTransform in mailListContent.transform)
+	/// <summary>
+	/// メールリストの全ての子オブジェクトコンテンツを破棄
+	/// </summary>
+	public void DestroyAllMailListContent()
+	{
+		foreach (Transform mailContent in mailListContent.transform)
 		{
-			Destroy(computerMenuTransform.gameObject);
+			Destroy(mailContent.gameObject);
 		}
-
 		mailListContentList.Clear();
-		for (int i = 0; i < missionList.Count; i++)
+	}
+
+	/// <summary>
+	/// メールリストに子オブジェクトコンテンツを追加
+	/// </summary>
+	public void AddMailListContent()
+	{
+		for (int i = 0; i < this.missionList.Count; i++)
 		{
 			//プレハブをInstantiateしてContentの子オブジェクトに配置
 			GameObject mailGameObject = Instantiate(mailPrefab, new Vector3(0, 0, 0), Quaternion.identity, mailListContent.transform);
-			mailGameObject.GetComponent<Mail>().Initialize(missionList[i].MissionName);
+			mailGameObject.GetComponent<Mail>().Initialize(this.missionList[i].MissionName);
 			mailListContentList.Add(mailGameObject.GetComponent<Mail>());
 		}
+	}
 
+	/// <summary>
+	/// コンピューターメニューの表示
+	/// </summary>
+	public void ShowComputerMenu()
+	{
 		currentMailListSelectedIndex = 0;
 		ChangeColorMailListContentImage();
 
-		//メールメッセージ
-		mailMessageTitle.text = missionList[currentMailListSelectedIndex].MissionName;
+		if (this.missionList.Count != 0)
+		{
+			//メールメッセージ
+			mailMessageTitle.text = this.missionList[currentMailListSelectedIndex].MissionName;
+		}
+		else
+		{
+			mailMessageTitle.text = "-----";
+		}
 
 		isComputerMenuActive = true;
 		panelComputerMenu.SetActive(true);
@@ -513,7 +529,7 @@ public class ScreenUI : MonoBehaviour
 	/// <summary>
 	/// コンピューターメニューの非表示
 	/// </summary>
-	void HideComputerMenu()
+	public void HideComputerMenu()
 	{
 		isComputerMenuActive = false;
 		panelComputerMenu.SetActive(false);
@@ -534,35 +550,42 @@ public class ScreenUI : MonoBehaviour
 			}
 		}
 
-		if (isComputerMenuActive == true)
+		if (this.missionList.Count == 0)
 		{
-			//上下の矢印キーで選択を変更
-			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || XInputManager.SingletonInstance.XInputDPadHandler.UpDown)
-			{
-				currentMailListSelectedIndex--;
-				if (currentMailListSelectedIndex < 0)
-				{
-					currentMailListSelectedIndex = missionList.Count - 1;
-				}
-				ChangeColorMailListContentImage();
-				mailMessageTitle.text = missionList[currentMailListSelectedIndex].MissionName;
-			}
-			else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || XInputManager.SingletonInstance.XInputDPadHandler.DownDown)
-			{
-				currentMailListSelectedIndex++;
-				if (missionList.Count <= currentMailListSelectedIndex)
-				{
-					currentMailListSelectedIndex = 0;
-				}
-				ChangeColorMailListContentImage();
-				mailMessageTitle.text = missionList[currentMailListSelectedIndex].MissionName;
-			}
+			return;
+		}
 
-			//Enterキーで選択を確定
-			if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
+		if (isComputerMenuActive == false)
+		{
+			return;
+		}
+
+		//上下の矢印キーで選択を変更
+		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || XInputManager.SingletonInstance.XInputDPadHandler.UpDown)
+		{
+			currentMailListSelectedIndex--;
+			if (currentMailListSelectedIndex < 0)
 			{
-				ExecuteComputerMenuAction();
+				currentMailListSelectedIndex = this.missionList.Count - 1;
 			}
+			ChangeColorMailListContentImage();
+			mailMessageTitle.text = this.missionList[currentMailListSelectedIndex].MissionName;
+		}
+		else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || XInputManager.SingletonInstance.XInputDPadHandler.DownDown)
+		{
+			currentMailListSelectedIndex++;
+			if (this.missionList.Count <= currentMailListSelectedIndex)
+			{
+				currentMailListSelectedIndex = 0;
+			}
+			ChangeColorMailListContentImage();
+			mailMessageTitle.text = this.missionList[currentMailListSelectedIndex].MissionName;
+		}
+
+		//Enterキーで選択を確定
+		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
+		{
+			ExecuteComputerMenuAction();
 		}
 	}
 
@@ -572,7 +595,7 @@ public class ScreenUI : MonoBehaviour
 	void ChangeColorMailListContentImage()
 	{
 		//メニューの見た目を更新
-		for (int i = 0; i < missionList.Count; i++)
+		for (int i = 0; i < this.missionList.Count; i++)
 		{
 			if (i == currentMailListSelectedIndex)
 			{
@@ -602,7 +625,7 @@ public class ScreenUI : MonoBehaviour
 	{
 		//↓ここをミッションごとに変えるようにする必要がある
 		//各ComputerTYPEに紐づいたミッションリストを取得して、そこから選択されたミッション内容を↓に反映すればいい
-		var result = missionList[currentMailListSelectedIndex];
+		MasterMissionEntity result = this.missionList[currentMailListSelectedIndex];
 		//ミッション開始
 		if (result != null)
 		{

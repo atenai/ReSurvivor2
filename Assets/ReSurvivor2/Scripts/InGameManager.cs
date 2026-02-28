@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -30,26 +29,7 @@ public class InGameManager : MonoBehaviour
 		set { isGamePlayReady = value; }
 	}
 
-	[Tooltip("ミッションがアクティブか？どうか")]
-	bool isMissionActive = false;
-	public bool IsMissionActive
-	{
-		get { return isMissionActive; }
-		set { isMissionActive = value; }
-	}
-
-	/// <summary>
-	/// ミッションエンドのコンピューター名
-	/// </summary>
-	EnumManager.ComputerTYPE endComputerName;
-	/// <summary>
-	/// ミッションエンドのコンピューター名のプロパティ
-	/// </summary>
-	public EnumManager.ComputerTYPE EndComputerName
-	{
-		get { return endComputerName; }
-		set { endComputerName = value; }
-	}
+	[Header("ミッション")]
 
 	[Tooltip("マスターデータのミッション情報")]
 	[SerializeField] MasterMission masterMission;//２番目で作成したエクセルをスクリプト化したクラスの変数を作成する
@@ -58,6 +38,23 @@ public class InGameManager : MonoBehaviour
 	/// </summary>
 	public MasterMission MasterMission => masterMission;
 
+	[Tooltip("ミッションがアクティブか？どうか")]
+	bool isMissionActive = false;
+	public bool IsMissionActive
+	{
+		get { return isMissionActive; }
+		set { isMissionActive = value; }
+	}
+
+	/// <summary>ミッションエンドのコンピューター名</summary>
+	EnumManager.ComputerTYPE endComputerName;
+	/// <summary>ミッションエンドのコンピューター名のプロパティ </summary>
+	public EnumManager.ComputerTYPE EndComputerName
+	{
+		get { return endComputerName; }
+		set { endComputerName = value; }
+	}
+
 	[Tooltip("現在のミッションID")]
 	[SerializeField] int currentMissionID = -1;
 	public int CurrentMissionID
@@ -65,6 +62,7 @@ public class InGameManager : MonoBehaviour
 		get { return currentMissionID; }
 		set { currentMissionID = value; }
 	}
+
 	[Tooltip("ミッションID0のクリア状況")]
 	bool missionID0 = false;
 	[Tooltip("ミッションID1のクリア状況")]
@@ -72,6 +70,7 @@ public class InGameManager : MonoBehaviour
 	[Tooltip("ミッションID2のクリア状況")]
 	bool missionID2 = false;
 
+	[Header("キーアイテム")]
 
 	[Tooltip("キーアイテム1がアクティブか？どうか")]
 	[SerializeField] bool keyItem1 = false;
@@ -135,35 +134,12 @@ public class InGameManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// ミッション検索リスト
-	/// </summary>
-	/// <param name="computerTYPE">コンピュータータイプ</param>
-	/// <returns>ミッションリスト</returns>
-	public List<MasterMissionEntity> MissionSerchList(EnumManager.ComputerTYPE computerTYPE)
-	{
-		//引数のコンピュータータイプからマスターデータのミッション情報を照らし合わせて、StartComputerNameと一致したコンピュータータイプの情報を全て取得する
-		List<MasterMissionEntity> result = MasterMission.Sheet1.Where((MasterMissionEntity excelLine) => excelLine.StartComputerName == computerTYPE).ToList();
-
-		if (result == null)
-		{
-			Debug.LogError("マスターデータのミッション情報がnull");
-		}
-
-		return result;
-	}
-
-	/// <summary>
 	/// ミッション
 	/// </summary>
 	/// <param name="computerName"></param>
 	public void Mission(EnumManager.ComputerTYPE computerName)
 	{
-		if (isMissionActive == false)//ミッション中でない場合
-		{
-			Save();
-			ScreenUI.SingletonInstance.ShowComputerMenu(computerName);
-		}
-		else if (isMissionActive == true)//ミッション中の場合
+		if (isMissionActive == true)//ミッション中の場合
 		{
 			if (computerName == EndComputerName)
 			{
@@ -179,6 +155,12 @@ public class InGameManager : MonoBehaviour
 			{
 				Debug.Log("<color=red>目的のコンピューターではない</color>");
 			}
+		}
+
+		if (isMissionActive == false)//ミッション中でない場合
+		{
+			Save();
+			ScreenUI.SingletonInstance.ShowComputerMenu();
 		}
 	}
 
