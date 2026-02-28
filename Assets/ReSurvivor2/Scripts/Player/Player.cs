@@ -324,7 +324,7 @@ public class Player : MonoBehaviour
 		inputVertical = Input.GetAxisRaw("Vertical");
 
 		//右ボタンまたはレフトシフトが押されていたら中身を実行
-		if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftControl) || 0.5f < Input.GetAxisRaw("XInput LT"))
+		if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftControl) || XInputManager.SingletonInstance.XInputTriggerHandler.IsPressedLT)
 		{
 			isAim = true;
 		}

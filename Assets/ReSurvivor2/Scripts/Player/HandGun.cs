@@ -61,7 +61,7 @@ public class HandGun : GunBase
 	/// </summary>
 	public override void AllSystem()
 	{
-		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.Down)//左クリックまたはEnterを押している場合に中身を実行する
+		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.DownRT)//左クリックまたはEnterを押している場合に中身を実行する
 		{
 			Shoot();
 		}

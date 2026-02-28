@@ -64,7 +64,7 @@ public class AssaultRifle : GunBase
 	/// </summary>
 	public override void AllSystem()
 	{
-		if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || 0.5f < Input.GetAxisRaw("XInput RT"))//左クリックまたはEnterを押している場合に中身を実行する
+		if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.IsPressedRT)//左クリックまたはEnterを押している場合に中身を実行する
 		{
 			Shoot();
 		}

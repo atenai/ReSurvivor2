@@ -48,9 +48,7 @@ public class XInputManager : MonoBehaviour
 	void UpdateXInputDPad()
 	{
 		// 状態更新
-		xInputDPadHandler.UpdateDPadDown();
-		xInputDPadHandler.UpdateDPadHold();
-		xInputDPadHandler.UpdateDPadUp();
+		xInputDPadHandler.Update();
 	}
 
 	/// <summary>
@@ -58,6 +56,7 @@ public class XInputManager : MonoBehaviour
 	/// </summary>
 	void UpdateXInputTrigger()
 	{
-		xInputTriggerHandler.Update(Input.GetAxis("XInput RT"));
+		xInputTriggerHandler.UpdateRT();
+		xInputTriggerHandler.UpdateLT();
 	}
 }

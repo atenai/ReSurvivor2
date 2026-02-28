@@ -7,8 +7,6 @@ using UnityEngine;
 /// </summary>
 public class XInputDPadHandler
 {
-
-
 	public bool LeftDown { get; private set; }
 	public bool RightDown { get; private set; }
 	public bool UpDown { get; private set; }
@@ -35,13 +33,13 @@ public class XInputDPadHandler
 	// 前フレームのDPadのY軸の値を保存する変数
 	float prevUpY = 0f;
 
-	// DPadの入力を判定するためのしきい値
+	// 入力を判定するためのしきい値
 	const float threshold = 0.5f;
 
 	/// <summary>
 	/// DPadのDown状態を更新
 	/// </summary>
-	public void UpdateDPadDown()
+	void UpdateDPadDown()
 	{
 		// 初期化
 		LeftDown = false;
@@ -81,7 +79,7 @@ public class XInputDPadHandler
 	/// <summary>
 	/// DPadのHold状態を更新
 	/// </summary>
-	public void UpdateDPadHold()
+	void UpdateDPadHold()
 	{
 		LeftHold = Input.GetAxis("XInput DPad Left&Right") < -threshold;
 		RightHold = threshold < Input.GetAxis("XInput DPad Left&Right");
@@ -92,7 +90,7 @@ public class XInputDPadHandler
 	/// <summary>
 	/// DPadのUp状態を更新
 	/// </summary>
-	public void UpdateDPadUp()
+	void UpdateDPadUp()
 	{
 		// 初期化
 		LeftUp = false;
@@ -126,5 +124,12 @@ public class XInputDPadHandler
 
 		prevUpX = Input.GetAxis("XInput DPad Left&Right");
 		prevUpY = Input.GetAxis("XInput DPad Up&Down");
+	}
+
+	public void Update()
+	{
+		UpdateDPadDown();
+		UpdateDPadHold();
+		UpdateDPadUp();
 	}
 }
