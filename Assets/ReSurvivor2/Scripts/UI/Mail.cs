@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 /// <summary>
 /// メール
 /// </summary>
 public class Mail : MonoBehaviour
 {
-	[SerializeField] Image image_MailBG;
-	public Image Image_MailBG => image_MailBG;
-	[SerializeField] Image image_ClearCheckIcon;
-	[SerializeField] TextMeshProUGUI textMeshProUGUI;
+	[SerializeField] Image imageMailBG;
+	public Image ImageMailBG => imageMailBG;
+	[SerializeField] Image imageClearCheckIcon;
+	[SerializeField] Text textMissionName;
 
 	int missionID;
 	public int MissionID
@@ -25,7 +24,7 @@ public class Mail : MonoBehaviour
 	{
 		this.missionID = missionID;
 		ClearCheck();
-		textMeshProUGUI.text = missionName;
+		textMissionName.text = missionName;
 	}
 
 	/// <summary>
@@ -37,12 +36,12 @@ public class Mail : MonoBehaviour
 		if (InGameManager.SingletonInstance.IsMissionIDClearCheck(this.missionID))
 		{
 			//クリアされている場合はチェックマークを表示する
-			image_ClearCheckIcon.gameObject.SetActive(true);
+			imageClearCheckIcon.gameObject.SetActive(true);
 		}
 		else
 		{
 			//クリアされていない場合はチェックマークを非表示にする
-			image_ClearCheckIcon.gameObject.SetActive(false);
+			imageClearCheckIcon.gameObject.SetActive(false);
 		}
 	}
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
-using TMPro;
 
 /// <summary>
 /// スクリーンUI管理クラス
@@ -103,9 +102,9 @@ public class ScreenUI : MonoBehaviour
 	[Tooltip("メールプレハブ")]
 	[SerializeField] GameObject mailPrefab;
 	[Tooltip("メールメッセージタイトル")]
-	[SerializeField] TextMeshProUGUI mailTitleMessage;
+	[SerializeField] Text mailTitleMessage;
 	[Tooltip("メールメッセージ本文")]
-	[SerializeField] TextMeshProUGUI mailMainMessage;
+	[SerializeField] Text mailMainMessage;
 	/// <summary>
 	/// ミッションリスト
 	/// </summary>
@@ -607,12 +606,12 @@ public class ScreenUI : MonoBehaviour
 			if (i == currentMailListSelectedIndex)
 			{
 				//選択中の項目の色を変更
-				mailListContentList[i].Image_MailBG.color = new Color32(0, 100, 255, 120);
+				mailListContentList[i].ImageMailBG.color = new Color32(0, 100, 255, 120);
 			}
 			else
 			{
 				//選択中でない項目の色を変更
-				mailListContentList[i].Image_MailBG.color = new Color32(100, 100, 100, 120);
+				mailListContentList[i].ImageMailBG.color = new Color32(100, 100, 100, 120);
 			}
 		}
 	}
