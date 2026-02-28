@@ -25,11 +25,11 @@ public class Credits : OutGameBase
 
 		float scroll = scrollRect.verticalNormalizedPosition;
 
-		if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || XInputManager.SingletonInstance.XInputDPadHandler.UpDown)
+		if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || XInputManager.SingletonInstance.XInputDPadHandler.UpHold)
 		{
 			scroll = 2;
 		}
-		else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || XInputManager.SingletonInstance.XInputDPadHandler.DownDown)
+		else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || XInputManager.SingletonInstance.XInputDPadHandler.DownHold)
 		{
 			scroll = -1;
 		}

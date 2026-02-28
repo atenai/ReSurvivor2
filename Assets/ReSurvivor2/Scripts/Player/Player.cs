@@ -125,10 +125,11 @@ public class Player : MonoBehaviour
 	[SerializeField] GameObject minePrefab;
 	[Tooltip("キャラクターからの地雷の生成距離")]
 	float mineSpawnDistance = 1.0f;
-	[Tooltip("地雷が再生成できるまでの間隔")]
-	[SerializeField] float mineSpawnTimer = 2.0f;
+	/// <summary>地雷を生成する際に長押しと判定する間隔、例：0.5秒なら（30フレーム ÷ 60fps = 0.5秒）に設定（60fpsの場合）</summary>
+	const float Mine_Hold_Time = 30.0f / 60.0f;
+
 	[Tooltip("地雷が再生成できるまでのカウント")]
-	float mineSpawnCount;
+	float mineSpawnCount = 0.0f;
 	[Tooltip("現在の地雷数")]
 	int currentMine = 3;
 	[Tooltip("地雷の所持できる最大数")]
@@ -273,7 +274,7 @@ public class Player : MonoBehaviour
 	/// </summary> 
 	void InitMine()
 	{
-		mineSpawnCount = mineSpawnTimer;
+		mineSpawnCount = 0.0f;
 		playerUI.TextMine.text = currentMine.ToString();
 	}
 
@@ -347,7 +348,36 @@ public class Player : MonoBehaviour
 			RestoresStamina();
 		}
 
-		if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.G) || 0.5 < Input.GetAxisRaw("XInput DPad Up&Down"))
+		//MineHoldKey();
+		MineHoldXInput();
+	}
+
+	void MineHoldKey()
+	{
+		//キーを押しているかを判定
+		if (Input.GetKey(KeyCode.Alpha4) || Input.GetKey(KeyCode.G))
+		{
+			mineSpawnCount = mineSpawnCount + Time.deltaTime;
+			Debug.Log("押しているフレーム数 : " + mineSpawnCount);
+		}
+
+		//キーを離した瞬間を判定
+		if (Input.GetKeyUp(KeyCode.Alpha4) || Input.GetKeyUp(KeyCode.G))
+		{
+			//長押しを判定
+			if (Mine_Hold_Time <= mineSpawnCount)
+			{
+				Debug.Log("長押し");
+				PlaceMine();
+			}
+
+			mineSpawnCount = 0.0f;
+		}
+	}
+
+	void MineHoldXInput()
+	{
+		if (XInputManager.SingletonInstance.XInputDPadHandler.UpDown == true)
 		{
 			PlaceMine();
 		}
@@ -358,24 +388,18 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void PlaceMine()
 	{
-		mineSpawnCount = mineSpawnCount + Time.deltaTime;
-
 		if (currentMine <= 0)
 		{
 			return;
 		}
 
-		if (mineSpawnTimer < mineSpawnCount)
-		{
-			mineSpawnCount = 0.0f;
-			currentMine = currentMine - 1;
-			playerUI.TextMine.text = currentMine.ToString();
+		currentMine = currentMine - 1;
+		playerUI.TextMine.text = currentMine.ToString();
 
-			Vector3 localPosition = new Vector3(this.transform.position.x, 0.0f, this.transform.position.z);
-			// キャラクターの前方にオブジェクトを生成
-			Vector3 spawnPosition = localPosition + (this.transform.forward * mineSpawnDistance);
-			GameObject localGameObject = UnityEngine.Object.Instantiate(minePrefab, spawnPosition, this.transform.rotation);
-		}
+		Vector3 localPosition = new Vector3(this.transform.position.x, 0.0f, this.transform.position.z);
+		// キャラクターの前方にオブジェクトを生成
+		Vector3 spawnPosition = localPosition + (this.transform.forward * mineSpawnDistance);
+		GameObject localGameObject = UnityEngine.Object.Instantiate(minePrefab, spawnPosition, this.transform.rotation);
 	}
 
 	void FixedUpdate()

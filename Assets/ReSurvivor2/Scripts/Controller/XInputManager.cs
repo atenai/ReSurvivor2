@@ -47,12 +47,10 @@ public class XInputManager : MonoBehaviour
 	/// </summary>
 	void UpdateXInputDPad()
 	{
-		// DPad軸を取得（InputManagerで設定済み or 軸番号で直接）
-		float dpadX = Input.GetAxis("XInput DPad Left&Right");
-		float dpadY = Input.GetAxis("XInput DPad Up&Down");
-
 		// 状態更新
-		xInputDPadHandler.Update(dpadX, dpadY);
+		xInputDPadHandler.UpdateDPadDown();
+		xInputDPadHandler.UpdateDPadHold();
+		xInputDPadHandler.UpdateDPadUp();
 	}
 
 	/// <summary>
