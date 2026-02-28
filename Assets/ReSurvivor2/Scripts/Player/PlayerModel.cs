@@ -69,6 +69,14 @@ public class PlayerModel : MonoBehaviour
 			return;
 		}
 
+		//↑ロード中に動かせる処理
+		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
+		{
+			ResetMoveAnimation();
+			return;
+		}
+		//↓ロード中に動かせない処理
+
 		NormalMoveAnimation();
 	}
 

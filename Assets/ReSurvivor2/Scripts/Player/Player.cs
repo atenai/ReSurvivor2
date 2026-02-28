@@ -232,6 +232,7 @@ public class Player : MonoBehaviour
 		StartStaminaHealEffect();
 		InitMine();
 		InitRespawnPos();
+		ResetMove();
 	}
 
 	/// <summary>
@@ -285,6 +286,16 @@ public class Player : MonoBehaviour
 		this.transform.rotation = respawnRotation;
 	}
 
+	void ResetMove()
+	{
+		inputHorizontal = 0.0f;
+		inputVertical = 0.0f;
+		moveForward = Vector3.zero;
+		rb.velocity = Vector3.zero;
+		isAim = false;
+		isDash = false;
+	}
+
 	void Update()
 	{
 		//ポーズ中は切り上げる
@@ -296,8 +307,17 @@ public class Player : MonoBehaviour
 		//コンピュータを使用中は切り上げる
 		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
 		{
+			ResetMove();
 			return;
 		}
+
+		//↑ロード中に動かせる処理
+		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
+		{
+			ResetMove();
+			return;
+		}
+		//↓ロード中に動かせない処理
 
 		inputHorizontal = Input.GetAxisRaw("Horizontal");
 		inputVertical = Input.GetAxisRaw("Vertical");
@@ -317,13 +337,6 @@ public class Player : MonoBehaviour
 			isDash = true;
 		}
 
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("XInput RB"))
 		{
 			Heal();
@@ -334,7 +347,10 @@ public class Player : MonoBehaviour
 			RestoresStamina();
 		}
 
-		PlaceMine();
+		if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.G) || 0.5 < Input.GetAxisRaw("XInput DPad Up&Down"))
+		{
+			PlaceMine();
+		}
 	}
 
 	/// <summary>
@@ -342,31 +358,23 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void PlaceMine()
 	{
-		if (minePrefab == null)
+		mineSpawnCount = mineSpawnCount + Time.deltaTime;
+
+		if (currentMine <= 0)
 		{
 			return;
 		}
 
-		mineSpawnCount = mineSpawnCount + Time.deltaTime;
-
-		if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.G) || 0.5 < Input.GetAxisRaw("XInput DPad Up&Down"))
+		if (mineSpawnTimer < mineSpawnCount)
 		{
-			if (currentMine <= 0)
-			{
-				return;
-			}
+			mineSpawnCount = 0.0f;
+			currentMine = currentMine - 1;
+			playerUI.TextMine.text = currentMine.ToString();
 
-			if (mineSpawnTimer < mineSpawnCount)
-			{
-				mineSpawnCount = 0.0f;
-				currentMine = currentMine - 1;
-				playerUI.TextMine.text = currentMine.ToString();
-
-				Vector3 localPosition = new Vector3(this.transform.position.x, 0.0f, this.transform.position.z);
-				// キャラクターの前方にオブジェクトを生成
-				Vector3 spawnPosition = localPosition + (this.transform.forward * mineSpawnDistance);
-				GameObject localGameObject = UnityEngine.Object.Instantiate(minePrefab, spawnPosition, this.transform.rotation);
-			}
+			Vector3 localPosition = new Vector3(this.transform.position.x, 0.0f, this.transform.position.z);
+			// キャラクターの前方にオブジェクトを生成
+			Vector3 spawnPosition = localPosition + (this.transform.forward * mineSpawnDistance);
+			GameObject localGameObject = UnityEngine.Object.Instantiate(minePrefab, spawnPosition, this.transform.rotation);
 		}
 	}
 
