@@ -358,6 +358,7 @@ public class Player : MonoBehaviour
 		if (Input.GetKey(KeyCode.Alpha4) || Input.GetKey(KeyCode.G))
 		{
 			mineSpawnCount = mineSpawnCount + Time.deltaTime;
+			playerUI.SetMinePlacingFillAmount(mineSpawnCount / Mine_Hold_Time);
 			Debug.Log("押しているフレーム数 : " + mineSpawnCount);
 		}
 
@@ -372,6 +373,7 @@ public class Player : MonoBehaviour
 			}
 
 			mineSpawnCount = 0.0f;
+			playerUI.SetMinePlacingFillAmount(0.0f);
 		}
 	}
 
@@ -381,6 +383,7 @@ public class Player : MonoBehaviour
 		if (XInputManager.SingletonInstance.XInputDPadHandler.UpHold)
 		{
 			mineSpawnCount = mineSpawnCount + Time.deltaTime;
+			playerUI.SetMinePlacingFillAmount(mineSpawnCount / Mine_Hold_Time);
 			Debug.Log("押しているフレーム数 : " + mineSpawnCount);
 		}
 
@@ -395,6 +398,7 @@ public class Player : MonoBehaviour
 			}
 
 			mineSpawnCount = 0.0f;
+			playerUI.SetMinePlacingFillAmount(0.0f);
 		}
 	}
 

@@ -56,6 +56,8 @@ public class PlayerUI : MonoBehaviour
 		get { return textMine; }
 		set { textMine = value; }
 	}
+	[Tooltip("地雷設置イメージ")]
+	[SerializeField] Image imagePlace;
 	[Tooltip("タイマーテキスト")]
 	[SerializeField] TextMeshProUGUI textTimer;
 	public TextMeshProUGUI TextTimer
@@ -72,6 +74,7 @@ public class PlayerUI : MonoBehaviour
 		StartTextFood();
 		StartImageReload();
 		StartTextMagazine();
+		SetMinePlacingFillAmount(0.0f);
 		StartTextTimer();
 		UpdateUITransform();
 	}
@@ -227,5 +230,14 @@ public class PlayerUI : MonoBehaviour
 	{
 		textMagazine.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
 		textAmmo.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
+	}
+
+	/// <summary>
+	/// 地雷設置イメージのフィルアマウントを設定する
+	/// </summary>
+	/// <param name="amount"></param>
+	public void SetMinePlacingFillAmount(float amount)
+	{
+		imagePlace.fillAmount = amount;
 	}
 }
