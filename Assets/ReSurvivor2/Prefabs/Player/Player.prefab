@@ -85,7 +85,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!114 &4094981230853522424
 MonoBehaviour:
@@ -104,8 +104,6 @@ MonoBehaviour:
   playerUI: {fileID: 3466684979332982630}
   energeticNormalMoveSpeed: 5
   energeticWeaponMoveSpeed: 3
-  minute: 10
-  seconds: 0
   minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
   mineSpawnTimer: 2
   cinemachineImpulseSource: {fileID: 9221019703623590627}
