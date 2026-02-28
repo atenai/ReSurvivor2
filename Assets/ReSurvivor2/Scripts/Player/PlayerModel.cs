@@ -39,6 +39,7 @@ public class PlayerModel : MonoBehaviour
 	{
 		InitBoneNeck01();
 		InitBoneSpine03();
+		ResetMoveAnimation();
 	}
 
 	/// <summary>
@@ -61,7 +62,34 @@ public class PlayerModel : MonoBehaviour
 
 	void Update()
 	{
+		//コンピュータを使用中は切り上げる
+		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
+		{
+			ResetMoveAnimation();
+			return;
+		}
 
+		NormalMoveAnimation();
+	}
+
+	/// <summary>
+	/// 移動アニメーション
+	/// </summary>
+	void NormalMoveAnimation()
+	{
+		Player.SingletonInstance.Animator.SetFloat("f_moveSpeedX", Player.SingletonInstance.InputHorizontal);
+		Player.SingletonInstance.Animator.SetFloat("f_moveSpeedY", Player.SingletonInstance.InputVertical);
+		Player.SingletonInstance.Animator.SetBool("b_isAim", Player.SingletonInstance.IsAim);
+	}
+
+	/// <summary>
+	/// 移動アニメーションをリセットする
+	/// </summary>
+	void ResetMoveAnimation()
+	{
+		Player.SingletonInstance.Animator.SetFloat("f_moveSpeedX", 0.0f);
+		Player.SingletonInstance.Animator.SetFloat("f_moveSpeedY", 0.0f);
+		Player.SingletonInstance.Animator.SetBool("b_isAim", false);
 	}
 
 	void LateUpdate()

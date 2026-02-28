@@ -45,6 +45,9 @@ public class LoadingScene : MonoBehaviour
 	/// </summary>
 	IEnumerator LoadScene()
 	{
+		//不透明にする
+		ScreenUI.SingletonInstance.InitFadeColor();
+
 		//スライダーの値を最低にする
 		ScreenUI.SingletonInstance.SliderLoading.value = float.MinValue;
 		//ロードUIをOnにする
@@ -69,9 +72,6 @@ public class LoadingScene : MonoBehaviour
 
 				//フレームのラストまで待つ
 				yield return new WaitForEndOfFrame();
-
-				//不透明にする
-				ScreenUI.SingletonInstance.InitFadeColor();
 
 				//ロードUIをOffにする
 				ScreenUI.SingletonInstance.PanelLoading.SetActive(false);

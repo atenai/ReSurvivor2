@@ -34,8 +34,10 @@ public class Player : MonoBehaviour
 	[Header("プレイヤーキャラクターの移動関連")]
 	/// <summary>縦入力</summary>
 	float inputVertical;
+	public float InputVertical => inputVertical;
 	/// <summary>横入力</summary>
 	float inputHorizontal;
+	public float InputHorizontal => inputHorizontal;
 	/// <summary>プレイヤーの前方向</summary>
 	Vector3 moveForward;
 	/// <summary>カメラの前方向</summary>
@@ -315,8 +317,6 @@ public class Player : MonoBehaviour
 			isDash = true;
 		}
 
-		NormalMoveAnimation();
-
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
@@ -335,16 +335,6 @@ public class Player : MonoBehaviour
 		}
 
 		PlaceMine();
-	}
-
-	/// <summary>
-	/// 移動アニメーション
-	/// </summary>
-	void NormalMoveAnimation()
-	{
-		animator.SetFloat("f_moveSpeedX", inputHorizontal);
-		animator.SetFloat("f_moveSpeedY", inputVertical);
-		animator.SetBool("b_isAim", isAim);
 	}
 
 	/// <summary>

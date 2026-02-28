@@ -16,8 +16,8 @@ public class StageManager : MonoBehaviour
 		set { stage = value; }
 	}
 
-	[Tooltip("プレイヤーリスポーンポイント")]//必ず設定するようにする、設定されていなければエラーログを出すようにする
-	[SerializeField] Transform playerRespawnPoint = null;
+	[Tooltip("プレイヤーリスポーンポイント")]
+	[SerializeField] Transform playerRespawnPoint = null;//必ず設定するようにする、設定されていなければエラーログを出すようにする
 
 	void Awake()
 	{
@@ -33,8 +33,8 @@ public class StageManager : MonoBehaviour
 
 	void Start()
 	{
-		StartCoroutine(ScreenUI.SingletonInstance.FadeIn());
 		ScreenUI.SingletonInstance.MapUI.SetCurrentPlayerStageNumber((int)stage);
+		StartCoroutine(ScreenUI.SingletonInstance.FadeIn());
 	}
 
 	void Update()

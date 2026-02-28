@@ -16,34 +16,10 @@ public class Computer : MonoBehaviour
 	[Tooltip("このコンピューターの名前")]
 	[SerializeField] EnumManager.ComputerTYPE thisComputerName;
 
-	bool isHit = false;
-
 	/// <summary>
-	/// コンピューターメニューのミッションリスト
+	/// プレイヤーがコンピューターにヒットしているかどうか
 	/// </summary>
-
-
-	void OnTriggerEnter(Collider collider)
-	{
-		if (collider.gameObject.CompareTag(TAG_PLAYER))
-		{
-			Debug.Log("<color=yellow>プレイヤーがコンピューターに近づいた</color>");
-			isHit = true;
-		}
-		else
-		{
-			Debug.Log("<color=red>プレイヤーじゃない</color>");
-		}
-	}
-
-	void OnTriggerExit(Collider collider)
-	{
-		if (collider.gameObject.CompareTag(TAG_PLAYER))
-		{
-			Debug.Log("<color=yellow>プレイヤーがコンピューターから離れた</color>");
-			isHit = false;
-		}
-	}
+	bool isPlayerHit = false;
 
 	void Start()
 	{
@@ -70,10 +46,44 @@ public class Computer : MonoBehaviour
 		return result;
 	}
 
+	void OnTriggerEnter(Collider collider)
+	{
+		if (collider.gameObject.CompareTag(TAG_PLAYER))
+		{
+			Debug.Log("<color=yellow>プレイヤーがコンピューターに近づいた</color>");
+			isPlayerHit = true;
+		}
+		else
+		{
+			Debug.Log("<color=red>プレイヤーじゃない</color>");
+		}
+	}
+
+	void OnTriggerExit(Collider collider)
+	{
+		if (collider.gameObject.CompareTag(TAG_PLAYER))
+		{
+			Debug.Log("<color=yellow>プレイヤーがコンピューターから離れた</color>");
+			isPlayerHit = false;
+		}
+	}
 
 	void Update()
 	{
-		if (isHit == true)
+		//ポーズ中は切り上げる
+		if (ScreenUI.SingletonInstance.IsPause == true)
+		{
+			return;
+		}
+
+		//↑ロード中に動かせる処理
+		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
+		{
+			return;
+		}
+		//↓ロード中に動かせない処理
+
+		if (isPlayerHit == true)
 		{
 			if (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("XInput Y"))
 			{

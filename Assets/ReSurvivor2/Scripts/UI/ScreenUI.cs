@@ -105,10 +105,13 @@ public class ScreenUI : MonoBehaviour
 	[Tooltip("メールメッセージタイトル")]
 	[SerializeField] TextMeshProUGUI mailMessageTitle;
 	/// <summary>
+	/// ミッションリスト
+	/// </summary>
+	List<MasterMissionEntity> missionList = new List<MasterMissionEntity>();
+	/// <summary>
 	/// メールリストのコンテンツリスト
 	/// </summary>
 	List<Mail> mailListContentList = new List<Mail>();
-
 	/// <summary>
 	/// 現在のメールリストの選択インデックス
 	/// </summary>
@@ -285,7 +288,7 @@ public class ScreenUI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// フェードの色を初期化
+	/// フェードの色を初期化（画面を暗くする）
 	/// </summary>
 	public void InitFadeColor()
 	{
@@ -294,7 +297,7 @@ public class ScreenUI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// フェードアウト処理（不透明にする）
+	/// フェードアウト処理（画面を暗くする）
 	/// </summary>
 	public IEnumerator FadeOut()
 	{
@@ -317,7 +320,7 @@ public class ScreenUI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// フェードイン処理（透明にする）
+	/// フェードイン処理（画面を透明にする）
 	/// </summary>
 	public IEnumerator FadeIn()
 	{
@@ -466,12 +469,10 @@ public class ScreenUI : MonoBehaviour
 #endif
 	}
 
-	List<MasterMissionEntity> missionList = new List<MasterMissionEntity>();
-
 	/// <summary>
 	/// コンピューターメニューのミッションリストの初期化
 	/// </summary>
-	/// <param name="missionList"></param>
+	/// <param name="missionList">ミッションリスト</param>
 	public void InitComputerMenuMissionList(List<MasterMissionEntity> missionList)
 	{
 		this.missionList.Clear();
