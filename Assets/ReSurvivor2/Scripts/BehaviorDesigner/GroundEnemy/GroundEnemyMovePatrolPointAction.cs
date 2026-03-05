@@ -13,6 +13,14 @@ public class GroundEnemyMovePatrolPointAction : Action
 	bool isEnd = false;
 	[UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
 	float endPos = 0.5f;
+	/// <summary>
+	/// 移動速度
+	/// </summary>
+	float speed = 2.0f;
+	/// <summary>
+	/// 水平速度の変化を滑らかにするための加速度（MoveTowards の最大変化量） 
+	/// </summary>
+	float acceleration = 8f;
 
 	//パトロールポイントの座標
 	Vector3 patrolPointPos;
@@ -208,7 +216,7 @@ public class GroundEnemyMovePatrolPointAction : Action
 		dir.y = 0;
 
 		// 進みたい方向の単位ベクトルに最大速度を掛けて目標速度を決定
-		Vector3 desiredVel = dir.normalized * groundEnemy.NavMeshAgent.speed;
+		Vector3 desiredVel = dir.normalized * speed;
 
 		// 現在の水平速度（Y成分は除く）
 		Vector3 horizontalVel = new Vector3(groundEnemy.Rigidbody.velocity.x, 0, groundEnemy.Rigidbody.velocity.z);
@@ -218,7 +226,7 @@ public class GroundEnemyMovePatrolPointAction : Action
 
 		// 現在の水平速度を目標の水平速度へ向かって滑らかに変化させる
 		// acceleration * Time.fixedDeltaTime がこのフレームで許容する最大の変化量
-		Vector3 newHorizontal = Vector3.MoveTowards(horizontalVel, targetHorizontal, groundEnemy.NavMeshAgent.acceleration * Time.fixedDeltaTime);
+		Vector3 newHorizontal = Vector3.MoveTowards(horizontalVel, targetHorizontal, acceleration * Time.fixedDeltaTime);
 
 		// Y 成分は保持して、Rigidbody の速度を更新する
 		groundEnemy.Rigidbody.velocity = new Vector3(newHorizontal.x, groundEnemy.Rigidbody.velocity.y, newHorizontal.z);
