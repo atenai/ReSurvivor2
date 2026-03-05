@@ -9,12 +9,10 @@ using UnityEngine;
 public class GroundEnemyMoveTargetAction : Action
 {
 	GroundEnemy groundEnemy;
+	[UnityEngine.Tooltip("移動終了フラグ")]
 	bool isEnd = false;
-
 	[UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
-	[SerializeField] float endPos = 2.5f;
-	[UnityEngine.Tooltip("エネミーの移動スピード")]
-	float moveSpeed = 3.0f;
+	float endPos = 2.5f;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
@@ -23,6 +21,7 @@ public class GroundEnemyMoveTargetAction : Action
 
 		InitAnimation();
 		InitMove();
+		AdjustNavMeshPosition();
 	}
 
 	/// <summary>
@@ -63,33 +62,30 @@ public class GroundEnemyMoveTargetAction : Action
 			return TaskStatus.Success;
 		}
 
+		UpdateTargetPosition();
 		//実行中
 		return TaskStatus.Running;
 	}
 
+	/// <summary>
+	/// 毎フレーム、プレイヤーの位置を NavMeshAgent に通知して経路を再計算させる。
+	/// SetDestination は非同期に経路を計算する場合があるため、
+	/// 経路が計算中かどうかは FixedUpdate 側で hasPath / pathPending / pathStatus を参照して扱う。
+	/// </summary>
+	void UpdateTargetPosition()
+	{
+		// 常にプレイヤーを目的地に設定する（敵 AI などの追従目的）
+		groundEnemy.NavMeshAgent.SetDestination(Player.SingletonInstance.transform.position);
+	}
+
 	public override void OnFixedUpdate()
 	{
-		RotateToDirectionTarget();
 		Move();
 	}
 
 	/// <summary>
-	/// ターゲットの方を向く
-	/// </summary> 
-	void RotateToDirectionTarget()
-	{
-		//対象オブジェクトの位置 – 自分のオブジェクトの位置 = 対象オブジェクトの向きベクトルが求められる
-		Vector3 direction = groundEnemy.TargetPlayer.transform.position - groundEnemy.transform.position;
-		//単純に左右だけを見るようにしたいので、y軸の数値を0にする
-		direction.y = 0;
-		//第一引数に向きたい方向の向きベクトルを入れてあげる、それによってどのくらい回転させれば良いのか？の数値を求めることができる
-		Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
-		//↑で求めたどのくらい回転させれば良いのか？の数値を元に回転させる
-		groundEnemy.transform.rotation = Quaternion.Lerp(groundEnemy.transform.rotation, lookRotation, Time.deltaTime * 10f);
-	}
-
-	/// <summary>
-	/// 移動
+	/// 移動の処理
+	/// 近距離（十分に近い）なら停止させる
 	/// </summary>
 	void Move()
 	{
@@ -102,26 +98,68 @@ public class GroundEnemyMoveTargetAction : Action
 			return;
 		}
 
-		ConstantSpeed();
+		AdjustNavMeshPosition();
+		MoveTargetPositon();
 	}
 
 	/// <summary>
-	/// 一定の速さによる移動
+	///  ナビメッシュの位置とエネミーの位置が0.5m以上ズレたら補正
 	/// </summary>
-	void ConstantSpeed()
+	void AdjustNavMeshPosition()
 	{
-		Vector3 localTargetPos = groundEnemy.TargetPlayer.transform.position;
-		localTargetPos.y = groundEnemy.transform.position.y;
-		//向きベクトル
-		Vector3 moveDirection = localTargetPos - groundEnemy.transform.position;
-#if UNITY_EDITOR
-		Ray ray = new Ray(groundEnemy.transform.position, moveDirection);
-		Debug.DrawRay(ray.origin, ray.direction * moveDirection.magnitude, Color.magenta);
-#endif
-		//Normalize()関数を使用すると2つのベクトルの長さを掛け合わせた正しい位置に自動で修正してくれる関数
-		moveDirection.Normalize();
+		float sqr = (groundEnemy.NavMeshAgent.nextPosition - groundEnemy.Rigidbody.position).sqrMagnitude;
+		if (0.25f < sqr)
+		{
+			groundEnemy.NavMeshAgent.nextPosition = groundEnemy.Rigidbody.position;
+		}
+	}
 
-		//正規化したベクトルに加速度をかける
-		groundEnemy.Rigidbody.velocity = moveDirection * moveSpeed;
+	/// <summary>
+	/// 物理更新毎に Rigidbody.velocity を計算して設定する。
+	/// NavMeshAgentが有効で経路を持っている場合は、steeringTargetを使って次の向きを決定する。
+	/// 垂直成分（Y）は既存のrb.velocity.yを維持して、ジャンプや重力挙動を壊さない。
+	/// 目標速度へはVector3.MoveTowardsによって加速度で滑らかに近づける。
+	/// 十分に小さい距離では停止する。
+	/// </summary>
+	void MoveTargetPositon()
+	{
+		// 経路を持っていない場合は水平速度を 0 にする（Y は維持）
+		if (groundEnemy.NavMeshAgent.hasPath == false)
+		{
+			groundEnemy.Rigidbody.velocity = new Vector3(0, groundEnemy.Rigidbody.velocity.y, 0);
+			return;
+		}
+
+		// NavMeshAgent が示す次の操舵目標点（steeringTarget）を取得
+		Vector3 steerTarget = groundEnemy.NavMeshAgent.steeringTarget;
+
+		// 現在位置から操舵目標点へのベクトルを計算（Y は無視して水平のみ扱う）
+		Vector3 dir = steerTarget - groundEnemy.transform.position;
+		dir.y = 0;
+
+		// 進みたい方向の単位ベクトルに最大速度を掛けて目標速度を決定
+		Vector3 desiredVel = dir.normalized * groundEnemy.NavMeshAgent.speed;
+
+		// 現在の水平速度（Y成分は除く）
+		Vector3 horizontalVel = new Vector3(groundEnemy.Rigidbody.velocity.x, 0, groundEnemy.Rigidbody.velocity.z);
+
+		// 目標の水平速度成分だけを取り出す
+		Vector3 targetHorizontal = new Vector3(desiredVel.x, 0, desiredVel.z);
+
+		// 現在の水平速度を目標の水平速度へ向かって滑らかに変化させる
+		// acceleration * Time.fixedDeltaTime がこのフレームで許容する最大の変化量
+		Vector3 newHorizontal = Vector3.MoveTowards(horizontalVel, targetHorizontal, groundEnemy.NavMeshAgent.acceleration * Time.fixedDeltaTime);
+
+		// Y 成分は保持して、Rigidbody の速度を更新する
+		groundEnemy.Rigidbody.velocity = new Vector3(newHorizontal.x, groundEnemy.Rigidbody.velocity.y, newHorizontal.z);
+
+		// 十分に速度がある場合は向きを滑らかに回転させる（視覚的な向き合わせ）
+		if (0.01f < newHorizontal.sqrMagnitude)
+		{
+			groundEnemy.transform.rotation = Quaternion.Slerp(groundEnemy.transform.rotation, Quaternion.LookRotation(newHorizontal.normalized), 10f * Time.fixedDeltaTime);
+		}
+
+		// ★これが重要：Agent内部位置を物理位置に同期
+		groundEnemy.NavMeshAgent.nextPosition = groundEnemy.Rigidbody.position;
 	}
 }

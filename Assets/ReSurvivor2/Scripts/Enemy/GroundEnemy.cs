@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Knife.Effects;
+using UnityEngine.AI;
 using Cinemachine;
 
 /// <summary>
@@ -10,16 +11,22 @@ using Cinemachine;
 /// </summary>
 public class GroundEnemy : Target
 {
-	[UnityEngine.Tooltip("プレイヤー")]
+	[Tooltip("プレイヤー")]
 	GameObject targetPlayer;
 	public GameObject TargetPlayer => targetPlayer;
-	[UnityEngine.Tooltip("アニメーター")]
+	[Tooltip("アニメーター")]
 	[SerializeField] Animator animator;
 	public Animator Animator => animator;
-	[UnityEngine.Tooltip("物理")]
+	[Tooltip("物理")]
 	[SerializeField] Rigidbody enemyRigidbody;
 	public Rigidbody Rigidbody => enemyRigidbody;
-	[UnityEngine.Tooltip("エネミー本体のコライダー")]
+	[Tooltip("ナビメッシュ")]
+	[SerializeField] NavMeshAgent navMeshAgent;
+	public NavMeshAgent NavMeshAgent => navMeshAgent;
+
+	[Header("コライダー")]
+
+	[Tooltip("エネミー本体のコライダー")]
 	[SerializeField] Collider enemyCollider;
 	public Collider EnemyCollider
 	{
@@ -27,46 +34,57 @@ public class GroundEnemy : Target
 		set { enemyCollider = value; }
 	}
 
-	[Header("センサーコライダー用の変数")]
+	[Tooltip("センサーコライダー用の変数")]
 	[SerializeField] ColliderEventHandler[] colliders = default;
 	private bool[] hits;
 	public bool GetHit(int index) => hits[index];
 	private Collider hitCollider = null;
 	public Collider HitCollider => hitCollider;
 
+	[Header("レイキャスト")]
+	[Tooltip("視界用の頭ゲームオブジェクト")]
+	[SerializeField] GameObject head;
+	[Tooltip("視界な長さ")]
+	[SerializeField] float rayDistance = 14.0f;
+	/// <summary>左右の最大角</summary>
+	float halfAngle = 45f;
+	/// <summary>度/秒（例：90なら1秒で90度回る）</summary>
+	float sweepSpeed = 180f;
+	/// <summary>現在の角度</summary>
+	float currentAngle = 0f;
+	/// <summary>角度の回転方向（+1で右へ、-1で左へ）</summary>
+	float angleDir = 1f;
+
 	[Header("追跡")]
-	[UnityEngine.Tooltip("追跡時間の設定")]
+	[Tooltip("追跡時間の設定")]
 	[SerializeField] float chaseTime = 10.0f;
 	public float ChaseTime => chaseTime;
-	[UnityEngine.Tooltip("追跡カウントタイマー")]
+	/// <summary>追跡カウントタイマー</summary>
 	float chaseCountTime;
 	public float ChaseCountTime
 	{
 		get { return chaseCountTime; }
 		set { chaseCountTime = value; }
 	}
-	[UnityEngine.Tooltip("追跡中か？")]
+	/// <summary>追跡中か？</summary>
 	bool isChase = false;
 	public bool IsChase
 	{
 		get { return isChase; }
 		set { isChase = value; }
 	}
-	[UnityEngine.Tooltip("エネミー追跡範囲の中心点")]
+	[Tooltip("エネミー追跡範囲の中心点")]
 	[SerializeField] GameObject centerPos;
 	public GameObject CenterPos => centerPos;
-	[UnityEngine.Tooltip("追跡中か？のアラートイメージ")]
+	[Tooltip("追跡中か？のアラートイメージ")]
 	[SerializeField] GameObject alert;
-	[UnityEngine.Tooltip("視界用の頭ゲームオブジェクト")]
-	[SerializeField] GameObject head;
-	[UnityEngine.Tooltip("視界な長さ")]
-	[SerializeField] float rayDistance = 14.0f;
+
 
 	[Header("パトロール")]
-	[UnityEngine.Tooltip("パトロールポイントの位置")]
+	[Tooltip("パトロールポイントの位置")]
 	[SerializeField] List<GameObject> patrolPoints = new List<GameObject>();
 	public List<GameObject> PatrolPoints => patrolPoints;
-	[UnityEngine.Tooltip("現在のパトロールポイントのナンバー")]
+	[Tooltip("現在のパトロールポイントのナンバー")]
 	int patrolPointNumber = 0;
 	public int PatrolPointNumber
 	{
@@ -74,18 +92,18 @@ public class GroundEnemy : Target
 		set { patrolPointNumber = value; }
 	}
 
-	[UnityEngine.Tooltip("地面の中心点")]
+	[Tooltip("地面の中心点")]
 	[SerializeField] Transform groundCheckCenter;
-	[UnityEngine.Tooltip("地面となるレイヤー")]
+	[Tooltip("地面となるレイヤー")]
 	[SerializeField] LayerMask groundLayers;
-	[UnityEngine.Tooltip("地面検知範囲")]
+	[Tooltip("地面検知範囲")]
 	[SerializeField] float groundedRadius = 0.2f;
-	[UnityEngine.Tooltip("地面と接地しているか？")]
+	[Tooltip("地面と接地しているか？")]
 	bool isGrounded = false;
 	public bool IsGrounded => isGrounded;
 
 	[Header("攻撃")]
-	[UnityEngine.Tooltip("射撃距離")]
+	[Tooltip("射撃距離")]
 	[SerializeField] float shootingDistance = 8.0f;
 	public float ShootingDistance => shootingDistance;
 
@@ -137,6 +155,25 @@ public class GroundEnemy : Target
 	[Tooltip("デバッグ")]
 	[SerializeField] DebugEnemy debugEnemy;
 	public DebugEnemy DebugEnemy => debugEnemy;
+
+	void Awake()
+	{
+		InitNavMeshAgent();
+	}
+
+	/// <summary>
+	/// Awake で NavMeshAgent の自動位置・回転更新をオフにする。
+	/// これにより NavMeshAgent は経路計算（path, steeringTarget 等）専用になり、
+	/// 実際の移動は Rigidbody.velocity によって行う。
+	/// </summary>
+	void InitNavMeshAgent()
+	{
+		// NavMeshAgent による Transform 更新を無効化
+		navMeshAgent.updatePosition = false;
+		navMeshAgent.updateRotation = false;
+		// ★これが重要：Agent内部位置を物理位置に同期
+		navMeshAgent.nextPosition = enemyRigidbody.position;
+	}
 
 	/// <summary>
 	/// 初期化処理
@@ -270,18 +307,46 @@ public class GroundEnemy : Target
 			return;
 		}
 
-		Ray ray = new Ray(head.transform.position, this.transform.forward);
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, rayDistance))
+		// 角度を進める
+		currentAngle = currentAngle + angleDir * sweepSpeed * Time.deltaTime;
+
+		// 端で反転（往復）
+		if (halfAngle < currentAngle)
 		{
-			if (hit.collider.tag == "Player")
+			currentAngle = halfAngle;
+			angleDir = -1f;
+		}
+		else if (currentAngle < -halfAngle)
+		{
+			currentAngle = -halfAngle;
+			angleDir = 1f;
+		}
+
+		Vector3 pos = head.transform.position;
+		Vector3 forward = this.transform.forward;
+
+		if (forward.sqrMagnitude < 0.0001f)
+		{
+			forward = Vector3.forward;
+		}
+		forward.Normalize();
+
+		// 今の角度だけ回した方向に1本Ray
+		Vector3 dir = Quaternion.AngleAxis(currentAngle, Vector3.up) * forward;
+
+		Debug.DrawRay(pos, dir * rayDistance, Color.yellow);
+
+		RaycastHit hit;
+		if (Physics.Raycast(pos, dir, out hit, rayDistance))
+		{
+			// ヒット時の処理（例：プレイヤー検知など）
+			if (hit.collider.CompareTag("Player"))
 			{
 				//Debug.Log("<color=red>プレイヤーを発見!</color>");
 				//ChaseOn();
 				EnemyManager.SingletonInstance.AllChaseOn();
 			}
 		}
-		Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.yellow);
 	}
 
 	/// <summary>
@@ -565,5 +630,19 @@ public class GroundEnemy : Target
 	public void Shaker()
 	{
 		cinemachineImpulseSource.GenerateImpulse();
+	}
+
+	void OnDisable()
+	{
+		UnInitRigidbody();
+	}
+
+	/// <summary>
+	/// コンポーネントやオブジェクトが無効化されたら速度をリセットする。
+	/// これにより停止状態で無効化され、再有効化時に不意な移動が発生しない。
+	/// </summary>
+	void UnInitRigidbody()
+	{
+		enemyRigidbody.velocity = Vector3.zero;
 	}
 }

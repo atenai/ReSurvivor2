@@ -16,12 +16,6 @@ public class NavMeshRigidbodyMover : MonoBehaviour
 	// 移動に使う Rigidbody（Y方向の速度は保持するため直接操作する）
 	[SerializeField] Rigidbody rb;
 
-	// 目標速度（水平）
-	[SerializeField] float speed = 3.5f;
-
-	// 水平速度の変化を滑らかにするための加速度（MoveTowards の最大変化量）
-	[SerializeField] float acceleration = 10f;
-
 
 	void Awake()
 	{
@@ -96,7 +90,7 @@ public class NavMeshRigidbodyMover : MonoBehaviour
 		}
 
 		// 進みたい方向の単位ベクトルに最大速度を掛けて目標速度を決定
-		Vector3 desiredVel = dir.normalized * speed;
+		Vector3 desiredVel = dir.normalized * navMeshAgent.speed;
 
 		// 現在の水平速度（Y成分は除く）
 		Vector3 horizontalVel = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -106,7 +100,7 @@ public class NavMeshRigidbodyMover : MonoBehaviour
 
 		// 現在の水平速度を目標の水平速度へ向かって滑らかに変化させる
 		// acceleration * Time.fixedDeltaTime がこのフレームで許容する最大の変化量
-		Vector3 newHorizontal = Vector3.MoveTowards(horizontalVel, targetHorizontal, acceleration * Time.fixedDeltaTime);
+		Vector3 newHorizontal = Vector3.MoveTowards(horizontalVel, targetHorizontal, navMeshAgent.acceleration * Time.fixedDeltaTime);
 
 		// Y 成分は保持して、Rigidbody の速度を更新する
 		rb.velocity = new Vector3(newHorizontal.x, rb.velocity.y, newHorizontal.z);
@@ -116,6 +110,9 @@ public class NavMeshRigidbodyMover : MonoBehaviour
 		{
 			this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(newHorizontal.normalized), 10f * Time.fixedDeltaTime);
 		}
+
+		// ★これが重要：Agent内部位置を物理位置に同期
+		navMeshAgent.nextPosition = rb.position;
 	}
 
 

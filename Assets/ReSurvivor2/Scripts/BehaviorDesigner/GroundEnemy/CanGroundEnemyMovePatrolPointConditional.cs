@@ -7,26 +7,24 @@ using UnityEngine;
 [TaskCategory("GroundEnemy")]
 public class CanGroundEnemyMovePatrolPointConditional : Conditional
 {
-    GroundEnemy groundEnemy;
+	GroundEnemy groundEnemy;
 
-    // Taskが処理される直前に呼ばれる
-    public override void OnStart()
-    {
-        groundEnemy = this.GetComponent<GroundEnemy>();
-    }
+	// Taskが処理される直前に呼ばれる
+	public override void OnStart()
+	{
+		groundEnemy = this.GetComponent<GroundEnemy>();
+	}
 
-    // 更新時に呼ばれる
-    public override TaskStatus OnUpdate()
-    {
-        if (groundEnemy.IsGrounded == true)
-        {
-            //プレイヤーを発見していない
-            return TaskStatus.Success;
-        }
-        else
-        {
-            //プレイヤーを発見した
-            return TaskStatus.Failure;
-        }
-    }
+	// 更新時に呼ばれる
+	public override TaskStatus OnUpdate()
+	{
+		if (groundEnemy.IsGrounded == false)
+		{
+			//地面に接触していない
+			return TaskStatus.Failure;
+		}
+
+		//地面に接触している
+		return TaskStatus.Success;
+	}
 }

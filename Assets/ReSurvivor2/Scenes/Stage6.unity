@@ -254,7 +254,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3974415567473568368, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4566893493988133510, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -300,13 +300,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Capsule_Target
       objectReference: {fileID: 0}
+    - target: {fileID: 5043083586570102351, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6159464469037480309, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7085607125838934711, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1072,6 +1076,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abc00000000013590330756419995795, type: 3}
+--- !u!114 &732811951 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3045641993606833947, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+  m_PrefabInstance: {fileID: 1677166356}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fdcdbb3a7f89cd44b0612ff0c7f221d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &739901444
 GameObject:
   m_ObjectHideFlags: 0
@@ -2289,6 +2304,71 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abc00000000013590330756419995795, type: 3}
+--- !u!1001 &1677166356
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1686781622753291610, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1686781622753291610, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5594603776963884427, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_Name
+      value: GroundAssaultRifleEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610672490780779992, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610672490780779992, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610672490780779992, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610672490780779992, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610672490780779992, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610672490780779992, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610672490780779992, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610672490780779992, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610672490780779992, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610672490780779992, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1a3356a771bbd594dbf629c9c9dcf381, type: 3}
 --- !u!1001 &1695804946
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2489,12 +2569,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
       propertyPath: groundEnemies.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
       propertyPath: groundEnemies.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 732811951}
     - target: {fileID: 1502823918831594336, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3398,7 +3478,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2121725323165253596, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2121725323165253596, guid: a8cbe879c2cd74e49bc1ad0442daa9fd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4011,6 +4091,7 @@ SceneRoots:
   - {fileID: 147984166}
   - {fileID: 1768906423}
   - {fileID: 135895364}
+  - {fileID: 1677166356}
   - {fileID: 739901445}
   - {fileID: 791841203}
   - {fileID: 554270281}
