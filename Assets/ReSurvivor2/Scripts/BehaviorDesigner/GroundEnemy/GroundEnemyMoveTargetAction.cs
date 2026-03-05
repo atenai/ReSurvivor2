@@ -49,16 +49,16 @@ public class GroundEnemyMoveTargetAction : Action
 	// Tick毎に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
+		if (groundEnemy.IsChase == false)
+		{
+			//追跡終了
+			return TaskStatus.Success;
+		}
+
 		if (isEnd == true)
 		{
 			isEnd = false;
 			//目的地にたどりついた
-			return TaskStatus.Success;
-		}
-
-		if (groundEnemy.IsChase == false)
-		{
-			//追跡終了
 			return TaskStatus.Success;
 		}
 

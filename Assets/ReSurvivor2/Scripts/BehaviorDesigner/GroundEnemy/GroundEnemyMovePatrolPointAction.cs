@@ -31,8 +31,8 @@ public class GroundEnemyMovePatrolPointAction : Action
 
 		InitAnimation();
 		InitMove();
-		SetPatrolPoint();
 		InitEnemyCanNotMove();
+		SetPatrolPoint();
 		AdjustNavMeshPosition();
 	}
 
