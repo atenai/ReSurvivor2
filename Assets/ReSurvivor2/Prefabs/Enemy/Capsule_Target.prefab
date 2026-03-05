@@ -266,9 +266,10 @@ GameObject:
   - component: {fileID: 3667314558492751689}
   - component: {fileID: 282577341247685728}
   - component: {fileID: 3102027135794137449}
-  - component: {fileID: 8377339414277215395}
-  - component: {fileID: 7085607125838934711}
   - component: {fileID: 6159464469037480309}
+  - component: {fileID: 8377339414277215395}
+  - component: {fileID: 3974415567473568368}
+  - component: {fileID: 7085607125838934711}
   m_Layer: 6
   m_Name: Capsule_Target
   m_TagString: Enemy
@@ -393,37 +394,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8377339414277215395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5043083586570102351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cebe169c357e2a04f8b2b7ce35b93f2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHp: 100
-  canvas: {fileID: 8849100633220470086}
-  sliderHp: {fileID: 8660514565469374937}
---- !u!114 &7085607125838934711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5043083586570102351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0726c3b193fe9c940b619e7c32ad9b4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  navMeshAgent: {fileID: 6159464469037480309}
-  rb: {fileID: 3102027135794137449}
-  speed: 3.5
-  acceleration: 10
 --- !u!195 &6159464469037480309
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -446,6 +416,49 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &8377339414277215395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043083586570102351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cebe169c357e2a04f8b2b7ce35b93f2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp: 100
+  canvas: {fileID: 8849100633220470086}
+  sliderHp: {fileID: 8660514565469374937}
+--- !u!114 &3974415567473568368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043083586570102351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d573bd3a1c123a94c96cbf4b249daf62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7085607125838934711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043083586570102351}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0726c3b193fe9c940b619e7c32ad9b4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  navMeshAgent: {fileID: 6159464469037480309}
+  rb: {fileID: 3102027135794137449}
+  speed: 3.5
+  acceleration: 10
 --- !u!1 &5233638622931751577
 GameObject:
   m_ObjectHideFlags: 0

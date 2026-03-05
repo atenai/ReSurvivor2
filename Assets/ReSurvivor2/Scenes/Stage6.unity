@@ -252,6 +252,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3974415567473568368, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4566893493988133510, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2
@@ -295,6 +299,14 @@ PrefabInstance:
     - target: {fileID: 5043083586570102351, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: m_Name
       value: Capsule_Target
+      objectReference: {fileID: 0}
+    - target: {fileID: 6159464469037480309, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085607125838934711, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

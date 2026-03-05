@@ -22,16 +22,27 @@ public class NavMeshRigidbodyMover : MonoBehaviour
 	// 水平速度の変化を滑らかにするための加速度（MoveTowards の最大変化量）
 	[SerializeField] float acceleration = 10f;
 
+
+	void Awake()
+	{
+		InitNavMeshAgent();
+	}
+
 	/// <summary>
 	/// Awake で NavMeshAgent の自動位置・回転更新をオフにする。
 	/// これにより NavMeshAgent は経路計算（path, steeringTarget 等）専用になり、
 	/// 実際の移動は Rigidbody.velocity によって行う。
 	/// </summary>
-	void Awake()
+	void InitNavMeshAgent()
 	{
 		// NavMeshAgent による Transform 更新を無効化
 		navMeshAgent.updatePosition = false;
 		navMeshAgent.updateRotation = false;
+	}
+
+	void Update()
+	{
+		UpdateTargetPosition();
 	}
 
 	/// <summary>
@@ -39,10 +50,16 @@ public class NavMeshRigidbodyMover : MonoBehaviour
 	/// SetDestination は非同期に経路を計算する場合があるため、
 	/// 経路が計算中かどうかは FixedUpdate 側で hasPath / pathPending / pathStatus を参照して扱う。
 	/// </summary>
-	void Update()
+	void UpdateTargetPosition()
 	{
 		// 常にプレイヤーを目的地に設定する（敵 AI などの追従目的）
 		navMeshAgent.SetDestination(Player.SingletonInstance.transform.position);
+	}
+
+
+	void FixedUpdate()
+	{
+		MoveTargetPositon();
 	}
 
 	/// <summary>
@@ -52,7 +69,7 @@ public class NavMeshRigidbodyMover : MonoBehaviour
 	/// 目標速度へはVector3.MoveTowardsによって加速度で滑らかに近づける。
 	/// 十分に小さい距離では停止する。
 	/// </summary>
-	void FixedUpdate()
+	void MoveTargetPositon()
 	{
 		// 経路を持っていない場合は水平速度を 0 にする（Y は維持）
 		if (navMeshAgent.hasPath == false)
@@ -101,11 +118,17 @@ public class NavMeshRigidbodyMover : MonoBehaviour
 		}
 	}
 
+
+	void OnDisable()
+	{
+		UnInitRigidbody();
+	}
+
 	/// <summary>
 	/// コンポーネントやオブジェクトが無効化されたら速度をリセットする。
 	/// これにより停止状態で無効化され、再有効化時に不意な移動が発生しない。
 	/// </summary>
-	void OnDisable()
+	void UnInitRigidbody()
 	{
 		rb.velocity = Vector3.zero;
 	}
