@@ -18,6 +18,18 @@ public class CanGroundEnemyWithinSpecificDistanceConditional : Conditional
 	// 更新時に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
+		// groundEnemy が破棄されている可能性をチェック
+		if (groundEnemy == null)
+		{
+			return TaskStatus.Failure;
+		}
+
+		// TargetPlayer が破棄されている可能性をチェック
+		if (groundEnemy.TargetPlayer == null)
+		{
+			return TaskStatus.Failure;
+		}
+
 		if (groundEnemy.CurrentMagazine <= 0)
 		{
 			return TaskStatus.Failure;

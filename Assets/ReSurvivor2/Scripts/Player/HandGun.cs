@@ -47,13 +47,13 @@ public class HandGun : GunBase
 	/// </summary>
 	public override void Load()
 	{
-		Debug.Log("<color=red>ハンドガンロード</color>");
+		//Debug.Log("<color=red>ハンドガンロード</color>");
 
 		currentMagazine = ES3.Load<int>("HandGunCurrentMagazine", handGunMagazineCapacity);
-		Debug.Log("<color=purple>ハンドガンマガジン : " + currentMagazine + "</color>");
+		//Debug.Log("<color=purple>ハンドガンマガジン : " + currentMagazine + "</color>");
 
 		currentAmmo = ES3.Load<int>("CurrentHandGunAmmo", initCurrentHandGunAmmoDefine);
-		Debug.Log("<color=purple>ハンドガン残弾数 : " + currentAmmo + "</color>");
+		//Debug.Log("<color=purple>ハンドガン残弾数 : " + currentAmmo + "</color>");
 	}
 
 	/// <summary>

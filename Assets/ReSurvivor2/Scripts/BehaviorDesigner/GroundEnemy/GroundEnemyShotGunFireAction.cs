@@ -89,6 +89,18 @@ public class GroundEnemyShotGunFireAction : Action
 
 	public override void OnFixedUpdate()
 	{
+		if (groundEnemy == null)
+		{
+			return;
+		}
+
+		// TargetPlayer が破棄されている可能性があるためチェックする
+		if (groundEnemy.TargetPlayer == null)
+		{
+			groundEnemy.IsChase = false;
+			return;
+		}
+
 		RotateToDirectionTarget();
 		Shot();
 	}
@@ -98,6 +110,11 @@ public class GroundEnemyShotGunFireAction : Action
 	/// </summary> 
 	void RotateToDirectionTarget()
 	{
+		if (groundEnemy == null || groundEnemy.TargetPlayer == null)
+		{
+			return;
+		}
+
 		//対象オブジェクトの位置 – 自分のオブジェクトの位置 = 対象オブジェクトの向きベクトルが求められる
 		Vector3 direction = groundEnemy.TargetPlayer.transform.position - groundEnemy.transform.position;
 		//単純に左右だけを見るようにしたいので、y軸の数値を0にする

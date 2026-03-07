@@ -50,13 +50,13 @@ public class AssaultRifle : GunBase
 	/// </summary>
 	public override void Load()
 	{
-		Debug.Log("<color=blue>アサルトライフルロード</color>");
+		//Debug.Log("<color=blue>アサルトライフルロード</color>");
 
 		currentMagazine = ES3.Load<int>("AssaultRifleCurrentMagazine", assaultRifleMagazineCapacity);
-		Debug.Log("<color=purple>アサルトライフルマガジン : " + currentMagazine + "</color>");
+		//Debug.Log("<color=purple>アサルトライフルマガジン : " + currentMagazine + "</color>");
 
 		currentAmmo = ES3.Load<int>("CurrentAssaultRifleAmmo", initCurrentAssaultRifleAmmoDefine);
-		Debug.Log("<color=purple>アサルトライフル残弾数 : " + currentAmmo + "</color>");
+		//Debug.Log("<color=purple>アサルトライフル残弾数 : " + currentAmmo + "</color>");
 	}
 
 	/// <summary>

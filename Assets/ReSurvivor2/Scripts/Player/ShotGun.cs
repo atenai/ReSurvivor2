@@ -53,13 +53,13 @@ public class ShotGun : GunBase
 	/// </summary>
 	public override void Load()
 	{
-		Debug.Log("<color=green>ショットガンロード</color>");
+		//Debug.Log("<color=green>ショットガンロード</color>");
 
 		currentMagazine = ES3.Load<int>("ShotGunCurrentMagazine", shotGunMagazineCapacity);
-		Debug.Log("<color=purple>ショットガンマガジン : " + currentMagazine + "</color>");
+		//Debug.Log("<color=purple>ショットガンマガジン : " + currentMagazine + "</color>");
 
 		currentAmmo = ES3.Load<int>("CurrentShotGunAmmo", initCurrentShotGunAmmoDefine);
-		Debug.Log("<color=purple>ショットガン残弾数 : " + currentAmmo + "</color>");
+		//Debug.Log("<color=purple>ショットガン残弾数 : " + currentAmmo + "</color>");
 	}
 
 	/// <summary>

@@ -54,7 +54,7 @@ public class GunFacade
 	/// </summary>
 	public void Load()
 	{
-		UnityEngine.Debug.Log("<color=purple>ガンファサードロード</color>");
+		//UnityEngine.Debug.Log("<color=purple>ガンファサードロード</color>");
 		foreach (var gun in gunBaseList)
 		{
 			gun.Load();

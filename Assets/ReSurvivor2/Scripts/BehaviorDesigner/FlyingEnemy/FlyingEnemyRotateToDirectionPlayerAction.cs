@@ -17,6 +17,13 @@ public class FlyingEnemyRotateToDirectionPlayerAction : Action
 	public override void OnStart()
 	{
 		flyingEnemy = this.GetComponent<FlyingEnemy>();
+
+		// TargetPlayer が破棄されている可能性があるためチェックする
+		if (flyingEnemy.TargetPlayer == null)
+		{
+			return;
+		}
+
 		//Debug.Log("<color=blue>OnStart</color>");
 		t = 0.0f;
 		//対象オブジェクトの位置 – 自分のオブジェクトの位置 = 対象オブジェクトの向きベクトルが求められる
@@ -31,6 +38,12 @@ public class FlyingEnemyRotateToDirectionPlayerAction : Action
 	// 更新時に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
+		// TargetPlayer が破棄されている可能性があるためチェックする
+		if (flyingEnemy.TargetPlayer == null)
+		{
+			return TaskStatus.Failure;
+		}
+
 		//Debug.Log("<color=red>回転処理</color>");
 
 		//Time.deltaTimeは0.1f

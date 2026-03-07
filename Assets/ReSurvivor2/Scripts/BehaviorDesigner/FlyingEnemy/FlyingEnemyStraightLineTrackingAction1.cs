@@ -36,6 +36,12 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 	{
 		flyingEnemy = this.GetComponent<FlyingEnemy>();
 
+		// TargetPlayer が破棄されている可能性があるためチェックする
+		if (flyingEnemy.TargetPlayer == null)
+		{
+			return;
+		}
+
 		TargetPos();
 		InitRotateToDirectionTarget();
 		InitMove();
@@ -77,6 +83,12 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 	// 更新時に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
+		// TargetPlayer が破棄されている可能性があるためチェックする
+		if (flyingEnemy.TargetPlayer == null)
+		{
+			return TaskStatus.Failure;
+		}
+
 		if (isEnd == true)
 		{
 			isEnd = false;
@@ -91,7 +103,11 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
 	public override void OnFixedUpdate()
 	{
-		base.OnFixedUpdate();
+		// TargetPlayer が破棄されている可能性があるためチェックする
+		if (flyingEnemy.TargetPlayer == null)
+		{
+			return;
+		}
 
 		if (isRotEnd == false)
 		{

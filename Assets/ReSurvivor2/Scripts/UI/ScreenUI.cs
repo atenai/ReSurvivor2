@@ -170,6 +170,12 @@ public class ScreenUI : MonoBehaviour
 
 	void Update()
 	{
+		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
+		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		{
+			return;
+		}
+
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{

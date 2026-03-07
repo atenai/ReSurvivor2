@@ -57,6 +57,12 @@ public class GroundEnemyMoveTargetAction : Action
 	// Tick毎に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
+		// TargetPlayer が破棄されている可能性をチェック
+		if (groundEnemy.TargetPlayer == null)
+		{
+			return TaskStatus.Failure;
+		}
+
 		if (groundEnemy.IsChase == false)
 		{
 			//追跡終了
@@ -88,6 +94,12 @@ public class GroundEnemyMoveTargetAction : Action
 
 	public override void OnFixedUpdate()
 	{
+		// TargetPlayer が破棄されている可能性をチェック
+		if (groundEnemy.TargetPlayer == null)
+		{
+			return;
+		}
+
 		Move();
 	}
 
@@ -97,6 +109,12 @@ public class GroundEnemyMoveTargetAction : Action
 	/// </summary>
 	void Move()
 	{
+		// TargetPlayer が破棄されている可能性をチェック
+		if (groundEnemy.TargetPlayer == null)
+		{
+			return;
+		}
+
 		float sqrCurrentDistance = Vector3.SqrMagnitude(groundEnemy.TargetPlayer.transform.position - groundEnemy.transform.position);
 		if (sqrCurrentDistance < endPos)
 		{

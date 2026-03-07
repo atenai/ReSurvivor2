@@ -131,17 +131,18 @@ public class PlayerCamera : MonoBehaviour
 		}
 		isFirstLoad = false;
 
-		Debug.Log("<color=purple>プレイヤーカメラロード</color>");
+		//Debug.Log("<color=purple>プレイヤーカメラロード</color>");
 		gunFacade.Load();
-	}
-
-	void Start()
-	{
-
 	}
 
 	void Update()
 	{
+		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
+		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		{
+			return;
+		}
+
 		//ポーズ中は切り上げる
 		if (ScreenUI.SingletonInstance.IsPause == true)
 		{
@@ -172,13 +173,18 @@ public class PlayerCamera : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
+		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		{
+			return;
+		}
+
 		//シネマシーンカメラがアクティブの場合は切り上げる
 		if (isCinemachineActive == true)
 		{
 			return;
 		}
 
-		//SRT
 		if (Player.SingletonInstance.IsAim == false)
 		{
 			CameraNormalMove();

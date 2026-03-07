@@ -190,27 +190,27 @@ public class Player : MonoBehaviour
 		}
 		isFirstLoad = false;
 
-		Debug.Log("<color=purple>プレイヤーロード</color>");
+		//Debug.Log("<color=purple>プレイヤーロード</color>");
 		currentHp = ES3.Load<float>("Hp", maxHp);
-		Debug.Log("<color=purple>HP : " + currentHp + "</color>");
+		//Debug.Log("<color=purple>HP : " + currentHp + "</color>");
 		currentStamina = ES3.Load<float>("Stamina", maxStamina);
-		Debug.Log("<color=purple>スタミナ : " + currentStamina + "</color>");
+		//Debug.Log("<color=purple>スタミナ : " + currentStamina + "</color>");
 		currentArmorPlate = ES3.Load<int>("ArmorPlate", 2);
-		Debug.Log("<color=purple>アーマープレート : " + currentArmorPlate + "</color>");
+		//Debug.Log("<color=purple>アーマープレート : " + currentArmorPlate + "</color>");
 		currentFood = ES3.Load<int>("Food", 2);
-		Debug.Log("<color=purple>食料 : " + currentFood + "</color>");
+		//Debug.Log("<color=purple>食料 : " + currentFood + "</color>");
 		currentMine = ES3.Load<int>("Mine", 3);
-		Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");
+		//Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");
 		//ステージが切り替わる度にリスポーン位置が呼ばれるため、リスポーンのオブジェクトは遷移先のステージで敵やオブジェクトにかぶらないように注意すること！！
 		if (ES3.KeyExists("PlayerPos") == true)
 		{
 			respawnPosition = ES3.Load<Vector3>("PlayerPos");
-			Debug.Log("<color=purple>プレイヤー位置 : " + this.transform.position + "</color>");
+			//Debug.Log("<color=purple>プレイヤー位置 : " + this.transform.position + "</color>");
 		}
 		if (ES3.KeyExists("PlayerRot") == true)
 		{
 			respawnRotation = ES3.Load<Quaternion>("PlayerRot");
-			Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
+			//Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
 		}
 	}
 
@@ -299,6 +299,12 @@ public class Player : MonoBehaviour
 
 	void Update()
 	{
+		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
+		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		{
+			return;
+		}
+
 		//ポーズ中は切り上げる
 		if (ScreenUI.SingletonInstance.IsPause == true)
 		{
@@ -423,6 +429,12 @@ public class Player : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
+		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		{
+			return;
+		}
+
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{

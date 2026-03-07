@@ -44,13 +44,14 @@ public class TimerManager : MonoBehaviour
 		}
 	}
 
-	void Start()
-	{
-
-	}
-
 	void Update()
 	{
+		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
+		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		{
+			return;
+		}
+
 		//ポーズ中は切り上げる
 		if (ScreenUI.SingletonInstance.IsPause == true)
 		{

@@ -35,6 +35,7 @@ public class StageManager : MonoBehaviour
 	{
 		ScreenUI.SingletonInstance.MapUI.SetCurrentPlayerStageNumber((int)stage);
 		StartCoroutine(ScreenUI.SingletonInstance.FadeIn());
+		StartCoroutine(InGameManager.SingletonInstance.PreloadScenesCoroutine());
 	}
 
 	void Update()

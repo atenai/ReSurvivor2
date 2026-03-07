@@ -18,6 +18,18 @@ public class CanGroundEnemyAwayFromTheTargetConditional : Conditional
 	// 更新時に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
+		// groundEnemy が破棄されている可能性をチェック
+		if (groundEnemy == null)
+		{
+			return TaskStatus.Failure;
+		}
+
+		// TargetPlayer が破棄されている可能性をチェック
+		if (groundEnemy.TargetPlayer == null)
+		{
+			return TaskStatus.Failure;
+		}
+
 		//距離を求める
 		float sqrCurrentDistance = Vector3.SqrMagnitude(groundEnemy.TargetPlayer.transform.position - groundEnemy.transform.position);
 		//Debug.Log("<color=red>sqrCurrentDistance : " + sqrCurrentDistance + "</color>");
