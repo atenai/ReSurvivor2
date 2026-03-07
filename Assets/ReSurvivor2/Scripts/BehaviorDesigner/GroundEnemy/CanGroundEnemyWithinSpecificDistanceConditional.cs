@@ -24,9 +24,10 @@ public class CanGroundEnemyWithinSpecificDistanceConditional : Conditional
 			return TaskStatus.Failure;
 		}
 
-		// TargetPlayer が破棄されている可能性をチェック
+		//ゲームクリアーおよびゲームオーバーシーンに遷移した際に必要となる処理
 		if (groundEnemy.TargetPlayer == null)
 		{
+			Debug.Log("<color=red>プレイヤーが破棄されています</color>");
 			return TaskStatus.Failure;
 		}
 

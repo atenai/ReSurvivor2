@@ -36,9 +36,10 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 	{
 		flyingEnemy = this.GetComponent<FlyingEnemy>();
 
-		// TargetPlayer が破棄されている可能性があるためチェックする
+		//ゲームクリアーおよびゲームオーバーシーンに遷移した際に必要となる処理
 		if (flyingEnemy.TargetPlayer == null)
 		{
+			Debug.Log("<color=red>プレイヤーが破棄されています</color>");
 			return;
 		}
 
@@ -83,9 +84,10 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 	// 更新時に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
-		// TargetPlayer が破棄されている可能性があるためチェックする
+		//ゲームクリアーおよびゲームオーバーシーンに遷移した際に必要となる処理
 		if (flyingEnemy.TargetPlayer == null)
 		{
+			Debug.Log("<color=red>プレイヤーが破棄されています</color>");
 			return TaskStatus.Failure;
 		}
 
@@ -103,9 +105,10 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 
 	public override void OnFixedUpdate()
 	{
-		// TargetPlayer が破棄されている可能性があるためチェックする
+		//ゲームクリアーおよびゲームオーバーシーンに遷移した際に必要となる処理
 		if (flyingEnemy.TargetPlayer == null)
 		{
+			Debug.Log("<color=red>プレイヤーが破棄されています</color>");
 			return;
 		}
 

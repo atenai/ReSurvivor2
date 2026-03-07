@@ -92,8 +92,10 @@ public class GroundEnemyGrenadeAction : Action
 			return;
 		}
 
+		//ゲームクリアーおよびゲームオーバーシーンに遷移した際に必要となる処理
 		if (groundEnemy.TargetPlayer == null)
 		{
+			Debug.Log("<color=red>プレイヤーが破棄されています</color>");
 			groundEnemy.IsChase = false;
 			return;
 		}

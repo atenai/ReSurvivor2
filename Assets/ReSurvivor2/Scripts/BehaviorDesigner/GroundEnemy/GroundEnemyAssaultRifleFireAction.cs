@@ -96,9 +96,10 @@ public class GroundEnemyAssaultRifleFireAction : Action
 			return;
 		}
 
-		// TargetPlayer が破棄されている可能性があるためチェックする
+		//ゲームクリアーおよびゲームオーバーシーンに遷移した際に必要となる処理
 		if (groundEnemy.TargetPlayer == null)
 		{
+			Debug.Log("<color=red>プレイヤーが破棄されています</color>");
 			groundEnemy.IsChase = false;
 			return;
 		}
