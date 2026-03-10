@@ -550,7 +550,7 @@ public class ScreenUI : MonoBehaviour
 	/// </summary> 
 	void UpdateComputerMenuSystem()
 	{
-		if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P) || Input.GetButtonDown("XInput Start") || Input.GetButtonDown("XInput B"))
+		if (Input.GetKeyDown(KeyCode.B) || Input.GetButtonDown("XInput B"))
 		{
 			//コンピューターメニューを閉じる
 			if (isComputerMenuActive == true)

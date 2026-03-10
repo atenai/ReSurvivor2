@@ -76,6 +76,12 @@ public class Computer : MonoBehaviour
 			return;
 		}
 
+		//コンピュータを使用中は切り上げる
+		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
+		{
+			return;
+		}
+
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
