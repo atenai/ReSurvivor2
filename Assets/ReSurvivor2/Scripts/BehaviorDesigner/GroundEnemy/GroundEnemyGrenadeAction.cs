@@ -150,11 +150,29 @@ public class GroundEnemyGrenadeAction : Action
 	/// </summary> 
 	void GrenadeSpawn()
 	{
+		if (groundEnemy == null || groundEnemy.TargetPlayer == null || grenadeGameObjectPrefab == null)
+		{
+			return;
+		}
+
 		// キャラクターの前方にオブジェクトを生成
 		Vector3 spawnPosition = this.transform.position + this.transform.forward * spawnDistance;
 		spawnPosition.y = spawnPosition.y + 2.0f;
 		GameObject localGameObject = UnityEngine.Object.Instantiate(grenadeGameObjectPrefab, spawnPosition, this.transform.rotation);
-		localGameObject.GetComponent<Rigidbody>().AddForce(transform.forward * 200.0f);
-		localGameObject.GetComponent<Rigidbody>().AddForce(transform.up * 100.0f);
+		Rigidbody rb = localGameObject.GetComponent<Rigidbody>();
+		if (rb == null)
+		{
+			return;
+		}
+
+		// プレイヤー方向へ投げる
+		Vector3 targetPosition = groundEnemy.TargetPlayer.transform.position;
+		// 少し上を狙うことで落下を補正
+		targetPosition.y += 1.0f;
+		Vector3 direction = (targetPosition - spawnPosition).normalized;
+
+		// 調整可能な投擲力（インパルス）
+		float throwForce = 15.0f;
+		rb.AddForce(direction * throwForce, ForceMode.Impulse);
 	}
 }
