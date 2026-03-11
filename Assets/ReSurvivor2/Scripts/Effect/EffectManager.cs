@@ -16,8 +16,22 @@ public class EffectManager : MonoBehaviour
 	//パス(Assets/Knife/PRO Effects FPS Muzzle flashes & Impacts/Particles/Prefabs/Impacts)
 	[Tooltip("血の着弾エフェクト")]
 	[SerializeField] GameObject bloodImpactEffect;
-	[Tooltip("煙の着弾エフェクト")]
+	[Tooltip("鉄の着弾エフェクト1")]
+	[SerializeField] GameObject metal1ImpactEffect;
+	[Tooltip("鉄の着弾エフェクト2")]
+	[SerializeField] GameObject metal2ImpactEffect;
+	[Tooltip("岩の着弾エフェクト")]
 	[SerializeField] GameObject rockImpactEffect;
+	[Tooltip("地面の着弾エフェクト")]
+	[SerializeField] GameObject groundImpactEffect;
+	[Tooltip("アスファルトの着弾エフェクト")]
+	[SerializeField] GameObject asphaltImpactEffect;
+	[Tooltip("コンクリートの着弾エフェクト")]
+	[SerializeField] GameObject concreteImpactEffect;
+	[Tooltip("ガラスの着弾エフェクト")]
+	[SerializeField] GameObject glassImpactEffect;
+	[Tooltip("木の着弾エフェクト")]
+	[SerializeField] GameObject woodImpactEffect;
 
 	void Awake()
 	{
@@ -38,13 +52,27 @@ public class EffectManager : MonoBehaviour
 	/// </summary> 
 	public void ImpactEffect(RaycastHit hit)
 	{
-		if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
+		if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 		{
+			//bloodImpactEffect
 			GameObject impactGameObject = Instantiate(bloodImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+			Destroy(impactGameObject, 2.0f);
+		}
+		else if (hit.collider.gameObject.CompareTag("FlyingEnemy"))
+		{
+			//metal2ImpactEffect
+			GameObject impactGameObject = Instantiate(metal2ImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+			Destroy(impactGameObject, 2.0f);
+		}
+		else if (hit.collider.gameObject.CompareTag("Ground"))
+		{
+			//groundImpactEffect
+			GameObject impactGameObject = Instantiate(groundImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
 			Destroy(impactGameObject, 2.0f);
 		}
 		else
 		{
+			//rockImpactEffect
 			GameObject impactGameObject = Instantiate(rockImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
 			Destroy(impactGameObject, 2.0f);
 		}
