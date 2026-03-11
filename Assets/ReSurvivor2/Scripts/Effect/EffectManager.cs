@@ -12,6 +12,9 @@ public class EffectManager : MonoBehaviour
 	/// <summary>シングルトンのプロパティ</summary>
 	public static EffectManager SingletonInstance => singletonInstance;
 
+	[SerializeField] BloodImpactEffectPool bloodImpactEffectPool;
+	public BloodImpactEffectPool BloodImpactEffectPool => bloodImpactEffectPool;
+
 	[Header("着弾エフェクト")]
 	//パス(Assets/Knife/PRO Effects FPS Muzzle flashes & Impacts/Particles/Prefabs/Impacts)
 	[Tooltip("血の着弾エフェクト")]
@@ -55,26 +58,30 @@ public class EffectManager : MonoBehaviour
 		if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("GroundEnemy"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 		{
 			//bloodImpactEffect
-			GameObject impactGameObject = Instantiate(bloodImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-			Destroy(impactGameObject, 2.0f);
+			//GameObject impactGameObject = Instantiate(bloodImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+			//Destroy(impactGameObject, 2.0f);
+			bloodImpactEffectPool.GetGameObject(hit.point, Quaternion.LookRotation(hit.normal));
 		}
 		else if (hit.collider.gameObject.CompareTag("FlyingEnemy"))
 		{
 			//metal2ImpactEffect
-			GameObject impactGameObject = Instantiate(metal2ImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-			Destroy(impactGameObject, 2.0f);
+			//GameObject impactGameObject = Instantiate(metal2ImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+			//Destroy(impactGameObject, 2.0f);
+			bloodImpactEffectPool.GetGameObject(hit.point, Quaternion.LookRotation(hit.normal));
 		}
 		else if (hit.collider.gameObject.CompareTag("Ground"))
 		{
 			//groundImpactEffect
-			GameObject impactGameObject = Instantiate(groundImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-			Destroy(impactGameObject, 2.0f);
+			//GameObject impactGameObject = Instantiate(groundImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+			//Destroy(impactGameObject, 2.0f);
+			bloodImpactEffectPool.GetGameObject(hit.point, Quaternion.LookRotation(hit.normal));
 		}
 		else
 		{
 			//rockImpactEffect
-			GameObject impactGameObject = Instantiate(rockImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
-			Destroy(impactGameObject, 2.0f);
+			//GameObject impactGameObject = Instantiate(rockImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
+			//Destroy(impactGameObject, 2.0f);
+			bloodImpactEffectPool.GetGameObject(hit.point, Quaternion.LookRotation(hit.normal));
 		}
 	}
 }

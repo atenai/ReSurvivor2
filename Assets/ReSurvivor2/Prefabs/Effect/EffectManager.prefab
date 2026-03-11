@@ -29,7 +29,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 9140583111228087840}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4167680471265424459
@@ -44,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63efad5bd847cbe4f99ef66d68c176dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bloodImpactEffectPool: {fileID: 7615034755713745766}
   bloodImpactEffect: {fileID: 258580847482720398, guid: 907189bb1273a83499f4581146d101a5, type: 3}
   metal1ImpactEffect: {fileID: 7077355519987932895, guid: 579357df66620f747a0c8f99cabbd10e, type: 3}
   metal2ImpactEffect: {fileID: 7077355519987932895, guid: 6d813d766b473a04680efdb264997f8d, type: 3}
@@ -53,3 +55,48 @@ MonoBehaviour:
   concreteImpactEffect: {fileID: 1245417074158469956, guid: 4116cec408736b8408c7cea75253bb9b, type: 3}
   glassImpactEffect: {fileID: 6116272564290920067, guid: d58f136885f6e8a4ca2a8731c8bc258d, type: 3}
   woodImpactEffect: {fileID: 3061189629347133704, guid: a8e182c1811239647a9f16b1f40dd7f2, type: 3}
+--- !u!1 &6625896136996527362
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9140583111228087840}
+  - component: {fileID: 7615034755713745766}
+  m_Layer: 0
+  m_Name: BloodImpactEffectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9140583111228087840
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6625896136996527362}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6531511205072101186}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7615034755713745766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6625896136996527362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c8d599dfbb4d948a42e6d2146d166a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 258580847482720398, guid: be7130cc3a33cf84da640db23d83fcd5, type: 3}
