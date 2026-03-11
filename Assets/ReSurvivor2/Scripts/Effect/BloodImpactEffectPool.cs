@@ -8,7 +8,7 @@ public class BloodImpactEffectPool : MonoBehaviour
 {
 	ObjectPool<GameObject> objectPool;
 	[SerializeField] GameObject prefab;
-	int defalutCapacity = 30 * 3;
+	int defalutCapacity = 270;
 	int maxCount = 300;
 
 	/// <summary>

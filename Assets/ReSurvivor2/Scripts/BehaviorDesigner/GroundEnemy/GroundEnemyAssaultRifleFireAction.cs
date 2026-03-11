@@ -188,6 +188,8 @@ public class GroundEnemyAssaultRifleFireAction : Action
 					EnemyIndicatorManager.SingletonInstance.ShowIndicator(groundEnemy);
 				}
 			}
+
+			EffectManager.SingletonInstance.ImpactEffect(hit);
 		}
 	}
 }

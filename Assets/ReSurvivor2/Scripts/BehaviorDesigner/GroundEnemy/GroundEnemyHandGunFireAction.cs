@@ -163,6 +163,8 @@ public class GroundEnemyHandGunFireAction : Action
 					EnemyIndicatorManager.SingletonInstance.ShowIndicator(groundEnemy);
 				}
 			}
+
+			EffectManager.SingletonInstance.ImpactEffect(hit);
 		}
 	}
 }
