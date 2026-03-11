@@ -218,7 +218,6 @@ public class FlyingEnemy : Target
 		}
 
 		Vector3 pos = head.transform.position;
-		//Vector3 forward = this.transform.forward;
 		//-head.transform.forwardをマイナスにしているのはなぜかドローンのモデル目の前方が反対になっていた為
 		Vector3 forward = -head.transform.forward;
 
@@ -239,7 +238,7 @@ public class FlyingEnemy : Target
 			// ヒット時の処理（例：プレイヤー検知など）
 			if (hit.collider.CompareTag("Player"))
 			{
-				Debug.Log("<color=red>プレイヤーを発見!</color>");
+				//Debug.Log("<color=red>プレイヤーを発見!</color>");
 				//ChaseOn();
 				EnemyManager.SingletonInstance.AllChaseOn();
 			}

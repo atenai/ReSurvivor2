@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
+using TMPro;
+using DG.Tweening;
 
 /// <summary>
 /// スクリーンUI管理クラス
@@ -134,9 +136,12 @@ public class ScreenUI : MonoBehaviour
 		get { return mapUI; }
 		set { mapUI = value; }
 	}
-
+	[Tooltip("アイテム取得ログ")]
 	[SerializeField] ItemOutPutLog itemOutPutLog;
 	public ItemOutPutLog ItemOutPutLog => itemOutPutLog;
+
+	[SerializeField] TextMeshProUGUI saveNowText;
+	public TextMeshProUGUI SaveNowText => saveNowText;
 
 	void Awake()
 	{
@@ -162,6 +167,9 @@ public class ScreenUI : MonoBehaviour
 
 		//スタミナ回復画像エフェクト
 		imageStaminaHeal.color = Color.clear;
+
+		// セーブ表示用テキストは初期で透明にする
+		saveNowText.color = new Color(saveNowText.color.r, saveNowText.color.g, saveNowText.color.b, 0f);
 
 		InitFadeColor();
 
@@ -650,5 +658,31 @@ public class ScreenUI : MonoBehaviour
 			TimerManager.SingletonInstance.Seconds = result.Seconds;
 			MapUI.SetEndComputerStageNumber((int)result.EndComputerName);
 		}
+	}
+
+	/// <summary>
+	/// 指定秒数だけフェードインしてその後フェードアウトする（DOTween使用）
+	/// </summary>
+	/// <param name="staySeconds">表示維持時間（秒）</param>
+	/// <param name="fadeDuration">フェードイン/アウト時間（秒）</param>
+	public void ShowSaveNowText(float staySeconds = 0.5f, float fadeDuration = 0.5f)
+	{
+		if (saveNowText == null)
+		{
+			return;
+		}
+
+		// 既存のTweenを停止
+		saveNowText.DOKill();
+
+		// 強制的に透明から開始
+		saveNowText.color = new Color(saveNowText.color.r, saveNowText.color.g, saveNowText.color.b, 0f);
+
+		// シーケンス: フェードイン -> 指定秒数待機 -> フェードアウト
+		Sequence seq = DOTween.Sequence();
+		seq.Append(saveNowText.DOFade(1f, fadeDuration));
+		seq.AppendInterval(staySeconds);
+		seq.Append(saveNowText.DOFade(0f, fadeDuration));
+		seq.Play();
 	}
 }

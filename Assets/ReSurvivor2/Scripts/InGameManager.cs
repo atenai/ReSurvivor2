@@ -130,6 +130,7 @@ public class InGameManager : MonoBehaviour
 		ES3.Save<bool>("MissionID2", missionID2);
 		Player.SingletonInstance.Save();
 		PlayerCamera.SingletonInstance.Save();
+		ScreenUI.SingletonInstance.ShowSaveNowText();
 	}
 
 	/// <summary>
