@@ -28,9 +28,9 @@ public class FlyingEnemy : Target
 	[Tooltip("視界用の頭ゲームオブジェクト")]
 	[SerializeField] GameObject head;
 	[Tooltip("視界な長さ")]
-	float rayDistance = 8.0f;
+	float rayDistance = 20.0f;
 	/// <summary>左右の最大角</summary>
-	float halfAngle = 45f;
+	float halfAngle = 60f;
 	/// <summary>度/秒（例：90なら1秒で90度回る）</summary>
 	float sweepSpeed = 180f;
 	/// <summary>現在の角度</summary>
@@ -217,9 +217,11 @@ public class FlyingEnemy : Target
 			angleDir = 1f;
 		}
 
+		// レイの原点と基準方向はheadの向きに合わせる
 		Vector3 pos = head.transform.position;
 		//-head.transform.forwardをマイナスにしているのはなぜかドローンのモデル目の前方が反対になっていた為
 		Vector3 forward = -head.transform.forward;
+		Vector3 right = head.transform.right;
 
 		if (forward.sqrMagnitude < 0.0001f)
 		{
@@ -227,8 +229,8 @@ public class FlyingEnemy : Target
 		}
 		forward.Normalize();
 
-		// 今の角度だけ回した方向に1本Ray
-		Vector3 dir = Quaternion.AngleAxis(currentAngle, Vector3.right) * forward;
+		// ローカルの右方向（head.transform.right）を回転軸にして上下にスイープ
+		Vector3 dir = Quaternion.AngleAxis(currentAngle, right) * forward;
 
 		Debug.DrawRay(pos, dir * rayDistance, Color.yellow);
 
@@ -238,8 +240,6 @@ public class FlyingEnemy : Target
 			// ヒット時の処理（例：プレイヤー検知など）
 			if (hit.collider.CompareTag("Player"))
 			{
-				//Debug.Log("<color=red>プレイヤーを発見!</color>");
-				//ChaseOn();
 				EnemyManager.SingletonInstance.AllChaseOn();
 			}
 		}

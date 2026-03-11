@@ -45,7 +45,7 @@ public class GroundEnemy : Target
 	[Tooltip("視界用の頭ゲームオブジェクト")]
 	[SerializeField] GameObject head;
 	[Tooltip("視界な長さ")]
-	[SerializeField] float rayDistance = 14.0f;
+	float rayDistance = 14.0f;
 	/// <summary>左右の最大角</summary>
 	float halfAngle = 45f;
 	/// <summary>度/秒（例：90なら1秒で90度回る）</summary>
@@ -326,6 +326,7 @@ public class GroundEnemy : Target
 
 		Vector3 pos = head.transform.position;
 		Vector3 forward = this.transform.forward;
+		Vector3 up = this.transform.up;
 
 		if (forward.sqrMagnitude < 0.0001f)
 		{
@@ -334,7 +335,7 @@ public class GroundEnemy : Target
 		forward.Normalize();
 
 		// 今の角度だけ回した方向に1本Ray
-		Vector3 dir = Quaternion.AngleAxis(currentAngle, Vector3.up) * forward;
+		Vector3 dir = Quaternion.AngleAxis(currentAngle, up) * forward;
 
 		Debug.DrawRay(pos, dir * rayDistance, Color.yellow);
 
