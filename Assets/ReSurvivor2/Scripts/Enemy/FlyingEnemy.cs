@@ -8,12 +8,14 @@ using UnityEngine;
 /// </summary>
 public class FlyingEnemy : Target
 {
-	[UnityEngine.Tooltip("プレイヤー")]
+	[Tooltip("プレイヤー")]
 	GameObject targetPlayer;
 	public GameObject TargetPlayer => targetPlayer;
-	[UnityEngine.Tooltip("物理")]
+	[Tooltip("物理")]
 	[SerializeField] Rigidbody enemyRigidbody;
 	public Rigidbody Rigidbody => enemyRigidbody;
+
+	[Header("コライダー")]
 
 	[Header("センサーコライダー用の変数")]
 	[SerializeField] ColliderEventHandler[] colliders = default;
@@ -22,39 +24,49 @@ public class FlyingEnemy : Target
 	private Collider hitCollider = null;
 	public Collider HitCollider => hitCollider;
 
+	[Header("レイキャスト")]
+	[Tooltip("視界用の頭ゲームオブジェクト")]
+	[SerializeField] GameObject head;
+	[Tooltip("視界な長さ")]
+	float rayDistance = 8.0f;
+	/// <summary>左右の最大角</summary>
+	float halfAngle = 45f;
+	/// <summary>度/秒（例：90なら1秒で90度回る）</summary>
+	float sweepSpeed = 180f;
+	/// <summary>現在の角度</summary>
+	float currentAngle = 0f;
+	/// <summary>角度の回転方向（+1で右へ、-1で左へ）</summary>
+	float angleDir = 1f;
+
 	[Header("追跡")]
-	[UnityEngine.Tooltip("追跡時間の設定")]
-	[SerializeField] float chaseTime = 10.0f;
+	/// <summary>追跡時間</summary>
+	float chaseTime = 25.0f;
 	public float ChaseTime => chaseTime;
-	[UnityEngine.Tooltip("追跡カウントタイマー")]
+	/// <summary>追跡カウントタイマー</summary>
 	float chaseCountTime;
 	public float ChaseCountTime
 	{
 		get { return chaseCountTime; }
 		set { chaseCountTime = value; }
 	}
-	[UnityEngine.Tooltip("追跡中か？")]
+	/// <summary>追跡中か？</summary>
 	bool isChase = false;
 	public bool IsChase
 	{
 		get { return isChase; }
 		set { isChase = value; }
 	}
-	[UnityEngine.Tooltip("エネミー追跡範囲の中心点")]
+	[Tooltip("エネミー追跡範囲の中心点")]
 	[SerializeField] GameObject centerPos;
 	public GameObject CenterPos => centerPos;
-	[UnityEngine.Tooltip("追跡中か？のアラートイメージ")]
+	[Tooltip("追跡中か？のアラートイメージ")]
 	[SerializeField] GameObject alert;
-	[UnityEngine.Tooltip("視界用の頭ゲームオブジェクト")]
-	[SerializeField] GameObject head;
-	[UnityEngine.Tooltip("視界な長さ")]
-	float rayDistance = 8.0f;
 
 	[Header("パトロール")]
-	[UnityEngine.Tooltip("パトロールポイントの位置")]
+	[Tooltip("パトロールポイントの位置")]
 	[SerializeField] List<GameObject> patrolPoints = new List<GameObject>();
 	public List<GameObject> PatrolPoints => patrolPoints;
-	[UnityEngine.Tooltip("現在のパトロールポイントのナンバー")]
+	[Tooltip("現在のパトロールポイントのナンバー")]
 	int patrolPointNumber = 0;
 	public int PatrolPointNumber
 	{
@@ -190,18 +202,48 @@ public class FlyingEnemy : Target
 			return;
 		}
 
-		Ray ray = new Ray(head.transform.position, -head.transform.forward);//-head.transform.forwardをマイナスにしているのはなぜかドローンのモデル目の前方が反対になっていた為
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, rayDistance))
+		// 角度を進める
+		currentAngle = currentAngle + angleDir * sweepSpeed * Time.deltaTime;
+
+		// 端で反転（往復）
+		if (halfAngle < currentAngle)
 		{
-			if (hit.collider.tag == "Player")
+			currentAngle = halfAngle;
+			angleDir = -1f;
+		}
+		else if (currentAngle < -halfAngle)
+		{
+			currentAngle = -halfAngle;
+			angleDir = 1f;
+		}
+
+		Vector3 pos = head.transform.position;
+		//Vector3 forward = this.transform.forward;
+		//-head.transform.forwardをマイナスにしているのはなぜかドローンのモデル目の前方が反対になっていた為
+		Vector3 forward = -head.transform.forward;
+
+		if (forward.sqrMagnitude < 0.0001f)
+		{
+			forward = Vector3.forward;
+		}
+		forward.Normalize();
+
+		// 今の角度だけ回した方向に1本Ray
+		Vector3 dir = Quaternion.AngleAxis(currentAngle, Vector3.right) * forward;
+
+		Debug.DrawRay(pos, dir * rayDistance, Color.yellow);
+
+		RaycastHit hit;
+		if (Physics.Raycast(pos, dir, out hit, rayDistance))
+		{
+			// ヒット時の処理（例：プレイヤー検知など）
+			if (hit.collider.CompareTag("Player"))
 			{
-				//Debug.Log("<color=red>プレイヤーを発見!</color>");
+				Debug.Log("<color=red>プレイヤーを発見!</color>");
 				//ChaseOn();
 				EnemyManager.SingletonInstance.AllChaseOn();
 			}
 		}
-		Debug.DrawRay(ray.origin, ray.direction * rayDistance, Color.yellow);
 	}
 
 	/// <summary>
@@ -335,25 +377,15 @@ public class FlyingEnemy : Target
 	/// <param name="collision"></param>
 	void OnCollisionEnter(Collision collision)
 	{
+		Debug.Log("<color=red>当たった！ : " + collision.gameObject.name + "</color>");
 		if (isChase == true)
 		{
 			if (collision.gameObject.CompareTag("Player") == true)
 			{
-				Debug.Log("<color=red>プレイヤー爆発！</color>");
-				Explosion();
+				//Debug.Log("<color=red>プレイヤー爆発！</color>");
 			}
 
-			if (collision.gameObject.CompareTag("GroundEnemy") == true)
-			{
-				Debug.Log("<color=orange>グラウンドエネミー爆発！</color>");
-				Explosion();
-			}
-
-			if (collision.gameObject.CompareTag("Ground") == true)
-			{
-				Debug.Log("<color=yellow>グラウンド爆発！</color>");
-				Explosion();
-			}
+			Explosion();
 		}
 	}
 
@@ -392,7 +424,7 @@ public class FlyingEnemy : Target
 	/// <param name="amount">ダメージ量</param>
 	public override void TakeDamage(float amount)
 	{
-		Debug.Log("<color=green>FlyingEnemyのTakeDamage()</color>");
+		//Debug.Log("<color=green>FlyingEnemyのTakeDamage()</color>");
 		CurrentHp = CurrentHp - amount;
 		//Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
 		SliderHp.value = (float)CurrentHp / (float)MaxHp;

@@ -56,8 +56,8 @@ public class GroundEnemy : Target
 	float angleDir = 1f;
 
 	[Header("追跡")]
-	[Tooltip("追跡時間の設定")]
-	[SerializeField] float chaseTime = 10.0f;
+	/// <summary>追跡時間</summary>
+	float chaseTime = 25.0f;
 	public float ChaseTime => chaseTime;
 	/// <summary>追跡カウントタイマー</summary>
 	float chaseCountTime;
@@ -92,6 +92,7 @@ public class GroundEnemy : Target
 		set { patrolPointNumber = value; }
 	}
 
+	[Header("地面")]
 	[Tooltip("地面の中心点")]
 	[SerializeField] Transform groundCheckCenter;
 	[Tooltip("地面となるレイヤー")]
@@ -149,6 +150,7 @@ public class GroundEnemy : Target
 		set { currentGrenade = value; }
 	}
 
+	[Tooltip("シネマシーンインパルス")]
 	[SerializeField] private CinemachineImpulseSource cinemachineImpulseSource;
 	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
 
