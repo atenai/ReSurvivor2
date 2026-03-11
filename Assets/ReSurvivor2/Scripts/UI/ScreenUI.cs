@@ -131,6 +131,16 @@ public class ScreenUI : MonoBehaviour
 	[Tooltip("リザルト画面")]
 	[SerializeField] Image resultImage;
 
+	[Tooltip("ミッションダイアログ")]
+	[SerializeField] Image yesnoDialogImage;
+	[Tooltip("メニューオプションのイメージリスト")]
+	[SerializeField] Image[] yesnoImages;
+
+	/// <summary>
+	/// 現在選択されているメニューのインデックス
+	/// </summary>
+	int currentSelectedIndex = 0;
+
 	[Tooltip("セーブテキスト")]
 	[SerializeField] TextMeshProUGUI saveNowText;
 	public TextMeshProUGUI SaveNowText => saveNowText;
@@ -179,12 +189,16 @@ public class ScreenUI : MonoBehaviour
 			saveNowText.color = new Color(saveNowText.color.r, saveNowText.color.g, saveNowText.color.b, 0f);
 		}
 
+		panelComputerMenu.gameObject.SetActive(false);
+
 		// リザルト画像は初期で非表示・透明にしておく
 		if (resultImage != null)
 		{
 			resultImage.color = new Color(resultImage.color.r, resultImage.color.g, resultImage.color.b, 0f);
 			resultImage.gameObject.SetActive(false);
 		}
+
+		HideYesNoDialog();
 
 		InitFadeColor();
 
@@ -218,6 +232,7 @@ public class ScreenUI : MonoBehaviour
 		}
 
 		UpdateComputerMenuSystem();
+		UpdateYesNoDialog();
 		UpdatePauseMenuSystem();
 	}
 
@@ -593,6 +608,11 @@ public class ScreenUI : MonoBehaviour
 			return;
 		}
 
+		if (yesnoDialogImage.gameObject.activeSelf == true)
+		{
+			return;
+		}
+
 		//上下の矢印キーで選択を変更
 		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || XInputManager.SingletonInstance.XInputDPadHandler.UpDown)
 		{
@@ -618,9 +638,103 @@ public class ScreenUI : MonoBehaviour
 		}
 
 		//Enterキーで選択を確定
-		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
+		if (Input.GetKeyUp(KeyCode.Return) || Input.GetButtonUp("XInput A"))
 		{
-			ExecuteComputerMenuAction();
+			//ExecuteComputerMenuAction();
+			ShowYesNoDialog();
+		}
+	}
+
+	/// <summary>
+	/// YesNoダイアログを表示する
+	/// </summary>
+	void ShowYesNoDialog()
+	{
+		currentSelectedIndex = 0;
+		yesnoDialogImage.gameObject.SetActive(true);
+	}
+
+	/// <summary>
+	/// YesNoダイアログを非表示にする
+	/// </summary>
+	void HideYesNoDialog()
+	{
+		currentSelectedIndex = 0;
+		yesnoDialogImage.gameObject.SetActive(false);
+	}
+
+	/// <summary>
+	/// YesNoダイアログの更新
+	/// </summary>
+	void UpdateYesNoDialog()
+	{
+		if (yesnoDialogImage.gameObject.activeSelf == false)
+		{
+			return;
+		}
+
+		//左右の矢印キーで選択を変更
+		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || XInputManager.SingletonInstance.XInputDPadHandler.LeftDown)
+		{
+			currentSelectedIndex--;
+			if (currentSelectedIndex < 0)
+			{
+				currentSelectedIndex = yesnoImages.Length - 1;
+			}
+		}
+		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || XInputManager.SingletonInstance.XInputDPadHandler.RightDown)
+		{
+			currentSelectedIndex++;
+			if (yesnoImages.Length <= currentSelectedIndex)
+			{
+				currentSelectedIndex = 0;
+			}
+		}
+		ChangeYesNoDialogButton();
+
+		//Enterキーで選択を確定
+		if (Input.GetKeyUp(KeyCode.Return) || Input.GetButtonUp("XInput A"))//ここが問題
+		{
+			ExecuteYesNoDialogAction();
+		}
+	}
+
+	/// <summary>
+	/// YesNoDialogのボタンの色を変える
+	/// </summary> 
+	void ChangeYesNoDialogButton()
+	{
+		//メニューの見た目を更新
+		for (int i = 0; i < yesnoImages.Length; i++)
+		{
+			if (i == currentSelectedIndex)
+			{
+				//選択中の項目の色を変更
+				yesnoImages[i].color = new Color(yesnoImages[i].color.r, yesnoImages[i].color.g, yesnoImages[i].color.b, 0.5f);
+			}
+			else
+			{
+				yesnoImages[i].color = new Color(yesnoImages[i].color.r, yesnoImages[i].color.g, yesnoImages[i].color.b, 0.0f);
+			}
+		}
+	}
+
+	/// <summary>
+	/// YesNoダイアログの決定
+	/// </summary>
+	void ExecuteYesNoDialogAction()
+	{
+		switch (currentSelectedIndex)
+		{
+			case 0:
+				//No
+				HideYesNoDialog();
+				break;
+			case 1:
+				//Yes
+				ExecuteComputerMenuAction();
+				HideYesNoDialog();
+				break;
 		}
 	}
 

@@ -43,7 +43,7 @@ public class Title : OutGameBase
 			return;
 		}
 
-		//上下の矢印キーで選択を変更
+		//左右の矢印キーで選択を変更
 		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || XInputManager.SingletonInstance.XInputDPadHandler.LeftDown)
 		{
 			currentSelectedIndex--;
