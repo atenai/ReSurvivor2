@@ -16,16 +16,14 @@ public class ScreenUI : MonoBehaviour
 	/// <summary>シングルトンのプロパティ</summary>
 	public static ScreenUI SingletonInstance => singletonInstance;
 
+	[Header("照準")]
+
 	[Tooltip("クロスヘアー")]
 	[SerializeField] Image imageCrosshair;
 
 	[Tooltip("ヒットレティクル")]
 	[SerializeField] Image imageHitReticule;
-	public Image ImageHitReticule
-	{
-		get { return imageHitReticule; }
-		set { imageHitReticule = value; }
-	}
+
 	[Tooltip("ヒットレティクルが表示か非表示か")]
 	bool isHitReticule = false;
 	public bool IsHitReticule
@@ -33,15 +31,15 @@ public class ScreenUI : MonoBehaviour
 		get { return isHitReticule; }
 		set { isHitReticule = value; }
 	}
-	[Tooltip("ヒットレティクルが消失するスピード")]
+	/// <summary> ヒットレティクルが消失するスピード</summary>
 	float hitReticuleSpeed = 10.0f;
 
+	[Header("ロード")]
+	[Tooltip("ロード画面")]
 	[SerializeField] GameObject panelLoading;
-	public GameObject PanelLoading
-	{
-		get { return panelLoading; }
-		set { panelLoading = value; }
-	}
+	public GameObject PanelLoading => panelLoading;
+
+	[Tooltip("ロードスライダー")]
 	[SerializeField] Slider sliderLoading;
 	public Slider SliderLoading
 	{
@@ -49,31 +47,18 @@ public class ScreenUI : MonoBehaviour
 		set { sliderLoading = value; }
 	}
 
+	[Header("画面エフェクト")]
 	[Tooltip("ダメージ画像エフェクト")]
 	[SerializeField] Image imageDamage;
-	public Image ImageDamage
-	{
-		get { return imageDamage; }
-		set { imageDamage = value; }
-	}
 
 	[Tooltip("HP回復画像エフェクト")]
 	[SerializeField] Image imageHpHeal;
-	public Image ImageHpHeal
-	{
-		get { return imageHpHeal; }
-		set { imageHpHeal = value; }
-	}
 
 	[Tooltip("スタミナ回復画像エフェクト")]
 	[SerializeField] Image imageStaminaHeal;
-	public Image ImageStaminaHeal
-	{
-		get { return imageStaminaHeal; }
-		set { imageStaminaHeal = value; }
-	}
 
-	[Tooltip("フェード用のUI Image")]
+	[Header("フェード")]
+	[Tooltip("フェード用画像")]
 	[SerializeField] Image imageFade;
 	[Tooltip("フェードの速さ")]
 	float fadeSpeed = 1.0f;
@@ -83,18 +68,26 @@ public class ScreenUI : MonoBehaviour
 	[SerializeField] GameObject panelPauseMenu;
 	[Tooltip("ポーズメニューオプションのイメージリスト")]
 	[SerializeField] Image[] pauseMenuOptions;
-	/// <summary>
-	/// 現在のポーズメニュー選択インデックス
-	/// </summary>
+	/// <summary> 現在のポーズメニュー選択インデックス</summary>
 	int currentPauseMenuSelectedIndex = 0;
-	/// <summary>
-	/// ポーズ中か？
-	/// </summary>
+	/// <summary> ポーズ中か？</summary>
 	bool isPause = false;
-	/// <summary>
-	/// ポーズ中か？のプロパティ
-	/// </summary>
+	/// <summary> ポーズ中か？のプロパティ </summary>
 	public bool IsPause => isPause;
+
+	[Header("マップUI")]
+	[Tooltip("マップイメージ")]
+	[SerializeField] MapUI mapUI;
+	public MapUI MapUI => mapUI;
+
+	[Header("アイテム取得")]
+	[Tooltip("アイテム取得ログ")]
+	[SerializeField] ItemOutPutLog itemOutPutLog;
+	public ItemOutPutLog ItemOutPutLog => itemOutPutLog;
+
+	[Header("セーブ")]
+	[Tooltip("セーブテキスト")]
+	[SerializeField] TextMeshProUGUI saveNowText;
 
 	[Header("コンピューターUI")]
 	[Tooltip("コンピューターメニューパネル")]
@@ -107,59 +100,28 @@ public class ScreenUI : MonoBehaviour
 	[SerializeField] Text mailTitleMessage;
 	[Tooltip("メールメッセージ本文")]
 	[SerializeField] Text mailMainMessage;
-	/// <summary>
-	/// ミッションリスト
-	/// </summary>
+	/// <summary> ミッションリスト </summary>
 	List<MasterMissionEntity> missionList = new List<MasterMissionEntity>();
-	/// <summary>
-	/// メールリストのコンテンツリスト
-	/// </summary>
+	/// <summary> メールリストのコンテンツリスト </summary>
 	List<Mail> mailListContentList = new List<Mail>();
-	/// <summary>
-	/// 現在のメールリストの選択インデックス
-	/// </summary>
+	/// <summary> 現在のメールリストの選択インデックス </summary>
 	int currentMailListSelectedIndex = 0;
-	/// <summary>
-	/// コンピューターメニュー表示中か？
-	/// </summary>
+	/// <summary> コンピューターメニュー表示中か？ </summary>
 	bool isComputerMenuActive = false;
-	/// <summary>
-	/// コンピューターメニュー表示中か？のプロパティ
-	/// </summary>
+	/// <summary> コンピューターメニュー表示中か？のプロパティ </summary>
 	public bool IsComputerMenuActive => isComputerMenuActive;
+
+	[Tooltip("Yes/Noダイアログ")]
+	[SerializeField] Image yesnoDialogImage;
+	[Tooltip("Yes/Noボタンのイメージリスト")]
+	[SerializeField] Image[] yesnoButtonImages;
+	/// <summary>  Yes/Noダイアログ表示直後の入力を1フレームだけ無視するフラグ</summary>
+	bool skipYesNoDialogInput = false;
+	/// <summary> 現在選択されているYes/Noダイアログのインデックス</summary>
+	int currentYesNoDialogSelectedIndex = 0;
 
 	[Tooltip("リザルト画面")]
 	[SerializeField] Image resultImage;
-
-	[Tooltip("ミッションダイアログ")]
-	[SerializeField] Image yesnoDialogImage;
-	[Tooltip("メニューオプションのイメージリスト")]
-	[SerializeField] Image[] yesnoImages;
-
-	// Yes/Noダイアログ表示直後の入力を1フレームだけ無視するフラグ
-	bool skipYesNoDialogInput = false;
-
-	/// <summary>
-	/// 現在選択されているYesNOダイアログのインデックス
-	/// </summary>
-	int currentYesNoDialogSelectedIndex = 0;
-
-	[Tooltip("セーブテキスト")]
-	[SerializeField] TextMeshProUGUI saveNowText;
-	public TextMeshProUGUI SaveNowText => saveNowText;
-
-	[Header("マップUI")]
-	[Tooltip("マップイメージ")]
-	[SerializeField] MapUI mapUI;
-	public MapUI MapUI
-	{
-		get { return mapUI; }
-		set { mapUI = value; }
-	}
-	[Tooltip("アイテム取得ログ")]
-	[SerializeField] ItemOutPutLog itemOutPutLog;
-	public ItemOutPutLog ItemOutPutLog => itemOutPutLog;
-
 
 	void Awake()
 	{
@@ -177,6 +139,8 @@ public class ScreenUI : MonoBehaviour
 
 	void Start()
 	{
+		imageHitReticule.color = Color.clear;
+
 		//ダメージ画像エフェクト
 		imageDamage.color = Color.clear;
 
@@ -186,26 +150,18 @@ public class ScreenUI : MonoBehaviour
 		//スタミナ回復画像エフェクト
 		imageStaminaHeal.color = Color.clear;
 
-		// セーブ表示用テキストは初期で透明にする
-		if (saveNowText != null)
-		{
-			saveNowText.color = new Color(saveNowText.color.r, saveNowText.color.g, saveNowText.color.b, 0f);
-		}
+		//セーブ表示用テキストを透明にする
+		saveNowText.color = new Color(saveNowText.color.r, saveNowText.color.g, saveNowText.color.b, 0f);
 
 		panelComputerMenu.gameObject.SetActive(false);
 
 		// リザルト画像は初期で非表示・透明にしておく
-		if (resultImage != null)
-		{
-			resultImage.color = new Color(resultImage.color.r, resultImage.color.g, resultImage.color.b, 0f);
-			resultImage.gameObject.SetActive(false);
-		}
+		resultImage.color = new Color(resultImage.color.r, resultImage.color.g, resultImage.color.b, 0f);
+		resultImage.gameObject.SetActive(false);
 
 		HideYesNoDialog();
 
 		InitFadeColor();
-
-		imageHitReticule.color = Color.clear;
 	}
 
 	void Update()
@@ -244,6 +200,7 @@ public class ScreenUI : MonoBehaviour
 		{
 			UpdateYesNoDialog();
 		}
+
 		UpdatePauseMenuSystem();
 	}
 
@@ -278,12 +235,12 @@ public class ScreenUI : MonoBehaviour
 	{
 		if (isHitReticule == true)
 		{
-			ImageHitReticule.color = new Color32(255, 0, 0, 150);
+			imageHitReticule.color = new Color32(255, 0, 0, 150);
 		}
 
 		if (isHitReticule == false)
 		{
-			ImageHitReticule.color = Color.Lerp(ImageHitReticule.color, Color.clear, Time.deltaTime * hitReticuleSpeed);
+			imageHitReticule.color = Color.Lerp(imageHitReticule.color, Color.clear, Time.deltaTime * hitReticuleSpeed);
 		}
 
 		isHitReticule = false;
@@ -292,16 +249,16 @@ public class ScreenUI : MonoBehaviour
 	/// <summary>
 	/// ダメージ画像エフェクト
 	/// </summary> 
-	public void UpdateDamageEffect()
+	void UpdateDamageEffect()
 	{
 		if (Player.SingletonInstance.IsDamage == true)
 		{
-			ImageDamage.color = new Color(0.5f, 0f, 0f, 0.5f);
+			imageDamage.color = new Color(0.5f, 0f, 0f, 0.5f);
 		}
 
 		if (Player.SingletonInstance.IsDamage == false)
 		{
-			ImageDamage.color = Color.Lerp(ImageDamage.color, Color.clear, Time.deltaTime);
+			imageDamage.color = Color.Lerp(imageDamage.color, Color.clear, Time.deltaTime);
 		}
 
 		Player.SingletonInstance.IsDamage = false;
@@ -310,16 +267,16 @@ public class ScreenUI : MonoBehaviour
 	/// <summary>
 	/// HP回復画像エフェクト
 	/// </summary> 
-	public void UpdateHpHealEffect()
+	void UpdateHpHealEffect()
 	{
 		if (Player.SingletonInstance.IsHpHeal == true)
 		{
-			ImageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
+			imageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
 		}
 
 		if (Player.SingletonInstance.IsHpHeal == false)
 		{
-			ImageHpHeal.color = Color.Lerp(ImageHpHeal.color, Color.clear, Time.deltaTime);
+			imageHpHeal.color = Color.Lerp(imageHpHeal.color, Color.clear, Time.deltaTime);
 		}
 
 		Player.SingletonInstance.IsHpHeal = false;
@@ -328,16 +285,16 @@ public class ScreenUI : MonoBehaviour
 	/// <summary>
 	/// スタミナ回復画像エフェクト
 	/// </summary> 
-	public void UpdateStaminaHealEffect()
+	void UpdateStaminaHealEffect()
 	{
 		if (Player.SingletonInstance.IsStaminaHeal == true)
 		{
-			ImageStaminaHeal.color = new Color(0.5f, 0.5f, 0f, 0.5f);
+			imageStaminaHeal.color = new Color(0.5f, 0.5f, 0f, 0.5f);
 		}
 
 		if (Player.SingletonInstance.IsStaminaHeal == false)
 		{
-			ImageStaminaHeal.color = Color.Lerp(ImageStaminaHeal.color, Color.clear, Time.deltaTime);
+			imageStaminaHeal.color = Color.Lerp(imageStaminaHeal.color, Color.clear, Time.deltaTime);
 		}
 
 		Player.SingletonInstance.IsStaminaHeal = false;
@@ -526,6 +483,32 @@ public class ScreenUI : MonoBehaviour
 	}
 
 	/// <summary>
+	/// 指定秒数だけフェードインしてその後フェードアウトする（DOTween使用）
+	/// </summary>
+	/// <param name="staySeconds">表示維持時間（秒）</param>
+	/// <param name="fadeDuration">フェードイン/アウト時間（秒）</param>
+	public void ShowSaveNowText(float staySeconds = 0.5f, float fadeDuration = 0.5f)
+	{
+		if (saveNowText == null)
+		{
+			return;
+		}
+
+		// 既存のTweenを停止
+		saveNowText.DOKill();
+
+		// 強制的に透明から開始
+		saveNowText.color = new Color(saveNowText.color.r, saveNowText.color.g, saveNowText.color.b, 0f);
+
+		// シーケンス: フェードイン -> 指定秒数待機 -> フェードアウト
+		Sequence seq = DOTween.Sequence();
+		seq.Append(saveNowText.DOFade(1f, fadeDuration));
+		seq.AppendInterval(staySeconds);
+		seq.Append(saveNowText.DOFade(0f, fadeDuration));
+		seq.Play();
+	}
+
+	/// <summary>
 	/// コンピューターメニューのミッションリストの初期化
 	/// </summary>
 	/// <param name="missionList">ミッションリスト</param>
@@ -588,8 +571,9 @@ public class ScreenUI : MonoBehaviour
 	/// <summary>
 	/// コンピューターメニューの非表示
 	/// </summary>
-	public void HideComputerMenu()
+	void HideComputerMenu()
 	{
+		HideYesNoDialog();
 		isComputerMenuActive = false;
 		panelComputerMenu.SetActive(false);
 	}
@@ -656,7 +640,6 @@ public class ScreenUI : MonoBehaviour
 		//Enterキーで選択を確定
 		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
 		{
-			//ExecuteComputerMenuAction();
 			ShowYesNoDialog();
 		}
 	}
@@ -702,13 +685,13 @@ public class ScreenUI : MonoBehaviour
 			currentYesNoDialogSelectedIndex--;
 			if (currentYesNoDialogSelectedIndex < 0)
 			{
-				currentYesNoDialogSelectedIndex = yesnoImages.Length - 1;
+				currentYesNoDialogSelectedIndex = yesnoButtonImages.Length - 1;
 			}
 		}
 		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || XInputManager.SingletonInstance.XInputDPadHandler.RightDown)
 		{
 			currentYesNoDialogSelectedIndex++;
-			if (yesnoImages.Length <= currentYesNoDialogSelectedIndex)
+			if (yesnoButtonImages.Length <= currentYesNoDialogSelectedIndex)
 			{
 				currentYesNoDialogSelectedIndex = 0;
 			}
@@ -728,16 +711,16 @@ public class ScreenUI : MonoBehaviour
 	void ChangeYesNoDialogButton()
 	{
 		//メニューの見た目を更新
-		for (int i = 0; i < yesnoImages.Length; i++)
+		for (int i = 0; i < yesnoButtonImages.Length; i++)
 		{
 			if (i == currentYesNoDialogSelectedIndex)
 			{
 				//選択中の項目の色を変更
-				yesnoImages[i].color = new Color(yesnoImages[i].color.r, yesnoImages[i].color.g, yesnoImages[i].color.b, 0.5f);
+				yesnoButtonImages[i].color = new Color(yesnoButtonImages[i].color.r, yesnoButtonImages[i].color.g, yesnoButtonImages[i].color.b, 0.5f);
 			}
 			else
 			{
-				yesnoImages[i].color = new Color(yesnoImages[i].color.r, yesnoImages[i].color.g, yesnoImages[i].color.b, 0.0f);
+				yesnoButtonImages[i].color = new Color(yesnoButtonImages[i].color.r, yesnoButtonImages[i].color.g, yesnoButtonImages[i].color.b, 0.0f);
 			}
 		}
 	}
@@ -840,32 +823,6 @@ public class ScreenUI : MonoBehaviour
 			resultImage.gameObject.SetActive(false);
 			ShowComputerMenu();
 		});
-		seq.Play();
-	}
-
-	/// <summary>
-	/// 指定秒数だけフェードインしてその後フェードアウトする（DOTween使用）
-	/// </summary>
-	/// <param name="staySeconds">表示維持時間（秒）</param>
-	/// <param name="fadeDuration">フェードイン/アウト時間（秒）</param>
-	public void ShowSaveNowText(float staySeconds = 0.5f, float fadeDuration = 0.5f)
-	{
-		if (saveNowText == null)
-		{
-			return;
-		}
-
-		// 既存のTweenを停止
-		saveNowText.DOKill();
-
-		// 強制的に透明から開始
-		saveNowText.color = new Color(saveNowText.color.r, saveNowText.color.g, saveNowText.color.b, 0f);
-
-		// シーケンス: フェードイン -> 指定秒数待機 -> フェードアウト
-		Sequence seq = DOTween.Sequence();
-		seq.Append(saveNowText.DOFade(1f, fadeDuration));
-		seq.AppendInterval(staySeconds);
-		seq.Append(saveNowText.DOFade(0f, fadeDuration));
 		seq.Play();
 	}
 }

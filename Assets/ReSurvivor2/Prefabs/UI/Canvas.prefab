@@ -4280,19 +4280,19 @@ MonoBehaviour:
   pauseMenuOptions:
   - {fileID: 4657506956094451366}
   - {fileID: 4705699217969237923}
+  mapUI: {fileID: 3770923355916117509}
+  itemOutPutLog: {fileID: 579379826004049369}
+  saveNowText: {fileID: 9089699277171372974}
   panelComputerMenu: {fileID: 5259202726704252033}
   mailListContent: {fileID: 4341652292273595601}
   mailPrefab: {fileID: 537799973998357700, guid: 2f9636613900a55459b9baf17b2b221b, type: 3}
   mailTitleMessage: {fileID: 4136626102778892445}
   mailMainMessage: {fileID: 3534506178113484624}
-  resultImage: {fileID: 6589498087107883989}
   yesnoDialogImage: {fileID: 9081801605599361911}
-  yesnoImages:
+  yesnoButtonImages:
   - {fileID: 6296641389101323477}
   - {fileID: 2754253937410363405}
-  saveNowText: {fileID: 9089699277171372974}
-  mapUI: {fileID: 3770923355916117509}
-  itemOutPutLog: {fileID: 579379826004049369}
+  resultImage: {fileID: 6589498087107883989}
 --- !u!1 &4043730198094354961
 GameObject:
   m_ObjectHideFlags: 0
