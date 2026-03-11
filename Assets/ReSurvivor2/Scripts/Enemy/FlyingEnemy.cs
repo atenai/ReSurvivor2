@@ -27,8 +27,10 @@ public class FlyingEnemy : Target
 	[Header("レイキャスト")]
 	[Tooltip("視界用の頭ゲームオブジェクト")]
 	[SerializeField] GameObject head;
-	[Tooltip("視界な長さ")]
+	/// <summary>視界な長さ</summary>
 	float rayDistance = 20.0f;
+	/// <summary>スフィアレイキャストの半径</summary>
+	float sphereRayCastRadius = 2.0f;
 	/// <summary>左右の最大角</summary>
 	float halfAngle = 60f;
 	/// <summary>度/秒（例：90なら1秒で90度回る）</summary>
@@ -235,7 +237,7 @@ public class FlyingEnemy : Target
 		Debug.DrawRay(pos, dir * rayDistance, Color.yellow);
 
 		RaycastHit hit;
-		if (Physics.Raycast(pos, dir, out hit, rayDistance))
+		if (Physics.SphereCast(pos, sphereRayCastRadius, dir, out hit, rayDistance))
 		{
 			// ヒット時の処理（例：プレイヤー検知など）
 			if (hit.collider.CompareTag("Player"))

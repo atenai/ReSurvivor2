@@ -44,7 +44,7 @@ public class GroundEnemy : Target
 	[Header("レイキャスト")]
 	[Tooltip("視界用の頭ゲームオブジェクト")]
 	[SerializeField] GameObject head;
-	[Tooltip("視界な長さ")]
+	/// <summary>視界な長さ</summary>
 	float rayDistance = 14.0f;
 	/// <summary>左右の最大角</summary>
 	float halfAngle = 45f;

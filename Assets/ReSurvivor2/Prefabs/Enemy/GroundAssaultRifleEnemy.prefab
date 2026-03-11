@@ -322,8 +322,6 @@ MonoBehaviour:
   colliders:
   - {fileID: 3131403555685646428}
   head: {fileID: 740881606135455463}
-  rayDistance: 14
-  chaseTime: 10
   centerPos: {fileID: 7430666133111987251}
   alert: {fileID: 6114367730951322678}
   patrolPoints:
@@ -565,7 +563,7 @@ GameObject:
   - component: {fileID: 3475511838509194652}
   - component: {fileID: 8923659058294761401}
   - component: {fileID: 7948717556403940174}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube_PatrolPoints3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -855,7 +853,7 @@ GameObject:
   - component: {fileID: 3491282949744925677}
   - component: {fileID: 5652615419713349185}
   - component: {fileID: 9200311818978155899}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube_PatrolPoints2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -951,7 +949,7 @@ GameObject:
   - component: {fileID: 8410807935831779535}
   - component: {fileID: 5342161692236989390}
   - component: {fileID: 698399609270194839}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube_PatrolPoints1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1047,7 +1045,7 @@ GameObject:
   - component: {fileID: 4799766482932839819}
   - component: {fileID: 4465488715542495648}
   - component: {fileID: 343239909814523942}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CenterPosOfTrackingRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1410,7 +1408,7 @@ GameObject:
   - component: {fileID: 323808919133334924}
   - component: {fileID: 7215853139931442823}
   - component: {fileID: 8797301342178964574}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube_PatrolPoints0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
