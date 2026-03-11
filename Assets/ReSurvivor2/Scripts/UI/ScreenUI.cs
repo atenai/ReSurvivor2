@@ -136,10 +136,13 @@ public class ScreenUI : MonoBehaviour
 	[Tooltip("メニューオプションのイメージリスト")]
 	[SerializeField] Image[] yesnoImages;
 
+	// Yes/Noダイアログ表示直後の入力を1フレームだけ無視するフラグ
+	bool skipYesNoDialogInput = false;
+
 	/// <summary>
-	/// 現在選択されているメニューのインデックス
+	/// 現在選択されているYesNOダイアログのインデックス
 	/// </summary>
-	int currentSelectedIndex = 0;
+	int currentYesNoDialogSelectedIndex = 0;
 
 	[Tooltip("セーブテキスト")]
 	[SerializeField] TextMeshProUGUI saveNowText;
@@ -232,7 +235,15 @@ public class ScreenUI : MonoBehaviour
 		}
 
 		UpdateComputerMenuSystem();
-		UpdateYesNoDialog();
+		if (skipYesNoDialogInput == true)
+		{
+			// 表示直後のフレームは入力を消費して無視する
+			skipYesNoDialogInput = false;
+		}
+		else
+		{
+			UpdateYesNoDialog();
+		}
 		UpdatePauseMenuSystem();
 	}
 
@@ -588,6 +599,11 @@ public class ScreenUI : MonoBehaviour
 	/// </summary> 
 	void UpdateComputerMenuSystem()
 	{
+		if (isPause == true)
+		{
+			return;
+		}
+
 		if (Input.GetKeyDown(KeyCode.B) || Input.GetButtonDown("XInput B"))
 		{
 			//コンピューターメニューを閉じる
@@ -638,7 +654,7 @@ public class ScreenUI : MonoBehaviour
 		}
 
 		//Enterキーで選択を確定
-		if (Input.GetKeyUp(KeyCode.Return) || Input.GetButtonUp("XInput A"))
+		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
 		{
 			//ExecuteComputerMenuAction();
 			ShowYesNoDialog();
@@ -650,8 +666,10 @@ public class ScreenUI : MonoBehaviour
 	/// </summary>
 	void ShowYesNoDialog()
 	{
-		currentSelectedIndex = 0;
+		currentYesNoDialogSelectedIndex = 0;
 		yesnoDialogImage.gameObject.SetActive(true);
+		// ダイアログ表示直後のフレームでの決定入力を無視する
+		skipYesNoDialogInput = true;
 	}
 
 	/// <summary>
@@ -659,7 +677,7 @@ public class ScreenUI : MonoBehaviour
 	/// </summary>
 	void HideYesNoDialog()
 	{
-		currentSelectedIndex = 0;
+		currentYesNoDialogSelectedIndex = 0;
 		yesnoDialogImage.gameObject.SetActive(false);
 	}
 
@@ -668,6 +686,11 @@ public class ScreenUI : MonoBehaviour
 	/// </summary>
 	void UpdateYesNoDialog()
 	{
+		if (isPause == true)
+		{
+			return;
+		}
+
 		if (yesnoDialogImage.gameObject.activeSelf == false)
 		{
 			return;
@@ -676,24 +699,24 @@ public class ScreenUI : MonoBehaviour
 		//左右の矢印キーで選択を変更
 		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || XInputManager.SingletonInstance.XInputDPadHandler.LeftDown)
 		{
-			currentSelectedIndex--;
-			if (currentSelectedIndex < 0)
+			currentYesNoDialogSelectedIndex--;
+			if (currentYesNoDialogSelectedIndex < 0)
 			{
-				currentSelectedIndex = yesnoImages.Length - 1;
+				currentYesNoDialogSelectedIndex = yesnoImages.Length - 1;
 			}
 		}
 		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || XInputManager.SingletonInstance.XInputDPadHandler.RightDown)
 		{
-			currentSelectedIndex++;
-			if (yesnoImages.Length <= currentSelectedIndex)
+			currentYesNoDialogSelectedIndex++;
+			if (yesnoImages.Length <= currentYesNoDialogSelectedIndex)
 			{
-				currentSelectedIndex = 0;
+				currentYesNoDialogSelectedIndex = 0;
 			}
 		}
 		ChangeYesNoDialogButton();
 
 		//Enterキーで選択を確定
-		if (Input.GetKeyUp(KeyCode.Return) || Input.GetButtonUp("XInput A"))//ここが問題
+		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
 		{
 			ExecuteYesNoDialogAction();
 		}
@@ -707,7 +730,7 @@ public class ScreenUI : MonoBehaviour
 		//メニューの見た目を更新
 		for (int i = 0; i < yesnoImages.Length; i++)
 		{
-			if (i == currentSelectedIndex)
+			if (i == currentYesNoDialogSelectedIndex)
 			{
 				//選択中の項目の色を変更
 				yesnoImages[i].color = new Color(yesnoImages[i].color.r, yesnoImages[i].color.g, yesnoImages[i].color.b, 0.5f);
@@ -724,7 +747,7 @@ public class ScreenUI : MonoBehaviour
 	/// </summary>
 	void ExecuteYesNoDialogAction()
 	{
-		switch (currentSelectedIndex)
+		switch (currentYesNoDialogSelectedIndex)
 		{
 			case 0:
 				//No
