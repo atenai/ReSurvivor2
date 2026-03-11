@@ -1,0 +1,112 @@
+using System.Collections;
+using System.Collections.Generic;
+using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.Pool;
+
+public class MetalImpactEffectPool : MonoBehaviour
+{
+	ObjectPool<GameObject> objectPool;
+	[SerializeField] GameObject prefab;
+	int defalutCapacity = 30 * 3;
+	int maxCount = 300;
+
+	/// <summary>
+	/// オブジェクトプールの初期化処理
+	/// </summary>
+	void Start()
+	{
+		//オブジェクトプールの設定
+		objectPool = new ObjectPool<GameObject>
+		(
+			OnCreatePoolObject,
+			OnTakeFromPool,
+			OnReturnedToPool,
+			OnDestroyPoolObject,
+			true,//必ずtrueにする（二重Releaseが即例外で分かるので、原因特定が一気に楽になります。）
+			defalutCapacity,
+			maxCount
+		);
+
+		List<GameObject> initGameObjectList = new List<GameObject>();
+
+		//オブジェクトプールのゲームオブジェクトを初期生成する
+		//必ずコンポーネントのインスペクターにあるPlay On Awakeのチェックを外すしてOFFにしておくこと！
+		for (int i = 0; i < defalutCapacity; i++)
+		{
+			GameObject initGameObject = objectPool.Get();
+			initGameObject.transform.position = transform.position;
+			initGameObjectList.Add(initGameObject);
+		}
+
+		foreach (var initGameObject in initGameObjectList)
+		{
+			ReleaseGameObject(initGameObject);
+		}
+
+		initGameObjectList.Clear();
+	}
+
+	/// <summary>
+	/// ObjectPoolコンストラクタ1つ目の引数の関数
+	/// プールに空きが無い時に新たに生成する処理
+	/// objectPool.Get()が呼ばれる
+	/// </summary>
+	GameObject OnCreatePoolObject()
+	{
+		var gameObject = Instantiate(prefab, this.transform);
+		return gameObject;
+	}
+
+	/// <summary>
+	/// ObjectPoolコンストラクタ2つ目の引数の関数
+	/// プールに空きがあった際の処理
+	/// objectPool.Get()が呼ばれる
+	/// </summary>
+	void OnTakeFromPool(GameObject gameObject)
+	{
+		gameObject.SetActive(true);
+	}
+
+	/// <summary>
+	/// ObjectPoolコンストラクタ3つ目の引数の関数
+	/// プールに返却するときの処理
+	/// </summary>
+	void OnReturnedToPool(GameObject gameObject)
+	{
+		gameObject.SetActive(false);
+	}
+
+	/// <summary>
+	/// ObjectPoolコンストラクタ4つ目の引数の関数
+	/// プールのMaxサイズより多くなった際に自動で破棄する
+	/// </summary>
+	void OnDestroyPoolObject(GameObject gameObject)
+	{
+		Destroy(gameObject);
+	}
+
+	/// <summary>
+	/// 外部から呼ぶObj取得関数
+	/// </summary>
+	public void GetGameObject(Vector3 pos, quaternion rot)
+	{
+		GameObject gameObject = objectPool.Get();
+		gameObject.transform.position = pos;
+		gameObject.transform.rotation = rot;
+		gameObject.GetComponent<ParticleSystemPlayMetalImpactEffectPool>().PlayParticleSystem();
+	}
+
+	/// <summary>
+	/// 外部から呼ぶObj返却用関数
+	/// </summary>
+	public void ReleaseGameObject(GameObject gameObject)
+	{
+		objectPool.Release(gameObject);
+	}
+
+	void Update()
+	{
+
+	}
+}

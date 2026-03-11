@@ -12,29 +12,24 @@ public class EffectManager : MonoBehaviour
 	/// <summary>シングルトンのプロパティ</summary>
 	public static EffectManager SingletonInstance => singletonInstance;
 
-	[SerializeField] BloodImpactEffectPool bloodImpactEffectPool;
-	public BloodImpactEffectPool BloodImpactEffectPool => bloodImpactEffectPool;
 
 	[Header("着弾エフェクト")]
 	//パス(Assets/Knife/PRO Effects FPS Muzzle flashes & Impacts/Particles/Prefabs/Impacts)
+
 	[Tooltip("血の着弾エフェクト")]
-	[SerializeField] GameObject bloodImpactEffect;
-	[Tooltip("鉄の着弾エフェクト1")]
-	[SerializeField] GameObject metal1ImpactEffect;
-	[Tooltip("鉄の着弾エフェクト2")]
-	[SerializeField] GameObject metal2ImpactEffect;
-	[Tooltip("岩の着弾エフェクト")]
-	[SerializeField] GameObject rockImpactEffect;
+	[SerializeField] BloodImpactEffectPool bloodImpactEffectPool;
+	public BloodImpactEffectPool BloodImpactEffectPool => bloodImpactEffectPool;
+
+	[Tooltip("鉄の着弾エフェクト")]
+	[SerializeField] MetalImpactEffectPool metalImpactEffectPool;
+	public MetalImpactEffectPool MetalImpactEffectPool => metalImpactEffectPool;
 	[Tooltip("地面の着弾エフェクト")]
-	[SerializeField] GameObject groundImpactEffect;
-	[Tooltip("アスファルトの着弾エフェクト")]
-	[SerializeField] GameObject asphaltImpactEffect;
-	[Tooltip("コンクリートの着弾エフェクト")]
-	[SerializeField] GameObject concreteImpactEffect;
-	[Tooltip("ガラスの着弾エフェクト")]
-	[SerializeField] GameObject glassImpactEffect;
-	[Tooltip("木の着弾エフェクト")]
-	[SerializeField] GameObject woodImpactEffect;
+	[SerializeField] GroundImpactEffectPool groundImpactEffectPool;
+	public GroundImpactEffectPool GroundImpactEffectPool => groundImpactEffectPool;
+	[Tooltip("岩の着弾エフェクト")]
+	[SerializeField] RockImpactEffectPool rockImpactEffectPool;
+	public RockImpactEffectPool RockImpactEffectPool => rockImpactEffectPool;
+
 
 	void Awake()
 	{
@@ -67,21 +62,21 @@ public class EffectManager : MonoBehaviour
 			//metal2ImpactEffect
 			//GameObject impactGameObject = Instantiate(metal2ImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
 			//Destroy(impactGameObject, 2.0f);
-			bloodImpactEffectPool.GetGameObject(hit.point, Quaternion.LookRotation(hit.normal));
+			metalImpactEffectPool.GetGameObject(hit.point, Quaternion.LookRotation(hit.normal));
 		}
 		else if (hit.collider.gameObject.CompareTag("Ground"))
 		{
 			//groundImpactEffect
 			//GameObject impactGameObject = Instantiate(groundImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
 			//Destroy(impactGameObject, 2.0f);
-			bloodImpactEffectPool.GetGameObject(hit.point, Quaternion.LookRotation(hit.normal));
+			groundImpactEffectPool.GetGameObject(hit.point, Quaternion.LookRotation(hit.normal));
 		}
 		else
 		{
 			//rockImpactEffect
 			//GameObject impactGameObject = Instantiate(rockImpactEffect, hit.point, Quaternion.LookRotation(hit.normal));
 			//Destroy(impactGameObject, 2.0f);
-			bloodImpactEffectPool.GetGameObject(hit.point, Quaternion.LookRotation(hit.normal));
+			rockImpactEffectPool.GetGameObject(hit.point, Quaternion.LookRotation(hit.normal));
 		}
 	}
 }
