@@ -128,6 +128,13 @@ public class ScreenUI : MonoBehaviour
 	/// </summary>
 	public bool IsComputerMenuActive => isComputerMenuActive;
 
+	[Tooltip("リザルト画面")]
+	[SerializeField] Image resultImage;
+
+	[Tooltip("セーブテキスト")]
+	[SerializeField] TextMeshProUGUI saveNowText;
+	public TextMeshProUGUI SaveNowText => saveNowText;
+
 	[Header("マップUI")]
 	[Tooltip("マップイメージ")]
 	[SerializeField] MapUI mapUI;
@@ -140,8 +147,6 @@ public class ScreenUI : MonoBehaviour
 	[SerializeField] ItemOutPutLog itemOutPutLog;
 	public ItemOutPutLog ItemOutPutLog => itemOutPutLog;
 
-	[SerializeField] TextMeshProUGUI saveNowText;
-	public TextMeshProUGUI SaveNowText => saveNowText;
 
 	void Awake()
 	{
@@ -169,7 +174,17 @@ public class ScreenUI : MonoBehaviour
 		imageStaminaHeal.color = Color.clear;
 
 		// セーブ表示用テキストは初期で透明にする
-		saveNowText.color = new Color(saveNowText.color.r, saveNowText.color.g, saveNowText.color.b, 0f);
+		if (saveNowText != null)
+		{
+			saveNowText.color = new Color(saveNowText.color.r, saveNowText.color.g, saveNowText.color.b, 0f);
+		}
+
+		// リザルト画像は初期で非表示・透明にしておく
+		if (resultImage != null)
+		{
+			resultImage.color = new Color(resultImage.color.r, resultImage.color.g, resultImage.color.b, 0f);
+			resultImage.gameObject.SetActive(false);
+		}
 
 		InitFadeColor();
 
@@ -658,6 +673,37 @@ public class ScreenUI : MonoBehaviour
 			TimerManager.SingletonInstance.Seconds = result.Seconds;
 			MapUI.SetEndComputerStageNumber((int)result.EndComputerName);
 		}
+	}
+
+	/// <summary>
+	/// リザルト画面を表示する
+	/// </summary>
+	public void ShowResult(float staySeconds = 1f, float fadeDuration = 0.5f)
+	{
+		if (resultImage == null)
+		{
+			ShowComputerMenu();
+			return;
+		}
+
+		// 既存のTweenを停止
+		resultImage.DOKill();
+
+		// 有効化して透明から開始
+		resultImage.gameObject.SetActive(true);
+		resultImage.color = new Color(resultImage.color.r, resultImage.color.g, resultImage.color.b, 0f);
+
+		// シーケンス: フェードイン -> 指定秒数待機 -> フェードアウト -> 非表示 + コンピュータメニュー表示
+		Sequence seq = DOTween.Sequence();
+		seq.Append(resultImage.DOFade(0.2f, fadeDuration));
+		seq.AppendInterval(staySeconds);
+		seq.Append(resultImage.DOFade(0f, fadeDuration));
+		seq.OnComplete(() =>
+		{
+			resultImage.gameObject.SetActive(false);
+			ShowComputerMenu();
+		});
+		seq.Play();
 	}
 
 	/// <summary>

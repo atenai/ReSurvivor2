@@ -321,10 +321,9 @@ public class InGameManager : MonoBehaviour
 			if (computerName == EndComputerName)
 			{
 				Debug.Log("<color=blue>ミッション終了</color>");
+				MissionResult();
 				MissionIDUpdate();
-				isMissionActive = false;
-				currentMissionID = -1;
-				ScreenUI.SingletonInstance.MapUI.SetEndComputerStageNumber(-1);
+				MissionReset();
 				Save();
 				GameClear();
 			}
@@ -333,12 +332,19 @@ public class InGameManager : MonoBehaviour
 				Debug.Log("<color=red>目的のコンピューターではない</color>");
 			}
 		}
-
-		if (isMissionActive == false)//ミッション中でない場合
+		else if (isMissionActive == false)//ミッション中でない場合
 		{
 			Save();
 			ScreenUI.SingletonInstance.ShowComputerMenu();
 		}
+	}
+
+	/// <summary>
+	/// ミッションのリザルト画面
+	/// </summary>
+	void MissionResult()
+	{
+		ScreenUI.SingletonInstance.ShowResult();
 	}
 
 	/// <summary>
@@ -384,6 +390,16 @@ public class InGameManager : MonoBehaviour
 			Debug.LogError("ミッションIDの値が不正です。");
 			return false;
 		}
+	}
+
+	/// <summary>
+	/// ミッションの状態をリセット
+	/// </summary>
+	void MissionReset()
+	{
+		isMissionActive = false;
+		currentMissionID = -1;
+		ScreenUI.SingletonInstance.MapUI.SetEndComputerStageNumber(-1);
 	}
 
 	/// <summary>
