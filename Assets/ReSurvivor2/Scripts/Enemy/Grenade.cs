@@ -44,7 +44,7 @@ public class Grenade : MonoBehaviour
 	/// <summary>
 	/// 爆発
 	/// </summary>
-	void Explosion()
+	public void Explosion()
 	{
 		if (mineSePrefab != null)
 		{
