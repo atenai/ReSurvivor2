@@ -161,13 +161,19 @@ public class ScreenUI : MonoBehaviour
 
 		HideYesNoDialog();
 
-		InitFadeColor();
+		FadeOut();
 	}
 
 	void Update()
 	{
 		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
 		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		{
+			return;
+		}
+
+		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
+		if (InGameManager.SingletonInstance.IsGameClearTriggered == true || InGameManager.SingletonInstance.IsGameOverTriggered == true)
 		{
 			return;
 		}
@@ -301,35 +307,12 @@ public class ScreenUI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// フェードの色を初期化（画面を暗くする）
+	/// フェードアウト処理（画面を暗くする）
 	/// </summary>
-	public void InitFadeColor()
+	public void FadeOut()
 	{
 		InGameManager.SingletonInstance.IsGamePlayReady = false;
 		imageFade.color = new Color(imageFade.color.r, imageFade.color.g, imageFade.color.b, 1);
-	}
-
-	/// <summary>
-	/// フェードアウト処理（画面を暗くする）
-	/// </summary>
-	public IEnumerator FadeOut()
-	{
-		InGameManager.SingletonInstance.IsGamePlayReady = false;
-
-		//現在のアルファ値を取得
-		Color color = imageFade.color;
-		float alpha = color.a;
-
-		//アルファ値が1になるまで徐々に増やす
-		while (alpha < 1)
-		{
-			alpha += Time.deltaTime * fadeSpeed;
-			imageFade.color = new Color(color.r, color.g, color.b, alpha);
-			yield return null;
-		}
-
-		//最後に完全に不透明にする
-		imageFade.color = new Color(color.r, color.g, color.b, 1);
 	}
 
 	/// <summary>

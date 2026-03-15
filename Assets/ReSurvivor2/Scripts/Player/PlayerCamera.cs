@@ -143,6 +143,12 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
+		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
+		if (InGameManager.SingletonInstance.IsGameClearTriggered == true || InGameManager.SingletonInstance.IsGameOverTriggered == true)
+		{
+			return;
+		}
+
 		//ポーズ中は切り上げる
 		if (ScreenUI.SingletonInstance.IsPause == true)
 		{
@@ -175,6 +181,12 @@ public class PlayerCamera : MonoBehaviour
 	{
 		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
 		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		{
+			return;
+		}
+
+		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
+		if (InGameManager.SingletonInstance.IsGameClearTriggered == true || InGameManager.SingletonInstance.IsGameOverTriggered == true)
 		{
 			return;
 		}

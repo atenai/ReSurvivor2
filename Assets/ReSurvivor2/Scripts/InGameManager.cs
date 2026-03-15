@@ -38,7 +38,9 @@ public class InGameManager : MonoBehaviour
 	bool isGameClearAndGameOverSceneSwitched = false;
 	public bool IsGameClearAndGameOverSceneSwitched => isGameClearAndGameOverSceneSwitched;
 	bool isGameClearTriggered = false;
+	public bool IsGameClearTriggered => isGameClearTriggered;
 	bool isGameOverTriggered = false;
+	public bool IsGameOverTriggered => isGameOverTriggered;
 
 	[Header("ミッション")]
 
@@ -410,12 +412,12 @@ public class InGameManager : MonoBehaviour
 		if (missionID0 == true && missionID1 == true && missionID2 == true)
 		{
 			Debug.Log("<color=blue>ゲームクリアー</color>");
-			InGameManager.IsFirstLoad = true;
+			isFirstLoad = true;
 			Player.IsFirstLoad = true;
 			PlayerCamera.IsFirstLoad = true;
-			//ゲームクリアー処理
 			//シーンを切り替える
 			isGameClearTriggered = true;
+			ScreenUI.SingletonInstance.FadeOut();
 		}
 	}
 
@@ -425,11 +427,11 @@ public class InGameManager : MonoBehaviour
 	public void GameOver()
 	{
 		Debug.Log("<color=red>ゲームオーバー</color>");
-		InGameManager.IsFirstLoad = true;
+		isFirstLoad = true;
 		Player.IsFirstLoad = true;
 		PlayerCamera.IsFirstLoad = true;
-		//ゲームオーバー処理
 		//シーンを切り替える
 		isGameOverTriggered = true;
+		ScreenUI.SingletonInstance.FadeOut();
 	}
 }

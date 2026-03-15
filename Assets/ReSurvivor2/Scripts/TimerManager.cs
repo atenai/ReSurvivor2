@@ -52,6 +52,12 @@ public class TimerManager : MonoBehaviour
 			return;
 		}
 
+		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
+		if (InGameManager.SingletonInstance.IsGameClearTriggered == true || InGameManager.SingletonInstance.IsGameOverTriggered == true)
+		{
+			return;
+		}
+
 		//ポーズ中は切り上げる
 		if (ScreenUI.SingletonInstance.IsPause == true)
 		{
