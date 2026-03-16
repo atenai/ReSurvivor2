@@ -783,11 +783,7 @@ public class ScreenUI : MonoBehaviour
 	/// </summary>
 	public void ShowResult(float staySeconds = 1f, float fadeDuration = 0.5f)
 	{
-		if (resultImage == null)
-		{
-			ShowComputerMenu();
-			return;
-		}
+		isComputerMenuActive = true;
 
 		// 既存のTweenを停止
 		resultImage.DOKill();
