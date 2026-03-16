@@ -1,11 +1,11 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class LoadingScene : MonoBehaviour
 {
-	[SerializeField] string sceneName;
+	[Tooltip("ステージ名")]
+	[SerializeField] EnumManager.StageTYPE stage;
 	[SerializeField] GameObject spawnPos;
 	[Tooltip("連続ロードしないための変数")]
 	bool isLoadOnce = false;
@@ -54,7 +54,7 @@ public class LoadingScene : MonoBehaviour
 		ScreenUI.SingletonInstance.PanelLoading.SetActive(true);
 
 		//シーンをロード
-		AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);
+		AsyncOperation async = SceneManager.LoadSceneAsync(stage.ToString());
 		//シーンが勝手に切り替わらないようにする
 		async.allowSceneActivation = false;
 		//シーンをロードするまでのループ処理
