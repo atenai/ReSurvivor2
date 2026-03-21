@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class Target : MonoBehaviour
 {
@@ -31,6 +32,48 @@ public class Target : MonoBehaviour
 	{
 		get { return isDead; }
 		set { isDead = value; }
+	}
+
+	[Tooltip("ナビメッシュ")]
+	[SerializeField] protected NavMeshAgent navMeshAgent;
+	public NavMeshAgent NavMeshAgent => navMeshAgent;
+	[Tooltip("物理")]
+	[SerializeField] protected Rigidbody enemyRigidbody;
+	public Rigidbody Rigidbody => enemyRigidbody;
+
+	Vector3 resultCoverPosition;
+	public Vector3 ResultCoverPosition
+	{
+		get { return resultCoverPosition; }
+		set { resultCoverPosition = value; }
+	}
+	GameObject resultCoverObject;
+	public GameObject ResultCoverObject
+	{
+		get { return resultCoverObject; }
+		set { resultCoverObject = value; }
+	}
+	[Tooltip("カバーポイント")]
+	[SerializeField] CoverPoint[] coverPoints;
+	public CoverPoint[] CoverPoints => coverPoints;
+
+	void Awake()
+	{
+		InitNavMeshAgent();
+	}
+
+	/// <summary>
+	/// Awake で NavMeshAgent の自動位置・回転更新をオフにする。
+	/// これにより NavMeshAgent は経路計算（path, steeringTarget 等）専用になり、
+	/// 実際の移動は Rigidbody.velocity によって行う。
+	/// </summary>
+	void InitNavMeshAgent()
+	{
+		// NavMeshAgent による Transform 更新を無効化
+		navMeshAgent.updatePosition = false;
+		navMeshAgent.updateRotation = false;
+		// ★これが重要：Agent内部位置を物理位置に同期
+		navMeshAgent.nextPosition = enemyRigidbody.position;
 	}
 
 	public void Start()

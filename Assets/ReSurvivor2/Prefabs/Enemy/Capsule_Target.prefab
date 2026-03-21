@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 282577341247685728}
   - component: {fileID: 3102027135794137449}
   - component: {fileID: 6159464469037480309}
+  - component: {fileID: 3307800408250475408}
   - component: {fileID: 8377339414277215395}
   - component: {fileID: 3974415567473568368}
   - component: {fileID: 7085607125838934711}
@@ -416,6 +417,49 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &3307800408250475408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043083586570102351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 0
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 0}
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(47.9128571,53.5326653)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Repeater","NodeData":{"Offset":"(-0.49363327,108.100586)"},"ID":1,"Name":"Repeater","Instant":true,"SharedIntcount":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":0},"SharedBoolrepeatForever":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolendOnFailure":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(0.0283470154,113.739365)"},"ID":2,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"FindBestCoverPointAction","NodeData":{"Offset":"(-160.869522,141.159363)"},"ID":3,"Name":"Find
+        Best Cover Point Action","Instant":true,"SinglesearchRadius":20,"SingleminDistanceFromPlayer":5,"SinglemaxDistanceFromPlayer":25,"SingleminDistanceFromEnemy":2,"LayerMaskobstacleLayer":0,"SingleeyeHeight":1.4,"SinglearriveSampleDistance":2,"SingledistanceWeight":1,"SinglecoverWeight":10},{"Type":"MoveToCoverPointAction","NodeData":{"Offset":"(41.1302032,138.039642)"},"ID":4,"Name":"Move
+        To Cover Point Action","Instant":true,"SinglestoppingDistance":1,"SinglerepathInterval":0.25},{"Type":"FaceTargetAction","NodeData":{"Offset":"(222.555939,140.7662)"},"ID":5,"Name":"Face
+        Target Action","Instant":true,"SinglerotateSpeed":8,"SingleangleTolerance":5}]}]}}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.13
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!114 &8377339414277215395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,6 +475,9 @@ MonoBehaviour:
   maxHp: 100
   canvas: {fileID: 8849100633220470086}
   sliderHp: {fileID: 8660514565469374937}
+  navMeshAgent: {fileID: 6159464469037480309}
+  enemyRigidbody: {fileID: 3102027135794137449}
+  coverPoints: []
 --- !u!114 &3974415567473568368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,7 +485,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5043083586570102351}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d573bd3a1c123a94c96cbf4b249daf62, type: 3}
   m_Name: 
@@ -457,8 +504,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   navMeshAgent: {fileID: 6159464469037480309}
   rb: {fileID: 3102027135794137449}
-  speed: 3.5
-  acceleration: 10
 --- !u!1 &5233638622931751577
 GameObject:
   m_ObjectHideFlags: 0

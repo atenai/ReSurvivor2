@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Knife.Effects;
-using UnityEngine.AI;
 using Cinemachine;
 
 /// <summary>
@@ -17,12 +16,6 @@ public class GroundEnemy : Target
 	[Tooltip("アニメーター")]
 	[SerializeField] Animator animator;
 	public Animator Animator => animator;
-	[Tooltip("物理")]
-	[SerializeField] Rigidbody enemyRigidbody;
-	public Rigidbody Rigidbody => enemyRigidbody;
-	[Tooltip("ナビメッシュ")]
-	[SerializeField] NavMeshAgent navMeshAgent;
-	public NavMeshAgent NavMeshAgent => navMeshAgent;
 
 	[Header("コライダー")]
 
@@ -157,25 +150,6 @@ public class GroundEnemy : Target
 	[Tooltip("デバッグ")]
 	[SerializeField] DebugEnemy debugEnemy;
 	public DebugEnemy DebugEnemy => debugEnemy;
-
-	void Awake()
-	{
-		InitNavMeshAgent();
-	}
-
-	/// <summary>
-	/// Awake で NavMeshAgent の自動位置・回転更新をオフにする。
-	/// これにより NavMeshAgent は経路計算（path, steeringTarget 等）専用になり、
-	/// 実際の移動は Rigidbody.velocity によって行う。
-	/// </summary>
-	void InitNavMeshAgent()
-	{
-		// NavMeshAgent による Transform 更新を無効化
-		navMeshAgent.updatePosition = false;
-		navMeshAgent.updateRotation = false;
-		// ★これが重要：Agent内部位置を物理位置に同期
-		navMeshAgent.nextPosition = enemyRigidbody.position;
-	}
 
 	/// <summary>
 	/// 初期化処理
