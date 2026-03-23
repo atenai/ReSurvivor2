@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// プレイヤーの方向へゆっくり向くタスク
 /// </summary>
-[TaskCategory("Enemy/Cover")]
+[TaskCategory("GroundEnemy")]
 public class FaceTargetAction : Action
 {
 	[SerializeField] float rotateSpeed = 8.0f;

@@ -6,7 +6,7 @@ using UnityEngine.AI;
 /// <summary>
 /// 指定されたカバーポジションへ移動するタスク
 /// </summary>
-[TaskCategory("Enemy/Cover")]
+[TaskCategory("GroundEnemy")]
 public class MoveToCoverPointAction : Action
 {
 	Target target;
@@ -24,10 +24,6 @@ public class MoveToCoverPointAction : Action
 	//ターゲット座標位置の変数
 	Vector3 targetPos;
 
-#if UNITY_EDITOR
-	[SerializeField] GameObject obj;//プレハブをGameObject型で取得（デバッグ用）
-#endif
-
 	//移動処理系の変数
 	[UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
 	[SerializeField] float endPos = 0.1f;
@@ -38,6 +34,12 @@ public class MoveToCoverPointAction : Action
 	float endCount = 0.0f;
 	[UnityEngine.Tooltip("前進できない際の強制終了時間")]
 	float endTime = 1.0f;
+
+	[UnityEngine.Tooltip("敵からの最大探索距離")]
+	[SerializeField] float maxDistance = 30f;
+
+	[UnityEngine.Tooltip("遮蔽物判定に使うレイヤーマスク")]
+	[SerializeField] LayerMask obstructionMask = ~0;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
@@ -55,14 +57,10 @@ public class MoveToCoverPointAction : Action
 		targetPos = FindBestCover();
 	}
 
-	[UnityEngine.Tooltip("敵からの最大探索距離")]
-	[SerializeField] float maxDistance = 30f;
-
-	[UnityEngine.Tooltip("遮蔽物判定に使うレイヤーマスク")]
-	[SerializeField] LayerMask obstructionMask = ~0;
-
-	// プレイヤー視点から遮られている（＝隠れられる）カバーポイントを探す
-	// 見つかれば ResultCoverPosition に代入して true を返す
+	/// <summary>
+	/// プレイヤー視点から遮られている（＝隠れられる）カバーポイントを探す
+	/// </summary>
+	/// <returns>カバーポイントの座標位置を返す</returns>
 	Vector3 FindBestCover()
 	{
 		if (target.CoverPoints == null || target.CoverPoints.Length == 0)

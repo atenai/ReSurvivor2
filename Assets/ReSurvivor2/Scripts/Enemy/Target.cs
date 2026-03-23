@@ -41,18 +41,6 @@ public class Target : MonoBehaviour
 	[SerializeField] protected Rigidbody enemyRigidbody;
 	public Rigidbody Rigidbody => enemyRigidbody;
 
-	Vector3 resultCoverPosition;
-	public Vector3 ResultCoverPosition
-	{
-		get { return resultCoverPosition; }
-		set { resultCoverPosition = value; }
-	}
-	GameObject resultCoverObject;
-	public GameObject ResultCoverObject
-	{
-		get { return resultCoverObject; }
-		set { resultCoverObject = value; }
-	}
 	[Tooltip("カバーポイント")]
 	[SerializeField] CoverPoint[] coverPoints;
 	public CoverPoint[] CoverPoints => coverPoints;
