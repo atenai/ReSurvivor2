@@ -52,7 +52,93 @@ public class MoveToCoverPointAction : Action
 
 	void TargetPos()
 	{
-		targetPos = target.ResultCoverPosition;
+		targetPos = FindBestCover();
+	}
+
+	[UnityEngine.Tooltip("敵からの最大探索距離")]
+	[SerializeField] float maxDistance = 30f;
+
+	[UnityEngine.Tooltip("遮蔽物判定に使うレイヤーマスク")]
+	[SerializeField] LayerMask obstructionMask = ~0;
+
+	// プレイヤー視点から遮られている（＝隠れられる）カバーポイントを探す
+	// 見つかれば ResultCoverPosition に代入して true を返す
+	Vector3 FindBestCover()
+	{
+		if (target.CoverPoints == null || target.CoverPoints.Length == 0)
+		{
+			return this.transform.position;
+		}
+
+		float bestDist = float.MaxValue;
+		CoverPoint best = null;
+
+		foreach (var cp in target.CoverPoints)
+		{
+			if (cp == null)
+			{
+				continue;
+			}
+			float distToEnemy = Vector3.Distance(transform.position, cp.Position);
+			if (distToEnemy > maxDistance)
+			{
+				continue;
+			}
+
+			Vector3 dir = cp.Position - Player.SingletonInstance.transform.position;
+			float dist = dir.magnitude;
+			if (dist <= 0.01f)
+			{
+				continue;
+			}
+
+			RaycastHit hit;
+			if (Physics.Raycast(Player.SingletonInstance.transform.position, dir.normalized, out hit, dist, obstructionMask))
+			{
+				// プレイヤーからカバーポイントへの途中で何かに当たる -> 視線が遮られている
+				if (hit.collider != null && hit.collider.gameObject != cp.gameObject)
+				{
+					if (distToEnemy < bestDist)
+					{
+						bestDist = distToEnemy;
+						best = cp;
+					}
+				}
+			}
+		}
+
+		if (best != null)
+		{
+			return best.Position;
+		}
+
+		// フォールバック: プレイヤーからもっとも遠いカバーポイントを使う
+		float bestScore = -1f;
+		foreach (var cp in target.CoverPoints)
+		{
+			if (cp == null)
+			{
+				continue;
+			}
+			float dE = Vector3.Distance(transform.position, cp.Position);
+			if (dE > maxDistance)
+			{
+				continue;
+			}
+			float dP = Vector3.Distance(Player.SingletonInstance.transform.position, cp.Position);
+			if (dP > bestScore)
+			{
+				bestScore = dP;
+				best = cp;
+			}
+		}
+
+		if (best != null)
+		{
+			return best.Position;
+		}
+
+		return this.transform.position;
 	}
 
 	void InitMove()

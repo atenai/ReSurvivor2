@@ -11,9 +11,6 @@ public class CoverSelector : MonoBehaviour
 	[Tooltip("遮蔽物判定に使うレイヤーマスク")]
 	[SerializeField] LayerMask obstructionMask = ~0;
 
-	[Tooltip("自動で毎フレーム検索するか")]
-	[SerializeField] bool autoFind = true;
-
 	Vector3 resultCoverPosition;
 
 	[SerializeField] Target target;
@@ -29,10 +26,7 @@ public class CoverSelector : MonoBehaviour
 
 	void Update()
 	{
-		if (autoFind == true)
-		{
-			FindBestCover();
-		}
+		FindBestCover();
 		UpdateTargetPosition();
 	}
 
