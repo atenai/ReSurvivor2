@@ -1,7 +1,6 @@
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
-using UnityEngine.AI;
 
 /// <summary>
 /// 指定されたカバーポジションへ移動するタスク
@@ -9,7 +8,7 @@ using UnityEngine.AI;
 [TaskCategory("GroundEnemy")]
 public class MoveToCoverPointAction : Action
 {
-	Target target;
+	GroundEnemy groundEnemy;
 	[UnityEngine.Tooltip("移動終了フラグ")]
 	bool isEnd = false;
 	/// <summary>
@@ -35,21 +34,48 @@ public class MoveToCoverPointAction : Action
 	[UnityEngine.Tooltip("前進できない際の強制終了時間")]
 	float endTime = 1.0f;
 
-	[UnityEngine.Tooltip("敵からの最大探索距離")]
-	[SerializeField] float maxDistance = 30f;
-
 	[UnityEngine.Tooltip("遮蔽物判定に使うレイヤーマスク")]
 	[SerializeField] LayerMask obstructionMask = ~0;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		target = this.GetComponent<Target>();
+		groundEnemy = this.GetComponent<GroundEnemy>();
 
+		InitAnimation();
 		InitMove();
 		InitEnemyCanNotMove();
 		TargetPos();
 		AdjustNavMeshPosition();
+	}
+
+	/// <summary>
+	/// アニメーションの初期化処理
+	/// </summary>
+	void InitAnimation()
+	{
+		groundEnemy.Animator.SetFloat("f_moveSpeed", 1.0f);
+		groundEnemy.Animator.SetBool("b_isReload", false);
+		groundEnemy.Animator.SetBool("b_isRifleAim", false);
+		groundEnemy.Animator.SetBool("b_isRifleFire", false);
+		groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
+		groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
+	}
+
+	void InitMove()
+	{
+		groundEnemy.Rigidbody.velocity = Vector3.zero;
+		isEnd = false;
+	}
+
+	/// <summary>
+	/// エネミーの移動距離が全く変わらない場合の強制終了カウントの初期化処理
+	/// </summary>
+	void InitEnemyCanNotMove()
+	{
+		startPos = groundEnemy.transform.position;
+		endCount = 0.0f;
+		oldDistance = 0.0f;
 	}
 
 	void TargetPos()
@@ -63,30 +89,36 @@ public class MoveToCoverPointAction : Action
 	/// <returns>カバーポイントの座標位置を返す</returns>
 	Vector3 FindBestCover()
 	{
-		if (target.CoverPoints == null || target.CoverPoints.Length == 0)
+		if (groundEnemy.CoverPoints == null || groundEnemy.CoverPoints.Length == 0)
 		{
 			return this.transform.position;
 		}
 
-		float bestDist = float.MaxValue;
-		CoverPoint best = null;
+		float bestDistance = float.MaxValue;
+		CoverPoint bestCoverPoint = null;
 
-		foreach (var cp in target.CoverPoints)
+		foreach (var coverPoint in groundEnemy.CoverPoints)
 		{
-			if (cp == null)
+			//カバーポイントが無いなら中身を実行する
+			if (coverPoint == null)
 			{
-				continue;
-			}
-			float distToEnemy = Vector3.Distance(transform.position, cp.Position);
-			if (distToEnemy > maxDistance)
-			{
+				//スキップ
 				continue;
 			}
 
-			Vector3 dir = cp.Position - Player.SingletonInstance.transform.position;
+			//エネミーに設定している交戦距離よりカバーポイントが遠いなら中身を実行する
+			float coverPointDistance = Vector3.Distance(this.transform.position, coverPoint.Position);
+			if (groundEnemy.EngagementDistance < coverPointDistance)
+			{
+				//スキップ
+				continue;
+			}
+
+			Vector3 dir = coverPoint.Position - Player.SingletonInstance.transform.position;
 			float dist = dir.magnitude;
 			if (dist <= 0.01f)
 			{
+				//スキップ
 				continue;
 			}
 
@@ -94,65 +126,63 @@ public class MoveToCoverPointAction : Action
 			if (Physics.Raycast(Player.SingletonInstance.transform.position, dir.normalized, out hit, dist, obstructionMask))
 			{
 				// プレイヤーからカバーポイントへの途中で何かに当たる -> 視線が遮られている
-				if (hit.collider != null && hit.collider.gameObject != cp.gameObject)
+				if (hit.collider != null && hit.collider.gameObject != coverPoint.gameObject)
 				{
-					if (distToEnemy < bestDist)
+					//カバーポイントの距離がベスト距離より小さいなら中身を実行する
+					if (coverPointDistance < bestDistance)
 					{
-						bestDist = distToEnemy;
-						best = cp;
+						//ベスト距離を更新
+						bestDistance = coverPointDistance;
+						//カバーポイントを更新
+						bestCoverPoint = coverPoint;
 					}
 				}
 			}
 		}
 
-		if (best != null)
+		//ベストカバーポイントがあるなら中身を実行する
+		if (bestCoverPoint != null)
 		{
-			return best.Position;
+			return bestCoverPoint.Position;
 		}
 
 		// フォールバック: プレイヤーからもっとも遠いカバーポイントを使う
 		float bestScore = -1f;
-		foreach (var cp in target.CoverPoints)
+		foreach (var coverPoint in groundEnemy.CoverPoints)
 		{
-			if (cp == null)
+			//カバーポイントが無いなら中身を実行する
+			if (coverPoint == null)
 			{
+				//スキップ
 				continue;
 			}
-			float dE = Vector3.Distance(transform.position, cp.Position);
-			if (dE > maxDistance)
+
+			//エネミーに設定している交戦距離よりカバーポイントが遠いなら中身を実行する
+			float coverPointDistance = Vector3.Distance(this.transform.position, coverPoint.Position);
+			if (groundEnemy.EngagementDistance < coverPointDistance)
 			{
+				//スキップ
 				continue;
 			}
-			float dP = Vector3.Distance(Player.SingletonInstance.transform.position, cp.Position);
-			if (dP > bestScore)
+
+			//プレイヤーとカバーポイントの距離を出してその距離が最も遠いなら中身を実行する
+			float distanceScore = Vector3.Distance(Player.SingletonInstance.transform.position, coverPoint.Position);
+			if (bestScore < distanceScore)
 			{
-				bestScore = dP;
-				best = cp;
+				//距離を更新
+				bestScore = distanceScore;
+				//カバーポイントを更新
+				bestCoverPoint = coverPoint;
 			}
 		}
 
-		if (best != null)
+		//ベストカバーポイントがあるなら中身を実行する
+		if (bestCoverPoint != null)
 		{
-			return best.Position;
+			return bestCoverPoint.Position;
 		}
 
 		return this.transform.position;
-	}
-
-	void InitMove()
-	{
-		target.Rigidbody.velocity = Vector3.zero;
-		isEnd = false;
-	}
-
-	/// <summary>
-	/// エネミーの移動距離が全く変わらない場合の強制終了カウントの初期化処理
-	/// </summary>
-	void InitEnemyCanNotMove()
-	{
-		startPos = target.transform.position;
-		endCount = 0.0f;
-		oldDistance = 0.0f;
 	}
 
 	// 更新時に呼ばれる
@@ -178,12 +208,12 @@ public class MoveToCoverPointAction : Action
 	void UpdateTargetPosition()
 	{
 		// 常にプレイヤーを目的地に設定する（敵 AI などの追従目的）
-		target.NavMeshAgent.SetDestination(targetPos);
+		groundEnemy.NavMeshAgent.SetDestination(targetPos);
 	}
 
 	public override void OnFixedUpdate()
 	{
-		float currentDistance = RounndFloat(Vector3.Distance(startPos, target.transform.position));
+		float currentDistance = RounndFloat(Vector3.Distance(startPos, groundEnemy.transform.position));
 		//Debug.Log("<color=red>currentDistance " + currentDistance + "</color>");
 		//Debug.Log("<color=blue>oldDistance " + oldDistance + "</color>");
 		//エネミーの移動距離が全く変わらない場合
@@ -234,7 +264,7 @@ public class MoveToCoverPointAction : Action
 		if (sqrCurrentDistance <= endPos)
 		{
 			//Debug.Log("<color=red>移動の終了</color>");
-			target.Rigidbody.velocity = Vector3.zero;
+			groundEnemy.Rigidbody.velocity = Vector3.zero;
 			isEnd = true;
 			return;
 		}
@@ -248,10 +278,10 @@ public class MoveToCoverPointAction : Action
 	/// </summary>
 	void AdjustNavMeshPosition()
 	{
-		float sqr = (target.NavMeshAgent.nextPosition - target.Rigidbody.position).sqrMagnitude;
+		float sqr = (groundEnemy.NavMeshAgent.nextPosition - groundEnemy.Rigidbody.position).sqrMagnitude;
 		if (0.25f < sqr)
 		{
-			target.NavMeshAgent.nextPosition = target.Rigidbody.position;
+			groundEnemy.NavMeshAgent.nextPosition = groundEnemy.Rigidbody.position;
 		}
 	}
 
@@ -265,24 +295,24 @@ public class MoveToCoverPointAction : Action
 	void MoveTargetPositon()
 	{
 		// 経路を持っていない場合は水平速度を 0 にする（Y は維持）
-		if (target.NavMeshAgent.hasPath == false)
+		if (groundEnemy.NavMeshAgent.hasPath == false)
 		{
-			target.Rigidbody.velocity = new Vector3(0, target.Rigidbody.velocity.y, 0);
+			groundEnemy.Rigidbody.velocity = new Vector3(0, groundEnemy.Rigidbody.velocity.y, 0);
 			return;
 		}
 
 		// NavMeshAgent が示す次の操舵目標点（steeringTarget）を取得
-		Vector3 steerTarget = target.NavMeshAgent.steeringTarget;
+		Vector3 steerTarget = groundEnemy.NavMeshAgent.steeringTarget;
 
 		// 現在位置から操舵目標点へのベクトルを計算（Y は無視して水平のみ扱う）
-		Vector3 dir = steerTarget - target.transform.position;
+		Vector3 dir = steerTarget - groundEnemy.transform.position;
 		dir.y = 0;
 
 		// 進みたい方向の単位ベクトルに最大速度を掛けて目標速度を決定
 		Vector3 desiredVel = dir.normalized * speed;
 
 		// 現在の水平速度（Y成分は除く）
-		Vector3 horizontalVel = new Vector3(target.Rigidbody.velocity.x, 0, target.Rigidbody.velocity.z);
+		Vector3 horizontalVel = new Vector3(groundEnemy.Rigidbody.velocity.x, 0, groundEnemy.Rigidbody.velocity.z);
 
 		// 目標の水平速度成分だけを取り出す
 		Vector3 targetHorizontal = new Vector3(desiredVel.x, 0, desiredVel.z);
@@ -292,15 +322,15 @@ public class MoveToCoverPointAction : Action
 		Vector3 newHorizontal = Vector3.MoveTowards(horizontalVel, targetHorizontal, acceleration * Time.fixedDeltaTime);
 
 		// Y 成分は保持して、Rigidbody の速度を更新する
-		target.Rigidbody.velocity = new Vector3(newHorizontal.x, target.Rigidbody.velocity.y, newHorizontal.z);
+		groundEnemy.Rigidbody.velocity = new Vector3(newHorizontal.x, groundEnemy.Rigidbody.velocity.y, newHorizontal.z);
 
 		// 十分に速度がある場合は向きを滑らかに回転させる（視覚的な向き合わせ）
 		if (0.01f < newHorizontal.sqrMagnitude)
 		{
-			target.transform.rotation = Quaternion.Slerp(target.transform.rotation, Quaternion.LookRotation(newHorizontal.normalized), 10f * Time.fixedDeltaTime);
+			groundEnemy.transform.rotation = Quaternion.Slerp(groundEnemy.transform.rotation, Quaternion.LookRotation(newHorizontal.normalized), 10f * Time.fixedDeltaTime);
 		}
 
 		// ★これが重要：Agent内部位置を物理位置に同期
-		target.NavMeshAgent.nextPosition = target.Rigidbody.position;
+		groundEnemy.NavMeshAgent.nextPosition = groundEnemy.Rigidbody.position;
 	}
 }

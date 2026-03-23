@@ -2,7 +2,8 @@ using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// エネミーがターゲットから特定の距離離れているか？を調べるクラス
+/// エネミーがターゲットから特定の距離範囲外か？を調べるクラス
+/// ターゲットが離れすぎた際は距離を詰める
 /// </summary>
 [TaskCategory("GroundEnemy")]
 public class CanGroundEnemyAwayFromTheTargetConditional : Conditional
@@ -36,7 +37,7 @@ public class CanGroundEnemyAwayFromTheTargetConditional : Conditional
 		//Debug.Log("<color=red>sqrCurrentDistance : " + sqrCurrentDistance + "</color>");
 
 		//↑の値が特定の範囲以上だとtrue、範囲以内だとfalse
-		if (sqrCurrentDistance < groundEnemy.ShootingDistance * groundEnemy.ShootingDistance)
+		if (sqrCurrentDistance < groundEnemy.EngagementDistance * groundEnemy.EngagementDistance)
 		{
 			//範囲以内
 			return TaskStatus.Failure;

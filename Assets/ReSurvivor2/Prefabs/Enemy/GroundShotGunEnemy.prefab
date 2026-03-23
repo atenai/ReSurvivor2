@@ -207,7 +207,7 @@ MonoBehaviour:
         Ground Enemy Away From The Target Conditional","Instant":true},{"Type":"GroundEnemyMoveTargetAction","NodeData":{"Offset":"(68.13437,153.269043)"},"ID":19,"Name":"Ground
         Enemy Move Target Action","Instant":true}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(45.23804,199.523941)"},"ID":20,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanGroundEnemyWithinSpecificDistanceConditional","NodeData":{"Offset":"(-80.79617,151.254883)"},"ID":21,"Name":"Can
         Ground Enemy Within Specific Distance Conditional","Instant":true},{"Type":"SelfMadeRandom","NodeData":{"Offset":"(130,154.848511)"},"ID":22,"Name":"Self
-        Made Random","Instant":true,"List`1probabilitiesList":[40,30,10,20],"AbortTypeabortType":"None","Children":[{"Type":"GroundEnemyShotGunFireAction","NodeData":{"Offset":"(-124.864769,148.648926)"},"ID":23,"Name":"Ground
+        Made Random","Instant":true,"List`1probabilitiesList":[40,10,10,40],"AbortTypeabortType":"None","Children":[{"Type":"GroundEnemyShotGunFireAction","NodeData":{"Offset":"(-124.864769,148.648926)"},"ID":23,"Name":"Ground
         Enemy Shot Gun Fire Action","Instant":true,"Singlerange":100,"SingleDamage":10,"Int32shotGunBullet":10},{"Type":"GroundEnemyRandomMoveAction","NodeData":{"Offset":"(120,150)"},"ID":24,"Name":"Ground
         Enemy Random Move Action","Instant":true,"GameObjectobj":0,"SingleendPos":2.5},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(301.7757,149.532639)"},"ID":25,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CanGroundEnemyGrenadeConditional","NodeData":{"Offset":"(-106.292679,134.021)"},"ID":26,"Name":"Can
         Ground Enemy Grenade Conditional","Instant":true},{"Type":"GroundEnemyGrenadeAction","NodeData":{"Offset":"(110,129.972031)"},"ID":27,"Name":"Ground
@@ -321,7 +321,6 @@ MonoBehaviour:
   sliderHp: {fileID: 4582419977116525393}
   navMeshAgent: {fileID: 2265207154070741179}
   enemyRigidbody: {fileID: 4553017098955803893}
-  coverPoints: []
   animator: {fileID: 7403507082190380116}
   enemyCollider: {fileID: 8595419044903638177}
   colliders:
@@ -339,7 +338,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   groundedRadius: 0.2
-  shootingDistance: 8
+  engagementDistance: 12
   magazineCapacity: 8
   shotEmitters:
   - {fileID: 5060550449447609551}

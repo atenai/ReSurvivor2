@@ -97,9 +97,9 @@ public class GroundEnemy : Target
 	public bool IsGrounded => isGrounded;
 
 	[Header("攻撃")]
-	[Tooltip("射撃距離")]
-	[SerializeField] float shootingDistance = 8.0f;
-	public float ShootingDistance => shootingDistance;
+	[Tooltip("交戦距離")]
+	[SerializeField] float engagementDistance = 14.0f;
+	public float EngagementDistance => engagementDistance;
 
 	[Tooltip("銃の現在のマガジンの弾数")]
 	int currentMagazine;
