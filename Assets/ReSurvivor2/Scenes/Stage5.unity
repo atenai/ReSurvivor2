@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 23241155}
   - component: {fileID: 23241159}
   m_Layer: 0
-  m_Name: Cube (7)
+  m_Name: CoverPoint7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 84786356}
   - component: {fileID: 84786359}
   m_Layer: 0
-  m_Name: Cube (6)
+  m_Name: CoverPoint6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -498,7 +498,7 @@ GameObject:
   - component: {fileID: 277747917}
   - component: {fileID: 277747921}
   m_Layer: 0
-  m_Name: Cube (4)
+  m_Name: CoverPoint4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -594,7 +594,7 @@ GameObject:
   - component: {fileID: 292907389}
   - component: {fileID: 292907392}
   m_Layer: 0
-  m_Name: Cube (8)
+  m_Name: CoverPoint8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -870,6 +870,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01dd6b60dc0421d4f8429d2ad49c6273, type: 3}
+--- !u!1 &512509249
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 512509250}
+  m_Layer: 0
+  m_Name: "----------\u2193Item\u2193---------- (1)"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &512509250
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512509249}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &548591886
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -880,11 +911,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2045447982428632554, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2045447982428632554, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4566893493988133510, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -929,6 +960,10 @@ PrefabInstance:
     - target: {fileID: 5043083586570102351, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: m_Name
       value: Capsule_Target
+      objectReference: {fileID: 0}
+    - target: {fileID: 5043083586570102351, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8377339414277215395, guid: 23841236b7d9312478a7f060fb93629b, type: 3}
       propertyPath: coverPoints.Array.data[0]
@@ -1412,7 +1447,7 @@ GameObject:
   - component: {fileID: 752362053}
   - component: {fileID: 752362057}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: CoverPoint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1508,7 +1543,7 @@ GameObject:
   - component: {fileID: 756847569}
   - component: {fileID: 756847573}
   m_Layer: 0
-  m_Name: Cube (3)
+  m_Name: CoverPoint3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1661,7 +1696,7 @@ GameObject:
   - component: {fileID: 771906230}
   - component: {fileID: 771906233}
   m_Layer: 0
-  m_Name: Cube (9)
+  m_Name: CoverPoint9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1985,7 +2020,7 @@ GameObject:
   - component: {fileID: 949905074}
   - component: {fileID: 949905078}
   m_Layer: 0
-  m_Name: Cube (2)
+  m_Name: CoverPoint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2195,7 +2230,7 @@ GameObject:
   - component: {fileID: 971784313}
   - component: {fileID: 971784317}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: CoverPoint0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2893,11 +2928,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1686781622753291610, guid: 3e38b6a8c4b620e49a6129154b4931fc, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1686781622753291610, guid: 3e38b6a8c4b620e49a6129154b4931fc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1851749994559717252, guid: 3e38b6a8c4b620e49a6129154b4931fc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2913,7 +2948,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5594603776963884427, guid: 3e38b6a8c4b620e49a6129154b4931fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5610672490780779992, guid: 3e38b6a8c4b620e49a6129154b4931fc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3127,7 +3162,7 @@ GameObject:
   - component: {fileID: 1596543164}
   - component: {fileID: 1596543168}
   m_Layer: 0
-  m_Name: Cube (10)
+  m_Name: CoverPoint10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3637,9 +3672,61 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1404591222}
     - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.size
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
       propertyPath: groundEnemies.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[0]
+      value: 
+      objectReference: {fileID: 971784317}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 752362057}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 949905078}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[3]
+      value: 
+      objectReference: {fileID: 756847573}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[4]
+      value: 
+      objectReference: {fileID: 277747921}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[5]
+      value: 
+      objectReference: {fileID: 1794210602}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[6]
+      value: 
+      objectReference: {fileID: 84786359}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[7]
+      value: 
+      objectReference: {fileID: 23241159}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[8]
+      value: 
+      objectReference: {fileID: 292907392}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[9]
+      value: 
+      objectReference: {fileID: 771906233}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[10]
+      value: 
+      objectReference: {fileID: 1596543168}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: coverPoints.Array.data[11]
+      value: 
+      objectReference: {fileID: 1775783815}
     - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
       propertyPath: groundEnemies.Array.data[0]
       value: 
@@ -3706,7 +3793,7 @@ GameObject:
   - component: {fileID: 1775783811}
   - component: {fileID: 1775783815}
   m_Layer: 0
-  m_Name: Cube (11)
+  m_Name: CoverPoint11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3916,7 +4003,7 @@ GameObject:
   - component: {fileID: 1794210598}
   - component: {fileID: 1794210602}
   m_Layer: 0
-  m_Name: Cube (5)
+  m_Name: CoverPoint5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5348,11 +5435,12 @@ SceneRoots:
   - {fileID: 1473701676328951858}
   - {fileID: 8412936158503641537}
   - {fileID: 1707447938}
+  - {fileID: 1513949966}
+  - {fileID: 1153695567}
+  - {fileID: 512509250}
   - {fileID: 1768906423}
   - {fileID: 548591886}
   - {fileID: 1404591221}
-  - {fileID: 1513949966}
-  - {fileID: 1153695567}
   - {fileID: 971784315}
   - {fileID: 752362055}
   - {fileID: 949905076}

@@ -11,9 +11,6 @@ public class FlyingEnemy : Target
 	[Tooltip("プレイヤー")]
 	GameObject targetPlayer;
 	public GameObject TargetPlayer => targetPlayer;
-	[Tooltip("物理")]
-	[SerializeField] Rigidbody enemyRigidbody;
-	public Rigidbody Rigidbody => enemyRigidbody;
 
 	[Header("コライダー")]
 

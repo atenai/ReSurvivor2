@@ -15,6 +15,9 @@ public class EnemyManager : MonoBehaviour
 	[SerializeField] GroundEnemy[] groundEnemies;
 	[SerializeField] FlyingEnemy[] flyingEnemies;
 
+	[Tooltip("カバーポイント")]
+	[SerializeField] CoverPoint[] coverPoints;
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -28,6 +31,25 @@ public class EnemyManager : MonoBehaviour
 		}
 	}
 
+	void Start()
+	{
+		SetCoverPoint();
+	}
+
+	/// <summary>
+	/// カバーポイントをセット
+	/// </summary>
+	void SetCoverPoint()
+	{
+		foreach (GroundEnemy groundEnemy in groundEnemies)
+		{
+			groundEnemy.CoverPoints = coverPoints;
+		}
+	}
+
+	/// <summary>
+	/// 全員が警戒態勢
+	/// </summary>
 	public void AllChaseOn()
 	{
 		Debug.Log("<color=yellow>EnemyManagerのAllChaseOn()</color>");

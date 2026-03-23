@@ -42,8 +42,12 @@ public class Target : MonoBehaviour
 	public Rigidbody Rigidbody => enemyRigidbody;
 
 	[Tooltip("カバーポイント")]
-	[SerializeField] CoverPoint[] coverPoints;
-	public CoverPoint[] CoverPoints => coverPoints;
+	CoverPoint[] coverPoints;
+	public CoverPoint[] CoverPoints
+	{
+		get { return coverPoints; }
+		set { coverPoints = value; }
+	}
 
 	void Awake()
 	{
