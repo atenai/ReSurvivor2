@@ -12,7 +12,7 @@ public class GroundEnemyMoveTargetAction : Action
 	[UnityEngine.Tooltip("移動終了フラグ")]
 	bool isEnd = false;
 	[UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
-	float endPos = 2.5f;
+	float endPos = 4.0f;
 	/// <summary>
 	/// 移動速度
 	/// </summary>

@@ -50,7 +50,7 @@ public class GroundEnemy : Target
 
 	[Header("追跡")]
 	/// <summary>追跡時間</summary>
-	float chaseTime = 25.0f;
+	float chaseTime = 30.0f;
 	public float ChaseTime => chaseTime;
 	/// <summary>追跡カウントタイマー</summary>
 	float chaseCountTime;
