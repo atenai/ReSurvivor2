@@ -263,7 +263,12 @@ public class GroundEnemy : Target
 		base.Update();
 		GroundCheck();
 
-		Eyesight();
+		if (Eyesight() == true)
+		{
+			//Debug.Log("<color=red>プレイヤーを発見!</color>");
+			//ChaseOn();
+			EnemyManager.SingletonInstance.AllChaseOn();
+		}
 		Alert();
 		ChasePlayer();
 
@@ -276,11 +281,11 @@ public class GroundEnemy : Target
 	/// <summary>
 	/// レイキャストによる視界
 	/// </summary>
-	void Eyesight()
+	public bool Eyesight()
 	{
 		if (IsDead == true)
 		{
-			return;
+			return false;
 		}
 
 		// 角度を進める
@@ -319,11 +324,11 @@ public class GroundEnemy : Target
 			// ヒット時の処理（例：プレイヤー検知など）
 			if (hit.collider.CompareTag("Player"))
 			{
-				//Debug.Log("<color=red>プレイヤーを発見!</color>");
-				//ChaseOn();
-				EnemyManager.SingletonInstance.AllChaseOn();
+				return true;
 			}
 		}
+
+		return false;
 	}
 
 	/// <summary>

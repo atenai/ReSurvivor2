@@ -66,13 +66,21 @@ public class GroundEnemyMoveTargetAction : Action
 
 		if (groundEnemy.IsChase == false)
 		{
+			InitMove();
 			//追跡終了
+			return TaskStatus.Success;
+		}
+
+		if (groundEnemy.Eyesight() == true)
+		{
+			InitMove();
+			//目的地にたどりついた
 			return TaskStatus.Success;
 		}
 
 		if (isEnd == true)
 		{
-			isEnd = false;
+			InitMove();
 			//目的地にたどりついた
 			return TaskStatus.Success;
 		}
@@ -120,7 +128,6 @@ public class GroundEnemyMoveTargetAction : Action
 		if (sqrCurrentDistance < endPos)
 		{
 			//Debug.Log("<color=red>移動の終了</color>");
-			groundEnemy.Rigidbody.velocity = Vector3.zero;
 			isEnd = true;
 			return;
 		}
