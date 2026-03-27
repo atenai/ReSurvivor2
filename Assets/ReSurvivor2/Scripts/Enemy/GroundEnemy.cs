@@ -186,6 +186,7 @@ public class GroundEnemy : Target
 			targetPlayer = Player.SingletonInstance.gameObject;
 		}
 
+		animator.applyRootMotion = false;
 		enemyRigidbody.useGravity = true;
 		enemyCollider.enabled = true;
 

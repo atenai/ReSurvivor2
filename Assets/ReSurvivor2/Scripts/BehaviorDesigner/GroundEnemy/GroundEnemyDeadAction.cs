@@ -28,6 +28,8 @@ public class GroundEnemyDeadAction : Action
 	/// </summary>
 	void InitAnimation()
 	{
+		groundEnemy.Animator.applyRootMotion = true;
+
 		groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
 		groundEnemy.Animator.SetBool("b_isReload", false);
 		groundEnemy.Animator.SetBool("b_isRifleAim", false);
