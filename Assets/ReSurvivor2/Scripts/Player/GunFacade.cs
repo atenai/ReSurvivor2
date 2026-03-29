@@ -18,10 +18,10 @@ public class GunFacade
 	[Tooltip("ショットガン")]
 	[SerializeField] ShotGun shotGun = new ShotGun();
 
-	GunBase gunBase;
-	public GunBase GetGunBase => gunBase;
+	IGun gunBase;
+	public IGun GetGunBase => gunBase;
 
-	List<GunBase> gunBaseList = new List<GunBase>();
+	List<IGun> gunBaseList = new List<IGun>();
 
 	EnumManager.GunTYPE gunTYPE;
 	public EnumManager.GunTYPE GetGunTYPE => gunTYPE;
