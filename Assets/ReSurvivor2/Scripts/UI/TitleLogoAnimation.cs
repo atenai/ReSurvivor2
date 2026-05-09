@@ -94,8 +94,8 @@ public class TitleLogoAnimation : MonoBehaviour
 
         //0.5秒かけて赤に変更
         float colorChangeDuration = 0.5f;
-        transformSequence.Join(animator.DOColorChar(0, Color.red, colorChangeDuration));
-        transformSequence.Join(animator.DOColorChar(4, Color.red, colorChangeDuration));
+        transformSequence.Join(animator.DOColorChar(0, Color.red, colorChangeDuration))
+        .Join(animator.DOColorChar(4, Color.red, colorChangeDuration));
 
         // 色変更後少し待つ
         float waitAfterColorChange = 3.0f;
@@ -103,10 +103,10 @@ public class TitleLogoAnimation : MonoBehaviour
 
         // 不要な文字を消す
         float fadeDuration = 0.25f;
-        transformSequence.Join(animator.DOFadeChar(1, 0.0f, fadeDuration));
-        transformSequence.Join(animator.DOFadeChar(2, 0.0f, fadeDuration));
-        transformSequence.Join(animator.DOFadeChar(3, 0.0f, fadeDuration));
-        transformSequence.Join(animator.DOFadeChar(5, 0.0f, fadeDuration));
+        transformSequence.Append(animator.DOFadeChar(1, 0.0f, fadeDuration))
+        .Join(animator.DOFadeChar(2, 0.0f, fadeDuration))
+        .Join(animator.DOFadeChar(3, 0.0f, fadeDuration))
+        .Join(animator.DOFadeChar(5, 0.0f, fadeDuration));
 
         // フェード後少し待つ
         float waitAfterFade = 0.5f;
