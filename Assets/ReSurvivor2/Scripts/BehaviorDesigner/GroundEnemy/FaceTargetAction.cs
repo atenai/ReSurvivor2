@@ -13,7 +13,13 @@ public class FaceTargetAction : Action
 
 	public override TaskStatus OnUpdate()
 	{
-		Vector3 direction = Player.SingletonInstance.transform.position - transform.position;
+		var player = Player.SingletonInstance;
+		if (player == null)
+		{
+			return TaskStatus.Failure;
+		}
+
+		Vector3 direction = player.transform.position - this.transform.position;
 		direction.y = 0.0f;
 
 		if (direction.sqrMagnitude <= 0.001f)
@@ -22,13 +28,13 @@ public class FaceTargetAction : Action
 		}
 
 		Quaternion targetRotation = Quaternion.LookRotation(direction.normalized);
-		transform.rotation = Quaternion.Slerp(
-			transform.rotation,
+		this.transform.rotation = Quaternion.Slerp(
+			this.transform.rotation,
 			targetRotation,
 			Time.deltaTime * rotateSpeed
 		);
 
-		float angle = Quaternion.Angle(transform.rotation, targetRotation);
+		float angle = Quaternion.Angle(this.transform.rotation, targetRotation);
 		if (angle <= angleTolerance)
 		{
 			return TaskStatus.Success;
