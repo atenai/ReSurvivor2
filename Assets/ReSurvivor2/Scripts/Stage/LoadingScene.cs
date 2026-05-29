@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class LoadingScene : MonoBehaviour
 {
-	[Tooltip("ステージ名")]
-	[SerializeField] EnumManager.StageTYPE stage;
+	[Tooltip("次のステージ名")]
+	[SerializeField] EnumManager.StageTYPE nextStage;
 	[SerializeField] GameObject spawnPos;
 	[Tooltip("連続ロードしないための変数")]
 	bool isLoadOnce = false;
@@ -54,7 +54,7 @@ public class LoadingScene : MonoBehaviour
 		ScreenUI.SingletonInstance.PanelLoading.SetActive(true);
 
 		//シーンをロード
-		AsyncOperation async = SceneManager.LoadSceneAsync(stage.ToString());
+		AsyncOperation async = SceneManager.LoadSceneAsync(nextStage.ToString());
 		//シーンが勝手に切り替わらないようにする
 		async.allowSceneActivation = false;
 		//シーンをロードするまでのループ処理

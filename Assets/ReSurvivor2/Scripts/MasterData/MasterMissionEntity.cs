@@ -15,11 +15,11 @@ public class MasterMissionEntity
 	/// <summary>
 	/// ミッションのスタートコンピューター名
 	/// </summary>
-	public EnumManager.ComputerTYPE StartComputerName;
+	public EnumManager.StageTYPE StartComputerStageNumber;
 	/// <summary>
 	/// ミッションのエンドコンピューター名
 	/// </summary>
-	public EnumManager.ComputerTYPE EndComputerName;
+	public EnumManager.StageTYPE EndComputerStageNumber;
 	/// <summary>
 	/// 分：カウントダウンタイマー用
 	/// </summary>

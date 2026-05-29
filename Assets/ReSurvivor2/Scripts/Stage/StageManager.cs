@@ -9,11 +9,11 @@ using UnityEngine;
 public class StageManager : MonoBehaviour
 {
 	[Tooltip("ステージ名")]
-	[SerializeField] EnumManager.StageTYPE stage;
-	public EnumManager.StageTYPE Stage
+	[SerializeField] EnumManager.StageTYPE currentStage;
+	public EnumManager.StageTYPE CurrentStage
 	{
-		get { return stage; }
-		set { stage = value; }
+		get { return currentStage; }
+		set { currentStage = value; }
 	}
 
 	[Tooltip("プレイヤーリスポーンポイント")]
@@ -33,9 +33,25 @@ public class StageManager : MonoBehaviour
 
 	void Start()
 	{
-		ScreenUI.SingletonInstance.MapUI.SetCurrentPlayerStageNumber((int)stage);
+		CreateMission();
+		ScreenUI.SingletonInstance.MapUI.SetCurrentPlayerStageNumber((int)currentStage);
 		StartCoroutine(ScreenUI.SingletonInstance.FadeIn());
 		StartCoroutine(InGameManager.SingletonInstance.PreloadScenesCoroutine());
+	}
+
+	void CreateMission()
+	{
+		//ミッションの作成
+		InGameManager.SingletonInstance.CachedMissionList = InGameManager.SingletonInstance.MissionSerchList(currentStage);
+		foreach (MasterMissionEntity mission in InGameManager.SingletonInstance.CachedMissionList)
+		{
+			UnityEngine.Debug.Log("<color=cyan>ミッションスタートコンピューター番号：" + mission.StartComputerStageNumber + "</color>");
+			UnityEngine.Debug.Log("<color=cyan>ミッションエンドコンピューター番号：" + mission.EndComputerStageNumber + "</color>");
+			UnityEngine.Debug.Log("<color=cyan>ミッション名：" + mission.MissionName + "</color>");
+		}
+		ScreenUI.SingletonInstance.InitComputerMenuMissionList(InGameManager.SingletonInstance.CachedMissionList);
+		ScreenUI.SingletonInstance.DestroyAllMailListContent();
+		ScreenUI.SingletonInstance.AddMailListContent();
 	}
 
 	void Update()

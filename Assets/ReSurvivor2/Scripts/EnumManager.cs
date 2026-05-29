@@ -14,34 +14,6 @@ public static class EnumManager
 	}
 
 	/// <summary>
-	/// コンピューターのタイプ
-	/// </summary>
-	public enum ComputerTYPE
-	{
-		Stage0Computer = 0,
-		Stage1Computer = 1,
-		Stage2Computer = 2,
-		Stage3Computer = 3,
-		Stage4Computer = 4,
-		Stage5Computer = 5,
-		Stage6Computer = 6,
-		Stage7Computer = 7,
-		Stage8Computer = 8,
-		Stage9Computer = 9,
-		Stage10Computer = 10,
-		Stage11Computer = 11,
-		Stage12Computer = 12,
-		Stage13Computer = 13,
-		Stage14Computer = 14,
-		Stage15Computer = 15,
-		Stage16Computer = 16,
-		Stage17Computer = 17,
-		Stage18Computer = 18,
-		Stage19Computer = 19,
-		Stage20Computer = 20,
-	}
-
-	/// <summary>
 	/// ステージのタイプ
 	/// </summary>
 	public enum StageTYPE

@@ -771,10 +771,10 @@ public class ScreenUI : MonoBehaviour
 			Debug.Log("<color=red>ミッション開始</color>");
 			InGameManager.SingletonInstance.IsMissionActive = true;
 			InGameManager.SingletonInstance.CurrentMissionID = result.MissionID;
-			InGameManager.SingletonInstance.EndComputerName = result.EndComputerName;
+			InGameManager.SingletonInstance.EndComputerStageNumber = result.EndComputerStageNumber;
 			TimerManager.SingletonInstance.Minute = result.Minute;
 			TimerManager.SingletonInstance.Seconds = result.Seconds;
-			MapUI.SetEndComputerStageNumber((int)result.EndComputerName);
+			MapUI.SetEndComputerStageNumber((int)result.EndComputerStageNumber);
 		}
 	}
 

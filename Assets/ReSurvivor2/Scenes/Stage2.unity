@@ -675,6 +675,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6617248888777553093, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: nextStage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617248888777553093, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: sceneName
       value: Stage1
       objectReference: {fileID: 0}
@@ -818,6 +822,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6617248888777553093, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: stage
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617248888777553093, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: nextStage
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6617248888777553093, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
@@ -2989,6 +2997,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6617248888777553093, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: nextStage
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6617248888777553093, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: sceneName
       value: Stage4
       objectReference: {fileID: 0}
@@ -3112,6 +3124,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8473667940747019427, guid: 186011d9432309a47805ba553927dea3, type: 3}
       propertyPath: stage
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8473667940747019427, guid: 186011d9432309a47805ba553927dea3, type: 3}
+      propertyPath: currentStage
       value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []

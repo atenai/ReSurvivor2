@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 /// <summary>
 /// インゲーム全体のマネージャー
@@ -60,12 +61,12 @@ public class InGameManager : MonoBehaviour
 	}
 
 	/// <summary>ミッションエンドのコンピューター名</summary>
-	EnumManager.ComputerTYPE endComputerName;
+	EnumManager.StageTYPE endComputerStageNumber;
 	/// <summary>ミッションエンドのコンピューター名のプロパティ </summary>
-	public EnumManager.ComputerTYPE EndComputerName
+	public EnumManager.StageTYPE EndComputerStageNumber
 	{
-		get { return endComputerName; }
-		set { endComputerName = value; }
+		get { return endComputerStageNumber; }
+		set { endComputerStageNumber = value; }
 	}
 
 	[Tooltip("現在のミッションID")]
@@ -82,6 +83,20 @@ public class InGameManager : MonoBehaviour
 	bool missionID1 = false;
 	[Tooltip("ミッションID2のクリア状況")]
 	bool missionID2 = false;
+
+	List<MasterMissionEntity> cachedMissionList = new List<MasterMissionEntity>();
+	/// <summary>
+	/// マスターデータのミッション情報をキャッシュするリスト
+	/// MissionSerchList()でマスターデータのミッション情報を検索して取得する際に、
+	/// 毎回マスターデータから検索するのではなく、
+	/// 一度検索して取得したミッション情報をこのリストにキャッシュしておいて、
+	/// 次回以降の検索でこのリストから取得するようにすることで、パフォーマンスの向上を図ることができる。
+	/// </summary>
+	public List<MasterMissionEntity> CachedMissionList
+	{
+		get { return cachedMissionList; }
+		set { cachedMissionList = value; }
+	}
 
 	[Header("キーアイテム")]
 
@@ -117,6 +132,24 @@ public class InGameManager : MonoBehaviour
 		isGameOverLoaded = false;
 		isGameClearTriggered = false;
 		isGameOverTriggered = false;
+	}
+
+	/// <summary>
+	/// ミッション検索リスト
+	/// </summary>
+	/// <param name="computerTYPE">コンピュータータイプ</param>
+	/// <returns>ミッションリスト</returns>
+	public List<MasterMissionEntity> MissionSerchList(EnumManager.StageTYPE currentComputerStageNumber)
+	{
+		//引数のコンピュータータイプからマスターデータのミッション情報を照らし合わせて、StartComputerStageNumberと一致したコンピュータータイプの情報を全て取得する
+		List<MasterMissionEntity> result = MasterMission.Sheet1.Where((MasterMissionEntity excelLine) => excelLine.StartComputerStageNumber == currentComputerStageNumber).ToList();
+
+		if (result == null)
+		{
+			Debug.Log("<color=red>マスターデータのミッション情報がnull</color>");
+		}
+
+		return result;
 	}
 
 	/// <summary>
@@ -315,12 +348,12 @@ public class InGameManager : MonoBehaviour
 	/// <summary>
 	/// ミッション
 	/// </summary>
-	/// <param name="computerName"></param>
-	public void Mission(EnumManager.ComputerTYPE computerName)
+	/// <param name="currentComputerStageNumber">現在のコンピューターステージ番号</param>
+	public void Mission(EnumManager.StageTYPE currentComputerStageNumber)
 	{
 		if (isMissionActive == true)//ミッション中の場合
 		{
-			if (computerName == EndComputerName)
+			if (currentComputerStageNumber == EndComputerStageNumber)
 			{
 				Debug.Log("<color=blue>ミッション終了</color>");
 				MissionResult();

@@ -14,37 +14,12 @@ public class Computer : MonoBehaviour
 	readonly string TAG_PLAYER = "Player";
 
 	[Tooltip("このコンピューターの名前")]
-	[SerializeField] EnumManager.ComputerTYPE thisComputerName;
+	[SerializeField] EnumManager.StageTYPE thisComputerStageNumber;
 
 	/// <summary>
 	/// プレイヤーがコンピューターにヒットしているかどうか
 	/// </summary>
 	bool isPlayerHit = false;
-
-	void Start()
-	{
-		ScreenUI.SingletonInstance.InitComputerMenuMissionList(MissionSerchList());
-		ScreenUI.SingletonInstance.DestroyAllMailListContent();
-		ScreenUI.SingletonInstance.AddMailListContent();
-	}
-
-	/// <summary>
-	/// ミッション検索リスト
-	/// </summary>
-	/// <param name="computerTYPE">コンピュータータイプ</param>
-	/// <returns>ミッションリスト</returns>
-	List<MasterMissionEntity> MissionSerchList()
-	{
-		//引数のコンピュータータイプからマスターデータのミッション情報を照らし合わせて、StartComputerNameと一致したコンピュータータイプの情報を全て取得する
-		List<MasterMissionEntity> result = InGameManager.SingletonInstance.MasterMission.Sheet1.Where((MasterMissionEntity excelLine) => excelLine.StartComputerName == thisComputerName).ToList();
-
-		if (result == null)
-		{
-			Debug.Log("<color=red>マスターデータのミッション情報がnull</color>");
-		}
-
-		return result;
-	}
 
 	void OnTriggerEnter(Collider collider)
 	{
@@ -94,7 +69,7 @@ public class Computer : MonoBehaviour
 			if (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("XInput Y"))
 			{
 				Debug.Log("<color=green>Fキー</color>");
-				InGameManager.SingletonInstance.Mission(thisComputerName);
+				InGameManager.SingletonInstance.Mission(thisComputerStageNumber);
 			}
 		}
 	}
