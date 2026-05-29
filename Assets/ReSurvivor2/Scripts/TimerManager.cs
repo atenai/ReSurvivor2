@@ -85,7 +85,7 @@ public class TimerManager : MonoBehaviour
 	/// </summary>
 	void UpdateTimerSystem()
 	{
-		if (InGameManager.SingletonInstance.IsMissionActive == false)
+		if (MissionManager.SingletonInstance.IsMissionActive == false)
 		{
 			Player.SingletonInstance.PlayerUI.TextTimer.text = "--" + ":" + "--";
 			return;

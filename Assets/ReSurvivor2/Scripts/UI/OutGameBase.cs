@@ -26,9 +26,16 @@ public class OutGameBase : MonoBehaviour
 
 	protected void Start()
 	{
+		//インゲームのマネージャークラスを必ずデストロイする
+
 		if (InGameManager.SingletonInstance != null)
 		{
 			Destroy(InGameManager.SingletonInstance.gameObject);
+		}
+
+		if (MissionManager.SingletonInstance != null)
+		{
+			Destroy(MissionManager.SingletonInstance.gameObject);
 		}
 
 		if (Player.SingletonInstance != null)

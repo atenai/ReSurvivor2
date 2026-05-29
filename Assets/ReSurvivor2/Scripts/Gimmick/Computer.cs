@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 /// <summary>
 /// コンピューター
@@ -25,7 +24,7 @@ public class Computer : MonoBehaviour
 	{
 		if (collider.gameObject.CompareTag(TAG_PLAYER))
 		{
-			Debug.Log("<color=yellow>プレイヤーがコンピューターに近づいた</color>");
+			//Debug.Log("<color=yellow>プレイヤーがコンピューターに近づいた</color>");
 			isPlayerHit = true;
 		}
 		else
@@ -38,7 +37,7 @@ public class Computer : MonoBehaviour
 	{
 		if (collider.gameObject.CompareTag(TAG_PLAYER))
 		{
-			Debug.Log("<color=yellow>プレイヤーがコンピューターから離れた</color>");
+			//Debug.Log("<color=yellow>プレイヤーがコンピューターから離れた</color>");
 			isPlayerHit = false;
 		}
 	}
@@ -68,8 +67,8 @@ public class Computer : MonoBehaviour
 		{
 			if (Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("XInput Y"))
 			{
-				Debug.Log("<color=green>Fキー</color>");
-				InGameManager.SingletonInstance.Mission(thisComputerStageNumber);
+				//Debug.Log("<color=green>Fキー</color>");
+				MissionManager.SingletonInstance.Mission(thisComputerStageNumber);
 			}
 		}
 	}

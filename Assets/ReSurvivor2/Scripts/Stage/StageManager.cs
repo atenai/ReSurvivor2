@@ -42,14 +42,12 @@ public class StageManager : MonoBehaviour
 	void CreateMission()
 	{
 		//ミッションの作成
-		InGameManager.SingletonInstance.CachedMissionList = InGameManager.SingletonInstance.MissionSerchList(currentStage);
-		foreach (MasterMissionEntity mission in InGameManager.SingletonInstance.CachedMissionList)
+		MissionManager.SingletonInstance.CachedMissionList = MissionManager.SingletonInstance.MissionSerchList(currentStage);
+		foreach (MasterMissionEntity mission in MissionManager.SingletonInstance.CachedMissionList)
 		{
-			UnityEngine.Debug.Log("<color=cyan>ミッションスタートコンピューター番号：" + mission.StartComputerStageNumber + "</color>");
-			UnityEngine.Debug.Log("<color=cyan>ミッションエンドコンピューター番号：" + mission.EndComputerStageNumber + "</color>");
 			UnityEngine.Debug.Log("<color=cyan>ミッション名：" + mission.MissionName + "</color>");
 		}
-		ScreenUI.SingletonInstance.InitComputerMenuMissionList(InGameManager.SingletonInstance.CachedMissionList);
+		ScreenUI.SingletonInstance.InitComputerMenuMissionList(MissionManager.SingletonInstance.CachedMissionList);
 		ScreenUI.SingletonInstance.DestroyAllMailListContent();
 		ScreenUI.SingletonInstance.AddMailListContent();
 	}

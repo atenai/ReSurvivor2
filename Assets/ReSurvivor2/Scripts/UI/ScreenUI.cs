@@ -769,9 +769,9 @@ public class ScreenUI : MonoBehaviour
 		if (result != null)
 		{
 			Debug.Log("<color=red>ミッション開始</color>");
-			InGameManager.SingletonInstance.IsMissionActive = true;
-			InGameManager.SingletonInstance.CurrentMissionID = result.MissionID;
-			InGameManager.SingletonInstance.EndComputerStageNumber = result.EndComputerStageNumber;
+			MissionManager.SingletonInstance.IsMissionActive = true;
+			MissionManager.SingletonInstance.CurrentMissionID = result.MissionID;
+			MissionManager.SingletonInstance.EndComputerStageNumber = result.EndComputerStageNumber;
 			TimerManager.SingletonInstance.Minute = result.Minute;
 			TimerManager.SingletonInstance.Seconds = result.Seconds;
 			MapUI.SetEndComputerStageNumber((int)result.EndComputerStageNumber);

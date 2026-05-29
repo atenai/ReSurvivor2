@@ -33,7 +33,7 @@ public class Mail : MonoBehaviour
 	void ClearCheck()
 	{
 		//ミッションがクリアされているかどうかの判定
-		if (InGameManager.SingletonInstance.IsMissionIDClearCheck(this.missionID) == true)
+		if (MissionManager.SingletonInstance.IsMissionIDClearCheck(this.missionID) == true)
 		{
 			//クリアされている場合はチェックマークを表示する
 			imageClearCheckIcon.gameObject.SetActive(true);

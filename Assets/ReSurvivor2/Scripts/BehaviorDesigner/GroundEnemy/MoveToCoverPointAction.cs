@@ -114,6 +114,10 @@ public class MoveToCoverPointAction : Action
 				continue;
 			}
 
+			if (Player.SingletonInstance == null)
+			{
+				return this.transform.position;
+			}
 			Vector3 dir = coverPoint.Position - Player.SingletonInstance.transform.position;
 			float dist = dir.magnitude;
 			if (dist <= 0.01f)
@@ -165,6 +169,10 @@ public class MoveToCoverPointAction : Action
 				continue;
 			}
 
+			if (Player.SingletonInstance == null)
+			{
+				return this.transform.position;
+			}
 			//プレイヤーとカバーポイントの距離を出してその距離が最も遠いなら中身を実行する
 			float distanceScore = Vector3.Distance(Player.SingletonInstance.transform.position, coverPoint.Position);
 			if (bestScore < distanceScore)
