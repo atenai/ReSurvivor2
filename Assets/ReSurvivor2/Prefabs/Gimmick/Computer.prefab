@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 1720802725622359936}
   - component: {fileID: 4097582183300492018}
   m_Layer: 0
-  m_Name: Virtual Camera
+  m_Name: Computer Virtual Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c1cd5bc107daae4d9f9a8333123910b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisComputerName: 0
+  thisComputerStageNumber: 0
 --- !u!114 &1607760214320404728
 MonoBehaviour:
   m_ObjectHideFlags: 0

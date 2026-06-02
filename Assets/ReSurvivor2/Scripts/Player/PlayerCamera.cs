@@ -221,18 +221,9 @@ public class PlayerCamera : MonoBehaviour
 			CameraAimMove();
 		}
 
-		if (Player.SingletonInstance.IsDash == true)
-		{
-			//徐々に子カメラをダッシュ時の位置にする
-			childMainLongDistanceVirtualCamera.Priority = longDistanceCameraHighPriority;
-		}
-		else
-		{
-			//徐々に子カメラを通常時の位置にする
-			childMainLongDistanceVirtualCamera.Priority = longDistanceCameraNormalPriority;
-		}
+		CameraDash();
 
-		UpdateCameraOcclusion();
+		CameraOcclusion();
 
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
@@ -362,14 +353,38 @@ public class PlayerCamera : MonoBehaviour
 		}
 	}
 
-	void UpdateCameraOcclusion()
+	/// <summary>
+	/// ダッシュカメラ 
+	/// </summary>
+	void CameraDash()
+	{
+		if (Player.SingletonInstance.IsDash == true)
+		{
+			//徐々に子カメラをダッシュ時の位置にする
+			childMainLongDistanceVirtualCamera.Priority = longDistanceCameraHighPriority;
+		}
+		else
+		{
+			//徐々に子カメラを通常時の位置にする
+			childMainLongDistanceVirtualCamera.Priority = longDistanceCameraNormalPriority;
+		}
+	}
+
+	/// <summary>
+	/// 閉塞カメラ
+	/// </summary>
+	void CameraOcclusion()
 	{
 		if (Player.SingletonInstance == null)
 		{
 			return;
 		}
 
-		childMainShortDistanceVirtualCamera.Priority = shortDistanceCameraNormalPriority;
+		if (Player.SingletonInstance.IsAim == true)
+		{
+			childMainShortDistanceVirtualCamera.Priority = shortDistanceCameraNormalPriority;
+			return;
+		}
 
 		Vector3 origin = childMainMidDistanceVirtualCamera.transform.position;
 		Vector3 targetPosition = Player.SingletonInstance.transform.position;
@@ -381,7 +396,6 @@ public class PlayerCamera : MonoBehaviour
 		}
 
 		Ray ray = new Ray(origin, direction.normalized);
-		Debug.DrawLine(origin, targetPosition, Color.cyan, 0.1f);
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, distance) == true)
 		{
