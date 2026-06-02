@@ -23,8 +23,23 @@ public class PlayerCamera : MonoBehaviour
 
 	[Header("カメラ")]
 
-	[Tooltip("子のメインカメラ")]
-	[SerializeField] CinemachineVirtualCamera childMainDashMoveVirtualCamera;
+	[Tooltip("子の近距離カメラ")]
+	[SerializeField] CinemachineVirtualCamera childMainShortDistanceVirtualCamera;
+
+	[Tooltip("子の中距離カメラ")]
+	[SerializeField] CinemachineVirtualCamera childMainMidDistanceVirtualCamera;
+
+	[Tooltip("子の遠距離カメラ")]
+	[SerializeField] CinemachineVirtualCamera childMainLongDistanceVirtualCamera;
+
+	[Tooltip("近距離カメラの高優先度")]
+	int shortDistanceCameraHighPriority = 200;
+	[Tooltip("近距離カメラの通常優先度")]
+	int shortDistanceCameraNormalPriority = 50;
+	[Tooltip("遠距離カメラの高優先度")]
+	int longDistanceCameraHighPriority = 150;
+	[Tooltip("遠距離カメラの通常優先度")]
+	int longDistanceCameraNormalPriority = 10;
 
 	[Tooltip("X軸のカメラの回転スピード")]
 	[Range(50, 150)][SerializeField] float normalCameraSpeedX = 100;
@@ -209,13 +224,15 @@ public class PlayerCamera : MonoBehaviour
 		if (Player.SingletonInstance.IsDash == true)
 		{
 			//徐々に子カメラをダッシュ時の位置にする
-			childMainDashMoveVirtualCamera.Priority = 200;
+			childMainLongDistanceVirtualCamera.Priority = longDistanceCameraHighPriority;
 		}
 		else
 		{
 			//徐々に子カメラを通常時の位置にする
-			childMainDashMoveVirtualCamera.Priority = 10;
+			childMainLongDistanceVirtualCamera.Priority = longDistanceCameraNormalPriority;
 		}
+
+		UpdateCameraOcclusion();
 
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
@@ -343,6 +360,55 @@ public class PlayerCamera : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	void UpdateCameraOcclusion()
+	{
+		if (Player.SingletonInstance == null)
+		{
+			return;
+		}
+
+		childMainShortDistanceVirtualCamera.Priority = shortDistanceCameraNormalPriority;
+
+		Vector3 origin = childMainMidDistanceVirtualCamera.transform.position;
+		Vector3 targetPosition = Player.SingletonInstance.transform.position;
+		Vector3 direction = targetPosition - origin;
+		float distance = direction.magnitude;
+		if (distance <= 0.001f)
+		{
+			return;
+		}
+
+		Ray ray = new Ray(origin, direction.normalized);
+		Debug.DrawLine(origin, targetPosition, Color.cyan, 0.1f);
+		RaycastHit hit;
+		if (Physics.Raycast(ray, out hit, distance) == true)
+		{
+			if (IsPlayerCollider(hit.collider) == false)
+			{
+				childMainShortDistanceVirtualCamera.Priority = shortDistanceCameraHighPriority;
+				Debug.Log("<color=cyan>カメラのオクルージョン発生</color>");
+				return;
+			}
+		}
+
+		childMainShortDistanceVirtualCamera.Priority = shortDistanceCameraNormalPriority;
+	}
+
+	bool IsPlayerCollider(Collider collider)
+	{
+		if (collider == null || Player.SingletonInstance == null)
+		{
+			return false;
+		}
+
+		if (collider.gameObject == Player.SingletonInstance.gameObject)
+		{
+			return true;
+		}
+
+		return collider.transform.IsChildOf(Player.SingletonInstance.transform);
 	}
 
 	void OnGUI()
