@@ -182,6 +182,18 @@ public class GroundEnemyShotGunFireAction : Action
 
 				EffectManager.SingletonInstance.ImpactEffect(hit);
 			}
+			//CreateBulletEffect(this.transform, direction);
 		}
+	}
+
+	/// <summary>
+	/// 弾道オブジェクトを生成して飛ばす
+	/// </summary>
+	/// <param name="gunTransform"></param>
+	/// <param name="direction"></param>
+	void CreateBulletEffect(Transform gunTransform, Vector3 direction)
+	{
+		GameObject newBullet = UnityEngine.Object.Instantiate(groundEnemy.BulletEffect, gunTransform.position, gunTransform.rotation);
+		newBullet.GetComponent<Rigidbody>().AddForce(direction * 5000.0f);
 	}
 }

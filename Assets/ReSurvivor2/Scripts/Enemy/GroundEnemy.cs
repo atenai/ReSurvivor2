@@ -135,6 +135,10 @@ public class GroundEnemy : Target
 	[SerializeField] ParticleGroupPlayer afterFireSmoke;
 	//↑アセットストアのプログラム↑//
 
+	[UnityEngine.Tooltip("弾道オブジェクト")]
+	[SerializeField] GameObject bulletEffect;
+	public GameObject BulletEffect => bulletEffect;
+
 	[Tooltip("現在のグレネード数")]
 	int currentGrenade = 3;
 	public int CurrentGrenade
