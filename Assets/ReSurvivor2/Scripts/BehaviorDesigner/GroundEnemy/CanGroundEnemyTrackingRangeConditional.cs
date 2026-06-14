@@ -11,7 +11,7 @@ public class CanGroundEnemyTrackingRangeConditional : Conditional
     GroundEnemy groundEnemy;
 
     [UnityEngine.Tooltip("エネミーの追跡範囲")]
-    [SerializeField] float range = 40.0f;
+    float range = 60.0f;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
