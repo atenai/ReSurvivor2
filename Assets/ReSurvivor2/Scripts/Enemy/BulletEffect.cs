@@ -16,6 +16,10 @@ public class BulletEffect : MonoBehaviour
 
     void OnTriggerEnter(Collider hit)
     {
-        Destroy(this.gameObject);
+        // TODO:多分銃のエフェクトやサウンドオブジェクトにあたって消えている...どうするか...
+        if (hit.gameObject.CompareTag("Player"))
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

@@ -25,6 +25,8 @@ public class GroundEnemyAssaultRifleFireAction : Action
 	int rapidFire = 3;
 	[UnityEngine.Tooltip("連射回数のカウント")]
 	int fireCount = 0;
+	[UnityEngine.Tooltip("弾道エフェクトのスピード")]
+	float bulletEffectSpeed = 100.0f;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
@@ -170,6 +172,7 @@ public class GroundEnemyAssaultRifleFireAction : Action
 		Vector3 direction = this.transform.forward;
 		direction = Quaternion.AngleAxis(Random.Range(-randomAngle, randomAngle), this.transform.up) * direction;
 		direction = Quaternion.AngleAxis(Random.Range(-randomAngle, randomAngle), this.transform.right) * direction;
+		direction.Normalize();
 
 		Ray ray = new Ray(pos, direction);
 		Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
@@ -191,17 +194,18 @@ public class GroundEnemyAssaultRifleFireAction : Action
 
 			EffectManager.SingletonInstance.ImpactEffect(hit);
 		}
-		//CreateBulletEffect(this.transform, direction);
+		CreateBulletEffect(pos, direction);
 	}
 
 	/// <summary>
 	/// 弾道オブジェクトを生成して飛ばす
 	/// </summary>
-	/// <param name="gunTransform"></param>
+	/// <param name="gunPosition"></param>
 	/// <param name="direction"></param>
-	void CreateBulletEffect(Transform gunTransform, Vector3 direction)
+	void CreateBulletEffect(Vector3 gunPosition, Vector3 direction)
 	{
-		GameObject newBullet = UnityEngine.Object.Instantiate(groundEnemy.BulletEffect, gunTransform.position, gunTransform.rotation);
-		newBullet.GetComponent<Rigidbody>().AddForce(direction * 5000.0f);
+		GameObject newBullet = UnityEngine.Object.Instantiate(groundEnemy.BulletEffect, gunPosition, Quaternion.LookRotation(direction));
+		Rigidbody rb = newBullet.GetComponent<Rigidbody>();
+		rb.velocity = direction * bulletEffectSpeed;
 	}
 }
