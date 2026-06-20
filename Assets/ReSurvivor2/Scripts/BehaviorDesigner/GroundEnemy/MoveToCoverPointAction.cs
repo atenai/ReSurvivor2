@@ -89,7 +89,7 @@ public class MoveToCoverPointAction : Action
 	/// <returns>カバーポイントの座標位置を返す</returns>
 	Vector3 FindBestCover()
 	{
-		if (groundEnemy.CoverPoints == null || groundEnemy.CoverPoints.Length == 0)
+		if (groundEnemy.GetCoverPoints == null || groundEnemy.GetCoverPoints.Length == 0)
 		{
 			return this.transform.position;
 		}
@@ -97,7 +97,7 @@ public class MoveToCoverPointAction : Action
 		float bestDistance = float.MaxValue;
 		CoverPoint bestCoverPoint = null;
 
-		foreach (var coverPoint in groundEnemy.CoverPoints)
+		foreach (var coverPoint in groundEnemy.GetCoverPoints)
 		{
 			//カバーポイントが無いなら中身を実行する
 			if (coverPoint == null)
@@ -152,7 +152,7 @@ public class MoveToCoverPointAction : Action
 
 		// フォールバック: プレイヤーからもっとも遠いカバーポイントを使う
 		float bestScore = -1f;
-		foreach (var coverPoint in groundEnemy.CoverPoints)
+		foreach (var coverPoint in groundEnemy.GetCoverPoints)
 		{
 			//カバーポイントが無いなら中身を実行する
 			if (coverPoint == null)

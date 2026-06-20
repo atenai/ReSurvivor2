@@ -30,19 +30,19 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	public Canvas Canvas => canvas;
 
 	[Tooltip("ナビメッシュ")]
-	[SerializeField] protected NavMeshAgent navMeshAgent;
+	[SerializeField] NavMeshAgent navMeshAgent;
 	public NavMeshAgent NavMeshAgent => navMeshAgent;
 
 	[Tooltip("物理")]
-	[SerializeField] protected Rigidbody enemyRigidbody;
+	[SerializeField] Rigidbody enemyRigidbody;
 	public Rigidbody Rigidbody => enemyRigidbody;
 
 	[Tooltip("カバーポイント")]
 	CoverPoint[] coverPoints;
-	public CoverPoint[] CoverPoints
+	public CoverPoint[] GetCoverPoints => coverPoints;
+	public void SetCoverPoints(CoverPoint[] coverPoints)
 	{
-		get { return coverPoints; }
-		set { coverPoints = value; }
+		this.coverPoints = coverPoints;
 	}
 
 	[Tooltip("プレイヤー")]
@@ -53,9 +53,9 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 
 	[Header("センサーコライダー用の変数")]
 	[SerializeField] ColliderEventHandler[] colliders = default;
-	private bool[] hits;
+	bool[] hits;
 	public bool GetHit(int index) => hits[index];
-	private Collider hitCollider = null;
+	Collider hitCollider = null;
 	public Collider HitCollider => hitCollider;
 
 	[Header("レイキャスト")]
@@ -447,12 +447,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 		Debug.Log("<color=red>当たった！ : " + collision.gameObject.name + "</color>");
 		if (isChase == true)
 		{
-			if (collision.gameObject.CompareTag("Player") == true)
-			{
-				//Debug.Log("<color=red>プレイヤー爆発！</color>");
-			}
-
-			Explosion();
+			hp.Damage(HitPoint.MaxHp);
 		}
 	}
 
@@ -481,20 +476,26 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 			var mineExplosionCollider = Instantiate(mineExplosionColliderPrefab, this.gameObject.transform.position, Quaternion.identity);
 			Destroy(mineExplosionCollider, mineExplosionColliderDestroyTime);
 		}
-
-		Destroy(this.gameObject);
 	}
 
+	/// <summary>
+	/// ダメージエフェクト
+	/// </summary>
 	public void DamageEffect()
 	{
 		SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.MaxHp;
 	}
 
+	/// <summary>
+	/// 死んだ際の処理
+	/// </summary>
 	public void Dead()
 	{
+		EnemyManager.SingletonInstance.RemoveEnemyList(this.transform.parent.gameObject);
 		//敵マーカー削除
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 		Explosion();
+		Destroy(this.transform.parent.gameObject);
 	}
 
 	/// <summary>

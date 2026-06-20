@@ -16,4 +16,15 @@ public interface IEnemy
     /// </summary>
     /// <returns></returns>
     public HitPoint GetHitPoint();
+
+    /// <summary>
+	/// 追跡開始
+	/// </summary>
+	public void ChaseOn();
+
+    /// <summary>
+    /// カバーポイントをセット
+    /// </summary>
+    /// <param name="coverPoints">カバーポイント</param>
+    public void SetCoverPoints(CoverPoint[] coverPoints);
 }

@@ -3464,11 +3464,23 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: enemies.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
       propertyPath: enemys.Array.data[0]
       value: 
       objectReference: {fileID: 5913209110479388582}
     - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
       propertyPath: enemys.Array.data[1]
+      value: 
+      objectReference: {fileID: 142389612}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: enemies.Array.data[0]
+      value: 
+      objectReference: {fileID: 5913209110479388582}
+    - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}
+      propertyPath: enemies.Array.data[1]
       value: 
       objectReference: {fileID: 142389612}
     - target: {fileID: 557118630215943498, guid: 7da152a8de5127942a4e7ffb275d7e28, type: 3}

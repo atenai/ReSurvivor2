@@ -12,8 +12,7 @@ public class EnemyManager : MonoBehaviour
 	/// <summary>シングルトンのプロパティ</summary>
 	public static EnemyManager SingletonInstance => singletonInstance;
 
-	[SerializeField] GroundEnemy[] groundEnemies;
-	[SerializeField] FlyingEnemy[] flyingEnemies;
+	[SerializeField] List<GameObject> enemies;
 
 	[Tooltip("カバーポイント")]
 	[SerializeField] CoverPoint[] coverPoints;
@@ -41,9 +40,9 @@ public class EnemyManager : MonoBehaviour
 	/// </summary>
 	void SetCoverPoint()
 	{
-		foreach (GroundEnemy groundEnemy in groundEnemies)
+		foreach (GameObject enemy in enemies)
 		{
-			groundEnemy.CoverPoints = coverPoints;
+			enemy.GetComponentInChildren<IEnemy>().SetCoverPoints(coverPoints);
 		}
 	}
 
@@ -54,14 +53,21 @@ public class EnemyManager : MonoBehaviour
 	{
 		Debug.Log("<color=yellow>EnemyManagerのAllChaseOn()</color>");
 
-		foreach (GroundEnemy groundEnemy in groundEnemies)
+		foreach (GameObject enemy in enemies)
 		{
-			groundEnemy.ChaseOn();
+			enemy.GetComponentInChildren<IEnemy>().ChaseOn();
 		}
+	}
 
-		foreach (FlyingEnemy flyingEnemy in flyingEnemies)
+	/// <summary>
+	/// リストからエネミーの削除
+	/// </summary>
+	/// <param name="enemy"></param>
+	public void RemoveEnemyList(GameObject enemy)
+	{
+		if (enemies.Contains(enemy))
 		{
-			flyingEnemy.ChaseOn();
+			enemies.Remove(enemy);
 		}
 	}
 }

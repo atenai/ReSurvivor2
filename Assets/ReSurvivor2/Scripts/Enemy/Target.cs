@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 
+/// <summary>
+/// 的
+/// </summary>
 public class Target : MonoBehaviour, IEnemy
 {
 	[UnityEngine.Tooltip("HP")]
@@ -26,19 +29,19 @@ public class Target : MonoBehaviour, IEnemy
 	public Canvas Canvas => canvas;
 
 	[Tooltip("ナビメッシュ")]
-	[SerializeField] protected NavMeshAgent navMeshAgent;
+	[SerializeField] NavMeshAgent navMeshAgent;
 	public NavMeshAgent NavMeshAgent => navMeshAgent;
 
 	[Tooltip("物理")]
-	[SerializeField] protected Rigidbody enemyRigidbody;
+	[SerializeField] Rigidbody enemyRigidbody;
 	public Rigidbody Rigidbody => enemyRigidbody;
 
 	[Tooltip("カバーポイント")]
 	CoverPoint[] coverPoints;
-	public CoverPoint[] CoverPoints
+	public CoverPoint[] GetCoverPoints => coverPoints;
+	public void SetCoverPoints(CoverPoint[] coverPoints)
 	{
-		get { return coverPoints; }
-		set { coverPoints = value; }
+		this.coverPoints = coverPoints;
 	}
 
 	void Awake()
@@ -92,6 +95,14 @@ public class Target : MonoBehaviour, IEnemy
 	}
 
 	/// <summary>
+	/// 追跡開始
+	/// </summary>
+	public void ChaseOn()
+	{
+		Debug.Log("<color=red>GroundEnemyのChaseOn()</color>");
+	}
+
+	/// <summary>
 	/// ゲームオブジェクトが非表示またはデストロイされた際に呼ばれる
 	/// </summary>
 	void OnDisable()
@@ -107,16 +118,23 @@ public class Target : MonoBehaviour, IEnemy
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 	}
 
+	/// <summary>
+	/// ダメージエフェクト
+	/// </summary>
 	public void DamageEffect()
 	{
 		sliderHp.value = (float)hp.CurrentHp / (float)HitPoint.MaxHp;
 	}
 
+	/// <summary>
+	/// 死んだ際の処理
+	/// </summary>
 	public void Dead()
 	{
+		EnemyManager.SingletonInstance.RemoveEnemyList(this.transform.parent.gameObject);
 		//敵マーカー削除
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
-		Destroy(this.gameObject);
+		Destroy(this.transform.parent.gameObject);
 	}
 
 	/// <summary>
