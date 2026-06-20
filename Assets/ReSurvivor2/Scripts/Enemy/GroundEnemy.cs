@@ -216,15 +216,9 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	void Start()
 	{
-		Init();
 		//Debug.Log("<color=orange>GroundEnemyクラスを初期化</color>");
 		InitSensorCollider();
 		Initialize();
-	}
-
-	void Init()
-	{
-
 	}
 
 	/// <summary>
