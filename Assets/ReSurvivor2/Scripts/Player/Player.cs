@@ -69,12 +69,10 @@ public class Player : MonoBehaviour
 	[Tooltip("プレイヤーのリスポーンポイントの回転")]
 	Quaternion respawnRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
-	[Tooltip("現在のHP")]
-	float currentHp = 100.0f;
-	public float CurrentHp => currentHp;
-	[Tooltip("HPの最大値")]
-	float maxHp = 100.0f;
-	public float MaxHp => maxHp;
+	[Tooltip("HP")]
+	HitPoint hp = new HitPoint();
+	public HitPoint HP => hp;
+
 	[Tooltip("現在のスタミナ")]
 	float currentStamina = 1000.0f;
 	public float CurrentStamina => currentStamina;
@@ -170,7 +168,7 @@ public class Player : MonoBehaviour
 	public void Save()
 	{
 		Debug.Log("<color=cyan>プレイヤーセーブ</color>");
-		ES3.Save<float>("Hp", currentHp);
+		ES3.Save<float>("Hp", hp.CurrentHp);
 		ES3.Save<float>("Stamina", currentStamina);
 		ES3.Save<int>("ArmorPlate", currentArmorPlate);
 		ES3.Save<int>("Food", currentFood);
@@ -191,7 +189,7 @@ public class Player : MonoBehaviour
 		isFirstLoad = false;
 
 		//Debug.Log("<color=purple>プレイヤーロード</color>");
-		currentHp = ES3.Load<float>("Hp", maxHp);
+		hp.CurrentHp = ES3.Load<float>("Hp", hp.MaxHp);
 		//Debug.Log("<color=purple>HP : " + currentHp + "</color>");
 		currentStamina = ES3.Load<float>("Stamina", maxStamina);
 		//Debug.Log("<color=purple>スタミナ : " + currentStamina + "</color>");
@@ -241,8 +239,9 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void InitHP()
 	{
+		hp.Init(DamageEffect, InGameManager.SingletonInstance.GameOver, UseArmorPlate, HealEffect);
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", currentHp / maxHp);
+		Shader.SetGlobalFloat("HP", hp.CurrentHp / hp.MaxHp);
 	}
 
 	/// <summary>
@@ -352,7 +351,7 @@ public class Player : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("XInput RB"))
 		{
-			Heal();
+			hp.Heal();
 		}
 
 		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("XInput LB"))
@@ -583,7 +582,7 @@ public class Player : MonoBehaviour
 	{
 		if (collision.collider.tag == "Enemy" || collision.collider.tag == "FlyingEnemy" || collision.collider.tag == "GroundEnemy")
 		{
-			TakeDamage(10.0f);
+			hp.Damage(10.0f);
 			CameraShaker();
 		}
 	}
@@ -597,47 +596,39 @@ public class Player : MonoBehaviour
 	}
 
 	/// <summary>
-	/// ダメージ処理
+	/// ダメージエフェクト
 	/// </summary>
-	public void TakeDamage(float amount)
+	public void DamageEffect()
 	{
-		currentHp = currentHp - amount;
-		//Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
-		playerUI.SliderHp.value = (float)currentHp / (float)maxHp;
+		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)hp.MaxHp;
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", currentHp / maxHp);
+		Shader.SetGlobalFloat("HP", hp.CurrentHp / hp.MaxHp);
 		isDamage = true;
-
-		if (currentHp <= 0.0f)
-		{
-			//ゲームオーバー処理
-			InGameManager.SingletonInstance.GameOver();
-		}
 	}
 
 	/// <summary>
-	/// HPを回復
+	/// 回復エフェクト
 	/// </summary>
-	void Heal()
+	public void HealEffect()
+	{
+		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)hp.MaxHp;
+		//シェーダーへ値を渡す（これだけでOK）
+		Shader.SetGlobalFloat("HP", hp.CurrentHp / hp.MaxHp);
+		isHpHeal = true;
+	}
+
+	/// <summary>
+	/// アーマープレートを使用
+	/// </summary>
+	public void UseArmorPlate()
 	{
 		if (currentArmorPlate <= 0)
 		{
 			return;
 		}
 
-		if (maxHp <= currentHp)
-		{
-			return;
-		}
-
 		currentArmorPlate = currentArmorPlate - 1;
 		playerUI.TextArmorPlate.text = currentArmorPlate.ToString();
-
-		currentHp = maxHp;
-		playerUI.SliderHp.value = (float)currentHp / (float)maxHp;
-		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", currentHp / maxHp);
-		isHpHeal = true;
 	}
 
 	/// <summary>

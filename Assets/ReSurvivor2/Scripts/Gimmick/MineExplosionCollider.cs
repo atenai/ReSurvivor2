@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
+/// <summary>
+/// 地雷の爆発コライダー
+/// </summary>
 public class MineExplosionCollider : MonoBehaviour
 {
 	[Tooltip("ダメージ")]
@@ -49,7 +52,7 @@ public class MineExplosionCollider : MonoBehaviour
 
 		if (collider.CompareTag("Player"))
 		{
-			Player.SingletonInstance.TakeDamage(damage);
+			Player.SingletonInstance.HP.Damage(damage);
 			Shaker();
 		}
 	}

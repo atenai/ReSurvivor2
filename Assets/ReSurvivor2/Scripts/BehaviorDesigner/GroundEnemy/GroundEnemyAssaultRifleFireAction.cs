@@ -185,7 +185,7 @@ public class GroundEnemyAssaultRifleFireAction : Action
 				Player player = hit.transform.GetComponent<Player>();
 				if (player != null)
 				{
-					player.TakeDamage(Damage);
+					player.HP.Damage(Damage);
 					groundEnemy.Shaker();
 					//敵マーカー表示
 					EnemyIndicatorManager.SingletonInstance.ShowIndicator(groundEnemy);
