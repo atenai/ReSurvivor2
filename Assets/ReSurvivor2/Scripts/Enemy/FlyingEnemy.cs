@@ -2,12 +2,49 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.AI;
 
 /// <summary>
 /// 空中敵
 /// </summary>
-public class FlyingEnemy : Target
+public class FlyingEnemy : MonoBehaviour, IEnemy
 {
+	[UnityEngine.Tooltip("HP")]
+	HitPoint hp = new HitPoint();
+	public HitPoint GetHitPoint()
+	{
+		return hp;
+	}
+
+	[UnityEngine.Tooltip("HPバー")]
+	[SerializeField] Slider sliderHp;
+	public Slider SliderHp
+	{
+		get { return sliderHp; }
+		set { sliderHp = value; }
+	}
+
+	[UnityEngine.Tooltip("キャンバス")]
+	[SerializeField] Canvas canvas;
+	public Canvas Canvas => canvas;
+
+	[Tooltip("ナビメッシュ")]
+	[SerializeField] protected NavMeshAgent navMeshAgent;
+	public NavMeshAgent NavMeshAgent => navMeshAgent;
+
+	[Tooltip("物理")]
+	[SerializeField] protected Rigidbody enemyRigidbody;
+	public Rigidbody Rigidbody => enemyRigidbody;
+
+	[Tooltip("カバーポイント")]
+	CoverPoint[] coverPoints;
+	public CoverPoint[] CoverPoints
+	{
+		get { return coverPoints; }
+		set { coverPoints = value; }
+	}
+
 	[Tooltip("プレイヤー")]
 	GameObject targetPlayer;
 	public GameObject TargetPlayer => targetPlayer;
@@ -114,12 +151,30 @@ public class FlyingEnemy : Target
 		set { isMoveBack = value; }
 	}
 
+	void Awake()
+	{
+		InitNavMeshAgent();
+	}
+
+	/// <summary>
+	/// Awake で NavMeshAgent の自動位置・回転更新をオフにする。
+	/// これにより NavMeshAgent は経路計算（path, steeringTarget 等）専用になり、
+	/// 実際の移動は Rigidbody.velocity によって行う。
+	/// </summary>
+	void InitNavMeshAgent()
+	{
+		// NavMeshAgent による Transform 更新を無効化
+		navMeshAgent.updatePosition = false;
+		navMeshAgent.updateRotation = false;
+		// ★これが重要：Agent内部位置を物理位置に同期
+		navMeshAgent.nextPosition = enemyRigidbody.position;
+	}
+
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	new void Start()
+	void Start()
 	{
-		base.Start();
 		//Debug.Log("<color=orange>FlyingEnemyクラスを初期化</color>");
 		InitSensorCollider();
 		Initialize();
@@ -144,6 +199,12 @@ public class FlyingEnemy : Target
 	/// </summary>
 	void Initialize()
 	{
+		hp.Init(DamageEffect, Dead);
+		sliderHp.value = 1;
+		hp.CurrentHp = hp.MaxHp;
+		//敵マーカー作成
+		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
+
 		if (targetPlayer == null)
 		{
 			targetPlayer = Player.SingletonInstance.gameObject;
@@ -178,9 +239,9 @@ public class FlyingEnemy : Target
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	new void Update()
+	void Update()
 	{
-		base.Update();
+		RotCanvas();
 		Eyesight();
 		Alert();
 		ChasePlayer();
@@ -192,11 +253,19 @@ public class FlyingEnemy : Target
 	}
 
 	/// <summary>
+	/// 常にキャンバスをメインカメラの方を向かせる
+	/// </summary>
+	void RotCanvas()
+	{
+		canvas.transform.rotation = Camera.main.transform.rotation;
+	}
+
+	/// <summary>
 	/// レイキャストによる視界
 	/// </summary>
 	void Eyesight()
 	{
-		if (IsDead == true)
+		if (hp.IsDead == true)
 		{
 			return;
 		}
@@ -259,7 +328,7 @@ public class FlyingEnemy : Target
 	/// </summary>
 	void Alert()
 	{
-		if (IsDead == false)
+		if (hp.IsDead == false)
 		{
 			alert.gameObject.SetActive(isChase);
 		}
@@ -416,25 +485,40 @@ public class FlyingEnemy : Target
 		Destroy(this.gameObject);
 	}
 
-	/// <summary>
-	/// ダメージ処理
-	/// </summary>
-	/// <param name="amount">ダメージ量</param>
-	public override void TakeDamage(float amount)
+	public void DamageEffect()
 	{
-		//Debug.Log("<color=green>FlyingEnemyのTakeDamage()</color>");
-		CurrentHp = CurrentHp - amount;
-		//Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
-		SliderHp.value = (float)CurrentHp / (float)MaxHp;
-		if (CurrentHp <= 0.0f)
-		{
-			//敵マーカー削除
-			EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
-			IsDead = true;
-			Explosion();
-		}
+		SliderHp.value = (float)hp.CurrentHp / (float)hp.MaxHp;
+	}
 
-		//地雷の攻撃を受けた際にチェイス状態になってほしくは無い
-		//ChaseOn();
+	public void Dead()
+	{
+		//敵マーカー削除
+		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
+		Explosion();
+	}
+
+	/// <summary>
+	/// ゲームオブジェクトが非表示またはデストロイされた際に呼ばれる
+	/// </summary>
+	void OnDisable()
+	{
+		DeleteIndicator();
+	}
+
+	/// <summary>
+	/// 敵マーカー削除
+	/// </summary>
+	void DeleteIndicator()
+	{
+		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
+	}
+
+	/// <summary>
+	/// エネミーのゲームオブジェクトを取得する
+	/// </summary>
+	/// <returns></returns>
+	public GameObject GetEnemyGameObject()
+	{
+		return this.gameObject;
 	}
 }

@@ -4,12 +4,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using Knife.Effects;
 using Cinemachine;
+using UnityEngine.UI;
+using UnityEngine.AI;
 
 /// <summary>
 /// 地上敵
 /// </summary>
-public class GroundEnemy : Target
+public class GroundEnemy : MonoBehaviour, IEnemy
 {
+	[UnityEngine.Tooltip("HP")]
+	HitPoint hp = new HitPoint();
+	public HitPoint GetHitPoint()
+	{
+		return hp;
+	}
+
+	[UnityEngine.Tooltip("HPバー")]
+	[SerializeField] Slider sliderHp;
+	public Slider SliderHp
+	{
+		get { return sliderHp; }
+		set { sliderHp = value; }
+	}
+
+	[UnityEngine.Tooltip("キャンバス")]
+	[SerializeField] Canvas canvas;
+	public Canvas Canvas => canvas;
+
+	[Tooltip("ナビメッシュ")]
+	[SerializeField] protected NavMeshAgent navMeshAgent;
+	public NavMeshAgent NavMeshAgent => navMeshAgent;
+
+	[Tooltip("物理")]
+	[SerializeField] protected Rigidbody enemyRigidbody;
+	public Rigidbody Rigidbody => enemyRigidbody;
+
+	[Tooltip("カバーポイント")]
+	CoverPoint[] coverPoints;
+	public CoverPoint[] CoverPoints
+	{
+		get { return coverPoints; }
+		set { coverPoints = value; }
+	}
+
 	[Tooltip("プレイヤー")]
 	GameObject targetPlayer;
 	public GameObject TargetPlayer => targetPlayer;
@@ -155,15 +192,39 @@ public class GroundEnemy : Target
 	[SerializeField] DebugEnemy debugEnemy;
 	public DebugEnemy DebugEnemy => debugEnemy;
 
+	void Awake()
+	{
+		InitNavMeshAgent();
+	}
+
+	/// <summary>
+	/// Awake で NavMeshAgent の自動位置・回転更新をオフにする。
+	/// これにより NavMeshAgent は経路計算（path, steeringTarget 等）専用になり、
+	/// 実際の移動は Rigidbody.velocity によって行う。
+	/// </summary>
+	void InitNavMeshAgent()
+	{
+		// NavMeshAgent による Transform 更新を無効化
+		navMeshAgent.updatePosition = false;
+		navMeshAgent.updateRotation = false;
+		// ★これが重要：Agent内部位置を物理位置に同期
+		navMeshAgent.nextPosition = enemyRigidbody.position;
+	}
+
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	new void Start()
+	void Start()
 	{
-		base.Start();
+		Init();
 		//Debug.Log("<color=orange>GroundEnemyクラスを初期化</color>");
 		InitSensorCollider();
 		Initialize();
+	}
+
+	void Init()
+	{
+
 	}
 
 	/// <summary>
@@ -185,6 +246,12 @@ public class GroundEnemy : Target
 	/// </summary>
 	void Initialize()
 	{
+		hp.Init(DamageEffect, Dead);
+		sliderHp.value = 1;
+		hp.CurrentHp = hp.MaxHp;
+		//敵マーカー作成
+		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
+
 		if (targetPlayer == null)
 		{
 			targetPlayer = Player.SingletonInstance.gameObject;
@@ -263,9 +330,9 @@ public class GroundEnemy : Target
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	new void Update()
+	void Update()
 	{
-		base.Update();
+		RotCanvas();
 		GroundCheck();
 
 		if (Eyesight() == true)
@@ -284,11 +351,19 @@ public class GroundEnemy : Target
 	}
 
 	/// <summary>
+	/// 常にキャンバスをメインカメラの方を向かせる
+	/// </summary>
+	void RotCanvas()
+	{
+		canvas.transform.rotation = Camera.main.transform.rotation;
+	}
+
+	/// <summary>
 	/// レイキャストによる視界
 	/// </summary>
 	public bool Eyesight()
 	{
-		if (IsDead == true)
+		if (hp.IsDead == true)
 		{
 			return false;
 		}
@@ -351,7 +426,7 @@ public class GroundEnemy : Target
 	/// </summary>
 	void Alert()
 	{
-		if (IsDead == false)
+		if (hp.IsDead == false)
 		{
 			alert.gameObject.SetActive(isChase);
 		}
@@ -384,7 +459,7 @@ public class GroundEnemy : Target
 	{
 		string[] debugTexts = new string[11];
 
-		debugTexts[10] = "IsDead : " + IsDead.ToString();
+		debugTexts[10] = "IsDead : " + hp.IsDead.ToString();
 
 		debugTexts[9] = "currentGrenade : " + currentGrenade.ToString();
 
@@ -493,25 +568,15 @@ public class GroundEnemy : Target
 		//Debug.Log("<color=green>OnTriggerExitHitGround</color>");
 	}
 
-	/// <summary>
-	/// ダメージ処理
-	/// </summary>
-	/// <param name="amount">ダメージ量</param>
-	public override void TakeDamage(float amount)
+	public void DamageEffect()
 	{
-		Debug.Log("<color=green>GroundEnemyのTakeDamage()</color>");
-		CurrentHp = CurrentHp - amount;
-		//Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
-		SliderHp.value = (float)CurrentHp / (float)MaxHp;
-		if (CurrentHp <= 0.0f)
-		{
-			//敵マーカー削除
-			EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
-			IsDead = true;
-		}
+		SliderHp.value = (float)hp.CurrentHp / (float)hp.MaxHp;
+	}
 
-		//地雷の攻撃を受けた際にチェイス状態になってほしくは無い
-		//ChaseOn();
+	public void Dead()
+	{
+		//敵マーカー削除
+		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 	}
 
 	/// <summary>
@@ -619,9 +684,21 @@ public class GroundEnemy : Target
 		cinemachineImpulseSource.GenerateImpulse();
 	}
 
+	/// <summary>
+	/// ゲームオブジェクトが非表示またはデストロイされた際に呼ばれる
+	/// </summary>
 	void OnDisable()
 	{
+		DeleteIndicator();
 		UnInitRigidbody();
+	}
+
+	/// <summary>
+	/// 敵マーカー削除
+	/// </summary>
+	void DeleteIndicator()
+	{
+		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 	}
 
 	/// <summary>
@@ -631,5 +708,14 @@ public class GroundEnemy : Target
 	void UnInitRigidbody()
 	{
 		enemyRigidbody.velocity = Vector3.zero;
+	}
+
+	/// <summary>
+	/// エネミーのゲームオブジェクトを取得する
+	/// </summary>
+	/// <returns></returns>
+	public GameObject GetEnemyGameObject()
+	{
+		return this.gameObject;
 	}
 }

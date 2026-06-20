@@ -10,7 +10,7 @@ using DG.Tweening;
 public class Indicator : MonoBehaviour
 {
 	[SerializeField] Image image;
-	//インジケーターの対象とするターゲットゲームオブジェクトのTransform
+	/// <summary> インジケーターの対象とするターゲットゲームオブジェクトのTransform</summary>
 	Transform target;
 	Sequence sequence;
 

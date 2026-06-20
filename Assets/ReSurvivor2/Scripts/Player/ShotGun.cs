@@ -165,10 +165,10 @@ public class ShotGun : GunBase
 				if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy") || hit.collider.gameObject.CompareTag("Mine") || hit.collider.gameObject.CompareTag("Grenade"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 				{
 					//ダメージ
-					Target target = hit.transform.GetComponent<Target>();
-					if (target != null)
+					IEnemy enemy = hit.transform.GetComponent<IEnemy>();
+					if (enemy != null)
 					{
-						target.TakeDamage(damage);
+						enemy.GetHitPoint().Damage(damage);
 					}
 
 					//着弾した物体を後ろに押す

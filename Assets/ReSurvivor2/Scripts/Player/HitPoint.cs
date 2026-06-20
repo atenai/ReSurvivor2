@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// ヒットポイント
+/// </summary>
 public class HitPoint
 {
     [Tooltip("現在のHP")]
@@ -25,8 +28,8 @@ public class HitPoint
 
     [Tooltip("ダメージ中間処理")]
     UnityAction damageProcessing = null;
-    [Tooltip("ダメージ修了処理")]
-    UnityAction damageFinalize = null;
+    [Tooltip("死亡処理処理")]
+    UnityAction dead = null;
 
     [Tooltip("ヒール中間処理")]
     UnityAction healProcessing = null;
@@ -38,10 +41,17 @@ public class HitPoint
 
     }
 
-    public void Init(UnityAction damageProcessing, UnityAction damageFinalize, UnityAction healProcessing, UnityAction healFinalize)
+    /// <summary>
+    /// 初期化処理
+    /// </summary>
+    /// <param name="damageProcessing">ダメージ中間処理</param>
+    /// <param name="dead">死亡処理処理</param>
+    /// <param name="healProcessing">ヒール中間処理</param>
+    /// <param name="healFinalize">ヒール修了処理</param>
+    public void Init(UnityAction damageProcessing = null, UnityAction dead = null, UnityAction healProcessing = null, UnityAction healFinalize = null)
     {
         this.damageProcessing = damageProcessing;
-        this.damageFinalize = damageFinalize;
+        this.dead = dead;
         this.healProcessing = healProcessing;
         this.healFinalize = healFinalize;
     }
@@ -58,7 +68,7 @@ public class HitPoint
 
         if (IsDead == true)
         {
-            damageFinalize?.Invoke();
+            dead?.Invoke();
         }
     }
 

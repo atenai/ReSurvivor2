@@ -4,21 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 
-public class Target : MonoBehaviour
+public class Target : MonoBehaviour, IEnemy
 {
-	[UnityEngine.Tooltip("現在のHP")]
-	float currentHp = 100.0f;
-	public float CurrentHp
+	[UnityEngine.Tooltip("HP")]
+	HitPoint hp = new HitPoint();
+	public HitPoint GetHitPoint()
 	{
-		get { return currentHp; }
-		set { currentHp = value; }
+		return hp;
 	}
-	[UnityEngine.Tooltip("最大HP")]
-	[SerializeField] float maxHp = 100.0f;
-	public float MaxHp => maxHp;
-	[UnityEngine.Tooltip("キャンバス")]
-	[SerializeField] Canvas canvas;
-	public Canvas Canvas => canvas;
+
 	[UnityEngine.Tooltip("HPバー")]
 	[SerializeField] Slider sliderHp;
 	public Slider SliderHp
@@ -26,17 +20,15 @@ public class Target : MonoBehaviour
 		get { return sliderHp; }
 		set { sliderHp = value; }
 	}
-	[UnityEngine.Tooltip("死んだか？")]
-	bool isDead = false;
-	public bool IsDead
-	{
-		get { return isDead; }
-		set { isDead = value; }
-	}
+
+	[UnityEngine.Tooltip("キャンバス")]
+	[SerializeField] Canvas canvas;
+	public Canvas Canvas => canvas;
 
 	[Tooltip("ナビメッシュ")]
 	[SerializeField] protected NavMeshAgent navMeshAgent;
 	public NavMeshAgent NavMeshAgent => navMeshAgent;
+
 	[Tooltip("物理")]
 	[SerializeField] protected Rigidbody enemyRigidbody;
 	public Rigidbody Rigidbody => enemyRigidbody;
@@ -68,19 +60,34 @@ public class Target : MonoBehaviour
 		navMeshAgent.nextPosition = enemyRigidbody.position;
 	}
 
-	public void Start()
+	void Start()
 	{
 		//Debug.Log("<color=orange>Targetクラスを初期化</color>");
+		Initialize();
+	}
+
+	/// <summary>
+	/// リスポーンした際の初期化処理
+	/// </summary>
+	void Initialize()
+	{
+		hp.Init(DamageEffect, Dead);
 		sliderHp.value = 1;
-		currentHp = maxHp;
-		isDead = false;
+		hp.CurrentHp = hp.MaxHp;
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
 	}
 
-	public void Update()
+	void Update()
 	{
-		//常にキャンバスをメインカメラの方を向かせる
+		RotCanvas();
+	}
+
+	/// <summary>
+	/// 常にキャンバスをメインカメラの方を向かせる
+	/// </summary>
+	void RotCanvas()
+	{
 		canvas.transform.rotation = Camera.main.transform.rotation;
 	}
 
@@ -89,25 +96,35 @@ public class Target : MonoBehaviour
 	/// </summary>
 	void OnDisable()
 	{
-		//敵マーカー削除
-		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
+		DeleteIndicator();
 	}
 
 	/// <summary>
-	/// ダメージ処理
+	/// 敵マーカー削除
 	/// </summary>
-	/// <param name="amount">ダメージ量</param>
-	public virtual void TakeDamage(float amount)
+	void DeleteIndicator()
 	{
-		Debug.Log("<color=orange>TargetのTakeDamage()</color>");
-		currentHp = currentHp - amount;
-		//Debug.Log("<color=orange>currentHp : " + currentHp + "</color>");
-		sliderHp.value = (float)currentHp / (float)maxHp;
-		if (currentHp <= 0.0f)
-		{
-			//敵マーカー削除
-			EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
-			Destroy(this.gameObject);
-		}
+		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
+	}
+
+	public void DamageEffect()
+	{
+		sliderHp.value = (float)hp.CurrentHp / (float)hp.MaxHp;
+	}
+
+	public void Dead()
+	{
+		//敵マーカー削除
+		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
+		Destroy(this.gameObject);
+	}
+
+	/// <summary>
+	/// エネミーのゲームオブジェクトを取得する
+	/// </summary>
+	/// <returns></returns>
+	public GameObject GetEnemyGameObject()
+	{
+		return this.gameObject;
 	}
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using Unity.VisualScripting;
 
 /// <summary>
 /// 地雷の爆発コライダー
@@ -43,10 +44,10 @@ public class MineExplosionCollider : MonoBehaviour
 		if (collider.gameObject.CompareTag("Enemy") || collider.gameObject.CompareTag("FlyingEnemy") || collider.gameObject.CompareTag("GroundEnemy"))
 		{
 			//ダメージ
-			Target target = collider.transform.GetComponent<Target>();
-			if (target != null)
+			IEnemy enemy = collider.transform.GetComponent<IEnemy>();
+			if (enemy != null)
 			{
-				target.TakeDamage(damage);
+				enemy.GetHitPoint().Damage(damage);
 			}
 		}
 

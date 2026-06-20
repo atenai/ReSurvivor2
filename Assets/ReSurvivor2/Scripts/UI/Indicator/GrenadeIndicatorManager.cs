@@ -37,7 +37,7 @@ public class GrenadeIndicatorManager : MonoBehaviour
 		//既に含まれていたら追加しない
 		if (!indicatorDic.ContainsKey(grenade))
 		{
-			GameObject gameObject = (GameObject)Instantiate(grenadeIndicatorPrefab, this.transform.position, Quaternion.identity);
+			GameObject gameObject = Instantiate(grenadeIndicatorPrefab, this.transform.position, Quaternion.identity);
 			gameObject.transform.SetParent(this.transform);
 			indicatorDic.Add(grenade, gameObject);
 			gameObject.GetComponent<Indicator>().Init(grenade.gameObject);

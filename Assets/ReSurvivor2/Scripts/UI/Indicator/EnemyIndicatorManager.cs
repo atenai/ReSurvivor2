@@ -11,9 +11,10 @@ public class EnemyIndicatorManager : MonoBehaviour
 	static EnemyIndicatorManager singletonInstance = null;
 	/// <summary>シングルトンのプロパティ</summary>
 	public static EnemyIndicatorManager SingletonInstance => singletonInstance;
+
 	[Tooltip("敵位置表示マーカー用プレハブ")]
-	[SerializeField] private GameObject indicatorPrefab;
-	private Dictionary<Target, GameObject> indicatorDic = new Dictionary<Target, GameObject>();   //マーカー一覧
+	[SerializeField] GameObject indicatorPrefab;
+	Dictionary<IEnemy, GameObject> indicatorDic = new Dictionary<IEnemy, GameObject>();
 
 	/// <summary>
 	/// 初期化処理
@@ -35,17 +36,17 @@ public class EnemyIndicatorManager : MonoBehaviour
 	/// <summary>
 	/// 敵表示マーカー生成
 	/// </summary>
-	/// <param name="target">ターゲット</param>
+	/// <param name="enemy">ターゲット</param>
 	/// <returns>生成された敵表示マーカー</returns>
-	public void InstanceIndicator(Target target)
+	public void InstanceIndicator(IEnemy enemy)
 	{
 		//既に含まれていたら追加しない
-		if (!indicatorDic.ContainsKey(target))
+		if (!indicatorDic.ContainsKey(enemy))
 		{
-			GameObject gameObject = (GameObject)Instantiate(indicatorPrefab, this.transform.position, Quaternion.identity);
+			GameObject gameObject = Instantiate(indicatorPrefab, this.transform.position, Quaternion.identity);
 			gameObject.transform.SetParent(this.transform);
-			indicatorDic.Add(target, gameObject);
-			gameObject.GetComponent<Indicator>().Init(target.gameObject);
+			indicatorDic.Add(enemy, gameObject);
+			gameObject.GetComponent<Indicator>().Init(enemy.GetEnemyGameObject());
 		}
 		else
 		{
@@ -56,26 +57,26 @@ public class EnemyIndicatorManager : MonoBehaviour
 	/// <summary>
 	/// 敵表示マーカーの削除
 	/// </summary>
-	/// <param name="target">ターゲット</param>
-	public void DeleteIndicator(Target target)
+	/// <param name="enemy">ターゲット</param>
+	public void DeleteIndicator(IEnemy enemy)
 	{
-		if (indicatorDic.ContainsKey(target))
+		if (indicatorDic.ContainsKey(enemy))
 		{
-			GameObject gameObject = indicatorDic[target];
+			GameObject gameObject = indicatorDic[enemy];
 			Destroy(gameObject);
-			indicatorDic.Remove(target);
+			indicatorDic.Remove(enemy);
 		}
 	}
 
 	/// <summary>
 	/// 敵表示マーカーを表示する
 	/// </summary>
-	/// <param name="target"></param>
-	public void ShowIndicator(Target target)
+	/// <param name="enemy"></param>
+	public void ShowIndicator(IEnemy enemy)
 	{
-		if (indicatorDic.ContainsKey(target))
+		if (indicatorDic.ContainsKey(enemy))
 		{
-			GameObject gameObject = indicatorDic[target];
+			GameObject gameObject = indicatorDic[enemy];
 			gameObject.GetComponent<Indicator>().Show();
 		}
 	}
