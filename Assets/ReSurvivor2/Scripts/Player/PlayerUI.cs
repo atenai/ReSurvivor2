@@ -84,7 +84,8 @@ public class PlayerUI : MonoBehaviour
 	/// </summary>
 	void InitHP()
 	{
-		sliderHp.value = (float)Player.SingletonInstance.HP.CurrentHp / (float)Player.SingletonInstance.HP.MaxHp;
+		Debug.Log("InitHP");
+		sliderHp.value = (float)Player.SingletonInstance.HP.CurrentHp / (float)HitPoint.MaxHp;
 	}
 
 	/// <summary>

@@ -11,7 +11,7 @@ using UnityEngine.AI;
 public class FlyingEnemy : MonoBehaviour, IEnemy
 {
 	[UnityEngine.Tooltip("HP")]
-	HitPoint hp = new HitPoint();
+	HitPoint hp;
 	public HitPoint GetHitPoint()
 	{
 		return hp;
@@ -199,9 +199,9 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	void Initialize()
 	{
-		hp.Init(DamageEffect, Dead);
+		hp = new HitPoint(HitPoint.MaxHp);
+		hp.Initialize(DamageEffect, Dead);
 		sliderHp.value = 1;
-		hp.CurrentHp = hp.MaxHp;
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
 
@@ -487,7 +487,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 
 	public void DamageEffect()
 	{
-		SliderHp.value = (float)hp.CurrentHp / (float)hp.MaxHp;
+		SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.MaxHp;
 	}
 
 	public void Dead()

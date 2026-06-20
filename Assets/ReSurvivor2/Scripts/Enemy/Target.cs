@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Target : MonoBehaviour, IEnemy
 {
 	[UnityEngine.Tooltip("HP")]
-	HitPoint hp = new HitPoint();
+	HitPoint hp;
 	public HitPoint GetHitPoint()
 	{
 		return hp;
@@ -71,9 +71,9 @@ public class Target : MonoBehaviour, IEnemy
 	/// </summary>
 	void Initialize()
 	{
-		hp.Init(DamageEffect, Dead);
+		hp = new HitPoint(HitPoint.MaxHp);
+		hp.Initialize(DamageEffect, Dead);
 		sliderHp.value = 1;
-		hp.CurrentHp = hp.MaxHp;
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
 	}
@@ -109,7 +109,7 @@ public class Target : MonoBehaviour, IEnemy
 
 	public void DamageEffect()
 	{
-		sliderHp.value = (float)hp.CurrentHp / (float)hp.MaxHp;
+		sliderHp.value = (float)hp.CurrentHp / (float)HitPoint.MaxHp;
 	}
 
 	public void Dead()

@@ -10,15 +10,10 @@ public class HitPoint
 {
     [Tooltip("現在のHP")]
     float currentHp = 100.0f;
-    public float CurrentHp
-    {
-        get { return currentHp; }
-        set { currentHp = value; }
-    }
+    public float CurrentHp => currentHp;
 
     [Tooltip("HPの最大値")]
-    float maxHp = 100.0f;
-    public float MaxHp => maxHp;
+    public static readonly float MaxHp = 100.0f;
 
     [Tooltip("死んだか？")]
     public bool IsDead
@@ -36,9 +31,9 @@ public class HitPoint
     [Tooltip("ヒール修了処理")]
     UnityAction healFinalize = null;
 
-    public HitPoint()
+    public HitPoint(float initHP)
     {
-
+        currentHp = initHP;
     }
 
     /// <summary>
@@ -48,7 +43,7 @@ public class HitPoint
     /// <param name="dead">死亡処理処理</param>
     /// <param name="healProcessing">ヒール中間処理</param>
     /// <param name="healFinalize">ヒール修了処理</param>
-    public void Init(UnityAction damageProcessing = null, UnityAction dead = null, UnityAction healProcessing = null, UnityAction healFinalize = null)
+    public void Initialize(UnityAction damageProcessing = null, UnityAction dead = null, UnityAction healProcessing = null, UnityAction healFinalize = null)
     {
         this.damageProcessing = damageProcessing;
         this.dead = dead;
@@ -77,14 +72,14 @@ public class HitPoint
 	/// </summary>
 	public void Heal()
     {
-        if (maxHp <= currentHp)
+        if (MaxHp <= currentHp)
         {
             return;
         }
 
         healProcessing?.Invoke();
 
-        currentHp = maxHp;
+        currentHp = MaxHp;
 
         healFinalize?.Invoke();
     }

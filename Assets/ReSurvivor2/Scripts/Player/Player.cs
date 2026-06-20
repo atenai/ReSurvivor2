@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
 	Quaternion respawnRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
 	[Tooltip("HP")]
-	HitPoint hp = new HitPoint();
+	HitPoint hp;
 	public HitPoint HP => hp;
 
 	[Tooltip("現在のスタミナ")]
@@ -189,8 +189,9 @@ public class Player : MonoBehaviour
 		isFirstLoad = false;
 
 		//Debug.Log("<color=purple>プレイヤーロード</color>");
-		hp.CurrentHp = ES3.Load<float>("Hp", hp.MaxHp);
-		//Debug.Log("<color=purple>HP : " + currentHp + "</color>");
+		float loadHp = ES3.Load<float>("Hp", HitPoint.MaxHp);
+		hp = new HitPoint(loadHp);
+		Debug.Log("<color=purple>HP : " + hp.CurrentHp + "</color>");
 		currentStamina = ES3.Load<float>("Stamina", maxStamina);
 		//Debug.Log("<color=purple>スタミナ : " + currentStamina + "</color>");
 		currentArmorPlate = ES3.Load<int>("ArmorPlate", 2);
@@ -239,9 +240,9 @@ public class Player : MonoBehaviour
 	/// </summary>
 	void InitHP()
 	{
-		hp.Init(DamageEffect, InGameManager.SingletonInstance.GameOver, UseArmorPlate, HealEffect);
+		hp.Initialize(DamageEffect, InGameManager.SingletonInstance.GameOver, UseArmorPlate, HealEffect);
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", hp.CurrentHp / hp.MaxHp);
+		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.MaxHp);
 	}
 
 	/// <summary>
@@ -600,9 +601,9 @@ public class Player : MonoBehaviour
 	/// </summary>
 	public void DamageEffect()
 	{
-		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)hp.MaxHp;
+		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.MaxHp;
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", hp.CurrentHp / hp.MaxHp);
+		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.MaxHp);
 		isDamage = true;
 	}
 
@@ -611,9 +612,9 @@ public class Player : MonoBehaviour
 	/// </summary>
 	public void HealEffect()
 	{
-		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)hp.MaxHp;
+		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.MaxHp;
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", hp.CurrentHp / hp.MaxHp);
+		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.MaxHp);
 		isHpHeal = true;
 	}
 
