@@ -173,7 +173,7 @@ public class GroundEnemyShotGunFireAction : Action
 				if (hit.collider.gameObject.CompareTag("Player"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 				{
 					//ダメージ
-					Player player = hit.transform.GetComponent<Player>();
+					var player = hit.transform.GetComponent<PlayerManager>();
 					if (player != null)
 					{
 						player.HP.Damage(Damage);

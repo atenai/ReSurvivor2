@@ -65,7 +65,7 @@ public partial class SROptions
 	[Sort(0)]
 	public void AcquireArmorPlate()
 	{
-		Player.SingletonInstance.AcquireArmorPlate();
+		PlayerManager.SingletonInstance.AcquireArmorPlate();
 	}
 
 	[Category("Player")]
@@ -73,7 +73,7 @@ public partial class SROptions
 	[Sort(1)]
 	public void IncreaseMaxArmorPlate()
 	{
-		Player.SingletonInstance.IncreaseMaxArmorPlate();
+		PlayerManager.SingletonInstance.IncreaseMaxArmorPlate();
 	}
 
 	[Category("Player")]
@@ -81,7 +81,7 @@ public partial class SROptions
 	[Sort(2)]
 	public void AcquireFood()
 	{
-		Player.SingletonInstance.AcquireFood();
+		PlayerManager.SingletonInstance.AcquireFood();
 	}
 
 	[Category("Player")]
@@ -89,7 +89,7 @@ public partial class SROptions
 	[Sort(3)]
 	public void IncreaseMaxFood()
 	{
-		Player.SingletonInstance.IncreaseMaxFood();
+		PlayerManager.SingletonInstance.IncreaseMaxFood();
 	}
 
 	[Category("Player")]

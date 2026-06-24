@@ -83,7 +83,7 @@ public class EnemyRayCast : MonoBehaviour
 
     void Start()
     {
-        target = Player.SingletonInstance.gameObject;
+        target = PlayerManager.SingletonInstance.gameObject;
     }
 
 

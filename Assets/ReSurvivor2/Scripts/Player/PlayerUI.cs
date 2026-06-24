@@ -85,7 +85,7 @@ public class PlayerUI : MonoBehaviour
 	void InitHP()
 	{
 		Debug.Log("InitHP");
-		sliderHp.value = (float)Player.SingletonInstance.HP.CurrentHp / (float)HitPoint.Max_Hp;
+		sliderHp.value = (float)PlayerManager.SingletonInstance.HP.CurrentHp / (float)HitPoint.Max_Hp;
 	}
 
 	/// <summary>
@@ -93,7 +93,7 @@ public class PlayerUI : MonoBehaviour
 	/// </summary> 
 	void InitStamina()
 	{
-		sliderStamina.value = (float)Player.SingletonInstance.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
+		sliderStamina.value = (float)PlayerManager.SingletonInstance.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
 	}
 
 	/// <summary>
@@ -101,7 +101,7 @@ public class PlayerUI : MonoBehaviour
 	/// </summary> 
 	void StartTextArmorPlate()
 	{
-		textArmorPlate.text = Player.SingletonInstance.CurrentArmorPlate.ToString();
+		textArmorPlate.text = PlayerManager.SingletonInstance.CurrentArmorPlate.ToString();
 	}
 
 	/// <summary>
@@ -109,7 +109,7 @@ public class PlayerUI : MonoBehaviour
 	/// </summary> 
 	void StartTextFood()
 	{
-		textFood.text = Player.SingletonInstance.CurrentFood.ToString();
+		textFood.text = PlayerManager.SingletonInstance.CurrentFood.ToString();
 	}
 
 	/// <summary>
@@ -166,12 +166,12 @@ public class PlayerUI : MonoBehaviour
 	/// </summary> 
 	void UpdateUITransform()
 	{
-		if (Player.SingletonInstance.IsAim == false)
+		if (PlayerManager.SingletonInstance.IsAim == false)
 		{
 			//常にキャンバスをメインカメラの方を向かせる
 			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
-			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(Player.SingletonInstance.transform.position.x, Player.SingletonInstance.transform.position.y + PlayerCamera.SingletonInstance.NormalUpPos, Player.SingletonInstance.transform.position.z);
+			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManager.SingletonInstance.transform.position.x, PlayerManager.SingletonInstance.transform.position.y + PlayerCamera.SingletonInstance.NormalUpPos, PlayerManager.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
 			const float Normal_Scale = 0.6f;
 			const float Normal_RotY = 0.4f;
@@ -181,12 +181,12 @@ public class PlayerUI : MonoBehaviour
 			imageBG.transform.localRotation = Quaternion.Euler(0.0f, Normal_RotY, 0.0f);
 			imageBG.transform.localPosition = new Vector3(Normal_RightPos, Normal_UpPos, 0.0f);
 		}
-		else if (Player.SingletonInstance.IsAim == true)
+		else if (PlayerManager.SingletonInstance.IsAim == true)
 		{
 			//常にキャンバスをメインカメラの方を向かせる
 			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
-			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(Player.SingletonInstance.transform.position.x, Player.SingletonInstance.transform.position.y + PlayerCamera.SingletonInstance.AimUpPos, Player.SingletonInstance.transform.position.z);
+			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManager.SingletonInstance.transform.position.x, PlayerManager.SingletonInstance.transform.position.y + PlayerCamera.SingletonInstance.AimUpPos, PlayerManager.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
 			const float Aim_Scale = 0.2f;
 			const float Aim_RotY = 0.2f;

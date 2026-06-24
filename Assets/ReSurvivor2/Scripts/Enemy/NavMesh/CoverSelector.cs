@@ -49,12 +49,12 @@ public class CoverSelector : MonoBehaviour
 			float distToEnemy = Vector3.Distance(transform.position, cp.Position);
 			if (distToEnemy > maxDistance) continue;
 
-			Vector3 dir = cp.Position - Player.SingletonInstance.transform.position;
+			Vector3 dir = cp.Position - PlayerManager.SingletonInstance.transform.position;
 			float dist = dir.magnitude;
 			if (dist <= 0.01f) continue;
 
 			RaycastHit hit;
-			if (Physics.Raycast(Player.SingletonInstance.transform.position, dir.normalized, out hit, dist, obstructionMask))
+			if (Physics.Raycast(PlayerManager.SingletonInstance.transform.position, dir.normalized, out hit, dist, obstructionMask))
 			{
 				// プレイヤーからカバーポイントへの途中で何かに当たる -> 視線が遮られている
 				if (hit.collider != null && hit.collider.gameObject != cp.gameObject)
@@ -81,7 +81,7 @@ public class CoverSelector : MonoBehaviour
 			if (cp == null) continue;
 			float dE = Vector3.Distance(transform.position, cp.Position);
 			if (dE > maxDistance) continue;
-			float dP = Vector3.Distance(Player.SingletonInstance.transform.position, cp.Position);
+			float dP = Vector3.Distance(PlayerManager.SingletonInstance.transform.position, cp.Position);
 			if (dP > bestScore)
 			{
 				bestScore = dP;

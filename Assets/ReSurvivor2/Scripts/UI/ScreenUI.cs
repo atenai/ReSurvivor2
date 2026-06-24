@@ -215,7 +215,7 @@ public class ScreenUI : MonoBehaviour
 	/// </summary>
 	void Crosshair()
 	{
-		if (Player.SingletonInstance.IsAim == false)
+		if (PlayerManager.SingletonInstance.IsAim == false)
 		{
 			imageCrosshair.gameObject.SetActive(false);
 		}
@@ -257,17 +257,17 @@ public class ScreenUI : MonoBehaviour
 	/// </summary> 
 	void UpdateDamageEffect()
 	{
-		if (Player.SingletonInstance.IsDamage == true)
+		if (PlayerManager.SingletonInstance.IsDamage == true)
 		{
 			imageDamage.color = new Color(0.5f, 0f, 0f, 0.5f);
 		}
 
-		if (Player.SingletonInstance.IsDamage == false)
+		if (PlayerManager.SingletonInstance.IsDamage == false)
 		{
 			imageDamage.color = Color.Lerp(imageDamage.color, Color.clear, Time.deltaTime);
 		}
 
-		Player.SingletonInstance.IsDamage = false;
+		PlayerManager.SingletonInstance.IsDamage = false;
 	}
 
 	/// <summary>
@@ -275,17 +275,17 @@ public class ScreenUI : MonoBehaviour
 	/// </summary> 
 	void UpdateHpHealEffect()
 	{
-		if (Player.SingletonInstance.IsHpHeal == true)
+		if (PlayerManager.SingletonInstance.IsHpHeal == true)
 		{
 			imageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
 		}
 
-		if (Player.SingletonInstance.IsHpHeal == false)
+		if (PlayerManager.SingletonInstance.IsHpHeal == false)
 		{
 			imageHpHeal.color = Color.Lerp(imageHpHeal.color, Color.clear, Time.deltaTime);
 		}
 
-		Player.SingletonInstance.IsHpHeal = false;
+		PlayerManager.SingletonInstance.IsHpHeal = false;
 	}
 
 	/// <summary>
@@ -293,17 +293,17 @@ public class ScreenUI : MonoBehaviour
 	/// </summary> 
 	void UpdateStaminaHealEffect()
 	{
-		if (Player.SingletonInstance.IsStaminaHeal == true)
+		if (PlayerManager.SingletonInstance.IsStaminaHeal == true)
 		{
 			imageStaminaHeal.color = new Color(0.5f, 0.5f, 0f, 0.5f);
 		}
 
-		if (Player.SingletonInstance.IsStaminaHeal == false)
+		if (PlayerManager.SingletonInstance.IsStaminaHeal == false)
 		{
 			imageStaminaHeal.color = Color.Lerp(imageStaminaHeal.color, Color.clear, Time.deltaTime);
 		}
 
-		Player.SingletonInstance.IsStaminaHeal = false;
+		PlayerManager.SingletonInstance.IsStaminaHeal = false;
 	}
 
 	/// <summary>

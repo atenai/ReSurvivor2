@@ -93,7 +93,7 @@ public class ShotGun : GunBase
 		if (reloadCountTimer == 0)
 		{
 			//ショットガンのリロードアニメーションをオン
-			Player.SingletonInstance.Animator.SetBool("b_isShotGunReload", true);
+			PlayerManager.SingletonInstance.Animator.SetBool("b_isShotGunReload", true);
 
 			ShotGunReloadSE();
 		}
@@ -132,7 +132,7 @@ public class ShotGun : GunBase
 			isReloadTimeActive = false;//リロードのオフ
 
 			//ショットガンのリロードアニメーションをオフ
-			Player.SingletonInstance.Animator.SetBool("b_isShotGunReload", false);
+			PlayerManager.SingletonInstance.Animator.SetBool("b_isShotGunReload", false);
 		}
 	}
 
@@ -142,8 +142,8 @@ public class ShotGun : GunBase
 	protected override void Fire()
 	{
 		ShotGunBulletCasingSE();
-		Player.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunMuzzleFlashAndShell();
-		Player.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunSmoke();
+		PlayerManager.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunMuzzleFlashAndShell();
+		PlayerManager.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunSmoke();
 
 		ShotGunFireSE();
 		bool isOnceShotGunHitSE = false;
@@ -218,7 +218,7 @@ public class ShotGun : GunBase
 	/// </summary> 
 	void ShotGunFireSE()
 	{
-		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunMuzzleTransform);
+		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunMuzzleTransform);
 	}
 
 	/// <summary>
@@ -226,7 +226,7 @@ public class ShotGun : GunBase
 	/// </summary> 
 	void ShotGunReloadSE()
 	{
-		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
+		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -234,7 +234,7 @@ public class ShotGun : GunBase
 	/// </summary>
 	void ShotGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
+		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
 	}
 
 	/// <summary>

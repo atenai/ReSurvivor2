@@ -114,11 +114,11 @@ public class MoveToCoverPointAction : Action
 				continue;
 			}
 
-			if (Player.SingletonInstance == null)
+			if (PlayerManager.SingletonInstance == null)
 			{
 				return this.transform.position;
 			}
-			Vector3 dir = coverPoint.Position - Player.SingletonInstance.transform.position;
+			Vector3 dir = coverPoint.Position - PlayerManager.SingletonInstance.transform.position;
 			float dist = dir.magnitude;
 			if (dist <= 0.01f)
 			{
@@ -127,7 +127,7 @@ public class MoveToCoverPointAction : Action
 			}
 
 			RaycastHit hit;
-			if (Physics.Raycast(Player.SingletonInstance.transform.position, dir.normalized, out hit, dist, obstructionMask))
+			if (Physics.Raycast(PlayerManager.SingletonInstance.transform.position, dir.normalized, out hit, dist, obstructionMask))
 			{
 				// プレイヤーからカバーポイントへの途中で何かに当たる -> 視線が遮られている
 				if (hit.collider != null && hit.collider.gameObject != coverPoint.gameObject)
@@ -169,12 +169,12 @@ public class MoveToCoverPointAction : Action
 				continue;
 			}
 
-			if (Player.SingletonInstance == null)
+			if (PlayerManager.SingletonInstance == null)
 			{
 				return this.transform.position;
 			}
 			//プレイヤーとカバーポイントの距離を出してその距離が最も遠いなら中身を実行する
-			float distanceScore = Vector3.Distance(Player.SingletonInstance.transform.position, coverPoint.Position);
+			float distanceScore = Vector3.Distance(PlayerManager.SingletonInstance.transform.position, coverPoint.Position);
 			if (bestScore < distanceScore)
 			{
 				//距離を更新

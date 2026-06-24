@@ -87,7 +87,7 @@ public class InGameManager : MonoBehaviour
 		ES3.Save<int>("Stage", SceneManager.GetActiveScene().name.Replace("Stage", "") != "" ? int.Parse(SceneManager.GetActiveScene().name.Replace("Stage", "")) : 0);
 		ES3.Save<bool>("KeyItem1", keyItem1);
 		MissionManager.SingletonInstance.Save();
-		Player.SingletonInstance.Save();
+		PlayerManager.SingletonInstance.Save();
 		PlayerCamera.SingletonInstance.Save();
 		ScreenUI.SingletonInstance.ShowSaveNowText();
 	}
@@ -273,7 +273,7 @@ public class InGameManager : MonoBehaviour
 			Debug.Log("<color=blue>ゲームクリアー</color>");
 			InGameManager.IsFirstLoad = true;
 			MissionManager.IsFirstLoad = true;
-			Player.IsFirstLoad = true;
+			PlayerManager.IsFirstLoad = true;
 			PlayerCamera.IsFirstLoad = true;
 			//シーンを切り替える
 			isGameClearTriggered = true;
@@ -289,7 +289,7 @@ public class InGameManager : MonoBehaviour
 		Debug.Log("<color=red>ゲームオーバー</color>");
 		InGameManager.IsFirstLoad = true;
 		MissionManager.IsFirstLoad = true;
-		Player.IsFirstLoad = true;
+		PlayerManager.IsFirstLoad = true;
 		PlayerCamera.IsFirstLoad = true;
 		//シーンを切り替える
 		isGameOverTriggered = true;

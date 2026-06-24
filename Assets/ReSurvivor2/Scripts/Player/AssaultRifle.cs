@@ -90,7 +90,7 @@ public class AssaultRifle : GunBase
 		if (reloadCountTimer == 0)
 		{
 			//アサルトライフルのリロードアニメーションをオン
-			Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
+			PlayerManager.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
 
 			AssaultRifleReloadSE();
 		}
@@ -129,7 +129,7 @@ public class AssaultRifle : GunBase
 			isReloadTimeActive = false;//リロードのオフ
 
 			//アサルトライフルのリロードアニメーションをオフ
-			Player.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", false);
+			PlayerManager.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", false);
 		}
 	}
 
@@ -139,8 +139,8 @@ public class AssaultRifle : GunBase
 	protected override void Fire()
 	{
 		AssaultRifleBulletCasingSE();
-		Player.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleFlashAndShell();
-		Player.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleSmoke();
+		PlayerManager.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleFlashAndShell();
+		PlayerManager.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleSmoke();
 
 		AssaultRifleFireSE();
 
@@ -207,7 +207,7 @@ public class AssaultRifle : GunBase
 	/// </summary> 
 	void AssaultRifleFireSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleTransform);
+		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleTransform);
 	}
 
 	/// <summary>
@@ -215,7 +215,7 @@ public class AssaultRifle : GunBase
 	/// </summary> 
 	void AssaultRifleReloadSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
+		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -223,7 +223,7 @@ public class AssaultRifle : GunBase
 	/// </summary>
 	void AssaultRifleBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(Player.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
+		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>
