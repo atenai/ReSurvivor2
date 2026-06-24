@@ -170,7 +170,7 @@ public class MissionManager : MonoBehaviour
                 MissionIDUpdate();
                 MissionReset();
                 InGameManager.SingletonInstance.Save();
-                InGameManager.SingletonInstance.GameClear();
+                ChangeSceneManager.SingletonInstance.GameClear();
             }
             else
             {

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 232285510229830891}
   m_Layer: 0
-  m_Name: LoadNextSceneParent
+  m_Name: LoadNextStageSceneParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 6617248888777553093}
   - component: {fileID: 962727797225885184}
   m_Layer: 2
-  m_Name: LoadNextSceneObject
+  m_Name: LoadNextStageSceneObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7bf7a95e26172f4483d5975fc1c48ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Stage1
+  nextStage: 0
   spawnPos: {fileID: 7238809896560818720}
 --- !u!114 &962727797225885184
 MonoBehaviour:

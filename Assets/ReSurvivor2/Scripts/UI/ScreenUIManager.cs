@@ -167,13 +167,13 @@ public class ScreenUIManager : MonoBehaviour
 	void Update()
 	{
 		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
 		{
 			return;
 		}
 
 		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (InGameManager.SingletonInstance.IsGameClearTriggered == true || InGameManager.SingletonInstance.IsGameOverTriggered == true)
+		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
 		{
 			return;
 		}

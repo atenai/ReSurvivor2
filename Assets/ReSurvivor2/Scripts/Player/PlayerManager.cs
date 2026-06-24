@@ -238,7 +238,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void InitHP()
 	{
-		hp.Initialize(DamageEffect, InGameManager.SingletonInstance.GameOver, UseArmorPlate, HealEffect);
+		hp.Initialize(DamageEffect, ChangeSceneManager.SingletonInstance.GameOver, UseArmorPlate, HealEffect);
 		//シェーダーへ値を渡す（これだけでOK）
 		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.Max_Hp);
 	}
@@ -306,13 +306,13 @@ public class PlayerManager : MonoBehaviour
 	void Update()
 	{
 		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
 		{
 			return;
 		}
 
 		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (InGameManager.SingletonInstance.IsGameClearTriggered == true || InGameManager.SingletonInstance.IsGameOverTriggered == true)
+		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
 		{
 			return;
 		}
@@ -442,13 +442,13 @@ public class PlayerManager : MonoBehaviour
 	void FixedUpdate()
 	{
 		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
 		{
 			return;
 		}
 
 		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (InGameManager.SingletonInstance.IsGameClearTriggered == true || InGameManager.SingletonInstance.IsGameOverTriggered == true)
+		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
 		{
 			return;
 		}

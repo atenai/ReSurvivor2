@@ -47,13 +47,13 @@ public class TimerManager : MonoBehaviour
 	void Update()
 	{
 		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (InGameManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
 		{
 			return;
 		}
 
 		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (InGameManager.SingletonInstance.IsGameClearTriggered == true || InGameManager.SingletonInstance.IsGameOverTriggered == true)
+		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
 		{
 			return;
 		}
@@ -101,7 +101,7 @@ public class TimerManager : MonoBehaviour
 		{
 			//ゲームオーバー処理
 			PlayerManager.SingletonInstance.PlayerUI.TextTimer.text = "00" + ":" + "00";
-			InGameManager.SingletonInstance.GameOver();
+			ChangeSceneManager.SingletonInstance.GameOver();
 		}
 		else
 		{
