@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 各ステージ用のマネージャー
 /// </summary>
-public class StageManager : MonoBehaviour
+public class CurrentStageManager : MonoBehaviour
 {
 	[Tooltip("ステージ名")]
 	[SerializeField] EnumManager.StageTYPE currentStage;
