@@ -5,7 +5,7 @@ using UnityEngine;
 using Cinemachine;
 
 /// <summary>
-/// プレイヤー
+/// プレイヤーを管理するマネージャークラス
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {

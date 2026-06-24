@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// シーン変更を管理するマネージャークラス
+/// </summary>
 public class ChangeSceneManager : MonoBehaviour
 {
     /// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>

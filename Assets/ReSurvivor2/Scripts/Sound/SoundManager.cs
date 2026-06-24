@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// サウンドマネージャー
+/// サウンドを管理するマネージャークラス
 /// </summary>
 public class SoundManager : MonoBehaviour
 {

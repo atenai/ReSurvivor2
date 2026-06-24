@@ -1,5 +1,5 @@
 /// <summary>
-/// Enumマネージャー
+/// Enumを管理するマネージャークラス
 /// </summary>
 public static class EnumManager
 {

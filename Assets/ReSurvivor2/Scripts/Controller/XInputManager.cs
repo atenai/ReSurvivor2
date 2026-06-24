@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// XInputの状態を管理するクラス
+/// XInputの状態を管理するマネージャークラス
 /// </summary>
 public class XInputManager : MonoBehaviour
 {

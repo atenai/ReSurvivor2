@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// インゲーム全体のマネージャー
+/// インゲーム全体のマネージャークラス
 /// </summary> 
 public class InGameManager : MonoBehaviour
 {
@@ -60,12 +60,7 @@ public class InGameManager : MonoBehaviour
 	public void Save()
 	{
 		Debug.Log("<color=cyan>インゲームマネージャーセーブ</color>");
-		ChangeSceneManager.SingletonInstance.Save();
 		ES3.Save<bool>("KeyItem1", keyItem1);
-		MissionManager.SingletonInstance.Save();
-		PlayerManager.SingletonInstance.Save();
-		PlayerCameraManager.SingletonInstance.Save();
-		ScreenUIManager.SingletonInstance.ShowSaveNowText();
 	}
 
 	/// <summary>
@@ -82,5 +77,65 @@ public class InGameManager : MonoBehaviour
 		//Debug.Log("<color=purple>インゲームマネージャーロード</color>");
 		keyItem1 = ES3.Load<bool>("KeyItem1", false);
 		//Debug.Log("<color=purple>キーアイテム1 : " + keyItem1 + "</color>");
+	}
+
+	void Update()
+	{
+		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
+		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		{
+			return;
+		}
+
+		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
+		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
+		{
+			return;
+		}
+
+		//ポーズ中は切り上げる
+		if (ScreenUIManager.SingletonInstance.IsPause == true)
+		{
+			return;
+		}
+
+		//コンピュータを使用中は切り上げる
+		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
+		{
+			return;
+		}
+
+		//↑ロード中に動かせる処理
+		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
+		{
+			return;
+		}
+		//↓ロード中に動かせない処理
+
+
+	}
+
+	void FixedUpdate()
+	{
+		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
+		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
+		{
+			return;
+		}
+
+		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
+		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
+		{
+			return;
+		}
+
+		//↑ロード中に動かせる処理
+		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
+		{
+			return;
+		}
+		//↓ロード中に動かせない処理
+
+
 	}
 }

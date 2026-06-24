@@ -4,7 +4,7 @@ using System.Diagnostics;
 using UnityEngine;
 
 /// <summary>
-/// 各ステージ用のマネージャー
+/// 各現在のステージを管理するマネージャークラス
 /// </summary>
 public class CurrentStageManager : MonoBehaviour
 {

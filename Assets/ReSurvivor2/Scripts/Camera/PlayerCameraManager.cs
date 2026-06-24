@@ -4,7 +4,7 @@ using UnityEngine;
 using Cinemachine;
 
 /// <summary>
-/// プレイヤーカメラ
+/// プレイヤーカメラを管理するマネージャークラス
 /// </summary> 
 public class PlayerCameraManager : MonoBehaviour
 {

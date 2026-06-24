@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// エネミーマネージャー
+/// エネミーを管理するマネージャークラス
 /// </summary>
 public class EnemyManager : MonoBehaviour
 {

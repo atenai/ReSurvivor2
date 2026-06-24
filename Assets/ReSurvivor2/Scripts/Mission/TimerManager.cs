@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ミッションの制限時間を管理するクラス
+/// ミッションの制限時間を管理するマネージャークラス
 /// </summary>
 public class TimerManager : MonoBehaviour
 {

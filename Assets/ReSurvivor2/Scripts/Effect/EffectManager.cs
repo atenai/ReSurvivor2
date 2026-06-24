@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// エフェクトマネージャー
+/// エフェクトを管理するマネージャークラス
 /// </summary>
 public class EffectManager : MonoBehaviour
 {

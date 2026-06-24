@@ -7,7 +7,7 @@ using TMPro;
 using DG.Tweening;
 
 /// <summary>
-/// スクリーンUI管理クラス
+/// スクリーンUIを管理するマネージャークラス
 /// </summary>
 public class ScreenUIManager : MonoBehaviour
 {

@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 /// <summary>
-/// ミッション管理クラス
+/// ミッションを管理するマネージャークラス
 /// </summary>
 public class MissionManager : MonoBehaviour
 {
@@ -169,7 +169,7 @@ public class MissionManager : MonoBehaviour
                 MissionResult();
                 MissionIDUpdate();
                 MissionReset();
-                InGameManager.SingletonInstance.Save();
+                SaveAndLoadDataManager.SingletonInstance.AllManagerSave();
                 ChangeSceneManager.SingletonInstance.GameClear();
             }
             else
@@ -179,7 +179,7 @@ public class MissionManager : MonoBehaviour
         }
         else if (isMissionActive == false)//ミッション中でない場合
         {
-            InGameManager.SingletonInstance.Save();
+            SaveAndLoadDataManager.SingletonInstance.AllManagerSave();
             ScreenUIManager.SingletonInstance.ShowComputerMenu();
         }
     }
