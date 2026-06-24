@@ -63,7 +63,7 @@ public class PlayerModel : MonoBehaviour
 	void Update()
 	{
 		//コンピュータを使用中は切り上げる
-		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
+		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
 		{
 			ResetMoveAnimation();
 			return;

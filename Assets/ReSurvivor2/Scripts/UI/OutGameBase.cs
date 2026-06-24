@@ -48,9 +48,9 @@ public class OutGameBase : MonoBehaviour
 			Destroy(PlayerCameraManager.SingletonInstance.gameObject);
 		}
 
-		if (ScreenUI.SingletonInstance != null)
+		if (ScreenUIManager.SingletonInstance != null)
 		{
-			Destroy(ScreenUI.SingletonInstance.gameObject);
+			Destroy(ScreenUIManager.SingletonInstance.gameObject);
 		}
 
 		//シェーダーをロード

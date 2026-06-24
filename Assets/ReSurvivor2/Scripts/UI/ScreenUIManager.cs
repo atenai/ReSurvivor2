@@ -9,12 +9,12 @@ using DG.Tweening;
 /// <summary>
 /// スクリーンUI管理クラス
 /// </summary>
-public class ScreenUI : MonoBehaviour
+public class ScreenUIManager : MonoBehaviour
 {
 	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
-	static ScreenUI singletonInstance = null;
+	static ScreenUIManager singletonInstance = null;
 	/// <summary>シングルトンのプロパティ</summary>
-	public static ScreenUI SingletonInstance => singletonInstance;
+	public static ScreenUIManager SingletonInstance => singletonInstance;
 
 	[Header("照準")]
 

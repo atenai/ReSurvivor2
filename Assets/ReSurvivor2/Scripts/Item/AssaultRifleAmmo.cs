@@ -23,7 +23,7 @@ public class AssaultRifleAmmo : MonoBehaviour
 	/// </summary>
 	void DestroySelf()
 	{
-		ScreenUI.SingletonInstance.ItemOutPutLog.OutputLog("+AssaultRifleAmmo");
+		ScreenUIManager.SingletonInstance.ItemOutPutLog.OutputLog("+AssaultRifleAmmo");
 		Destroy(this.gameObject);
 	}
 }

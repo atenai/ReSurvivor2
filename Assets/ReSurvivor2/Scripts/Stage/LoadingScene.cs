@@ -46,12 +46,12 @@ public class LoadingScene : MonoBehaviour
 	IEnumerator LoadScene()
 	{
 		//不透明にする
-		ScreenUI.SingletonInstance.FadeOut();
+		ScreenUIManager.SingletonInstance.FadeOut();
 
 		//スライダーの値を最低にする
-		ScreenUI.SingletonInstance.SliderLoading.value = float.MinValue;
+		ScreenUIManager.SingletonInstance.SliderLoading.value = float.MinValue;
 		//ロードUIをOnにする
-		ScreenUI.SingletonInstance.PanelLoading.SetActive(true);
+		ScreenUIManager.SingletonInstance.PanelLoading.SetActive(true);
 
 		//シーンをロード
 		AsyncOperation async = SceneManager.LoadSceneAsync(nextStage.ToString());
@@ -61,20 +61,20 @@ public class LoadingScene : MonoBehaviour
 		while (async.isDone == false)
 		{
 			//ロード数値をスライダーに反映
-			ScreenUI.SingletonInstance.SliderLoading.value = async.progress;
+			ScreenUIManager.SingletonInstance.SliderLoading.value = async.progress;
 			Debug.Log("<color=red>読み込み進捗: " + async.progress * 100 + "%</color>");
 
 			//ロード数値が0.9より同じかそれ以上大きくなったら中身を実行する
 			if (0.9f <= async.progress)
 			{
 				//スライダーの値を最大にする
-				ScreenUI.SingletonInstance.SliderLoading.value = float.MaxValue;
+				ScreenUIManager.SingletonInstance.SliderLoading.value = float.MaxValue;
 
 				//フレームのラストまで待つ
 				yield return new WaitForEndOfFrame();
 
 				//ロードUIをOffにする
-				ScreenUI.SingletonInstance.PanelLoading.SetActive(false);
+				ScreenUIManager.SingletonInstance.PanelLoading.SetActive(false);
 
 				//シーンを切り替える
 				async.allowSceneActivation = true;

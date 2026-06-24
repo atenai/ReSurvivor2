@@ -318,13 +318,13 @@ public class PlayerManager : MonoBehaviour
 		}
 
 		//ポーズ中は切り上げる
-		if (ScreenUI.SingletonInstance.IsPause == true)
+		if (ScreenUIManager.SingletonInstance.IsPause == true)
 		{
 			return;
 		}
 
 		//コンピュータを使用中は切り上げる
-		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
+		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
 		{
 			ResetMove();
 			return;

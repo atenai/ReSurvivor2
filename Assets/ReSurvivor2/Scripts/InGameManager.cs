@@ -89,7 +89,7 @@ public class InGameManager : MonoBehaviour
 		MissionManager.SingletonInstance.Save();
 		PlayerManager.SingletonInstance.Save();
 		PlayerCameraManager.SingletonInstance.Save();
-		ScreenUI.SingletonInstance.ShowSaveNowText();
+		ScreenUIManager.SingletonInstance.ShowSaveNowText();
 	}
 
 	/// <summary>
@@ -277,7 +277,7 @@ public class InGameManager : MonoBehaviour
 			PlayerCameraManager.IsFirstLoad = true;
 			//シーンを切り替える
 			isGameClearTriggered = true;
-			ScreenUI.SingletonInstance.FadeOut();
+			ScreenUIManager.SingletonInstance.FadeOut();
 		}
 	}
 
@@ -293,6 +293,6 @@ public class InGameManager : MonoBehaviour
 		PlayerCameraManager.IsFirstLoad = true;
 		//シーンを切り替える
 		isGameOverTriggered = true;
-		ScreenUI.SingletonInstance.FadeOut();
+		ScreenUIManager.SingletonInstance.FadeOut();
 	}
 }

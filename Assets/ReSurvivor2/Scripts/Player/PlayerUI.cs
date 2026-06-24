@@ -139,12 +139,12 @@ public class PlayerUI : MonoBehaviour
 
 	void Update()
 	{
-		if (ScreenUI.SingletonInstance.IsPause == true)
+		if (ScreenUIManager.SingletonInstance.IsPause == true)
 		{
 			return;
 		}
 
-		if (ScreenUI.SingletonInstance.IsComputerMenuActive == true)
+		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
 		{
 			return;
 		}
