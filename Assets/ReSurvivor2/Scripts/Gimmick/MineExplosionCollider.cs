@@ -16,8 +16,8 @@ public class MineExplosionCollider : MonoBehaviour
 	float localScale = 1.0f;
 	[Tooltip("爆発範囲拡大スピード")]
 	[SerializeField] float rangeSpeed = 2.0f;
+	[Tooltip("シネマシーンインパルス")]
 	[SerializeField] private CinemachineImpulseSource cinemachineImpulseSource;
-	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
 
 	void Start()
 	{
@@ -33,13 +33,13 @@ public class MineExplosionCollider : MonoBehaviour
 	/// <summary>
 	/// 爆発範囲拡大
 	/// </summary>
-	private void ExplosionRangeExpansion()
+	void ExplosionRangeExpansion()
 	{
 		localScale = localScale + (Time.deltaTime * rangeSpeed);
 		this.transform.localScale = new Vector3(localScale, localScale, localScale);
 	}
 
-	private void OnTriggerEnter(Collider collider)
+	void OnTriggerEnter(Collider collider)
 	{
 		if (collider.gameObject.CompareTag("Enemy") || collider.gameObject.CompareTag("FlyingEnemy") || collider.gameObject.CompareTag("GroundEnemy"))
 		{
@@ -54,11 +54,14 @@ public class MineExplosionCollider : MonoBehaviour
 		if (collider.CompareTag("Player"))
 		{
 			Player.SingletonInstance.HP.Damage(damage);
-			Shaker();
+			CameraShaker();
 		}
 	}
 
-	private void Shaker()
+	/// <summary>
+	/// プレイヤーにダメージを与えた際にカメラを揺らす
+	/// </summary>
+	void CameraShaker()
 	{
 		cinemachineImpulseSource.GenerateImpulse();
 	}

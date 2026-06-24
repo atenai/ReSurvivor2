@@ -316,9 +316,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fdcdbb3a7f89cd44b0612ff0c7f221d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 100
-  canvas: {fileID: 2419519451328426163}
   sliderHp: {fileID: 4582419977116525393}
+  canvas: {fileID: 2419519451328426163}
   navMeshAgent: {fileID: 7379415921181432295}
   enemyRigidbody: {fileID: 4553017098955803893}
   animator: {fileID: 2776096747537405195}

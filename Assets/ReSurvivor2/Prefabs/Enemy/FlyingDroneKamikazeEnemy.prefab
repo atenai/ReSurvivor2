@@ -1103,6 +1103,7 @@ GameObject:
   - component: {fileID: 3885848965487579325}
   - component: {fileID: 549200724540539983}
   - component: {fileID: 5514666497858788686}
+  - component: {fileID: 1822955150964191545}
   - component: {fileID: 8064469496346956863}
   m_Layer: 7
   m_Name: FlyingDroneKamikazeEnemy
@@ -1264,6 +1265,59 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1822955150964191545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6477606098694973927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 2
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.2
+    m_ImpulseType: 3
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+    m_AmplitudeGain: 2
+    m_FrequencyGain: 2
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 1, y: 1, z: 0}
 --- !u!114 &8064469496346956863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1276,12 +1330,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7754e0f3451b14ba0fa1e0f5e36f0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 100
-  canvas: {fileID: 9057571287036808216}
   sliderHp: {fileID: 7647867411961735123}
+  canvas: {fileID: 9057571287036808216}
   navMeshAgent: {fileID: 5514666497858788686}
   enemyRigidbody: {fileID: 3885848965487579325}
-  coverPoints: []
   colliders:
   - {fileID: 360813983045918102}
   - {fileID: 803509467399215777}
@@ -1300,6 +1352,8 @@ MonoBehaviour:
   mineSePrefab: {fileID: 8217214238848448886, guid: 2d39d9f68faf3ba4eaee07a9d9023a0c, type: 3}
   mineSeEndtime: 1
   mineExplosionColliderPrefab: {fileID: 5952633979640247180, guid: b9ab6b4abc324614897c9d5048e60da9, type: 3}
+  damage: 50
+  cinemachineImpulseSource: {fileID: 1822955150964191545}
   debugEnemy:
     isDebugMode: 1
     debugTextPrefab: {fileID: 5879542589618870122, guid: 2b9195b1c4d4e344a8dae248f1394dc4, type: 3}

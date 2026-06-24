@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 using UnityEngine.UI;
 using UnityEngine.AI;
 
@@ -124,6 +125,12 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	[Tooltip("爆発のあたり判定オブジェクトを生成")]
 	[SerializeField] GameObject mineExplosionColliderPrefab = null;
 	float mineExplosionColliderDestroyTime = 1.0f;
+
+	[Tooltip("ダメージ")]
+	[SerializeField] int damage = 50;
+
+	[Tooltip("シネマシーンインパルス")]
+	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
 
 	[Tooltip("デバッグ")]
 	[SerializeField] DebugEnemy debugEnemy;
@@ -444,11 +451,27 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	/// <param name="collision"></param>
 	void OnCollisionEnter(Collision collision)
 	{
-		Debug.Log("<color=red>当たった！ : " + collision.gameObject.name + "</color>");
+		// 	Debug.Log("<color=red>当たった！ : " + collision.gameObject.name + "</color>");
+
 		if (isChase == true)
 		{
 			hp.Damage(HitPoint.Max_Hp);
 		}
+
+		// Note : 爆発コライダーの方で行っている
+		// if (collision.collider.tag == "Player")
+		// {
+		// 	Player.SingletonInstance.HP.Damage(damage);
+		// 	CameraShaker();
+		// }
+	}
+
+	/// <summary>
+	/// プレイヤーにダメージを与えた際にカメラを揺らす
+	/// </summary>
+	void CameraShaker()
+	{
+		cinemachineImpulseSource.GenerateImpulse();
 	}
 
 	/// <summary>

@@ -177,7 +177,7 @@ public class GroundEnemyShotGunFireAction : Action
 					if (player != null)
 					{
 						player.HP.Damage(Damage);
-						groundEnemy.Shaker();
+						groundEnemy.CameraShaker();
 						//敵マーカー表示
 						EnemyIndicatorManager.SingletonInstance.ShowIndicator(groundEnemy);
 					}

@@ -587,11 +587,13 @@ public class Player : MonoBehaviour
 
 	void OnCollisionEnter(Collision collision)
 	{
-		if (collision.collider.tag == "Enemy" || collision.collider.tag == "FlyingEnemy" || collision.collider.tag == "GroundEnemy")
-		{
-			hp.Damage(10.0f);
-			CameraShaker();
-		}
+		// 	Debug.Log("<color=red>当たった！ : " + collision.gameObject.name + "</color>");
+
+		// if (collision.collider.tag == "Enemy" || collision.collider.tag == "FlyingEnemy" || collision.collider.tag == "GroundEnemy")
+		// {
+		// 	hp.Damage(10.0f);
+		// 	CameraShaker();
+		// }
 	}
 
 	/// <summary>

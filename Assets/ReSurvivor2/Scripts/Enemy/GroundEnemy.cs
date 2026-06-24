@@ -186,7 +186,6 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 
 	[Tooltip("シネマシーンインパルス")]
 	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
-	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
 
 	[Tooltip("デバッグ")]
 	[SerializeField] DebugEnemy debugEnemy;
@@ -543,7 +542,13 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// <param name="collision"></param>
 	void OnCollisionEnter(Collision collision)
 	{
-		//Debug.Log("Hit");
+		// Debug.Log("<color=red>当たった！ : " + collision.gameObject.name + "</color>");
+
+		if (collision.collider.tag == "Player")
+		{
+			Player.SingletonInstance.HP.Damage(10.0f);
+			CameraShaker();
+		}
 	}
 
 	/// <summary>
@@ -680,7 +685,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// <summary>
 	/// プレイヤーにダメージを与えた際にカメラを揺らす
 	/// </summary>
-	public void Shaker()
+	public void CameraShaker()
 	{
 		cinemachineImpulseSource.GenerateImpulse();
 	}
