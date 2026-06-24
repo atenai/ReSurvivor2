@@ -211,6 +211,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 		sliderHp.value = 1;
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
+		EnemyManager.SingletonInstance.ChaseEvent.AddListener(ChaseOn);
 
 		if (targetPlayer == null)
 		{
@@ -249,7 +250,12 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	void Update()
 	{
 		RotCanvas();
-		Eyesight();
+
+		if (Eyesight() == true)
+		{
+			//Debug.Log("<color=red>プレイヤーを発見!</color>");
+			EnemyManager.SingletonInstance.ChaseEvent.Invoke();
+		}
 		Alert();
 		ChasePlayer();
 
@@ -270,13 +276,12 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	/// <summary>
 	/// レイキャストによる視界
 	/// </summary>
-	void Eyesight()
+	bool Eyesight()
 	{
 		if (hp.IsDead == true)
 		{
-			return;
+			return false;
 		}
-
 		// 角度を進める
 		currentAngle = currentAngle + angleDir * sweepSpeed * Time.deltaTime;
 
@@ -315,9 +320,11 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 			// ヒット時の処理（例：プレイヤー検知など）
 			if (hit.collider.CompareTag("Player"))
 			{
-				EnemyManager.SingletonInstance.AllChaseOn();
+				return true;
 			}
 		}
+
+		return false;
 	}
 
 	/// <summary>
@@ -514,7 +521,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	public void Dead()
 	{
-		EnemyManager.SingletonInstance.RemoveEnemyList(this.transform.parent.gameObject);
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(ChaseOn);
 		//敵マーカー削除
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 		Explosion();
@@ -526,14 +533,8 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	void OnDisable()
 	{
-		DeleteIndicator();
-	}
-
-	/// <summary>
-	/// 敵マーカー削除
-	/// </summary>
-	void DeleteIndicator()
-	{
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(ChaseOn);
+		//敵マーカー削除
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 	}
 

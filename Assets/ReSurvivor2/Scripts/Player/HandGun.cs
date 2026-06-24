@@ -173,15 +173,8 @@ public class HandGun : GunBase
 				//ヒット音を再生
 				SoundManager.SingletonInstance.HitSEPool.GetGameObject(PlayerCamera.SingletonInstance.transform);
 
-				// GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
-				// if (groundEnemy != null)
-				// {
-				// 	//追跡開始
-				// 	groundEnemy.ChaseOn();
-				// }
-
 				//追跡開始
-				EnemyManager.SingletonInstance.AllChaseOn();
+				EnemyManager.SingletonInstance.ChaseEvent.Invoke();
 
 				//地雷を爆破
 				Mine mine = hit.transform.GetComponent<Mine>();

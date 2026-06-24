@@ -79,6 +79,7 @@ public class Target : MonoBehaviour, IEnemy
 		sliderHp.value = 1;
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
+		EnemyManager.SingletonInstance.ChaseEvent.AddListener(ChaseOn);
 	}
 
 	void Update()
@@ -103,22 +104,6 @@ public class Target : MonoBehaviour, IEnemy
 	}
 
 	/// <summary>
-	/// ゲームオブジェクトが非表示またはデストロイされた際に呼ばれる
-	/// </summary>
-	void OnDisable()
-	{
-		DeleteIndicator();
-	}
-
-	/// <summary>
-	/// 敵マーカー削除
-	/// </summary>
-	void DeleteIndicator()
-	{
-		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
-	}
-
-	/// <summary>
 	/// ダメージエフェクト
 	/// </summary>
 	public void DamageEffect()
@@ -131,10 +116,20 @@ public class Target : MonoBehaviour, IEnemy
 	/// </summary>
 	public void Dead()
 	{
-		EnemyManager.SingletonInstance.RemoveEnemyList(this.transform.parent.gameObject);
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(ChaseOn);
 		//敵マーカー削除
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 		Destroy(this.transform.parent.gameObject);
+	}
+
+	/// <summary>
+	/// ゲームオブジェクトが非表示またはデストロイされた際に呼ばれる
+	/// </summary>
+	void OnDisable()
+	{
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(ChaseOn);
+		//敵マーカー削除
+		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 	}
 
 	/// <summary>

@@ -190,13 +190,6 @@ public class ShotGun : GunBase
 						SoundManager.SingletonInstance.HitSEPool.GetGameObject(PlayerCamera.SingletonInstance.transform);
 					}
 
-					// GroundEnemy groundEnemy = hit.transform.GetComponent<GroundEnemy>();
-					// if (groundEnemy != null)
-					// {
-					// 	//追跡開始
-					// 	groundEnemy.ChaseOn();
-					// }
-
 					//地雷を爆破
 					Mine mine = hit.transform.GetComponent<Mine>();
 					if (mine != null)
@@ -217,7 +210,7 @@ public class ShotGun : GunBase
 		}
 
 		//追跡開始
-		EnemyManager.SingletonInstance.AllChaseOn();
+		EnemyManager.SingletonInstance.ChaseEvent.Invoke();
 	}
 
 	/// <summary>

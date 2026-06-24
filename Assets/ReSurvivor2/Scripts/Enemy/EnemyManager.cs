@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// エネミーマネージャー
@@ -16,6 +17,9 @@ public class EnemyManager : MonoBehaviour
 
 	[Tooltip("カバーポイント")]
 	[SerializeField] CoverPoint[] coverPoints;
+
+	UnityEvent chaseEvent = new UnityEvent();
+	public UnityEvent ChaseEvent => chaseEvent;
 
 	void Awake()
 	{
@@ -43,31 +47,6 @@ public class EnemyManager : MonoBehaviour
 		foreach (GameObject enemy in enemies)
 		{
 			enemy.GetComponentInChildren<IEnemy>().SetCoverPoints(coverPoints);
-		}
-	}
-
-	/// <summary>
-	/// 全員が警戒態勢
-	/// </summary>
-	public void AllChaseOn()
-	{
-		Debug.Log("<color=yellow>EnemyManagerのAllChaseOn()</color>");
-
-		foreach (GameObject enemy in enemies)
-		{
-			enemy.GetComponentInChildren<IEnemy>().ChaseOn();
-		}
-	}
-
-	/// <summary>
-	/// リストからエネミーの削除
-	/// </summary>
-	/// <param name="enemy"></param>
-	public void RemoveEnemyList(GameObject enemy)
-	{
-		if (enemies.Contains(enemy))
-		{
-			enemies.Remove(enemy);
 		}
 	}
 }

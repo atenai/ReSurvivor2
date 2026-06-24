@@ -244,6 +244,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 		sliderHp.value = 1;
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
+		EnemyManager.SingletonInstance.ChaseEvent.AddListener(ChaseOn);
 
 		if (targetPlayer == null)
 		{
@@ -331,8 +332,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 		if (Eyesight() == true)
 		{
 			//Debug.Log("<color=red>プレイヤーを発見!</color>");
-			//ChaseOn();
-			EnemyManager.SingletonInstance.AllChaseOn();
+			EnemyManager.SingletonInstance.ChaseEvent.Invoke();
 		}
 		Alert();
 		ChasePlayer();
@@ -580,7 +580,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	public void Dead()
 	{
-		EnemyManager.SingletonInstance.RemoveEnemyList(this.transform.parent.gameObject);
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(ChaseOn);
 		//敵マーカー削除
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 	}
@@ -695,16 +695,10 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	void OnDisable()
 	{
-		DeleteIndicator();
-		UnInitRigidbody();
-	}
-
-	/// <summary>
-	/// 敵マーカー削除
-	/// </summary>
-	void DeleteIndicator()
-	{
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(ChaseOn);
+		//敵マーカー削除
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
+		UnInitRigidbody();
 	}
 
 	/// <summary>
