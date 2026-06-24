@@ -674,6 +674,15 @@ public class Player : MonoBehaviour
 	}
 
 	/// <summary>
+	/// スタミナを回復エフェクト
+	/// </summary>
+	void RestoresStaminaEffect()
+	{
+		playerUI.SliderStamina.value = (float)stamina.CurrentStamina / (float)Stamina.Max_Stamina;
+		isStaminaHeal = true;
+	}
+
+	/// <summary>
 	/// 食料を使用
 	/// </summary>
 	void UseFood()
@@ -685,15 +694,6 @@ public class Player : MonoBehaviour
 
 		currentFood = currentFood - 1;
 		playerUI.TextFood.text = currentFood.ToString();
-	}
-
-	/// <summary>
-	/// スタミナを回復エフェクト
-	/// </summary>
-	void RestoresStaminaEffect()
-	{
-		playerUI.SliderStamina.value = (float)stamina.CurrentStamina / (float)Stamina.Max_Stamina;
-		isStaminaHeal = true;
 	}
 
 	/// <summary>
