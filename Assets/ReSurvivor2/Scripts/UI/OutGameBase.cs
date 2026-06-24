@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 /// <summary>
 /// アウトゲームのベース
@@ -33,9 +34,29 @@ public class OutGameBase : MonoBehaviour
 			Destroy(InGameManager.SingletonInstance.gameObject);
 		}
 
+		if (ChangeSceneManager.SingletonInstance != null)
+		{
+			Destroy(ChangeSceneManager.SingletonInstance.gameObject);
+		}
+
 		if (MissionManager.SingletonInstance != null)
 		{
 			Destroy(MissionManager.SingletonInstance.gameObject);
+		}
+
+		if (TimerManager.SingletonInstance != null)
+		{
+			Destroy(TimerManager.SingletonInstance.gameObject);
+		}
+
+		if (EffectManager.SingletonInstance != null)
+		{
+			Destroy(EffectManager.SingletonInstance.gameObject);
+		}
+
+		if (SoundManager.SingletonInstance != null)
+		{
+			Destroy(SoundManager.SingletonInstance.gameObject);
 		}
 
 		if (PlayerManager.SingletonInstance != null)
@@ -51,6 +72,11 @@ public class OutGameBase : MonoBehaviour
 		if (ScreenUIManager.SingletonInstance != null)
 		{
 			Destroy(ScreenUIManager.SingletonInstance.gameObject);
+		}
+
+		if (EnemyManager.SingletonInstance != null)
+		{
+			Destroy(EnemyManager.SingletonInstance.gameObject);
 		}
 
 		//シェーダーをロード
