@@ -25,7 +25,7 @@ public class Indicator : MonoBehaviour
 		{
 			this.gameObject.SetActive(true);
 			UnityEngine.Quaternion rot = Quaternion.LookRotation(target.position - PlayerManager.SingletonInstance.gameObject.transform.position);
-			float angle = (PlayerCamera.SingletonInstance.gameObject.transform.eulerAngles - rot.eulerAngles).y;
+			float angle = (PlayerCameraManager.SingletonInstance.gameObject.transform.eulerAngles - rot.eulerAngles).y;
 			this.GetComponent<RectTransform>().localEulerAngles = new Vector3(0, 0, angle);
 		}
 		else

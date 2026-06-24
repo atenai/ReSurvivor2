@@ -14,7 +14,7 @@ public class ShotGunAmmo : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			PlayerCamera.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.ShotGun, amount, DestroySelf);
+			PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.ShotGun, amount, DestroySelf);
 		}
 	}
 

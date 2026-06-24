@@ -142,7 +142,7 @@ public class PlayerModel : MonoBehaviour
 			const float aimAnimationRotX = 12.5f;
 			const float aimAnimationRotY = 12.5f;
 			//腰のボーンの角度をカメラの向きにする
-			spine_03.rotation = Quaternion.Euler(PlayerCamera.SingletonInstance.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
+			spine_03.rotation = Quaternion.Euler(PlayerCameraManager.SingletonInstance.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
 			isSpine03AnimationRotInit = true;
 		}
 		else if (PlayerManager.SingletonInstance.IsAim == false)

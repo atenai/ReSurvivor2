@@ -23,7 +23,7 @@ public class SwitchCinemachineVirtualCamera : MonoBehaviour
 		// 当たった相手に"Player"タグが付いていた場合
 		if (collider.gameObject.CompareTag("Player"))
 		{
-			PlayerCamera.SingletonInstance.IsCinemachineActive = true;
+			PlayerCameraManager.SingletonInstance.IsCinemachineActive = true;
 			// 他のvirtualCameraよりも高い優先度にすることで切り替わる
 			virtualCamera.Priority = 300;
 		}
@@ -34,7 +34,7 @@ public class SwitchCinemachineVirtualCamera : MonoBehaviour
 		// 当たった相手に"Player"タグが付いていた場合
 		if (collider.gameObject.CompareTag("Player"))
 		{
-			PlayerCamera.SingletonInstance.IsCinemachineActive = false;
+			PlayerCameraManager.SingletonInstance.IsCinemachineActive = false;
 			// 元のpriorityに戻す
 			virtualCamera.Priority = defaultPriority;
 		}

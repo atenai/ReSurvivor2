@@ -223,7 +223,7 @@ public class ScreenUI : MonoBehaviour
 		{
 			imageCrosshair.gameObject.SetActive(true);
 
-			if (PlayerCamera.SingletonInstance.IsTargethit == true)
+			if (PlayerCameraManager.SingletonInstance.IsTargethit == true)
 			{
 				imageCrosshair.color = new Color32(255, 0, 0, 150);
 			}

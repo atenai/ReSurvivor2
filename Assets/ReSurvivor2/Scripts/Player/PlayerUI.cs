@@ -125,8 +125,8 @@ public class PlayerUI : MonoBehaviour
 	/// </summary>
 	void StartTextMagazine()
 	{
-		textMagazine.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
-		textAmmo.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
+		textMagazine.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
+		textAmmo.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
 	}
 
 	/// <summary>
@@ -171,7 +171,7 @@ public class PlayerUI : MonoBehaviour
 			//常にキャンバスをメインカメラの方を向かせる
 			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
-			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManager.SingletonInstance.transform.position.x, PlayerManager.SingletonInstance.transform.position.y + PlayerCamera.SingletonInstance.NormalUpPos, PlayerManager.SingletonInstance.transform.position.z);
+			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManager.SingletonInstance.transform.position.x, PlayerManager.SingletonInstance.transform.position.y + PlayerCameraManager.SingletonInstance.NormalUpPos, PlayerManager.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
 			const float Normal_Scale = 0.6f;
 			const float Normal_RotY = 0.4f;
@@ -186,7 +186,7 @@ public class PlayerUI : MonoBehaviour
 			//常にキャンバスをメインカメラの方を向かせる
 			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
-			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManager.SingletonInstance.transform.position.x, PlayerManager.SingletonInstance.transform.position.y + PlayerCamera.SingletonInstance.AimUpPos, PlayerManager.SingletonInstance.transform.position.z);
+			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManager.SingletonInstance.transform.position.x, PlayerManager.SingletonInstance.transform.position.y + PlayerCameraManager.SingletonInstance.AimUpPos, PlayerManager.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
 			const float Aim_Scale = 0.2f;
 			const float Aim_RotY = 0.2f;
@@ -206,7 +206,7 @@ public class PlayerUI : MonoBehaviour
 		const float Rotate_Speed = -500.0f;
 		imageReload.gameObject.GetComponent<RectTransform>().transform.Rotate(0.0f, 0.0f, Rotate_Speed * Time.deltaTime);
 
-		if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
+		if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
 		{
 			if (reloadColor.a <= 1)
 			{
@@ -214,7 +214,7 @@ public class PlayerUI : MonoBehaviour
 				imageReload.color = reloadColor;
 			}
 		}
-		else if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
+		else if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
 		{
 			if (reloadColor.a >= 0)
 			{
@@ -229,8 +229,8 @@ public class PlayerUI : MonoBehaviour
 	/// </summary>
 	void UpdateTextMagazine()
 	{
-		textMagazine.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
-		textAmmo.text = PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
+		textMagazine.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
+		textAmmo.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
 	}
 
 	/// <summary>

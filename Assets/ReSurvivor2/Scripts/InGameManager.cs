@@ -88,7 +88,7 @@ public class InGameManager : MonoBehaviour
 		ES3.Save<bool>("KeyItem1", keyItem1);
 		MissionManager.SingletonInstance.Save();
 		PlayerManager.SingletonInstance.Save();
-		PlayerCamera.SingletonInstance.Save();
+		PlayerCameraManager.SingletonInstance.Save();
 		ScreenUI.SingletonInstance.ShowSaveNowText();
 	}
 
@@ -274,7 +274,7 @@ public class InGameManager : MonoBehaviour
 			InGameManager.IsFirstLoad = true;
 			MissionManager.IsFirstLoad = true;
 			PlayerManager.IsFirstLoad = true;
-			PlayerCamera.IsFirstLoad = true;
+			PlayerCameraManager.IsFirstLoad = true;
 			//シーンを切り替える
 			isGameClearTriggered = true;
 			ScreenUI.SingletonInstance.FadeOut();
@@ -290,7 +290,7 @@ public class InGameManager : MonoBehaviour
 		InGameManager.IsFirstLoad = true;
 		MissionManager.IsFirstLoad = true;
 		PlayerManager.IsFirstLoad = true;
-		PlayerCamera.IsFirstLoad = true;
+		PlayerCameraManager.IsFirstLoad = true;
 		//シーンを切り替える
 		isGameOverTriggered = true;
 		ScreenUI.SingletonInstance.FadeOut();

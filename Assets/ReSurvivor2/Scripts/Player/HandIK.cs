@@ -21,9 +21,9 @@ public class HandIK : MonoBehaviour
 	/// </summary> 
 	void OnAnimatorIK()
 	{
-		if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun)
+		if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun)
 		{
-			if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
+			if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
 			{
 				//キャラクターの左手の位置と角度を合わせる
 				animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
@@ -36,9 +36,9 @@ public class HandIK : MonoBehaviour
 
 			}
 		}
-		else if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunTYPE == EnumManager.GunTYPE.AssaultRifle)
+		else if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunTYPE == EnumManager.GunTYPE.AssaultRifle)
 		{
-			if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
+			if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
 			{
 				//キャラクターの左手の位置と角度を合わせる
 				animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
@@ -51,9 +51,9 @@ public class HandIK : MonoBehaviour
 
 			}
 		}
-		else if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunTYPE == EnumManager.GunTYPE.ShotGun)
+		else if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunTYPE == EnumManager.GunTYPE.ShotGun)
 		{
-			if (PlayerCamera.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
+			if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
 			{
 				//キャラクターの左手の位置と角度を合わせる
 				animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
