@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LoadingScene : MonoBehaviour
+public class LoadingNextStageScene : MonoBehaviour
 {
 	[Tooltip("次のステージ名")]
 	[SerializeField] EnumManager.StageTYPE nextStage;
