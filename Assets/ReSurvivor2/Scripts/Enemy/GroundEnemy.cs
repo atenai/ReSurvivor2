@@ -13,7 +13,7 @@ using UnityEngine.AI;
 public class GroundEnemy : MonoBehaviour, IEnemy
 {
 	[UnityEngine.Tooltip("HP")]
-	HitPoint hp;
+	[SerializeField] HitPoint hp;
 	public HitPoint GetHitPoint()
 	{
 		return hp;
@@ -240,7 +240,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	void Initialize()
 	{
-		hp = new HitPoint(HitPoint.MaxHp);
+		hp = new HitPoint(HitPoint.Max_Hp);
 		hp.Initialize(DamageEffect, Dead);
 		sliderHp.value = 1;
 		//敵マーカー作成
@@ -567,7 +567,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	public void DamageEffect()
 	{
-		SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.MaxHp;
+		SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.Max_Hp;
 	}
 
 	/// <summary>

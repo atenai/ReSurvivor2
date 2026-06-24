@@ -70,17 +70,13 @@ public class Player : MonoBehaviour
 	Quaternion respawnRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 
 	[Tooltip("HP")]
-	HitPoint hp;
+	[SerializeField] HitPoint hp;
 	public HitPoint HP => hp;
 
-	[Tooltip("現在のスタミナ")]
-	float currentStamina = 1000.0f;
-	public float CurrentStamina => currentStamina;
-	[Tooltip("スタミナの最大値")]
-	float maxStamina = 1000.0f;
-	public float MaxStamina => maxStamina;
-	[Tooltip("疲れてダッシュできなくなる時のスタミナ値")]
-	float tiredStamina = 100.0f;
+	[Tooltip("スタミナ")]
+	[SerializeField] Stamina stamina;
+	public Stamina Stamina => stamina;
+
 	[Tooltip("現在のアーマープレート数")]
 	int currentArmorPlate = 2;
 	public int CurrentArmorPlate => currentArmorPlate;
@@ -169,7 +165,7 @@ public class Player : MonoBehaviour
 	{
 		Debug.Log("<color=cyan>プレイヤーセーブ</color>");
 		ES3.Save<float>("Hp", hp.CurrentHp);
-		ES3.Save<float>("Stamina", currentStamina);
+		ES3.Save<float>("Stamina", stamina.CurrentStamina);
 		ES3.Save<int>("ArmorPlate", currentArmorPlate);
 		ES3.Save<int>("Food", currentFood);
 		ES3.Save<int>("Mine", currentMine);
@@ -189,10 +185,11 @@ public class Player : MonoBehaviour
 		isFirstLoad = false;
 
 		//Debug.Log("<color=purple>プレイヤーロード</color>");
-		float loadHp = ES3.Load<float>("Hp", HitPoint.MaxHp);
+		float loadHp = ES3.Load<float>("Hp", HitPoint.Max_Hp);
 		hp = new HitPoint(loadHp);
 		Debug.Log("<color=purple>HP : " + hp.CurrentHp + "</color>");
-		currentStamina = ES3.Load<float>("Stamina", maxStamina);
+		float loadStamina = ES3.Load<float>("Stamina", Stamina.Max_Stamina);
+		stamina = new Stamina(loadStamina);
 		//Debug.Log("<color=purple>スタミナ : " + currentStamina + "</color>");
 		currentArmorPlate = ES3.Load<int>("ArmorPlate", 2);
 		//Debug.Log("<color=purple>アーマープレート : " + currentArmorPlate + "</color>");
@@ -227,6 +224,7 @@ public class Player : MonoBehaviour
 	void Start()
 	{
 		InitHP();
+		InitStamina();
 		StartDamageEffect();
 		StartHpHealEffect();
 		StartStaminaHealEffect();
@@ -242,7 +240,15 @@ public class Player : MonoBehaviour
 	{
 		hp.Initialize(DamageEffect, InGameManager.SingletonInstance.GameOver, UseArmorPlate, HealEffect);
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.MaxHp);
+		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.Max_Hp);
+	}
+
+	/// <summary>
+	/// スタミナの初期化処理
+	/// </summary>
+	void InitStamina()
+	{
+		stamina.Initialize(ConsumeStaminaEffect, UseFood, RestoresStaminaEffect);
 	}
 
 	/// <summary>
@@ -357,7 +363,7 @@ public class Player : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("XInput LB"))
 		{
-			RestoresStamina();
+			stamina.RestoresStamina();
 		}
 
 		MineHoldKey();
@@ -494,12 +500,12 @@ public class Player : MonoBehaviour
 			if (inputVertical <= -0.1f || 0.1f <= inputVertical)//前後移動入力
 			{
 				//スタミナ消費
-				ConsumeStamina(2.0f);
+				stamina.ConsumeStamina(2.0f);
 			}
 			else if (inputHorizontal <= -0.1f || 0.1f <= inputHorizontal)//左右移動入力
 			{
 				//スタミナ消費
-				ConsumeStamina(2.0f);
+				stamina.ConsumeStamina(2.0f);
 			}
 			else
 			{
@@ -560,7 +566,7 @@ public class Player : MonoBehaviour
 			isDash = false;
 		}
 
-		if (currentStamina <= tiredStamina)
+		if (stamina.IsTired == true)
 		{
 			isDash = false;
 		}
@@ -601,9 +607,9 @@ public class Player : MonoBehaviour
 	/// </summary>
 	public void DamageEffect()
 	{
-		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.MaxHp;
+		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.Max_Hp;
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.MaxHp);
+		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.Max_Hp);
 		isDamage = true;
 	}
 
@@ -612,9 +618,9 @@ public class Player : MonoBehaviour
 	/// </summary>
 	public void HealEffect()
 	{
-		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.MaxHp;
+		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.Max_Hp;
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.MaxHp);
+		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.Max_Hp);
 		isHpHeal = true;
 	}
 
@@ -660,42 +666,33 @@ public class Player : MonoBehaviour
 	}
 
 	/// <summary>
-	/// スタミナを消費
+	/// スタミナを消費エフェクト
 	/// </summary> 
-	void ConsumeStamina(float amount)
+	void ConsumeStaminaEffect()
 	{
-		if (currentStamina <= 0.0f)
-		{
-			currentStamina = 0.0f;
-			return;
-		}
-
-		currentStamina = currentStamina - amount;
-		//Debug.Log("<color=orange>currentStamina : " + currentStamina + "</color>");
-		playerUI.SliderStamina.value = (float)currentStamina / (float)maxStamina;
+		playerUI.SliderStamina.value = (float)stamina.CurrentStamina / (float)Stamina.Max_Stamina;
 	}
 
 	/// <summary>
-	/// スタミナを回復
+	/// 食料を使用
 	/// </summary>
-	void RestoresStamina()
+	void UseFood()
 	{
 		if (currentFood <= 0)
 		{
 			return;
 		}
 
-		if (maxStamina <= currentStamina)
-		{
-			return;
-		}
-
 		currentFood = currentFood - 1;
 		playerUI.TextFood.text = currentFood.ToString();
+	}
 
-		currentStamina = maxStamina;
-		playerUI.SliderStamina.value = (float)currentStamina / (float)maxStamina;
-
+	/// <summary>
+	/// スタミナを回復エフェクト
+	/// </summary>
+	void RestoresStaminaEffect()
+	{
+		playerUI.SliderStamina.value = (float)stamina.CurrentStamina / (float)Stamina.Max_Stamina;
 		isStaminaHeal = true;
 	}
 

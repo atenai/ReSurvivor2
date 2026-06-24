@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine.Events;
 /// <summary>
 /// ヒットポイント
 /// </summary>
+[Serializable]
 public class HitPoint
 {
     [Tooltip("現在のHP")]
@@ -13,7 +15,7 @@ public class HitPoint
     public float CurrentHp => currentHp;
 
     [Tooltip("HPの最大値")]
-    public static readonly float MaxHp = 100.0f;
+    public static readonly float Max_Hp = 100.0f;
 
     [Tooltip("死んだか？")]
     public bool IsDead
@@ -28,7 +30,7 @@ public class HitPoint
 
     [Tooltip("ヒール中間処理")]
     UnityAction healProcessing = null;
-    [Tooltip("ヒール修了処理")]
+    [Tooltip("ヒール終了処理")]
     UnityAction healFinalize = null;
 
     public HitPoint(float initHP)
@@ -72,14 +74,14 @@ public class HitPoint
 	/// </summary>
 	public void Heal()
     {
-        if (MaxHp <= currentHp)
+        if (Max_Hp <= currentHp)
         {
             return;
         }
 
         healProcessing?.Invoke();
 
-        currentHp = MaxHp;
+        currentHp = Max_Hp;
 
         healFinalize?.Invoke();
     }

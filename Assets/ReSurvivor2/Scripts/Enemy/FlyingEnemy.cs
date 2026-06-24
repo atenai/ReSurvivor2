@@ -11,7 +11,7 @@ using UnityEngine.AI;
 public class FlyingEnemy : MonoBehaviour, IEnemy
 {
 	[UnityEngine.Tooltip("HP")]
-	HitPoint hp;
+	[SerializeField] HitPoint hp;
 	public HitPoint GetHitPoint()
 	{
 		return hp;
@@ -199,7 +199,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	void Initialize()
 	{
-		hp = new HitPoint(HitPoint.MaxHp);
+		hp = new HitPoint(HitPoint.Max_Hp);
 		hp.Initialize(DamageEffect, Dead);
 		sliderHp.value = 1;
 		//敵マーカー作成
@@ -447,7 +447,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 		Debug.Log("<color=red>当たった！ : " + collision.gameObject.name + "</color>");
 		if (isChase == true)
 		{
-			hp.Damage(HitPoint.MaxHp);
+			hp.Damage(HitPoint.Max_Hp);
 		}
 	}
 
@@ -483,7 +483,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	public void DamageEffect()
 	{
-		SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.MaxHp;
+		SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.Max_Hp;
 	}
 
 	/// <summary>
