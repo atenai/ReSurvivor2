@@ -12,6 +12,18 @@ public class InGameManager : MonoBehaviour
 	/// <summary>シングルトンのプロパティ</summary>
 	public static InGameManager SingletonInstance => singletonInstance;
 
+	[SerializeField] PlayerManager playerManager;
+	public PlayerManager PlayerManager => playerManager;
+
+	[SerializeField] PlayerCameraManager playerCameraManager;
+	public PlayerCameraManager PlayerCameraManager => playerCameraManager;
+
+	[SerializeField] TimerManager timerManager;
+	public TimerManager TimerManager => timerManager;
+
+	[SerializeField] ScreenUIManager screenUIManager;
+	public ScreenUIManager ScreenUIManager => screenUIManager;
+
 	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]
 	static bool isFirstLoad = true;
 	public static bool IsFirstLoad
@@ -94,25 +106,33 @@ public class InGameManager : MonoBehaviour
 		}
 
 		//ポーズ中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsPause == true)
+		if (InGameManager.SingletonInstance.ScreenUIManager.IsPause == true)
 		{
 			return;
 		}
 
 		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
+		if (InGameManager.SingletonInstance.ScreenUIManager.IsComputerMenuActive == true)
 		{
+			playerManager.ResetMove();
+			playerManager.PlayerModel.ResetMoveAnimation();
 			return;
 		}
 
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
+			playerManager.ResetMove();
+			playerManager.PlayerModel.ResetMoveAnimation();
 			return;
 		}
 		//↓ロード中に動かせない処理
 
-
+		playerManager.AfterUpdate();
+		playerManager.PlayerModel.AfterUpdate();
+		PlayerCameraManager.AfterUpdate();
+		timerManager.AfterUpdate();
+		screenUIManager.AfterUpdate();
 	}
 
 	void FixedUpdate()
@@ -129,6 +149,8 @@ public class InGameManager : MonoBehaviour
 			return;
 		}
 
+		playerCameraManager.BeforeFixedUpdate();
+
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
@@ -136,6 +158,7 @@ public class InGameManager : MonoBehaviour
 		}
 		//↓ロード中に動かせない処理
 
-
+		playerManager.AfterFixedUpdate();
+		playerCameraManager.AfterFixedUpdate();
 	}
 }

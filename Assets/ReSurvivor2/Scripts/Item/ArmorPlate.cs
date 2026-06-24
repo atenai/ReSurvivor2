@@ -11,14 +11,14 @@ public class ArmorPlate : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			if (PlayerManager.SingletonInstance.MaxArmorPlate <= PlayerManager.SingletonInstance.CurrentArmorPlate)
+			if (InGameManager.SingletonInstance.PlayerManager.MaxArmorPlate <= InGameManager.SingletonInstance.PlayerManager.CurrentArmorPlate)
 			{
 				return;
 			}
 
-			PlayerManager.SingletonInstance.AcquireArmorPlate();
+			InGameManager.SingletonInstance.PlayerManager.AcquireArmorPlate();
 
-			ScreenUIManager.SingletonInstance.ItemOutPutLog.OutputLog("+ArmorPlate");
+			InGameManager.SingletonInstance.ScreenUIManager.ItemOutPutLog.OutputLog("+ArmorPlate");
 			Destroy(this.gameObject);//このオブジェクトを削除            
 		}
 	}

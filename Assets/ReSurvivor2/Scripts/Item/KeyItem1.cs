@@ -20,7 +20,7 @@ public class KeyItem1 : MonoBehaviour
 		if (collider.CompareTag("Player"))
 		{
 			InGameManager.SingletonInstance.KeyItem1 = true;
-			ScreenUIManager.SingletonInstance.ItemOutPutLog.OutputLog("+KeyItem1");
+			InGameManager.SingletonInstance.ScreenUIManager.ItemOutPutLog.OutputLog("+KeyItem1");
 			Destroy(this.gameObject);//このオブジェクトを削除            
 		}
 	}

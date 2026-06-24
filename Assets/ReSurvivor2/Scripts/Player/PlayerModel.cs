@@ -60,23 +60,8 @@ public class PlayerModel : MonoBehaviour
 		spine_03_InitEulerAnglesX = spine_03.eulerAngles.x;
 	}
 
-	void Update()
+	public void AfterUpdate()
 	{
-		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
-		{
-			ResetMoveAnimation();
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			ResetMoveAnimation();
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		NormalMoveAnimation();
 	}
 
@@ -85,19 +70,19 @@ public class PlayerModel : MonoBehaviour
 	/// </summary>
 	void NormalMoveAnimation()
 	{
-		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedX", PlayerManager.SingletonInstance.InputHorizontal);
-		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedY", PlayerManager.SingletonInstance.InputVertical);
-		PlayerManager.SingletonInstance.Animator.SetBool("b_isAim", PlayerManager.SingletonInstance.IsAim);
+		InGameManager.SingletonInstance.PlayerManager.Animator.SetFloat("f_moveSpeedX", InGameManager.SingletonInstance.PlayerManager.InputHorizontal);
+		InGameManager.SingletonInstance.PlayerManager.Animator.SetFloat("f_moveSpeedY", InGameManager.SingletonInstance.PlayerManager.InputVertical);
+		InGameManager.SingletonInstance.PlayerManager.Animator.SetBool("b_isAim", InGameManager.SingletonInstance.PlayerManager.IsAim);
 	}
 
 	/// <summary>
 	/// 移動アニメーションをリセットする
 	/// </summary>
-	void ResetMoveAnimation()
+	public void ResetMoveAnimation()
 	{
-		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedX", 0.0f);
-		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedY", 0.0f);
-		PlayerManager.SingletonInstance.Animator.SetBool("b_isAim", false);
+		InGameManager.SingletonInstance.PlayerManager.Animator.SetFloat("f_moveSpeedX", 0.0f);
+		InGameManager.SingletonInstance.PlayerManager.Animator.SetFloat("f_moveSpeedY", 0.0f);
+		InGameManager.SingletonInstance.PlayerManager.Animator.SetBool("b_isAim", false);
 	}
 
 	void LateUpdate()
@@ -114,14 +99,14 @@ public class PlayerModel : MonoBehaviour
 	/// </summary> 
 	void RotateBoneNeck01()
 	{
-		if (PlayerManager.SingletonInstance.IsAim == true)
+		if (InGameManager.SingletonInstance.PlayerManager.IsAim == true)
 		{
 			const float aimAnimationRotY = -20.0f;
 			//腰のボーンの角度をカメラの向きにする
 			neck_01.rotation = Quaternion.Euler(neck_01.eulerAngles.x, neck_01.eulerAngles.y + aimAnimationRotY, neck_01.eulerAngles.z);
 			isNeck01AnimationRotInit = true;
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == false)
+		else if (InGameManager.SingletonInstance.PlayerManager.IsAim == false)
 		{
 			if (isNeck01AnimationRotInit == true)
 			{
@@ -137,15 +122,15 @@ public class PlayerModel : MonoBehaviour
 	/// </summary> 
 	void RotateBoneSpine03()
 	{
-		if (PlayerManager.SingletonInstance.IsAim == true)
+		if (InGameManager.SingletonInstance.PlayerManager.IsAim == true)
 		{
 			const float aimAnimationRotX = 12.5f;
 			const float aimAnimationRotY = 12.5f;
 			//腰のボーンの角度をカメラの向きにする
-			spine_03.rotation = Quaternion.Euler(PlayerCameraManager.SingletonInstance.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
+			spine_03.rotation = Quaternion.Euler(InGameManager.SingletonInstance.PlayerCameraManager.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
 			isSpine03AnimationRotInit = true;
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == false)
+		else if (InGameManager.SingletonInstance.PlayerManager.IsAim == false)
 		{
 			if (isSpine03AnimationRotInit == true)
 			{
@@ -161,13 +146,13 @@ public class PlayerModel : MonoBehaviour
 	/// </summary> 
 	void RotateBoneUpperArmR()
 	{
-		if (PlayerManager.SingletonInstance.IsAim == true)
+		if (InGameManager.SingletonInstance.PlayerManager.IsAim == true)
 		{
 			//右肩のボーンの角度をカメラの向きにする
 			//upperarm_r.rotation = Quaternion.Euler(PlayerCamera.singletonInstance.transform.localEulerAngles.x + aimAnimationRotX, upperarm_r.eulerAngles.y + aimAnimationRotY, upperarm_r.eulerAngles.z);
 			upperarm_r.rotation = Quaternion.Euler(upperarm_r.eulerAngles.x + Arm_Aim_Animation_Rot_X, upperarm_r.eulerAngles.y + Arm_Aim_Animation_Rot_Y, upperarm_r.eulerAngles.z);
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == false)
+		else if (InGameManager.SingletonInstance.PlayerManager.IsAim == false)
 		{
 			//右肩のボーンの角度を真正面（初期値）にする
 			upperarm_r.rotation = Quaternion.Euler(upperarm_r.eulerAngles.x, upperarm_r.eulerAngles.y, upperarm_r.eulerAngles.z);
@@ -179,12 +164,12 @@ public class PlayerModel : MonoBehaviour
 	/// </summary> 
 	void RotateBoneUpperArmL()
 	{
-		if (PlayerManager.SingletonInstance.IsAim == true)
+		if (InGameManager.SingletonInstance.PlayerManager.IsAim == true)
 		{
 			//左肩のボーンの角度をカメラの向きにする
 			upperarm_l.rotation = Quaternion.Euler(upperarm_l.eulerAngles.x + Arm_Aim_Animation_Rot_X, upperarm_l.eulerAngles.y + Arm_Aim_Animation_Rot_Y, upperarm_l.eulerAngles.z);
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == false)
+		else if (InGameManager.SingletonInstance.PlayerManager.IsAim == false)
 		{
 			//左肩のボーンの角度を真正面（初期値）にする
 			upperarm_l.rotation = Quaternion.Euler(upperarm_l.eulerAngles.x, upperarm_l.eulerAngles.y, upperarm_l.eulerAngles.z);

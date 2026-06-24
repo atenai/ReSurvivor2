@@ -215,7 +215,7 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 
 		if (targetPlayer == null)
 		{
-			targetPlayer = PlayerManager.SingletonInstance.gameObject;
+			targetPlayer = InGameManager.SingletonInstance.PlayerManager.gameObject;
 		}
 
 		if (enemyRigidbody == null)

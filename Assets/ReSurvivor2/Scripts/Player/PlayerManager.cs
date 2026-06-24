@@ -9,11 +9,6 @@ using Cinemachine;
 /// </summary>
 public class PlayerManager : MonoBehaviour
 {
-	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
-	static PlayerManager singletonInstance = null;
-	/// <summary>シングルトンのプロパティ</summary>
-	public static PlayerManager SingletonInstance => singletonInstance;
-
 	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]
 	static bool isFirstLoad = true;
 	public static bool IsFirstLoad
@@ -144,17 +139,6 @@ public class PlayerManager : MonoBehaviour
 
 	void Awake()
 	{
-		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
-		if (singletonInstance == null)
-		{
-			singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、Playerのインスタンスという意味になります。
-			DontDestroyOnLoad(this.gameObject);//シーンを切り替えた時に破棄しない
-		}
-		else
-		{
-			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
-		}
-
 		Load();
 	}
 
@@ -293,7 +277,7 @@ public class PlayerManager : MonoBehaviour
 		this.transform.rotation = respawnRotation;
 	}
 
-	void ResetMove()
+	public void ResetMove()
 	{
 		inputHorizontal = 0.0f;
 		inputVertical = 0.0f;
@@ -303,41 +287,8 @@ public class PlayerManager : MonoBehaviour
 		isDash = false;
 	}
 
-	void Update()
+	public void AfterUpdate()
 	{
-		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
-		{
-			return;
-		}
-
-		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
-		{
-			return;
-		}
-
-		//ポーズ中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsPause == true)
-		{
-			return;
-		}
-
-		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
-		{
-			ResetMove();
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			ResetMove();
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		inputHorizontal = Input.GetAxisRaw("Horizontal");
 		inputVertical = Input.GetAxisRaw("Vertical");
 
@@ -439,27 +390,8 @@ public class PlayerManager : MonoBehaviour
 		GameObject localGameObject = UnityEngine.Object.Instantiate(minePrefab, spawnPosition, this.transform.rotation);
 	}
 
-	void FixedUpdate()
+	public void AfterFixedUpdate()
 	{
-		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
-		{
-			return;
-		}
-
-		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
-		{
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		ChangeMoveSpeed();
 		NormalMove();
 		AimMove();

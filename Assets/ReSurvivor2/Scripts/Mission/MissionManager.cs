@@ -180,7 +180,7 @@ public class MissionManager : MonoBehaviour
         else if (isMissionActive == false)//ミッション中でない場合
         {
             SaveAndLoadDataManager.SingletonInstance.AllManagerSave();
-            ScreenUIManager.SingletonInstance.ShowComputerMenu();
+            InGameManager.SingletonInstance.ScreenUIManager.ShowComputerMenu();
         }
     }
 
@@ -189,7 +189,7 @@ public class MissionManager : MonoBehaviour
     /// </summary>
     void MissionResult()
     {
-        ScreenUIManager.SingletonInstance.ShowResult();
+        InGameManager.SingletonInstance.ScreenUIManager.ShowResult();
     }
 
     /// <summary>
@@ -250,6 +250,6 @@ public class MissionManager : MonoBehaviour
     {
         isMissionActive = false;
         currentMissionID = -1;
-        ScreenUIManager.SingletonInstance.MapUI.SetEndComputerStageNumber(-1);
+        InGameManager.SingletonInstance.ScreenUIManager.MapUI.SetEndComputerStageNumber(-1);
     }
 }

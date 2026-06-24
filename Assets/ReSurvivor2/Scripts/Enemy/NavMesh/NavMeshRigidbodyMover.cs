@@ -47,7 +47,7 @@ public class NavMeshRigidbodyMover : MonoBehaviour
 	void UpdateTargetPosition()
 	{
 		// 常にプレイヤーを目的地に設定する（敵 AI などの追従目的）
-		navMeshAgent.SetDestination(PlayerManager.SingletonInstance.transform.position);
+		navMeshAgent.SetDestination(InGameManager.SingletonInstance.PlayerManager.transform.position);
 	}
 
 

@@ -61,7 +61,7 @@ public class GunFacade
 		}
 		this.gunTYPE = ES3.Load<EnumManager.GunTYPE>("CurrentGunType", EnumManager.GunTYPE.HandGun);
 		SwitchWeapon(this.gunTYPE);
-		PlayerManager.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+		InGameManager.SingletonInstance.PlayerManager.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
 	}
 
 	/// <summary>
@@ -88,21 +88,21 @@ public class GunFacade
 			//Debug.Log("ハンドガン");
 			this.gunTYPE = EnumManager.GunTYPE.HandGun;
 			SwitchWeapon(this.gunTYPE);
-			PlayerManager.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			InGameManager.SingletonInstance.PlayerManager.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
 		{
 			//Debug.Log("アサルトライフル");
 			this.gunTYPE = EnumManager.GunTYPE.AssaultRifle;
 			SwitchWeapon(this.gunTYPE);
-			PlayerManager.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			InGameManager.SingletonInstance.PlayerManager.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetAxisRaw("XInput DPad Up&Down") < -0.5f)
 		{
 			//Debug.Log("ショットガン");
 			this.gunTYPE = EnumManager.GunTYPE.ShotGun;
 			SwitchWeapon(this.gunTYPE);
-			PlayerManager.SingletonInstance.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			InGameManager.SingletonInstance.PlayerManager.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
 		}
 	}
 

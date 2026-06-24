@@ -87,7 +87,7 @@ public class HandGun : GunBase
 		if (reloadCountTimer == 0)
 		{
 			//ハンドガンのリロードアニメーションをオン
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isHandGunReload", true);
+			InGameManager.SingletonInstance.PlayerManager.Animator.SetBool("b_isHandGunReload", true);
 
 			HandGunReloadSE();
 		}
@@ -126,7 +126,7 @@ public class HandGun : GunBase
 			isReloadTimeActive = false;//リロードのオフ
 
 			//ハンドガンのリロードアニメーションをオフ
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isHandGunReload", false);
+			InGameManager.SingletonInstance.PlayerManager.Animator.SetBool("b_isHandGunReload", false);
 		}
 	}
 
@@ -136,18 +136,18 @@ public class HandGun : GunBase
 	protected override void Fire()
 	{
 		HandGunBulletCasingSE();
-		PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunMuzzleFlashAndShell();
-		PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunSmoke();
+		InGameManager.SingletonInstance.PlayerManager.GunModelFacade.HandGunModel.HandGunMuzzleFlashAndShell();
+		InGameManager.SingletonInstance.PlayerManager.GunModelFacade.HandGunModel.HandGunSmoke();
 
 		HandGunFireSE();
 
-		Ray ray = new Ray(PlayerCameraManager.SingletonInstance.transform.position, PlayerCameraManager.SingletonInstance.transform.forward);
-		Debug.DrawRay(ray.origin, ray.direction * PlayerCameraManager.SingletonInstance.RaycastRange, Color.red, 10.0f);
+		Ray ray = new Ray(InGameManager.SingletonInstance.PlayerCameraManager.transform.position, InGameManager.SingletonInstance.PlayerCameraManager.transform.forward);
+		Debug.DrawRay(ray.origin, ray.direction * InGameManager.SingletonInstance.PlayerCameraManager.RaycastRange, Color.red, 10.0f);
 		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, PlayerCameraManager.SingletonInstance.RaycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
+		if (Physics.Raycast(ray, out hit, InGameManager.SingletonInstance.PlayerCameraManager.RaycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
 		{
 #if UNITY_EDITOR//Unityエディター上での処理
-			PlayerCameraManager.SingletonInstance.HitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
+			InGameManager.SingletonInstance.PlayerCameraManager.HitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 #endif //終了  
 			if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy") || hit.collider.gameObject.CompareTag("Mine") || hit.collider.gameObject.CompareTag("Grenade"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 			{
@@ -168,10 +168,10 @@ public class HandGun : GunBase
 				}
 
 				//ヒットレティクルを表示
-				ScreenUIManager.SingletonInstance.IsHitReticule = true;
+				InGameManager.SingletonInstance.ScreenUIManager.IsHitReticule = true;
 
 				//ヒット音を再生
-				SoundManager.SingletonInstance.HitSEPool.GetGameObject(PlayerCameraManager.SingletonInstance.transform);
+				SoundManager.SingletonInstance.HitSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerCameraManager.transform);
 
 				//追跡開始
 				EnemyManager.SingletonInstance.ChaseEvent.Invoke();
@@ -200,7 +200,7 @@ public class HandGun : GunBase
 	/// </summary> 
 	void HandGunFireSE()
 	{
-		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunMuzzleTransform);
+		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerManager.GunModelFacade.HandGunModel.HandGunMuzzleTransform);
 	}
 
 	/// <summary>
@@ -208,7 +208,7 @@ public class HandGun : GunBase
 	/// </summary> 
 	void HandGunReloadSE()
 	{
-		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
+		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerManager.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -216,7 +216,7 @@ public class HandGun : GunBase
 	/// </summary>
 	void HandGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
+		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerManager.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>

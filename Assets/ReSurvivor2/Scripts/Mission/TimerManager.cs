@@ -7,11 +7,6 @@ using UnityEngine;
 /// </summary>
 public class TimerManager : MonoBehaviour
 {
-	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
-	static TimerManager singletonInstance = null;
-	/// <summary>シングルトンのプロパティ</summary>
-	public static TimerManager SingletonInstance => singletonInstance;
-
 	[Tooltip("totalTimeは秒で集計されている")]
 	float totalTime = 0.0f;
 
@@ -32,51 +27,11 @@ public class TimerManager : MonoBehaviour
 
 	void Awake()
 	{
-		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
-		if (singletonInstance == null)
-		{
-			singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、Playerのインスタンスという意味になります。
-			DontDestroyOnLoad(this.gameObject);//シーンを切り替えた時に破棄しない
-		}
-		else
-		{
-			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
-		}
+
 	}
 
-	void Update()
+	public void AfterUpdate()
 	{
-		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
-		{
-			return;
-		}
-
-		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
-		{
-			return;
-		}
-
-		//ポーズ中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsPause == true)
-		{
-			return;
-		}
-
-		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
-		{
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		UpdateTimerSystem();
 	}
 
@@ -87,7 +42,7 @@ public class TimerManager : MonoBehaviour
 	{
 		if (MissionManager.SingletonInstance.IsMissionActive == false)
 		{
-			PlayerManager.SingletonInstance.PlayerUI.TextTimer.text = "--" + ":" + "--";
+			InGameManager.SingletonInstance.PlayerManager.PlayerUI.TextTimer.text = "--" + ":" + "--";
 			return;
 		}
 
@@ -100,12 +55,12 @@ public class TimerManager : MonoBehaviour
 		if (minute <= 0 && seconds <= 0.0f)
 		{
 			//ゲームオーバー処理
-			PlayerManager.SingletonInstance.PlayerUI.TextTimer.text = "00" + ":" + "00";
+			InGameManager.SingletonInstance.PlayerManager.PlayerUI.TextTimer.text = "00" + ":" + "00";
 			ChangeSceneManager.SingletonInstance.GameOver();
 		}
 		else
 		{
-			PlayerManager.SingletonInstance.PlayerUI.TextTimer.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
+			InGameManager.SingletonInstance.PlayerManager.PlayerUI.TextTimer.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
 		}
 	}
 }

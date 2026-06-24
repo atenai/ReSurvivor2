@@ -90,7 +90,7 @@ public class AssaultRifle : GunBase
 		if (reloadCountTimer == 0)
 		{
 			//アサルトライフルのリロードアニメーションをオン
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
+			InGameManager.SingletonInstance.PlayerManager.Animator.SetBool("b_isAssaultRifleReload", true);
 
 			AssaultRifleReloadSE();
 		}
@@ -129,7 +129,7 @@ public class AssaultRifle : GunBase
 			isReloadTimeActive = false;//リロードのオフ
 
 			//アサルトライフルのリロードアニメーションをオフ
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", false);
+			InGameManager.SingletonInstance.PlayerManager.Animator.SetBool("b_isAssaultRifleReload", false);
 		}
 	}
 
@@ -139,22 +139,22 @@ public class AssaultRifle : GunBase
 	protected override void Fire()
 	{
 		AssaultRifleBulletCasingSE();
-		PlayerManager.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleFlashAndShell();
-		PlayerManager.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleSmoke();
+		InGameManager.SingletonInstance.PlayerManager.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleFlashAndShell();
+		InGameManager.SingletonInstance.PlayerManager.GunModelFacade.AssaultRifleModel.AssaultRifleSmoke();
 
 		AssaultRifleFireSE();
 
-		Vector3 direction = PlayerCameraManager.SingletonInstance.transform.forward;
-		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), PlayerCameraManager.SingletonInstance.transform.up) * direction;
-		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), PlayerCameraManager.SingletonInstance.transform.right) * direction;
+		Vector3 direction = InGameManager.SingletonInstance.PlayerCameraManager.transform.forward;
+		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), InGameManager.SingletonInstance.PlayerCameraManager.transform.up) * direction;
+		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), InGameManager.SingletonInstance.PlayerCameraManager.transform.right) * direction;
 
-		Ray ray = new Ray(PlayerCameraManager.SingletonInstance.transform.position, direction);
-		Debug.DrawRay(ray.origin, ray.direction * PlayerCameraManager.SingletonInstance.RaycastRange, Color.red, 10.0f);
+		Ray ray = new Ray(InGameManager.SingletonInstance.PlayerCameraManager.transform.position, direction);
+		Debug.DrawRay(ray.origin, ray.direction * InGameManager.SingletonInstance.PlayerCameraManager.RaycastRange, Color.red, 10.0f);
 		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, PlayerCameraManager.SingletonInstance.RaycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
+		if (Physics.Raycast(ray, out hit, InGameManager.SingletonInstance.PlayerCameraManager.RaycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
 		{
 #if UNITY_EDITOR//Unityエディター上での処理
-			PlayerCameraManager.SingletonInstance.HitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
+			InGameManager.SingletonInstance.PlayerCameraManager.HitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 #endif //終了 
 			if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy") || hit.collider.gameObject.CompareTag("Mine") || hit.collider.gameObject.CompareTag("Grenade"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 			{
@@ -175,10 +175,10 @@ public class AssaultRifle : GunBase
 				}
 
 				//ヒットレティクルを表示
-				ScreenUIManager.SingletonInstance.IsHitReticule = true;
+				InGameManager.SingletonInstance.ScreenUIManager.IsHitReticule = true;
 
 				//ヒット音を再生
-				SoundManager.SingletonInstance.HitSEPool.GetGameObject(PlayerCameraManager.SingletonInstance.transform);
+				SoundManager.SingletonInstance.HitSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerCameraManager.transform);
 
 				//地雷を爆破
 				Mine mine = hit.transform.GetComponent<Mine>();
@@ -207,7 +207,7 @@ public class AssaultRifle : GunBase
 	/// </summary> 
 	void AssaultRifleFireSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleTransform);
+		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerManager.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleTransform);
 	}
 
 	/// <summary>
@@ -215,7 +215,7 @@ public class AssaultRifle : GunBase
 	/// </summary> 
 	void AssaultRifleReloadSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
+		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerManager.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -223,7 +223,7 @@ public class AssaultRifle : GunBase
 	/// </summary>
 	void AssaultRifleBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
+		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerManager.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>

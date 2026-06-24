@@ -258,7 +258,7 @@ public class ChangeSceneManager : MonoBehaviour
             PlayerCameraManager.IsFirstLoad = true;
             //シーンを切り替える
             isGameClearTriggered = true;
-            ScreenUIManager.SingletonInstance.FadeOut();
+            InGameManager.SingletonInstance.ScreenUIManager.FadeOut();
         }
     }
 
@@ -275,6 +275,6 @@ public class ChangeSceneManager : MonoBehaviour
         PlayerCameraManager.IsFirstLoad = true;
         //シーンを切り替える
         isGameOverTriggered = true;
-        ScreenUIManager.SingletonInstance.FadeOut();
+        InGameManager.SingletonInstance.ScreenUIManager.FadeOut();
     }
 }

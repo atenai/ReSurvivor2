@@ -93,7 +93,7 @@ public class ShotGun : GunBase
 		if (reloadCountTimer == 0)
 		{
 			//ショットガンのリロードアニメーションをオン
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isShotGunReload", true);
+			InGameManager.SingletonInstance.PlayerManager.Animator.SetBool("b_isShotGunReload", true);
 
 			ShotGunReloadSE();
 		}
@@ -132,7 +132,7 @@ public class ShotGun : GunBase
 			isReloadTimeActive = false;//リロードのオフ
 
 			//ショットガンのリロードアニメーションをオフ
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isShotGunReload", false);
+			InGameManager.SingletonInstance.PlayerManager.Animator.SetBool("b_isShotGunReload", false);
 		}
 	}
 
@@ -142,25 +142,25 @@ public class ShotGun : GunBase
 	protected override void Fire()
 	{
 		ShotGunBulletCasingSE();
-		PlayerManager.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunMuzzleFlashAndShell();
-		PlayerManager.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunSmoke();
+		InGameManager.SingletonInstance.PlayerManager.GunModelFacade.ShotGunModel.ShotGunMuzzleFlashAndShell();
+		InGameManager.SingletonInstance.PlayerManager.GunModelFacade.ShotGunModel.ShotGunSmoke();
 
 		ShotGunFireSE();
 		bool isOnceShotGunHitSE = false;
 
 		for (int i = 0; i < shotGunBullet; i++)
 		{
-			Vector3 direction = PlayerCameraManager.SingletonInstance.transform.forward;
-			direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-shotGunRandomAngle, shotGunRandomAngle), PlayerCameraManager.SingletonInstance.transform.up) * direction;
-			direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-shotGunRandomAngle, shotGunRandomAngle), PlayerCameraManager.SingletonInstance.transform.right) * direction;
+			Vector3 direction = InGameManager.SingletonInstance.PlayerCameraManager.transform.forward;
+			direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-shotGunRandomAngle, shotGunRandomAngle), InGameManager.SingletonInstance.PlayerCameraManager.transform.up) * direction;
+			direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-shotGunRandomAngle, shotGunRandomAngle), InGameManager.SingletonInstance.PlayerCameraManager.transform.right) * direction;
 
-			Ray ray = new Ray(PlayerCameraManager.SingletonInstance.transform.position, direction);
-			Debug.DrawRay(ray.origin, ray.direction * PlayerCameraManager.SingletonInstance.RaycastRange, Color.red, 10.0f);
+			Ray ray = new Ray(InGameManager.SingletonInstance.PlayerCameraManager.transform.position, direction);
+			Debug.DrawRay(ray.origin, ray.direction * InGameManager.SingletonInstance.PlayerCameraManager.RaycastRange, Color.red, 10.0f);
 			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit, PlayerCameraManager.SingletonInstance.RaycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
+			if (Physics.Raycast(ray, out hit, InGameManager.SingletonInstance.PlayerCameraManager.RaycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
 			{
 #if UNITY_EDITOR//Unityエディター上での処理
-				PlayerCameraManager.SingletonInstance.HitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
+				InGameManager.SingletonInstance.PlayerCameraManager.HitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
 #endif //終了 
 				if (hit.collider.gameObject.CompareTag("Enemy") || hit.collider.gameObject.CompareTag("FlyingEnemy") || hit.collider.gameObject.CompareTag("GroundEnemy") || hit.collider.gameObject.CompareTag("Mine") || hit.collider.gameObject.CompareTag("Grenade"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 				{
@@ -181,13 +181,13 @@ public class ShotGun : GunBase
 					}
 
 					//ヒットレティクルを表示
-					ScreenUIManager.SingletonInstance.IsHitReticule = true;
+					InGameManager.SingletonInstance.ScreenUIManager.IsHitReticule = true;
 
 					if (isOnceShotGunHitSE == false)
 					{
 						isOnceShotGunHitSE = true;
 						//ヒット音を再生
-						SoundManager.SingletonInstance.HitSEPool.GetGameObject(PlayerCameraManager.SingletonInstance.transform);
+						SoundManager.SingletonInstance.HitSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerCameraManager.transform);
 					}
 
 					//地雷を爆破
@@ -218,7 +218,7 @@ public class ShotGun : GunBase
 	/// </summary> 
 	void ShotGunFireSE()
 	{
-		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunMuzzleTransform);
+		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerManager.GunModelFacade.ShotGunModel.ShotGunMuzzleTransform);
 	}
 
 	/// <summary>
@@ -226,7 +226,7 @@ public class ShotGun : GunBase
 	/// </summary> 
 	void ShotGunReloadSE()
 	{
-		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
+		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerManager.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -234,7 +234,7 @@ public class ShotGun : GunBase
 	/// </summary>
 	void ShotGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
+		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(InGameManager.SingletonInstance.PlayerManager.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
 	}
 
 	/// <summary>

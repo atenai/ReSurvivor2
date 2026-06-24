@@ -14,7 +14,7 @@ public class HandGunAmmo : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.HandGun, amount, DestroySelf);
+			InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.HandGun, amount, DestroySelf);
 		}
 	}
 
@@ -23,7 +23,7 @@ public class HandGunAmmo : MonoBehaviour
 	/// </summary>
 	void DestroySelf()
 	{
-		ScreenUIManager.SingletonInstance.ItemOutPutLog.OutputLog("+HandGunAmmo");
+		InGameManager.SingletonInstance.ScreenUIManager.ItemOutPutLog.OutputLog("+HandGunAmmo");
 		Destroy(this.gameObject);
 	}
 }

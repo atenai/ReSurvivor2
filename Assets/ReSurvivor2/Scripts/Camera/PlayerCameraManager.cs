@@ -8,11 +8,6 @@ using Cinemachine;
 /// </summary> 
 public class PlayerCameraManager : MonoBehaviour
 {
-	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
-	static PlayerCameraManager singletonInstance = null;
-	/// <summary>シングルトンのプロパティ</summary>
-	public static PlayerCameraManager SingletonInstance => singletonInstance;
-
 	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]
 	static bool isFirstLoad = true;
 	public static bool IsFirstLoad
@@ -112,17 +107,6 @@ public class PlayerCameraManager : MonoBehaviour
 
 	void Awake()
 	{
-		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
-		if (singletonInstance == null)
-		{
-			singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、PlayerCameraのインスタンスという意味になります。
-			DontDestroyOnLoad(this.gameObject);//シーンを切り替えた時に破棄しない
-		}
-		else
-		{
-			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
-		}
-
 		Load();
 	}
 
@@ -150,73 +134,30 @@ public class PlayerCameraManager : MonoBehaviour
 		gunFacade.Load();
 	}
 
-	void Update()
+	public void AfterUpdate()
 	{
-		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
-		{
-			return;
-		}
-
-		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
-		{
-			return;
-		}
-
-		//ポーズ中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsPause == true)
-		{
-			return;
-		}
-
-		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
-		{
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		//シネマシーンカメラがアクティブの場合は切り上げる
 		if (isCinemachineActive == true)
 		{
 			return;
 		}
 
-		gunFacade.UpdateGun(PlayerManager.SingletonInstance.IsAim);
+		gunFacade.UpdateGun(InGameManager.SingletonInstance.PlayerManager.IsAim);
 	}
 
-	void FixedUpdate()
+	public void BeforeFixedUpdate()
 	{
-		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
-		{
-			return;
-		}
-
-		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
-		{
-			return;
-		}
-
 		//シネマシーンカメラがアクティブの場合は切り上げる
 		if (isCinemachineActive == true)
 		{
 			return;
 		}
 
-		if (PlayerManager.SingletonInstance.IsAim == false)
+		if (InGameManager.SingletonInstance.PlayerManager.IsAim == false)
 		{
 			CameraNormalMove();
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == true)
+		else if (InGameManager.SingletonInstance.PlayerManager.IsAim == true)
 		{
 			CameraAimMove();
 		}
@@ -224,14 +165,11 @@ public class PlayerCameraManager : MonoBehaviour
 		CameraDash();
 
 		CameraOcclusion();
+	}
 
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
 
+	public void AfterFixedUpdate()
+	{
 		CameraRot();
 	}
 
@@ -241,9 +179,9 @@ public class PlayerCameraManager : MonoBehaviour
 	void CameraNormalMove()
 	{
 		//通常カメラ位置をプレイヤーの座標位置から計算
-		Vector3 cameraPos = PlayerManager.SingletonInstance.transform.position + (Vector3.up * normalUpPos) + (this.transform.forward * normalForwardPos);
+		Vector3 cameraPos = InGameManager.SingletonInstance.PlayerManager.transform.position + (Vector3.up * normalUpPos) + (this.transform.forward * normalForwardPos);
 		//カメラの位置を移動させる
-		this.transform.position = Vector3.Lerp(transform.position, cameraPos, PlayerManager.SingletonInstance.NormalMoveSpeed * 10 * Time.deltaTime);
+		this.transform.position = Vector3.Lerp(transform.position, cameraPos, InGameManager.SingletonInstance.PlayerManager.NormalMoveSpeed * 10 * Time.deltaTime);
 	}
 
 	/// <summary>
@@ -252,9 +190,9 @@ public class PlayerCameraManager : MonoBehaviour
 	void CameraAimMove()
 	{
 		//肩越しカメラ位置をプレイヤーの座標位置から計算
-		Vector3 cameraPos = PlayerManager.SingletonInstance.transform.position + (PlayerManager.SingletonInstance.transform.right * aimRightPos) + (Vector3.up * aimUpPos) + (this.transform.forward * aimForwardPos);
+		Vector3 cameraPos = InGameManager.SingletonInstance.PlayerManager.transform.position + (InGameManager.SingletonInstance.PlayerManager.transform.right * aimRightPos) + (Vector3.up * aimUpPos) + (this.transform.forward * aimForwardPos);
 		//カメラの位置を移動させる
-		this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, PlayerManager.SingletonInstance.WeaponMoveSpeed * 10 * Time.deltaTime);
+		this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, InGameManager.SingletonInstance.PlayerManager.WeaponMoveSpeed * 10 * Time.deltaTime);
 	}
 
 	/// <summary>
@@ -266,7 +204,7 @@ public class PlayerCameraManager : MonoBehaviour
 		float x_Rotation = Input.GetAxis("Mouse X") + Input.GetAxis("XInput R_Stick_Left&Right");
 		float y_Rotation = Input.GetAxis("Mouse Y") + Input.GetAxis("XInput R_Stick_Up&Down");
 
-		if (PlayerManager.SingletonInstance.IsAim == true)
+		if (InGameManager.SingletonInstance.PlayerManager.IsAim == true)
 		{
 			localCameraSpeedX = aimCameraSpeedX;
 			localCameraSpeedY = aimCameraSpeedY;
@@ -300,7 +238,7 @@ public class PlayerCameraManager : MonoBehaviour
 				}
 			}
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == false)
+		else if (InGameManager.SingletonInstance.PlayerManager.IsAim == false)
 		{
 			localCameraSpeedX = normalCameraSpeedX;
 			localCameraSpeedY = normalCameraSpeedY;
@@ -314,7 +252,7 @@ public class PlayerCameraManager : MonoBehaviour
 		if (deadZoneX < Mathf.Abs(x_Rotation))
 		{
 			// 回転軸はワールド座標のY軸
-			this.transform.RotateAround(PlayerManager.SingletonInstance.transform.position, Vector3.up, x_Rotation * Time.deltaTime * localCameraSpeedX);
+			this.transform.RotateAround(InGameManager.SingletonInstance.PlayerManager.transform.position, Vector3.up, x_Rotation * Time.deltaTime * localCameraSpeedX);
 		}
 
 		// Y方向に一定量移動していれば縦回転
@@ -328,7 +266,7 @@ public class PlayerCameraManager : MonoBehaviour
 			if (lookingUp < cameraAngles && cameraAngles < lookingUpLimit || lookingDownLimit < cameraAngles && cameraAngles < lookingDown)//ここの数値を変えればカメラの上下の止まる限界値が変わる
 			{
 				// 回転軸はカメラ自身のX軸
-				this.transform.RotateAround(PlayerManager.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
+				this.transform.RotateAround(InGameManager.SingletonInstance.PlayerManager.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
 			}
 			else
 			{
@@ -337,7 +275,7 @@ public class PlayerCameraManager : MonoBehaviour
 					if (y_Rotation < 0)
 					{
 						//マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
-						this.transform.RotateAround(PlayerManager.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
+						this.transform.RotateAround(InGameManager.SingletonInstance.PlayerManager.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
 					}
 				}
 				else
@@ -345,7 +283,7 @@ public class PlayerCameraManager : MonoBehaviour
 					if (0 < y_Rotation)
 					{
 						//マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
-						this.transform.RotateAround(PlayerManager.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
+						this.transform.RotateAround(InGameManager.SingletonInstance.PlayerManager.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
 					}
 
 				}
@@ -358,7 +296,7 @@ public class PlayerCameraManager : MonoBehaviour
 	/// </summary>
 	void CameraDash()
 	{
-		if (PlayerManager.SingletonInstance.IsDash == true)
+		if (InGameManager.SingletonInstance.PlayerManager.IsDash == true)
 		{
 			//徐々に子カメラをダッシュ時の位置にする
 			childMainLongDistanceVirtualCamera.Priority = longDistanceCameraHighPriority;
@@ -375,19 +313,19 @@ public class PlayerCameraManager : MonoBehaviour
 	/// </summary>
 	void CameraOcclusion()
 	{
-		if (PlayerManager.SingletonInstance == null)
+		if (InGameManager.SingletonInstance.PlayerManager == null)
 		{
 			return;
 		}
 
-		if (PlayerManager.SingletonInstance.IsAim == true)
+		if (InGameManager.SingletonInstance.PlayerManager.IsAim == true)
 		{
 			childMainShortDistanceVirtualCamera.Priority = shortDistanceCameraNormalPriority;
 			return;
 		}
 
 		Vector3 origin = childMainMidDistanceVirtualCamera.transform.position;
-		Vector3 targetPosition = PlayerManager.SingletonInstance.transform.position;
+		Vector3 targetPosition = InGameManager.SingletonInstance.PlayerManager.transform.position;
 		Vector3 direction = targetPosition - origin;
 		float distance = direction.magnitude;
 		if (distance <= 0.001f)
@@ -412,17 +350,17 @@ public class PlayerCameraManager : MonoBehaviour
 
 	bool IsPlayerCollider(Collider collider)
 	{
-		if (collider == null || PlayerManager.SingletonInstance == null)
+		if (collider == null || InGameManager.SingletonInstance.PlayerManager == null)
 		{
 			return false;
 		}
 
-		if (collider.gameObject == PlayerManager.SingletonInstance.gameObject)
+		if (collider.gameObject == InGameManager.SingletonInstance.PlayerManager.gameObject)
 		{
 			return true;
 		}
 
-		return collider.transform.IsChildOf(PlayerManager.SingletonInstance.transform);
+		return collider.transform.IsChildOf(InGameManager.SingletonInstance.PlayerManager.transform);
 	}
 
 	void OnGUI()

@@ -65,7 +65,7 @@ public partial class SROptions
 	[Sort(0)]
 	public void AcquireArmorPlate()
 	{
-		PlayerManager.SingletonInstance.AcquireArmorPlate();
+		InGameManager.SingletonInstance.PlayerManager.AcquireArmorPlate();
 	}
 
 	[Category("Player")]
@@ -73,7 +73,7 @@ public partial class SROptions
 	[Sort(1)]
 	public void IncreaseMaxArmorPlate()
 	{
-		PlayerManager.SingletonInstance.IncreaseMaxArmorPlate();
+		InGameManager.SingletonInstance.PlayerManager.IncreaseMaxArmorPlate();
 	}
 
 	[Category("Player")]
@@ -81,7 +81,7 @@ public partial class SROptions
 	[Sort(2)]
 	public void AcquireFood()
 	{
-		PlayerManager.SingletonInstance.AcquireFood();
+		InGameManager.SingletonInstance.PlayerManager.AcquireFood();
 	}
 
 	[Category("Player")]
@@ -89,7 +89,7 @@ public partial class SROptions
 	[Sort(3)]
 	public void IncreaseMaxFood()
 	{
-		PlayerManager.SingletonInstance.IncreaseMaxFood();
+		InGameManager.SingletonInstance.PlayerManager.IncreaseMaxFood();
 	}
 
 	[Category("Player")]
@@ -97,7 +97,7 @@ public partial class SROptions
 	[Sort(4)]
 	public void AcquireHandGunAmmo()
 	{
-		PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.HandGun);
+		InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.HandGun);
 	}
 
 	[Category("Player")]
@@ -105,7 +105,7 @@ public partial class SROptions
 	[Sort(5)]
 	public void AcquireAssaultRifleAmmo()
 	{
-		PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.AssaultRifle);
+		InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.AssaultRifle);
 	}
 
 	[Category("Player")]
@@ -113,7 +113,7 @@ public partial class SROptions
 	[Sort(6)]
 	public void AcquireShotGunAmmo()
 	{
-		PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.ShotGun);
+		InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.ShotGun);
 	}
 
 	#endregion

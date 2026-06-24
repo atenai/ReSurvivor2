@@ -85,7 +85,7 @@ public class PlayerUI : MonoBehaviour
 	void InitHP()
 	{
 		Debug.Log("InitHP");
-		sliderHp.value = (float)PlayerManager.SingletonInstance.HP.CurrentHp / (float)HitPoint.Max_Hp;
+		sliderHp.value = (float)InGameManager.SingletonInstance.PlayerManager.HP.CurrentHp / (float)HitPoint.Max_Hp;
 	}
 
 	/// <summary>
@@ -93,7 +93,7 @@ public class PlayerUI : MonoBehaviour
 	/// </summary> 
 	void InitStamina()
 	{
-		sliderStamina.value = (float)PlayerManager.SingletonInstance.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
+		sliderStamina.value = (float)InGameManager.SingletonInstance.PlayerManager.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
 	}
 
 	/// <summary>
@@ -101,7 +101,7 @@ public class PlayerUI : MonoBehaviour
 	/// </summary> 
 	void StartTextArmorPlate()
 	{
-		textArmorPlate.text = PlayerManager.SingletonInstance.CurrentArmorPlate.ToString();
+		textArmorPlate.text = InGameManager.SingletonInstance.PlayerManager.CurrentArmorPlate.ToString();
 	}
 
 	/// <summary>
@@ -109,7 +109,7 @@ public class PlayerUI : MonoBehaviour
 	/// </summary> 
 	void StartTextFood()
 	{
-		textFood.text = PlayerManager.SingletonInstance.CurrentFood.ToString();
+		textFood.text = InGameManager.SingletonInstance.PlayerManager.CurrentFood.ToString();
 	}
 
 	/// <summary>
@@ -125,8 +125,8 @@ public class PlayerUI : MonoBehaviour
 	/// </summary>
 	void StartTextMagazine()
 	{
-		textMagazine.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
-		textAmmo.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
+		textMagazine.text = InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
+		textAmmo.text = InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
 	}
 
 	/// <summary>
@@ -139,12 +139,12 @@ public class PlayerUI : MonoBehaviour
 
 	void Update()
 	{
-		if (ScreenUIManager.SingletonInstance.IsPause == true)
+		if (InGameManager.SingletonInstance.ScreenUIManager.IsPause == true)
 		{
 			return;
 		}
 
-		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
+		if (InGameManager.SingletonInstance.ScreenUIManager.IsComputerMenuActive == true)
 		{
 			return;
 		}
@@ -166,12 +166,12 @@ public class PlayerUI : MonoBehaviour
 	/// </summary> 
 	void UpdateUITransform()
 	{
-		if (PlayerManager.SingletonInstance.IsAim == false)
+		if (InGameManager.SingletonInstance.PlayerManager.IsAim == false)
 		{
 			//常にキャンバスをメインカメラの方を向かせる
 			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
-			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManager.SingletonInstance.transform.position.x, PlayerManager.SingletonInstance.transform.position.y + PlayerCameraManager.SingletonInstance.NormalUpPos, PlayerManager.SingletonInstance.transform.position.z);
+			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(InGameManager.SingletonInstance.PlayerManager.transform.position.x, InGameManager.SingletonInstance.PlayerManager.transform.position.y + InGameManager.SingletonInstance.PlayerCameraManager.NormalUpPos, InGameManager.SingletonInstance.PlayerManager.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
 			const float Normal_Scale = 0.6f;
 			const float Normal_RotY = 0.4f;
@@ -181,12 +181,12 @@ public class PlayerUI : MonoBehaviour
 			imageBG.transform.localRotation = Quaternion.Euler(0.0f, Normal_RotY, 0.0f);
 			imageBG.transform.localPosition = new Vector3(Normal_RightPos, Normal_UpPos, 0.0f);
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == true)
+		else if (InGameManager.SingletonInstance.PlayerManager.IsAim == true)
 		{
 			//常にキャンバスをメインカメラの方を向かせる
 			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
-			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManager.SingletonInstance.transform.position.x, PlayerManager.SingletonInstance.transform.position.y + PlayerCameraManager.SingletonInstance.AimUpPos, PlayerManager.SingletonInstance.transform.position.z);
+			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(InGameManager.SingletonInstance.PlayerManager.transform.position.x, InGameManager.SingletonInstance.PlayerManager.transform.position.y + InGameManager.SingletonInstance.PlayerCameraManager.AimUpPos, InGameManager.SingletonInstance.PlayerManager.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
 			const float Aim_Scale = 0.2f;
 			const float Aim_RotY = 0.2f;
@@ -206,7 +206,7 @@ public class PlayerUI : MonoBehaviour
 		const float Rotate_Speed = -500.0f;
 		imageReload.gameObject.GetComponent<RectTransform>().transform.Rotate(0.0f, 0.0f, Rotate_Speed * Time.deltaTime);
 
-		if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
+		if (InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
 		{
 			if (reloadColor.a <= 1)
 			{
@@ -214,7 +214,7 @@ public class PlayerUI : MonoBehaviour
 				imageReload.color = reloadColor;
 			}
 		}
-		else if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
+		else if (InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
 		{
 			if (reloadColor.a >= 0)
 			{
@@ -229,8 +229,8 @@ public class PlayerUI : MonoBehaviour
 	/// </summary>
 	void UpdateTextMagazine()
 	{
-		textMagazine.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
-		textAmmo.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
+		textMagazine.text = InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
+		textAmmo.text = InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
 	}
 
 	/// <summary>

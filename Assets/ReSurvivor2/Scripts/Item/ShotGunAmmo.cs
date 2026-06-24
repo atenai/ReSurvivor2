@@ -14,7 +14,7 @@ public class ShotGunAmmo : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.ShotGun, amount, DestroySelf);
+			InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.ShotGun, amount, DestroySelf);
 		}
 	}
 
@@ -23,7 +23,7 @@ public class ShotGunAmmo : MonoBehaviour
 	/// </summary>
 	void DestroySelf()
 	{
-		ScreenUIManager.SingletonInstance.ItemOutPutLog.OutputLog("+ShotGunAmmo");
+		InGameManager.SingletonInstance.ScreenUIManager.ItemOutPutLog.OutputLog("+ShotGunAmmo");
 		Destroy(this.gameObject);
 	}
 }

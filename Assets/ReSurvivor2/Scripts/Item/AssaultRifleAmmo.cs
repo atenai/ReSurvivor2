@@ -14,7 +14,7 @@ public class AssaultRifleAmmo : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.AssaultRifle, amount, DestroySelf);
+			InGameManager.SingletonInstance.PlayerCameraManager.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.AssaultRifle, amount, DestroySelf);
 		}
 	}
 
@@ -23,7 +23,7 @@ public class AssaultRifleAmmo : MonoBehaviour
 	/// </summary>
 	void DestroySelf()
 	{
-		ScreenUIManager.SingletonInstance.ItemOutPutLog.OutputLog("+AssaultRifleAmmo");
+		InGameManager.SingletonInstance.ScreenUIManager.ItemOutPutLog.OutputLog("+AssaultRifleAmmo");
 		Destroy(this.gameObject);
 	}
 }

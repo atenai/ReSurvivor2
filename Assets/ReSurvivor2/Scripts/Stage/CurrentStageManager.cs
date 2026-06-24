@@ -23,7 +23,7 @@ public class CurrentStageManager : MonoBehaviour
 	{
 		if (playerRespawnPoint != null)
 		{
-			PlayerManager.SingletonInstance.SetPlayerRespawnPoint(playerRespawnPoint.position, playerRespawnPoint.rotation);
+			InGameManager.SingletonInstance.PlayerManager.SetPlayerRespawnPoint(playerRespawnPoint.position, playerRespawnPoint.rotation);
 		}
 		else
 		{
@@ -34,8 +34,8 @@ public class CurrentStageManager : MonoBehaviour
 	void Start()
 	{
 		CreateMission();
-		ScreenUIManager.SingletonInstance.MapUI.SetCurrentPlayerStageNumber((int)currentStage);
-		StartCoroutine(ScreenUIManager.SingletonInstance.FadeIn());
+		InGameManager.SingletonInstance.ScreenUIManager.MapUI.SetCurrentPlayerStageNumber((int)currentStage);
+		StartCoroutine(InGameManager.SingletonInstance.ScreenUIManager.FadeIn());
 		StartCoroutine(ChangeSceneManager.SingletonInstance.PreloadScenesCoroutine());
 	}
 
@@ -47,9 +47,9 @@ public class CurrentStageManager : MonoBehaviour
 		{
 			UnityEngine.Debug.Log("<color=cyan>ミッション名：" + mission.MissionName + "</color>");
 		}
-		ScreenUIManager.SingletonInstance.InitComputerMenuMissionList(MissionManager.SingletonInstance.CachedMissionList);
-		ScreenUIManager.SingletonInstance.DestroyAllMailListContent();
-		ScreenUIManager.SingletonInstance.AddMailListContent();
+		InGameManager.SingletonInstance.ScreenUIManager.InitComputerMenuMissionList(MissionManager.SingletonInstance.CachedMissionList);
+		InGameManager.SingletonInstance.ScreenUIManager.DestroyAllMailListContent();
+		InGameManager.SingletonInstance.ScreenUIManager.AddMailListContent();
 	}
 
 	void Update()

@@ -14,12 +14,12 @@ public abstract class GunModelBase : MonoBehaviour
 
 	void Update()
 	{
-		if (ScreenUIManager.SingletonInstance.IsPause == true)
+		if (InGameManager.SingletonInstance.ScreenUIManager.IsPause == true)
 		{
 			return;
 		}
 
-		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
+		if (InGameManager.SingletonInstance.ScreenUIManager.IsComputerMenuActive == true)
 		{
 			return;
 		}

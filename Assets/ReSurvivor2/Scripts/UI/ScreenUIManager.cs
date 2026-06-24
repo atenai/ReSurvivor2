@@ -11,11 +11,6 @@ using DG.Tweening;
 /// </summary>
 public class ScreenUIManager : MonoBehaviour
 {
-	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
-	static ScreenUIManager singletonInstance = null;
-	/// <summary>シングルトンのプロパティ</summary>
-	public static ScreenUIManager SingletonInstance => singletonInstance;
-
 	[Header("照準")]
 
 	[Tooltip("クロスヘアー")]
@@ -125,16 +120,7 @@ public class ScreenUIManager : MonoBehaviour
 
 	void Awake()
 	{
-		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
-		if (singletonInstance == null)
-		{
-			singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、UIのインスタンスという意味になります。
-			DontDestroyOnLoad(this.gameObject);//シーンを切り替えた時に破棄しない
-		}
-		else
-		{
-			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
-		}
+
 	}
 
 	void Start()
@@ -164,27 +150,8 @@ public class ScreenUIManager : MonoBehaviour
 		FadeOut();
 	}
 
-	void Update()
+	public void AfterUpdate()
 	{
-		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
-		{
-			return;
-		}
-
-		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
-		{
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		Crosshair();
 		UpdateHitReticule();
 		UpdateDamageEffect();
@@ -215,7 +182,7 @@ public class ScreenUIManager : MonoBehaviour
 	/// </summary>
 	void Crosshair()
 	{
-		if (PlayerManager.SingletonInstance.IsAim == false)
+		if (InGameManager.SingletonInstance.PlayerManager.IsAim == false)
 		{
 			imageCrosshair.gameObject.SetActive(false);
 		}
@@ -223,7 +190,7 @@ public class ScreenUIManager : MonoBehaviour
 		{
 			imageCrosshair.gameObject.SetActive(true);
 
-			if (PlayerCameraManager.SingletonInstance.IsTargethit == true)
+			if (InGameManager.SingletonInstance.PlayerCameraManager.IsTargethit == true)
 			{
 				imageCrosshair.color = new Color32(255, 0, 0, 150);
 			}
@@ -257,17 +224,17 @@ public class ScreenUIManager : MonoBehaviour
 	/// </summary> 
 	void UpdateDamageEffect()
 	{
-		if (PlayerManager.SingletonInstance.IsDamage == true)
+		if (InGameManager.SingletonInstance.PlayerManager.IsDamage == true)
 		{
 			imageDamage.color = new Color(0.5f, 0f, 0f, 0.5f);
 		}
 
-		if (PlayerManager.SingletonInstance.IsDamage == false)
+		if (InGameManager.SingletonInstance.PlayerManager.IsDamage == false)
 		{
 			imageDamage.color = Color.Lerp(imageDamage.color, Color.clear, Time.deltaTime);
 		}
 
-		PlayerManager.SingletonInstance.IsDamage = false;
+		InGameManager.SingletonInstance.PlayerManager.IsDamage = false;
 	}
 
 	/// <summary>
@@ -275,17 +242,17 @@ public class ScreenUIManager : MonoBehaviour
 	/// </summary> 
 	void UpdateHpHealEffect()
 	{
-		if (PlayerManager.SingletonInstance.IsHpHeal == true)
+		if (InGameManager.SingletonInstance.PlayerManager.IsHpHeal == true)
 		{
 			imageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
 		}
 
-		if (PlayerManager.SingletonInstance.IsHpHeal == false)
+		if (InGameManager.SingletonInstance.PlayerManager.IsHpHeal == false)
 		{
 			imageHpHeal.color = Color.Lerp(imageHpHeal.color, Color.clear, Time.deltaTime);
 		}
 
-		PlayerManager.SingletonInstance.IsHpHeal = false;
+		InGameManager.SingletonInstance.PlayerManager.IsHpHeal = false;
 	}
 
 	/// <summary>
@@ -293,17 +260,17 @@ public class ScreenUIManager : MonoBehaviour
 	/// </summary> 
 	void UpdateStaminaHealEffect()
 	{
-		if (PlayerManager.SingletonInstance.IsStaminaHeal == true)
+		if (InGameManager.SingletonInstance.PlayerManager.IsStaminaHeal == true)
 		{
 			imageStaminaHeal.color = new Color(0.5f, 0.5f, 0f, 0.5f);
 		}
 
-		if (PlayerManager.SingletonInstance.IsStaminaHeal == false)
+		if (InGameManager.SingletonInstance.PlayerManager.IsStaminaHeal == false)
 		{
 			imageStaminaHeal.color = Color.Lerp(imageStaminaHeal.color, Color.clear, Time.deltaTime);
 		}
 
-		PlayerManager.SingletonInstance.IsStaminaHeal = false;
+		InGameManager.SingletonInstance.PlayerManager.IsStaminaHeal = false;
 	}
 
 	/// <summary>
@@ -772,8 +739,8 @@ public class ScreenUIManager : MonoBehaviour
 			MissionManager.SingletonInstance.IsMissionActive = true;
 			MissionManager.SingletonInstance.CurrentMissionID = result.MissionID;
 			MissionManager.SingletonInstance.EndComputerStageNumber = result.EndComputerStageNumber;
-			TimerManager.SingletonInstance.Minute = result.Minute;
-			TimerManager.SingletonInstance.Seconds = result.Seconds;
+			InGameManager.SingletonInstance.TimerManager.Minute = result.Minute;
+			InGameManager.SingletonInstance.TimerManager.Seconds = result.Seconds;
 			MapUI.SetEndComputerStageNumber((int)result.EndComputerStageNumber);
 		}
 	}
