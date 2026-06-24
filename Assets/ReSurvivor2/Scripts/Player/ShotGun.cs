@@ -65,11 +65,11 @@ public class ShotGun : GunBase
 	/// <summary>
 	/// 一連の全ての処理
 	/// </summary>
-	public override void AllSystem()
+	public override void AllSystem(bool isAim)
 	{
 		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.DownRT)//左クリックまたはEnterを押している場合に中身を実行する
 		{
-			Shoot();
+			Shoot(isAim);
 		}
 		ResetFireCountTimer();
 		AutoReloadTrigger();

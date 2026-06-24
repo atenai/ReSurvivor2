@@ -47,14 +47,14 @@ public abstract class GunBase
 	/// <summary>
 	/// 一連の全ての処理
 	/// </summary>
-	public abstract void AllSystem();
+	public abstract void AllSystem(bool isAim);
 
 	/// <summary>
 	/// 射撃
 	/// </summary> 
-	protected void Shoot()
+	protected void Shoot(bool isAim)
 	{
-		if (Player.SingletonInstance.IsAim == false)
+		if (isAim == false)
 		{
 			return;
 		}

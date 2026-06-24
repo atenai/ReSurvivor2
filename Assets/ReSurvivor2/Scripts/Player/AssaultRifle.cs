@@ -62,11 +62,11 @@ public class AssaultRifle : GunBase
 	/// <summary>
 	/// 一連の全ての処理
 	/// </summary>
-	public override void AllSystem()
+	public override void AllSystem(bool isAim)
 	{
 		if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.IsPressedRT)//左クリックまたはEnterを押している場合に中身を実行する
 		{
-			Shoot();
+			Shoot(isAim);
 		}
 		ResetFireCountTimer();
 		AutoReloadTrigger();

@@ -189,7 +189,7 @@ public class PlayerCamera : MonoBehaviour
 			return;
 		}
 
-		gunFacade.UpdateGun();
+		gunFacade.UpdateGun(Player.SingletonInstance.IsAim);
 	}
 
 	void FixedUpdate()
