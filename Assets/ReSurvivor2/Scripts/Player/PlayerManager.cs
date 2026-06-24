@@ -7,12 +7,12 @@ using Cinemachine;
 /// <summary>
 /// プレイヤー
 /// </summary>
-public class Player : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
 	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
-	static Player singletonInstance = null;
+	static PlayerManager singletonInstance = null;
 	/// <summary>シングルトンのプロパティ</summary>
-	public static Player SingletonInstance => singletonInstance;
+	public static PlayerManager SingletonInstance => singletonInstance;
 
 	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]
 	static bool isFirstLoad = true;
