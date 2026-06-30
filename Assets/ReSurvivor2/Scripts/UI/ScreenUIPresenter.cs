@@ -7,7 +7,7 @@ using DG.Tweening;
 public class ScreenUIPresenter
 {
     ScreenUIView screenUIView;
-    public ScreenUIView ScreenUIView => screenUIView;//これありえない（消す）
+    public ScreenUIView ScreenUIView => screenUIView;//ロジック側がビュー側を知っているというこれはありえないので消す
 
     bool isHitReticule = false;
     /// <summary>ヒットレティクルを表示するか？</summary>
