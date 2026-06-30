@@ -41,7 +41,7 @@ public class SaveAndLoadDataManager : MonoBehaviour
         PlayerCameraManager.SingletonInstance.Save();
 
         //SaveNowのテキストを表示する
-        ScreenUIManager.SingletonInstance.ShowSaveNowText();
+        ScreenUIManager.SingletonInstance.ScreenUIPresenter.ShowSaveNowText();
     }
 
     /// <summary>

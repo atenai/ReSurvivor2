@@ -28,6 +28,15 @@ public class InGameManager : MonoBehaviour
 		set { isGamePlayReady = value; }
 	}
 
+	/// <summary> ポーズ中か？</summary>
+	bool isPause = false;
+	/// <summary> ポーズ中か？のプロパティ </summary>
+	public bool IsPause
+	{
+		get { return isPause; }
+		set { isPause = value; }
+	}
+
 	[Header("キーアイテム")]
 
 	[Tooltip("キーアイテム1がアクティブか？どうか")]
@@ -94,13 +103,13 @@ public class InGameManager : MonoBehaviour
 		}
 
 		//ポーズ中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsPause == true)
+		if (InGameManager.singletonInstance.IsPause == true)
 		{
 			return;
 		}
 
 		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
+		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
 		{
 			return;
 		}

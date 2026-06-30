@@ -23,7 +23,7 @@ public class ShotGunAmmo : MonoBehaviour
 	/// </summary>
 	void DestroySelf()
 	{
-		ScreenUIManager.SingletonInstance.ItemOutPutLog.OutputLog("+ShotGunAmmo");
+		ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.ItemOutPutLog.OutputLog("+ShotGunAmmo");
 		Destroy(this.gameObject);
 	}
 }

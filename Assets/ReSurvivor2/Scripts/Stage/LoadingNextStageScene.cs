@@ -46,12 +46,12 @@ public class LoadingNextStageScene : MonoBehaviour
 	IEnumerator LoadScene()
 	{
 		//不透明にする
-		ScreenUIManager.SingletonInstance.FadeOut();
+		ScreenUIManager.SingletonInstance.ScreenUIPresenter.FadeOut();
 
 		//スライダーの値を最低にする
-		ScreenUIManager.SingletonInstance.SliderLoading.value = float.MinValue;
+		ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.SliderLoading.value = float.MinValue;
 		//ロードUIをOnにする
-		ScreenUIManager.SingletonInstance.PanelLoading.SetActive(true);
+		ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.PanelLoading.gameObject.SetActive(true);
 
 		//シーンをロード
 		AsyncOperation async = SceneManager.LoadSceneAsync(nextStage.ToString());
@@ -61,20 +61,20 @@ public class LoadingNextStageScene : MonoBehaviour
 		while (async.isDone == false)
 		{
 			//ロード数値をスライダーに反映
-			ScreenUIManager.SingletonInstance.SliderLoading.value = async.progress;
+			ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.SliderLoading.value = async.progress;
 			Debug.Log("<color=red>読み込み進捗: " + async.progress * 100 + "%</color>");
 
 			//ロード数値が0.9より同じかそれ以上大きくなったら中身を実行する
 			if (0.9f <= async.progress)
 			{
 				//スライダーの値を最大にする
-				ScreenUIManager.SingletonInstance.SliderLoading.value = float.MaxValue;
+				ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.SliderLoading.value = float.MaxValue;
 
 				//フレームのラストまで待つ
 				yield return new WaitForEndOfFrame();
 
 				//ロードUIをOffにする
-				ScreenUIManager.SingletonInstance.PanelLoading.SetActive(false);
+				ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.PanelLoading.gameObject.SetActive(false);
 
 				//シーンを切り替える
 				async.allowSceneActivation = true;

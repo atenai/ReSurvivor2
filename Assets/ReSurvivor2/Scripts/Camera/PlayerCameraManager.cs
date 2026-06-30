@@ -57,8 +57,8 @@ public class PlayerCameraManager : MonoBehaviour
 	[Range(0.001f, 0.1f)][SerializeField] float deadZoneY = 0.1f;
 
 	[Tooltip("レティクルの中心点（レイキャスト）にターゲットがヒットしてるか？")]
-	bool isTargethit = false;
-	public bool IsTargethit => isTargethit;
+	bool isTargetHit = false;
+	public bool IsTargetHit => isTargetHit;
 	[Tooltip("ローカルで計算する為のX軸のカメラの回転スピード")]
 	float localCameraSpeedX;
 	[Tooltip("ローカルで計算する為のY軸のカメラの回転スピード")]
@@ -165,13 +165,13 @@ public class PlayerCameraManager : MonoBehaviour
 		}
 
 		//ポーズ中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsPause == true)
+		if (InGameManager.SingletonInstance.IsPause == true)
 		{
 			return;
 		}
 
 		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
+		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
 		{
 			return;
 		}
@@ -270,7 +270,7 @@ public class PlayerCameraManager : MonoBehaviour
 		{
 			localCameraSpeedX = aimCameraSpeedX;
 			localCameraSpeedY = aimCameraSpeedY;
-			isTargethit = false;
+			isTargetHit = false;
 
 			//ターゲットにあたった際にカメラを少し遅くする処理(スフィアレイキャスト)
 			Debug.DrawRay(this.transform.position, this.transform.forward * raycastRange, Color.yellow, 1.0f);
@@ -296,7 +296,7 @@ public class PlayerCameraManager : MonoBehaviour
 					//カメラのスピードを遅くする
 					localCameraSpeedX = aimCameraSpeedX / slowDownCameraSpeed;
 					localCameraSpeedY = aimCameraSpeedY / slowDownCameraSpeed;
-					isTargethit = true;
+					isTargetHit = true;
 				}
 			}
 		}
@@ -304,7 +304,7 @@ public class PlayerCameraManager : MonoBehaviour
 		{
 			localCameraSpeedX = normalCameraSpeedX;
 			localCameraSpeedY = normalCameraSpeedY;
-			isTargethit = false;
+			isTargetHit = false;
 		}
 
 		//Mathf.Absは絶対値を返す(例)Mathf.Abs(10)なら10、Mathf.Abs(-10)なら10と+だろうが-だろうがプラスの値を返す

@@ -45,13 +45,13 @@ public class Computer : MonoBehaviour
 	void Update()
 	{
 		//ポーズ中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsPause == true)
+		if (InGameManager.SingletonInstance.IsPause == true)
 		{
 			return;
 		}
 
 		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.IsComputerMenuActive == true)
+		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
 		{
 			return;
 		}

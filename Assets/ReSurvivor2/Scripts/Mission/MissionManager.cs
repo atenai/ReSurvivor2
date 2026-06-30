@@ -180,7 +180,7 @@ public class MissionManager : MonoBehaviour
         else if (isMissionActive == false)//ミッション中でない場合
         {
             SaveAndLoadDataManager.SingletonInstance.AllManagerSave();
-            ScreenUIManager.SingletonInstance.ShowComputerMenu();
+            ScreenUIManager.SingletonInstance.ScreenUIPresenter.ShowComputerMenu();
         }
     }
 
@@ -189,7 +189,7 @@ public class MissionManager : MonoBehaviour
     /// </summary>
     void MissionResult()
     {
-        ScreenUIManager.SingletonInstance.ShowResult();
+        ScreenUIManager.SingletonInstance.ScreenUIPresenter.ShowResult();
     }
 
     /// <summary>
@@ -250,6 +250,6 @@ public class MissionManager : MonoBehaviour
     {
         isMissionActive = false;
         currentMissionID = -1;
-        ScreenUIManager.SingletonInstance.MapUI.SetEndComputerStageNumber(-1);
+        ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.MapUI.SetEndComputerStageNumber(-1);
     }
 }

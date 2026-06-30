@@ -4242,6 +4242,7 @@ GameObject:
   - component: {fileID: 2775900183771766614}
   - component: {fileID: 8521639481524710840}
   - component: {fileID: 8206079514333182546}
+  - component: {fileID: 3134650877578906285}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -4344,22 +4345,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ce64a716cce9a48af808cd0af79346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  screenUIView: {fileID: 3134650877578906285}
+--- !u!114 &3134650877578906285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723265548184136445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69c8151de1af7014a9e10a00724b9ad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   imageCrosshair: {fileID: 4053137233371994216}
   imageHitReticule: {fileID: 209575424063355271}
-  panelLoading: {fileID: 6133777975400999264}
-  sliderLoading: {fileID: 5028991341134815162}
   imageDamage: {fileID: 968412357667042515}
   imageHpHeal: {fileID: 5972378481673349743}
   imageStaminaHeal: {fileID: 2133243715333514053}
+  panelLoading: {fileID: 9197513689535707376}
+  sliderLoading: {fileID: 5028991341134815162}
   imageFade: {fileID: 8321642223474475540}
-  panelPauseMenu: {fileID: 5629418032340474447}
+  panelPauseMenu: {fileID: 738719649581440164}
   pauseMenuOptions:
   - {fileID: 4657506956094451366}
   - {fileID: 4705699217969237923}
   mapUI: {fileID: 3770923355916117509}
   itemOutPutLog: {fileID: 579379826004049369}
   saveNowText: {fileID: 9089699277171372974}
-  panelComputerMenu: {fileID: 5259202726704252033}
+  panelComputerMenu: {fileID: 2057885696943741514}
   mailListContent: {fileID: 4341652292273595601}
   mailPrefab: {fileID: 537799973998357700, guid: 2f9636613900a55459b9baf17b2b221b, type: 3}
   mailTitleMessage: {fileID: 4136626102778892445}

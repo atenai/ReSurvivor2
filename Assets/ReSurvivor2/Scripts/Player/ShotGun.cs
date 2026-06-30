@@ -181,7 +181,7 @@ public class ShotGun : GunBase
 					}
 
 					//ヒットレティクルを表示
-					ScreenUIManager.SingletonInstance.IsHitReticule = true;
+					ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsHitReticule = true;
 
 					if (isOnceShotGunHitSE == false)
 					{
