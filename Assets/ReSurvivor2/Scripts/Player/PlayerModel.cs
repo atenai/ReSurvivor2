@@ -60,23 +60,8 @@ public class PlayerModel : MonoBehaviour
 		spine_03_InitEulerAnglesX = spine_03.eulerAngles.x;
 	}
 
-	void Update()
+	public void AfterUpdate()
 	{
-		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
-		{
-			ResetMoveAnimation();
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			ResetMoveAnimation();
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		NormalMoveAnimation();
 	}
 
@@ -93,7 +78,7 @@ public class PlayerModel : MonoBehaviour
 	/// <summary>
 	/// 移動アニメーションをリセットする
 	/// </summary>
-	void ResetMoveAnimation()
+	public void ResetMoveAnimation()
 	{
 		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedX", 0.0f);
 		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedY", 0.0f);

@@ -44,11 +44,6 @@ public class OutGameBase : MonoBehaviour
 			Destroy(MissionManager.SingletonInstance.gameObject);
 		}
 
-		if (TimerManager.SingletonInstance != null)
-		{
-			Destroy(TimerManager.SingletonInstance.gameObject);
-		}
-
 		if (EffectManager.SingletonInstance != null)
 		{
 			Destroy(EffectManager.SingletonInstance.gameObject);
@@ -57,21 +52,6 @@ public class OutGameBase : MonoBehaviour
 		if (SoundManager.SingletonInstance != null)
 		{
 			Destroy(SoundManager.SingletonInstance.gameObject);
-		}
-
-		if (PlayerManager.SingletonInstance != null)
-		{
-			Destroy(PlayerManager.SingletonInstance.gameObject);
-		}
-
-		if (PlayerCameraManager.SingletonInstance != null)
-		{
-			Destroy(PlayerCameraManager.SingletonInstance.gameObject);
-		}
-
-		if (ScreenUIManager.SingletonInstance != null)
-		{
-			Destroy(ScreenUIManager.SingletonInstance.gameObject);
 		}
 
 		if (EnemyManager.SingletonInstance != null)

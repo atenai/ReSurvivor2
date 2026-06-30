@@ -111,17 +111,25 @@ public class InGameManager : MonoBehaviour
 		//コンピュータを使用中は切り上げる
 		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
 		{
+			PlayerManager.SingletonInstance.ResetMove();
+			PlayerManager.SingletonInstance.PlayerModel.ResetMoveAnimation();
 			return;
 		}
 
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
+			PlayerManager.SingletonInstance.ResetMove();
+			PlayerManager.SingletonInstance.PlayerModel.ResetMoveAnimation();
 			return;
 		}
 		//↓ロード中に動かせない処理
 
-
+		PlayerManager.SingletonInstance.AfterUpdate();
+		PlayerManager.SingletonInstance.PlayerModel.AfterUpdate();
+		PlayerCameraManager.SingletonInstance.AfterUpdate();
+		TimerManager.SingletonInstance.AfterUpdate();
+		ScreenUIManager.SingletonInstance.AfterUpdate();
 	}
 
 	void FixedUpdate()
@@ -138,6 +146,8 @@ public class InGameManager : MonoBehaviour
 			return;
 		}
 
+		PlayerCameraManager.SingletonInstance.BeforeFixedUpdate();
+
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
@@ -145,6 +155,7 @@ public class InGameManager : MonoBehaviour
 		}
 		//↓ロード中に動かせない処理
 
-
+		PlayerManager.SingletonInstance.AfterFixedUpdate();
+		PlayerCameraManager.SingletonInstance.AfterFixedUpdate();
 	}
 }
