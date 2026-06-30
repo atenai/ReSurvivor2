@@ -161,7 +161,7 @@ public class PlayerCameraManager : MonoBehaviour
 		gunFacade.UpdateGun(PlayerManager.SingletonInstance.IsAim);
 	}
 
-	public void BeforeFixedUpdate()
+	public void AlwaysFixedUpdate()
 	{
 		//シネマシーンカメラがアクティブの場合は切り上げる
 		if (isCinemachineActive == true)
@@ -356,7 +356,7 @@ public class PlayerCameraManager : MonoBehaviour
 			if (IsPlayerCollider(hit.collider) == false)
 			{
 				childMainShortDistanceVirtualCamera.Priority = shortDistanceCameraHighPriority;
-				Debug.Log("<color=cyan>カメラのオクルージョン発生</color>");
+				//Debug.Log("<color=cyan>カメラのオクルージョン発生</color>");
 				return;
 			}
 		}

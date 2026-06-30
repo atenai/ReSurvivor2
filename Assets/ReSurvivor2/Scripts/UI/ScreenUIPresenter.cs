@@ -166,52 +166,48 @@ public class ScreenUIPresenter
     /// </summary> 
     public void UpdatePauseMenuSystem()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P) || Input.GetButtonDown("XInput Start"))
+        if (screenUIView.PanelPauseMenu.gameObject.activeSelf == false)
         {
-            PauseMenuActive();
+            return;
         }
 
-        if (InGameManager.SingletonInstance.IsPause == true)
+        //左右の矢印キーで選択を変更
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || XInputManager.SingletonInstance.XInputDPadHandler.LeftDown)
         {
-            //左右の矢印キーで選択を変更
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || XInputManager.SingletonInstance.XInputDPadHandler.LeftDown)
+            currentPauseMenuSelectedIndex--;
+            if (currentPauseMenuSelectedIndex < 0)
             {
-                currentPauseMenuSelectedIndex--;
-                if (currentPauseMenuSelectedIndex < 0)
-                {
-                    currentPauseMenuSelectedIndex = screenUIView.PauseMenuOptions.Length - 1;
-                }
-                ChangeColorPauseMenuImage();
+                currentPauseMenuSelectedIndex = screenUIView.PauseMenuOptions.Length - 1;
             }
-            else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || XInputManager.SingletonInstance.XInputDPadHandler.RightDown)
+            ChangeColorPauseMenuImage();
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || XInputManager.SingletonInstance.XInputDPadHandler.RightDown)
+        {
+            currentPauseMenuSelectedIndex++;
+            if (screenUIView.PauseMenuOptions.Length <= currentPauseMenuSelectedIndex)
             {
-                currentPauseMenuSelectedIndex++;
-                if (screenUIView.PauseMenuOptions.Length <= currentPauseMenuSelectedIndex)
-                {
-                    currentPauseMenuSelectedIndex = 0;
-                }
-                ChangeColorPauseMenuImage();
+                currentPauseMenuSelectedIndex = 0;
             }
+            ChangeColorPauseMenuImage();
+        }
 
-            //Enterキーで選択を確定
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
-            {
-                ExecutePauseMenuAction();
-            }
+        //Enterキーで選択を確定
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
+        {
+            ExecutePauseMenuAction();
         }
     }
 
     /// <summary>
     /// ポーズメニューのオン/オフ
     /// </summary>
-    void PauseMenuActive()
+    public void PauseMenuActive(bool isPause)
     {
-        InGameManager.SingletonInstance.IsPause = InGameManager.SingletonInstance.IsPause ? false : true;
+        screenUIView.PanelPauseMenu.gameObject.SetActive(isPause);
 
-        if (InGameManager.SingletonInstance.IsPause == true)
+        if (isPause == true)
         {
             Time.timeScale = 0f;
-            screenUIView.PanelPauseMenu.gameObject.SetActive(true);
 
             //各種パラメーターの初期化処理
             currentPauseMenuSelectedIndex = 0;
@@ -220,7 +216,6 @@ public class ScreenUIPresenter
         else
         {
             Time.timeScale = 1f;
-            screenUIView.PanelPauseMenu.gameObject.SetActive(false);
         }
     }
 
@@ -265,7 +260,7 @@ public class ScreenUIPresenter
     /// </summary>
     void ReturnToGamePlay()
     {
-        PauseMenuActive();
+        PauseMenuActive(false);
     }
 
     /// <summary>
@@ -377,7 +372,7 @@ public class ScreenUIPresenter
     /// <summary>
     /// コンピューターメニューの非表示
     /// </summary>
-    void HideComputerMenu()
+    public void HideComputerMenu()
     {
         HideYesNoDialog();
         isComputerMenuActive = false;
@@ -389,11 +384,6 @@ public class ScreenUIPresenter
     /// </summary> 
     public void UpdateComputerMenuSystem()
     {
-        if (InGameManager.SingletonInstance.IsPause == true)
-        {
-            return;
-        }
-
         if (Input.GetKeyDown(KeyCode.B) || Input.GetButtonDown("XInput B"))
         {
             //コンピューターメニューを閉じる
@@ -475,11 +465,6 @@ public class ScreenUIPresenter
     /// </summary>
     public void UpdateYesNoDialog()
     {
-        if (InGameManager.SingletonInstance.IsPause == true)
-        {
-            return;
-        }
-
         if (screenUIView.YesNoDialogImage.gameObject.activeSelf == false)
         {
             return;

@@ -37,7 +37,17 @@ public class ScreenUIManager : MonoBehaviour
 		screenUIPresenter.Init();
 	}
 
-	public void BeforeUpdate()
+	public void InputUpdate(bool isPause)
+	{
+		screenUIPresenter.PauseMenuActive(isPause);
+	}
+
+	public void BeforeUpdate1()
+	{
+		screenUIPresenter.UpdatePauseMenuSystem();
+	}
+
+	public void BeforeUpdate2()
 	{
 		screenUIPresenter.UpdateComputerMenuSystem();
 		if (screenUIPresenter.SkipYesNoDialogInput == true)
@@ -49,8 +59,6 @@ public class ScreenUIManager : MonoBehaviour
 		{
 			screenUIPresenter.UpdateYesNoDialog();
 		}
-
-		screenUIPresenter.UpdatePauseMenuSystem();
 	}
 
 	public void AfterUpdate()

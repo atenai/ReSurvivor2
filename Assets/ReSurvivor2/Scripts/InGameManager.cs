@@ -30,12 +30,7 @@ public class InGameManager : MonoBehaviour
 
 	/// <summary> ポーズ中か？</summary>
 	bool isPause = false;
-	/// <summary> ポーズ中か？のプロパティ </summary>
-	public bool IsPause
-	{
-		get { return isPause; }
-		set { isPause = value; }
-	}
+	public bool IsPause => isPause;
 
 	[Header("キーアイテム")]
 
@@ -111,13 +106,21 @@ public class InGameManager : MonoBehaviour
 		}
 		//↓ロード中に動かせない処理
 
-		ScreenUIManager.SingletonInstance.BeforeUpdate();
+		if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P) || Input.GetButtonDown("XInput Start"))
+		{
+			isPause = isPause ? false : true;
+			ScreenUIManager.SingletonInstance.InputUpdate(isPause);
+		}
+
+		ScreenUIManager.SingletonInstance.BeforeUpdate1();
 
 		//ポーズ中は切り上げる
-		if (InGameManager.singletonInstance.IsPause == true)
+		if (isPause == true)
 		{
 			return;
 		}
+
+		ScreenUIManager.SingletonInstance.BeforeUpdate2();
 
 		//コンピュータを使用中は切り上げる
 		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
@@ -149,7 +152,7 @@ public class InGameManager : MonoBehaviour
 			return;
 		}
 
-		PlayerCameraManager.SingletonInstance.BeforeFixedUpdate();
+		PlayerCameraManager.SingletonInstance.AlwaysFixedUpdate();
 
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
