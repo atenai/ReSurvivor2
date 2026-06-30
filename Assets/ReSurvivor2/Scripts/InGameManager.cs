@@ -102,6 +102,17 @@ public class InGameManager : MonoBehaviour
 			return;
 		}
 
+		//↑ロード中に動かせる処理
+		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
+		{
+			PlayerManager.SingletonInstance.ResetMove();
+			PlayerManager.SingletonInstance.PlayerModel.ResetMoveAnimation();
+			return;
+		}
+		//↓ロード中に動かせない処理
+
+		ScreenUIManager.SingletonInstance.BeforeUpdate();
+
 		//ポーズ中は切り上げる
 		if (InGameManager.singletonInstance.IsPause == true)
 		{
@@ -116,17 +127,9 @@ public class InGameManager : MonoBehaviour
 			return;
 		}
 
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			PlayerManager.SingletonInstance.ResetMove();
-			PlayerManager.SingletonInstance.PlayerModel.ResetMoveAnimation();
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		PlayerManager.SingletonInstance.AfterUpdate();
 		PlayerManager.SingletonInstance.PlayerModel.AfterUpdate();
+		PlayerManager.SingletonInstance.PlayerUI.AfterUpdate();
 		PlayerCameraManager.SingletonInstance.AfterUpdate();
 		TimerManager.SingletonInstance.AfterUpdate();
 		ScreenUIManager.SingletonInstance.AfterUpdate();

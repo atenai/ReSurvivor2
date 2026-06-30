@@ -137,25 +137,8 @@ public class PlayerUI : MonoBehaviour
 		textTimer.text = "--" + ":" + "--"; ;
 	}
 
-	void Update()
+	public void AfterUpdate()
 	{
-		if (InGameManager.SingletonInstance.IsPause == true)
-		{
-			return;
-		}
-
-		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
-		{
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		UpdateUITransform();
 		UpdateImageReload();
 		UpdateTextMagazine();

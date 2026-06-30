@@ -37,19 +37,8 @@ public class ScreenUIManager : MonoBehaviour
 		screenUIPresenter.Init();
 	}
 
-	public void AfterUpdate()
+	public void BeforeUpdate()
 	{
-		screenUIView.Crosshair(PlayerManager.SingletonInstance.IsAim, PlayerCameraManager.SingletonInstance.IsTargetHit);
-		screenUIPresenter.UpdateHitReticule();
-		screenUIPresenter.UpdateDamageEffect();
-		screenUIPresenter.UpdateHpHealEffect();
-		screenUIPresenter.UpdateStaminaHealEffect();
-
-		if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
-		{
-			screenUIView.MapUI.EnableMap();
-		}
-
 		screenUIPresenter.UpdateComputerMenuSystem();
 		if (screenUIPresenter.SkipYesNoDialogInput == true)
 		{
@@ -62,5 +51,19 @@ public class ScreenUIManager : MonoBehaviour
 		}
 
 		screenUIPresenter.UpdatePauseMenuSystem();
+	}
+
+	public void AfterUpdate()
+	{
+		screenUIView.Crosshair(PlayerManager.SingletonInstance.IsAim, PlayerCameraManager.SingletonInstance.IsTargetHit);
+		screenUIPresenter.UpdateHitReticule();
+		screenUIPresenter.UpdateDamageEffect();
+		screenUIPresenter.UpdateHpHealEffect();
+		screenUIPresenter.UpdateStaminaHealEffect();
+
+		if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
+		{
+			screenUIView.MapUI.EnableMap();
+		}
 	}
 }
