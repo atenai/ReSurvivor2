@@ -39,9 +39,29 @@ public class OutGameBase : MonoBehaviour
 			Destroy(ChangeSceneManager.SingletonInstance.gameObject);
 		}
 
+		if (PlayerManager.SingletonInstance != null)
+		{
+			Destroy(PlayerManager.SingletonInstance.gameObject);
+		}
+
+		if (PlayerCameraManager.SingletonInstance != null)
+		{
+			Destroy(PlayerCameraManager.SingletonInstance.gameObject);
+		}
+
+		if (ScreenUIManager.SingletonInstance != null)
+		{
+			Destroy(ScreenUIManager.SingletonInstance.gameObject);
+		}
+
 		if (MissionManager.SingletonInstance != null)
 		{
 			Destroy(MissionManager.SingletonInstance.gameObject);
+		}
+
+		if (TimerManager.SingletonInstance != null)
+		{
+			Destroy(TimerManager.SingletonInstance.gameObject);
 		}
 
 		if (EffectManager.SingletonInstance != null)
