@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// スクリーンUIを管理するマネージャークラス
@@ -22,7 +23,7 @@ public class ScreenUIManager : MonoBehaviour
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
 		if (singletonInstance == null)
 		{
-			singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、UIのインスタンスという意味になります。
+			singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、Playerのインスタンスという意味になります。
 			DontDestroyOnLoad(this.gameObject);//シーンを切り替えた時に破棄しない
 		}
 		else
@@ -37,38 +38,18 @@ public class ScreenUIManager : MonoBehaviour
 		screenUIPresenter.Init();
 	}
 
-	void Update()
+	public void InputUpdate(bool isPause)
 	{
-		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
-		{
-			return;
-		}
+		screenUIPresenter.PauseMenuActive(isPause);
+	}
 
-		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
-		{
-			return;
-		}
+	public void BeforeUpdate1()
+	{
+		screenUIPresenter.UpdatePauseMenuSystem();
+	}
 
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
-
-		screenUIView.Crosshair(PlayerManager.SingletonInstance.IsAim, PlayerCameraManager.SingletonInstance.IsTargetHit);
-		screenUIPresenter.UpdateHitReticule();
-		screenUIPresenter.UpdateDamageEffect();
-		screenUIPresenter.UpdateHpHealEffect();
-		screenUIPresenter.UpdateStaminaHealEffect();
-
-		if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
-		{
-			screenUIView.MapUI.EnableMap();
-		}
-
+	public void BeforeUpdate2()
+	{
 		screenUIPresenter.UpdateComputerMenuSystem();
 		if (screenUIPresenter.SkipYesNoDialogInput == true)
 		{
@@ -79,7 +60,19 @@ public class ScreenUIManager : MonoBehaviour
 		{
 			screenUIPresenter.UpdateYesNoDialog();
 		}
+	}
 
-		screenUIPresenter.UpdatePauseMenuSystem();
+	public void AfterUpdate()
+	{
+		screenUIView.Crosshair(PlayerManager.SingletonInstance.IsAim, PlayerCameraManager.SingletonInstance.IsTargetHit);
+		screenUIPresenter.UpdateHitReticule();
+		screenUIPresenter.UpdateDamageEffect();
+		screenUIPresenter.UpdateHpHealEffect();
+		screenUIPresenter.UpdateStaminaHealEffect();
+
+		if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
+		{
+			screenUIView.MapUI.EnableMap();
+		}
 	}
 }

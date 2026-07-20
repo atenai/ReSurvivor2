@@ -47,6 +47,7 @@ public class CurrentStageManager : MonoBehaviour
 		{
 			UnityEngine.Debug.Log("<color=cyan>ミッション名：" + mission.MissionName + "</color>");
 		}
+
 		ScreenUIManager.SingletonInstance.ScreenUIPresenter.InitComputerMenuMissionList(MissionManager.SingletonInstance.CachedMissionList);
 		ScreenUIManager.SingletonInstance.ScreenUIPresenter.DestroyAllMailListContent();
 		ScreenUIManager.SingletonInstance.ScreenUIPresenter.AddMailListContent();

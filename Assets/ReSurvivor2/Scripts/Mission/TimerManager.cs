@@ -44,39 +44,8 @@ public class TimerManager : MonoBehaviour
 		}
 	}
 
-	void Update()
+	public void AfterUpdate()
 	{
-		//ゲームクリアーシーンとゲームオーバーシーンに切り替えたら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearAndGameOverSceneSwitched == true)
-		{
-			return;
-		}
-
-		//ゲームクリアーとゲームオーバーをトリガーのどちらかが起動したら切り上げる
-		if (ChangeSceneManager.SingletonInstance.IsGameClearTriggered == true || ChangeSceneManager.SingletonInstance.IsGameOverTriggered == true)
-		{
-			return;
-		}
-
-		//ポーズ中は切り上げる
-		if (InGameManager.SingletonInstance.IsPause == true)
-		{
-			return;
-		}
-
-		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
-		{
-			return;
-		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
-
 		UpdateTimerSystem();
 	}
 

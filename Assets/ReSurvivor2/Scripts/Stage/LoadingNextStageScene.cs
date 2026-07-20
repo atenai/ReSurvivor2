@@ -69,13 +69,11 @@ public class LoadingNextStageScene : MonoBehaviour
 			{
 				//スライダーの値を最大にする
 				ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.SliderLoading.value = float.MaxValue;
-
 				//フレームのラストまで待つ
 				yield return new WaitForEndOfFrame();
 
 				//ロードUIをOffにする
 				ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.PanelLoading.gameObject.SetActive(false);
-
 				//シーンを切り替える
 				async.allowSceneActivation = true;
 			}

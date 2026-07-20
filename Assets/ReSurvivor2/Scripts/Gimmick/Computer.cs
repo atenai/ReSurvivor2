@@ -44,6 +44,13 @@ public class Computer : MonoBehaviour
 
 	void Update()
 	{
+		//↑ロード中に動かせる処理
+		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
+		{
+			return;
+		}
+		//↓ロード中に動かせない処理
+
 		//ポーズ中は切り上げる
 		if (InGameManager.SingletonInstance.IsPause == true)
 		{
@@ -55,13 +62,6 @@ public class Computer : MonoBehaviour
 		{
 			return;
 		}
-
-		//↑ロード中に動かせる処理
-		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
-		{
-			return;
-		}
-		//↓ロード中に動かせない処理
 
 		if (isPlayerHit == true)
 		{

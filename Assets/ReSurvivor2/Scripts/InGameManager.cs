@@ -30,7 +30,6 @@ public class InGameManager : MonoBehaviour
 
 	/// <summary> ポーズ中か？</summary>
 	bool isPause = false;
-	/// <summary> ポーズ中か？のプロパティ </summary>
 	public bool IsPause
 	{
 		get { return isPause; }
@@ -102,26 +101,45 @@ public class InGameManager : MonoBehaviour
 			return;
 		}
 
-		//ポーズ中は切り上げる
-		if (InGameManager.singletonInstance.IsPause == true)
-		{
-			return;
-		}
-
-		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
-		{
-			return;
-		}
-
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
+			PlayerManager.SingletonInstance.ResetMove();
+			PlayerManager.SingletonInstance.PlayerModel.ResetMoveAnimation();
 			return;
 		}
 		//↓ロード中に動かせない処理
 
+		if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P) || Input.GetButtonDown("XInput Start"))
+		{
+			isPause = isPause ? false : true;
+			ScreenUIManager.SingletonInstance.InputUpdate(isPause);
+		}
 
+		ScreenUIManager.SingletonInstance.BeforeUpdate1();
+
+		//ポーズ中は切り上げる
+		if (isPause == true)
+		{
+			return;
+		}
+
+		ScreenUIManager.SingletonInstance.BeforeUpdate2();
+
+		//コンピュータを使用中は切り上げる
+		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
+		{
+			PlayerManager.SingletonInstance.ResetMove();
+			PlayerManager.SingletonInstance.PlayerModel.ResetMoveAnimation();
+			return;
+		}
+
+		PlayerManager.SingletonInstance.AfterUpdate();
+		PlayerManager.SingletonInstance.PlayerModel.AfterUpdate();
+		PlayerManager.SingletonInstance.PlayerUI.AfterUpdate();
+		PlayerCameraManager.SingletonInstance.AfterUpdate();
+		TimerManager.SingletonInstance.AfterUpdate();
+		ScreenUIManager.SingletonInstance.AfterUpdate();
 	}
 
 	void FixedUpdate()
@@ -138,6 +156,8 @@ public class InGameManager : MonoBehaviour
 			return;
 		}
 
+		PlayerCameraManager.SingletonInstance.AlwaysFixedUpdate();
+
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
@@ -145,6 +165,7 @@ public class InGameManager : MonoBehaviour
 		}
 		//↓ロード中に動かせない処理
 
-
+		PlayerManager.SingletonInstance.AfterFixedUpdate();
+		PlayerCameraManager.SingletonInstance.AfterFixedUpdate();
 	}
 }
