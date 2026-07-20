@@ -18,6 +18,11 @@ public class AudioPlayAssaultRifleBulletCasingSEPool : MonoBehaviour
 		CancelInvoke();
 	}
 
+	private void OnDisable()
+	{
+		CancelInvoke();
+	}
+
 	/// <summary>
 	/// サウンドを再生
 	/// </summary>
@@ -36,7 +41,7 @@ public class AudioPlayAssaultRifleBulletCasingSEPool : MonoBehaviour
 	/// </remarks>
 	public void PlaySound()
 	{
-		if (audioSource == null || audioClip == null)
+		if (this == null || gameObject == null || audioSource == null || audioClip == null)
 		{
 			return;
 		}
@@ -55,13 +60,16 @@ public class AudioPlayAssaultRifleBulletCasingSEPool : MonoBehaviour
 
 	private void ReturnToPool()
 	{
-		if (isReturned == true)
+		if (isReturned == true || this == null || gameObject == null)
 		{
 			return;
 		}
 
 		isReturned = true;
-		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.ReleaseGameObject(this.gameObject);
+		if (SoundManager.SingletonInstance != null && SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool != null)
+		{
+			SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.ReleaseGameObject(this.gameObject);
+		}
 	}
 
 

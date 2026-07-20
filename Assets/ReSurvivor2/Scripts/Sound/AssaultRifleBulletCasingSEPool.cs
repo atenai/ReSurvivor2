@@ -18,6 +18,11 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 	/// </summary>
 	void Start()
 	{
+		if (prefab == null)
+		{
+			return;
+		}
+
 		//オブジェクトプールの設定
 		objectPool = new ObjectPool<GameObject>
 		(
@@ -56,6 +61,11 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 	/// </summary>
 	GameObject OnCreatePoolObject()
 	{
+		if (prefab == null)
+		{
+			return null;
+		}
+
 		var gameObject = Instantiate(prefab, this.transform);
 		return gameObject;
 	}
@@ -67,6 +77,11 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 	/// </summary>
 	void OnTakeFromPool(GameObject gameObject)
 	{
+		if (gameObject == null)
+		{
+			return;
+		}
+
 		gameObject.SetActive(true);
 	}
 
@@ -76,6 +91,11 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 	/// </summary>
 	void OnReturnedToPool(GameObject gameObject)
 	{
+		if (gameObject == null)
+		{
+			return;
+		}
+
 		gameObject.SetActive(false);
 	}
 
@@ -85,6 +105,11 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 	/// </summary>
 	void OnDestroyPoolObject(GameObject gameObject)
 	{
+		if (gameObject == null)
+		{
+			return;
+		}
+
 		Destroy(gameObject);
 	}
 
@@ -93,9 +118,23 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 	/// </summary>
 	public void GetGameObject(Transform transform)
 	{
+		if (objectPool == null || transform == null)
+		{
+			return;
+		}
+
 		GameObject gameObject = objectPool.Get();
+		if (gameObject == null)
+		{
+			return;
+		}
+
 		gameObject.transform.position = transform.position;
-		gameObject.GetComponent<AudioPlayAssaultRifleBulletCasingSEPool>().PlaySound();
+		AudioPlayAssaultRifleBulletCasingSEPool audioPlayer = gameObject.GetComponent<AudioPlayAssaultRifleBulletCasingSEPool>();
+		if (audioPlayer != null)
+		{
+			audioPlayer.PlaySound();
+		}
 	}
 
 	/// <summary>
@@ -103,6 +142,11 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 	/// </summary>
 	public void ReleaseGameObject(GameObject gameObject)
 	{
+		if (objectPool == null || gameObject == null)
+		{
+			return;
+		}
+
 		objectPool.Release(gameObject);
 	}
 
