@@ -30,7 +30,11 @@ public class InGameManager : MonoBehaviour
 
 	/// <summary> ポーズ中か？</summary>
 	bool isPause = false;
-	public bool IsPause => isPause;
+	public bool IsPause
+	{
+		get { return isPause; }
+		set { isPause = value; }
+	}
 
 	[Header("キーアイテム")]
 

@@ -325,11 +325,19 @@ public class PlayerManager : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("XInput RB"))
 		{
+			if (currentArmorPlate <= 0)
+			{
+				return;
+			}
 			hp.Heal();
 		}
 
 		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("XInput LB"))
 		{
+			if (currentFood <= 0)
+			{
+				return;
+			}
 			stamina.RestoresStamina();
 		}
 
@@ -631,6 +639,8 @@ public class PlayerManager : MonoBehaviour
 		playerUI.SliderStamina.value = (float)stamina.CurrentStamina / (float)Stamina.Max_Stamina;
 		isStaminaHeal = true;
 	}
+
+	bool CanUseFood => currentFood <= 0;
 
 	/// <summary>
 	/// 食料を使用

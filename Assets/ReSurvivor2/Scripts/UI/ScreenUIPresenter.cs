@@ -162,6 +162,37 @@ public class ScreenUIPresenter
     }
 
     /// <summary>
+    /// ポーズメニューのオン/オフ
+    /// </summary>
+    public void PauseMenuActive(bool isPause)
+    {
+        if (isPause == true)
+        {
+            ShowPauseMenu();
+        }
+        else
+        {
+            HidePauseMenu();
+        }
+    }
+
+    public void ShowPauseMenu()
+    {
+        screenUIView.PanelPauseMenu.gameObject.SetActive(true);
+        Time.timeScale = 0f;
+
+        //各種パラメーターの初期化処理
+        currentPauseMenuSelectedIndex = 0;
+        ChangeColorPauseMenuImage();
+    }
+
+    public void HidePauseMenu()
+    {
+        screenUIView.PanelPauseMenu.gameObject.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+    /// <summary>
     /// ポーズメニュー画面の更新
     /// </summary> 
     public void UpdatePauseMenuSystem()
@@ -195,27 +226,6 @@ public class ScreenUIPresenter
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
         {
             ExecutePauseMenuAction();
-        }
-    }
-
-    /// <summary>
-    /// ポーズメニューのオン/オフ
-    /// </summary>
-    public void PauseMenuActive(bool isPause)
-    {
-        screenUIView.PanelPauseMenu.gameObject.SetActive(isPause);
-
-        if (isPause == true)
-        {
-            Time.timeScale = 0f;
-
-            //各種パラメーターの初期化処理
-            currentPauseMenuSelectedIndex = 0;
-            ChangeColorPauseMenuImage();
-        }
-        else
-        {
-            Time.timeScale = 1f;
         }
     }
 
@@ -260,7 +270,8 @@ public class ScreenUIPresenter
     /// </summary>
     void ReturnToGamePlay()
     {
-        PauseMenuActive(false);
+        InGameManager.SingletonInstance.IsPause = false;
+        HidePauseMenu();
     }
 
     /// <summary>
