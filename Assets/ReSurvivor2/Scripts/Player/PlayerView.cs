@@ -17,7 +17,6 @@ public class PlayerView : MonoBehaviour
 	bool isNeck01AnimationRotInit = false;
 	[Tooltip("キャラクターの脊椎ボーン")]
 	[SerializeField] Transform spine_03;
-	public Transform Spine_03 => spine_03;
 
 	[Tooltip("キャラクターの脊椎ボーンの初期値")]
 	float spine_03_InitEulerAnglesX;
@@ -25,11 +24,9 @@ public class PlayerView : MonoBehaviour
 	//※型のボーンを曲げると銃の持つ位置がずれておかしくなる為、首と背骨のボーンを曲げる事によって型のボーンを曲げずに済むようにする必要がある
 	[Tooltip("キャラクターの右肩ボーン")]
 	[SerializeField] Transform upperarm_r;
-	public Transform Upperarm_r => upperarm_r;
 
 	[Tooltip("キャラクターの左肩ボーン")]
 	[SerializeField] Transform upperarm_l;
-	public Transform Upperarm_l => upperarm_l;
 
 	[Tooltip("肩のXボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
 	public readonly float Arm_Aim_Animation_Rot_X = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
@@ -175,5 +172,49 @@ public class PlayerView : MonoBehaviour
 			//左肩のボーンの角度を真正面（初期値）にする
 			upperarm_l.rotation = Quaternion.Euler(upperarm_l.eulerAngles.x, upperarm_l.eulerAngles.y, upperarm_l.eulerAngles.z);
 		}
+	}
+
+	void OnGUI()
+	{
+#if UNITY_EDITOR//Unityエディター上での処理
+
+		GUIStyle styleGreen = new GUIStyle();
+		styleGreen.fontSize = 30;
+		GUIStyleState styleStateGreen = new GUIStyleState();
+		styleStateGreen.textColor = Color.green;
+		styleGreen.normal = styleStateGreen;
+
+		GUIStyle styleRed = new GUIStyle();
+		styleRed.fontSize = 30;
+		GUIStyleState styleStateRed = new GUIStyleState();
+		styleStateRed.textColor = Color.red;
+		styleRed.normal = styleStateRed;
+
+		GUIStyle styleBlack = new GUIStyle();
+		styleBlack.fontSize = 30;
+		GUIStyleState styleStateBlack = new GUIStyleState();
+		styleStateBlack.textColor = Color.black;
+		styleBlack.normal = styleStateBlack;
+
+		GUIStyle styleYellow = new GUIStyle();
+		styleYellow.fontSize = 30;
+		GUIStyleState styleStateYellow = new GUIStyleState();
+		styleStateYellow.textColor = Color.yellow;
+		styleYellow.normal = styleStateYellow;
+
+		int lineHeight = 50;
+
+		GUI.Box(new Rect(10, 9 * lineHeight, 100, 50), "spine_03.eulerAngles", styleGreen);
+		GUI.Box(new Rect(350, 9 * lineHeight, 100, 50), spine_03.eulerAngles.ToString(), styleGreen);
+		GUI.Box(new Rect(10, 10 * lineHeight, 100, 50), "upperarm_r.eulerAngles.x + armAimAnimationRotX", styleGreen);
+		GUI.Box(new Rect(750, 10 * lineHeight, 100, 50), upperarm_r.eulerAngles.x + Arm_Aim_Animation_Rot_X.ToString(), styleGreen);
+		GUI.Box(new Rect(10, 11 * lineHeight, 100, 50), "upperarm_r.eulerAngles.y + armAimAnimationRotY", styleGreen);
+		GUI.Box(new Rect(750, 11 * lineHeight, 100, 50), upperarm_r.eulerAngles.y + Arm_Aim_Animation_Rot_Y.ToString(), styleGreen);
+		GUI.Box(new Rect(10, 12 * lineHeight, 100, 50), "upperarm_l.eulerAngles.x + armAimAnimationRotX", styleGreen);
+		GUI.Box(new Rect(750, 12 * lineHeight, 100, 50), upperarm_l.eulerAngles.x + Arm_Aim_Animation_Rot_X.ToString(), styleGreen);
+		GUI.Box(new Rect(10, 13 * lineHeight, 100, 50), "upperarm_l.eulerAngles.y + armAimAnimationRotY", styleGreen);
+		GUI.Box(new Rect(750, 13 * lineHeight, 100, 50), upperarm_l.eulerAngles.y + Arm_Aim_Animation_Rot_Y.ToString(), styleGreen);
+
+#endif //終了  
 	}
 }

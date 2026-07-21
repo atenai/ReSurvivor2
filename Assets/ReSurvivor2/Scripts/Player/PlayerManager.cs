@@ -132,10 +132,14 @@ public class PlayerManager : MonoBehaviour
 	[SerializeField] private CinemachineImpulseSource cinemachineImpulseSource;
 	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
 
-	[Header("プレイヤービュー")]
+	[Header("プレイヤーMVPパターン")]
 	[Tooltip("プレイヤービュー")]
 	[SerializeField] PlayerView playerView;
 	public PlayerView PlayerView => playerView;
+
+	/// <summary>プレイヤーモデル</summary>
+	PlayerModel playerModel = new PlayerModel();
+	public PlayerModel PlayerModel => playerModel;
 
 	[Header("ガンモデル")]
 	[Tooltip("ガンモデルファサード")]
@@ -746,16 +750,6 @@ public class PlayerManager : MonoBehaviour
 		GUI.Box(new Rect(10, 8 * lineHeight, 100, 50), "isAim", styleGreen);
 		GUI.Box(new Rect(350, 8 * lineHeight, 100, 50), isAim.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 9 * lineHeight, 100, 50), "spine_03.eulerAngles", styleGreen);
-		GUI.Box(new Rect(350, 9 * lineHeight, 100, 50), playerView.Spine_03.eulerAngles.ToString(), styleGreen);
-		GUI.Box(new Rect(10, 10 * lineHeight, 100, 50), "upperarm_r.eulerAngles.x + armAimAnimationRotX", styleGreen);
-		GUI.Box(new Rect(750, 10 * lineHeight, 100, 50), playerView.Upperarm_r.eulerAngles.x + playerView.Arm_Aim_Animation_Rot_X.ToString(), styleGreen);
-		GUI.Box(new Rect(10, 11 * lineHeight, 100, 50), "upperarm_r.eulerAngles.y + armAimAnimationRotY", styleGreen);
-		GUI.Box(new Rect(750, 11 * lineHeight, 100, 50), playerView.Upperarm_r.eulerAngles.y + playerView.Arm_Aim_Animation_Rot_Y.ToString(), styleGreen);
-		GUI.Box(new Rect(10, 12 * lineHeight, 100, 50), "upperarm_l.eulerAngles.x + armAimAnimationRotX", styleGreen);
-		GUI.Box(new Rect(750, 12 * lineHeight, 100, 50), playerView.Upperarm_l.eulerAngles.x + playerView.Arm_Aim_Animation_Rot_X.ToString(), styleGreen);
-		GUI.Box(new Rect(10, 13 * lineHeight, 100, 50), "upperarm_l.eulerAngles.y + armAimAnimationRotY", styleGreen);
-		GUI.Box(new Rect(750, 13 * lineHeight, 100, 50), playerView.Upperarm_l.eulerAngles.y + playerView.Arm_Aim_Animation_Rot_Y.ToString(), styleGreen);
-
 #endif //終了  
 	}
 }
