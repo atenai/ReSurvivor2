@@ -4,9 +4,10 @@ using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 /// <summary>
-/// プレイヤーモデル
+/// プレイヤー
+/// MVPパターンのView担当
 /// </summary>
-public class PlayerModel : MonoBehaviour
+public class PlayerView : MonoBehaviour
 {
 	[Header("キャラクターモデル")]
 	[Tooltip("キャラクターの首ボーン")]

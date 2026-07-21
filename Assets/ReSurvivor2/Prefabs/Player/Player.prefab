@@ -105,9 +105,8 @@ MonoBehaviour:
   energeticNormalMoveSpeed: 5
   energeticWeaponMoveSpeed: 3
   minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
-  mineSpawnTimer: 2
   cinemachineImpulseSource: {fileID: 9221019703623590627}
-  playerModel: {fileID: 6227315758585164327}
+  playerView: {fileID: 6227315758585164327}
   gunModelFacade:
     handGunModel: {fileID: 8057301629818621534}
     assaultRifleModel: {fileID: 7988927343523470063}
