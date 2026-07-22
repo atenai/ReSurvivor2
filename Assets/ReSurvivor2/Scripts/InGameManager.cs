@@ -105,7 +105,6 @@ public class InGameManager : MonoBehaviour
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
 			PlayerManager.SingletonInstance.ResetMove();
-			PlayerManager.SingletonInstance.PlayerView.ResetMoveAnimation();
 			return;
 		}
 		//↓ロード中に動かせない処理
@@ -130,7 +129,6 @@ public class InGameManager : MonoBehaviour
 		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
 		{
 			PlayerManager.SingletonInstance.ResetMove();
-			PlayerManager.SingletonInstance.PlayerView.ResetMoveAnimation();
 			return;
 		}
 

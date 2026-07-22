@@ -31,37 +31,7 @@ public class PlayerManager : MonoBehaviour
 	[SerializeField] PlayerUI playerUI;
 	public PlayerUI PlayerUI => playerUI;
 
-	[Header("プレイヤーキャラクターの移動関連")]
-	/// <summary>縦入力</summary>
-	float inputVertical;
-	public float InputVertical => inputVertical;
-	/// <summary>横入力</summary>
-	float inputHorizontal;
-	public float InputHorizontal => inputHorizontal;
-	/// <summary>プレイヤーの前方向</summary>
-	Vector3 moveForward;
-	/// <summary>カメラの前方向</summary>
-	Vector3 cameraForward;
-	/// <summary>ダッシュするか？</summary>
-	bool isDash = false;
-	public bool IsDash => isDash;
-	/// <summary>エイムしているか？</summary>
-	bool isAim = false;
-	public bool IsAim => isAim;
-	[Tooltip("プレイヤーキャラクターの元気な時の通常移動速度")]
-	[SerializeField] float energeticNormalMoveSpeed = 5.0f;
-	[Tooltip("プレイヤーキャラクターの元気な時のエイム中移動速度")]
-	[SerializeField] float energeticWeaponMoveSpeed = 3.0f;
-	[Tooltip("プレイヤーキャラクターの疲れた時の通常移動速度")]
-	float tiredNormalMoveSpeed = 4.0f;
-	[Tooltip("プレイヤーキャラクターの疲れた時のエイム中移動速度")]
-	float tiredWeaponMoveSpeed = 2.0f;
-	[Tooltip("プレイヤーキャラクターの通常移動速度")]
-	float normalMoveSpeed = 5.0f;
-	public float NormalMoveSpeed => normalMoveSpeed;
-	[Tooltip("プレイヤーキャラクターのエイム中移動速度")]
-	float weaponMoveSpeed = 3.0f;
-	public float WeaponMoveSpeed => weaponMoveSpeed;
+
 
 	[Header("リスポーンポイント")]
 	[Tooltip("プレイヤーのリスポーンポイントの位置")]
@@ -72,10 +42,6 @@ public class PlayerManager : MonoBehaviour
 	[Tooltip("HP")]
 	[SerializeField] HitPoint hp;
 	public HitPoint HP => hp;
-
-	[Tooltip("スタミナ")]
-	[SerializeField] Stamina stamina;
-	public Stamina Stamina => stamina;
 
 	[Tooltip("現在のアーマープレート数")]
 	int currentArmorPlate = 2;
@@ -138,6 +104,7 @@ public class PlayerManager : MonoBehaviour
 	public PlayerView PlayerView => playerView;
 
 	/// <summary>プレイヤーモデル</summary>
+	[SerializeField]
 	PlayerModel playerModel = new PlayerModel();
 	public PlayerModel PlayerModel => playerModel;
 
@@ -169,7 +136,7 @@ public class PlayerManager : MonoBehaviour
 	{
 		Debug.Log("<color=cyan>プレイヤーセーブ</color>");
 		ES3.Save<float>("Hp", hp.CurrentHp);
-		ES3.Save<float>("Stamina", stamina.CurrentStamina);
+		playerModel.Save();
 		ES3.Save<int>("ArmorPlate", currentArmorPlate);
 		ES3.Save<int>("Food", currentFood);
 		ES3.Save<int>("Mine", currentMine);
@@ -192,9 +159,7 @@ public class PlayerManager : MonoBehaviour
 		float loadHp = ES3.Load<float>("Hp", HitPoint.Max_Hp);
 		hp = new HitPoint(loadHp);
 		Debug.Log("<color=purple>HP : " + hp.CurrentHp + "</color>");
-		float loadStamina = ES3.Load<float>("Stamina", Stamina.Max_Stamina);
-		stamina = new Stamina(loadStamina);
-		//Debug.Log("<color=purple>スタミナ : " + currentStamina + "</color>");
+		playerModel.Load();
 		currentArmorPlate = ES3.Load<int>("ArmorPlate", 2);
 		//Debug.Log("<color=purple>アーマープレート : " + currentArmorPlate + "</color>");
 		currentFood = ES3.Load<int>("Food", 2);
@@ -234,7 +199,13 @@ public class PlayerManager : MonoBehaviour
 		StartStaminaHealEffect();
 		InitMine();
 		InitRespawnPos();
-		ResetMove();
+	}
+
+	public void ResetMove()
+	{
+		rb.velocity = Vector3.zero;
+		playerModel.ResetMove();
+		playerView.ResetMoveAnimation();
 	}
 
 	/// <summary>
@@ -252,7 +223,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void InitStamina()
 	{
-		stamina.Initialize(ConsumeStaminaEffect, UseFood, RestoresStaminaEffect);
+		playerModel.Stamina.Initialize(ConsumeStaminaEffect, UseFood, RestoresStaminaEffect);
 	}
 
 	/// <summary>
@@ -297,112 +268,86 @@ public class PlayerManager : MonoBehaviour
 		this.transform.rotation = respawnRotation;
 	}
 
-	public void ResetMove()
-	{
-		inputHorizontal = 0.0f;
-		inputVertical = 0.0f;
-		moveForward = Vector3.zero;
-		rb.velocity = Vector3.zero;
-		isAim = false;
-		isDash = false;
-	}
-
 	public void AfterUpdate()
 	{
-		inputHorizontal = Input.GetAxisRaw("Horizontal");
-		inputVertical = Input.GetAxisRaw("Vertical");
-
-		//右ボタンまたはレフトシフトが押されていたら中身を実行
-		if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftControl) || XInputManager.SingletonInstance.XInputTriggerHandler.IsPressedLT)
-		{
-			isAim = true;
-		}
-		else
-		{
-			isAim = false;
-		}
-
-		if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("XInput L_Stick Click"))
-		{
-			isDash = true;
-		}
+		playerModel.AfterUpdate();
 
 		if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("XInput RB"))
 		{
-			if (currentArmorPlate <= 0)
-			{
-				return;
-			}
-			hp.Heal();
+			Heal();
 		}
 
 		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("XInput LB"))
 		{
-			if (currentFood <= 0)
-			{
-				return;
-			}
-			stamina.RestoresStamina();
+			RestoresStamina();
 		}
 
-		MineHoldKey();
-		MineHoldXInput();
+		Mine();
 	}
 
-	void MineHoldKey()
+	void Heal()
+	{
+		if (currentArmorPlate <= 0)
+		{
+			return;
+		}
+		hp.Heal();
+	}
+
+	void RestoresStamina()
+	{
+		if (currentFood <= 0)
+		{
+			return;
+		}
+		playerModel.Stamina.RestoresStamina();
+	}
+
+	void Mine()
 	{
 		//押しているかを判定
-		if (Input.GetKey(KeyCode.Alpha4) || Input.GetKey(KeyCode.G))
+		if (Input.GetKey(KeyCode.Alpha4) || Input.GetKey(KeyCode.G) || XInputManager.SingletonInstance.XInputDPadHandler.UpHold)
 		{
-			mineSpawnCount = mineSpawnCount + Time.deltaTime;
-			playerUI.SetMinePlacingFillAmount(mineSpawnCount / Mine_Hold_Time);
-			Debug.Log("押しているフレーム数 : " + mineSpawnCount);
+			PlacingMine();
 		}
 
 		//離した瞬間を判定
-		if (Input.GetKeyUp(KeyCode.Alpha4) || Input.GetKeyUp(KeyCode.G))
+		if (Input.GetKeyUp(KeyCode.Alpha4) || Input.GetKeyUp(KeyCode.G) || XInputManager.SingletonInstance.XInputDPadHandler.UpUp)
 		{
-			//長押しを判定
-			if (Mine_Hold_Time <= mineSpawnCount)
-			{
-				Debug.Log("長押し");
-				PlaceMine();
-			}
-
-			mineSpawnCount = 0.0f;
-			playerUI.SetMinePlacingFillAmount(0.0f);
-		}
-	}
-
-	void MineHoldXInput()
-	{
-		//押しているかを判定
-		if (XInputManager.SingletonInstance.XInputDPadHandler.UpHold)
-		{
-			mineSpawnCount = mineSpawnCount + Time.deltaTime;
-			playerUI.SetMinePlacingFillAmount(mineSpawnCount / Mine_Hold_Time);
-			Debug.Log("押しているフレーム数 : " + mineSpawnCount);
-		}
-
-		//離した瞬間を判定
-		if (XInputManager.SingletonInstance.XInputDPadHandler.UpUp)
-		{
-			//長押しを判定
-			if (Mine_Hold_Time <= mineSpawnCount)
-			{
-				Debug.Log("長押し");
-				PlaceMine();
-			}
-
-			mineSpawnCount = 0.0f;
-			playerUI.SetMinePlacingFillAmount(0.0f);
+			PlacedMine();
 		}
 	}
 
 	/// <summary>
-	/// 地雷を設置する
+	/// 地雷を設置中
 	/// </summary>
-	void PlaceMine()
+	void PlacingMine()
+	{
+		mineSpawnCount = mineSpawnCount + Time.deltaTime;
+		playerUI.SetMinePlacingFillAmount(mineSpawnCount / Mine_Hold_Time);
+		Debug.Log("押しているフレーム数 : " + mineSpawnCount);
+	}
+
+	/// <summary>
+	/// 地雷を設置した
+	/// </summary>
+	void PlacedMine()
+	{
+		//長押しを判定
+		if (Mine_Hold_Time <= mineSpawnCount)
+		{
+			Debug.Log("長押し");
+			CreateMine();
+		}
+
+		mineSpawnCount = 0.0f;
+		playerUI.SetMinePlacingFillAmount(0.0f);
+	}
+
+	/// <summary>
+	/// 地雷を生成する
+	/// </summary>
+	void CreateMine()
 	{
 		if (currentMine <= 0)
 		{
@@ -420,56 +365,53 @@ public class PlayerManager : MonoBehaviour
 
 	public void AfterFixedUpdate()
 	{
-		ChangeMoveSpeed();
+		playerModel.ChangeMoveSpeed();
 		NormalMove();
 		AimMove();
 	}
-
-	/// プレイヤーの移動はフルスクラッチする、何故ならTPSで通常カメラと肩越しカメラとで移動やアニメーションを切り替える必要がある為
-	/// キャラクターの移動はRigidbody.velocityで行う、参考作品としてランアウェイシュートを参考にする
 
 	/// <summary>
 	/// 通常状態移動
 	/// </summary>
 	void NormalMove()
 	{
-		if (isAim == true)
+		if (playerModel.IsAim == true)
 		{
 			return;
 		}
 
 		//カメラの方向から、XとZのベクトルを取得 0,0,1 * 1,0,1 = 1,0,1;
-		cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+		playerModel.CameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
 		//方向キーの入力値とカメラの向きから、移動方向のベクトルを算出する
-		moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
+		playerModel.MoveForward = playerModel.CameraForward * playerModel.InputVertical + Camera.main.transform.right * playerModel.InputHorizontal;
 		//移動方向のベクトルを正規化
-		moveForward.Normalize();
+		playerModel.MoveForward.Normalize();
 
 		//移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-		rb.velocity = moveForward * normalMoveSpeed + new Vector3(0, rb.velocity.y, 0);
+		rb.velocity = playerModel.MoveForward * playerModel.NormalMoveSpeed + new Vector3(0, rb.velocity.y, 0);
 
 		//キャラクターの向きをキャラクターの進行方向にする
-		if (moveForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
+		if (playerModel.MoveForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
 		{
-			this.transform.rotation = Quaternion.LookRotation(moveForward);
+			this.transform.rotation = Quaternion.LookRotation(playerModel.MoveForward);
 		}
 
-		if (isDash == true)
+		if (playerModel.IsDash == true)
 		{
-			if (inputVertical <= -0.1f || 0.1f <= inputVertical)//前後移動入力
+			if (playerModel.InputVertical <= -0.1f || 0.1f <= playerModel.InputVertical)//前後移動入力
 			{
 				//スタミナ消費
-				stamina.ConsumeStamina(2.0f);
+				playerModel.Stamina.ConsumeStamina(2.0f);
 			}
-			else if (inputHorizontal <= -0.1f || 0.1f <= inputHorizontal)//左右移動入力
+			else if (playerModel.InputHorizontal <= -0.1f || 0.1f <= playerModel.InputHorizontal)//左右移動入力
 			{
 				//スタミナ消費
-				stamina.ConsumeStamina(2.0f);
+				playerModel.Stamina.ConsumeStamina(2.0f);
 			}
 			else
 			{
-				isDash = false;
+				playerModel.IsDash = false;
 			}
 		}
 
@@ -484,26 +426,26 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void AimMove()
 	{
-		if (isAim == false)
+		if (playerModel.IsAim == false)
 		{
 			return;
 		}
 
 		//カメラの方向から、XとZのベクトルを取得 0,0,1 * 1,0,1 = 1,0,1;
-		cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+		playerModel.CameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
 		//方向キーの入力値とカメラの向きから、移動方向のベクトルを算出する
-		moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
+		playerModel.MoveForward = playerModel.CameraForward * playerModel.InputVertical + Camera.main.transform.right * playerModel.InputHorizontal;
 		//移動方向のベクトルを正規化
-		moveForward.Normalize();
+		playerModel.MoveForward.Normalize();
 
 		//移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-		rb.velocity = moveForward * weaponMoveSpeed + new Vector3(0, rb.velocity.y, 0);
+		rb.velocity = playerModel.MoveForward * playerModel.WeaponMoveSpeed + new Vector3(0, rb.velocity.y, 0);
 
 		//キャラクターの向きをカメラの前方にする
-		if (cameraForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
+		if (playerModel.CameraForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
 		{
-			this.transform.rotation = Quaternion.LookRotation(cameraForward);
+			this.transform.rotation = Quaternion.LookRotation(playerModel.CameraForward);
 		}
 	}
 
@@ -515,36 +457,6 @@ public class PlayerManager : MonoBehaviour
 		Ray debugRayVelocity = new Ray(this.transform.position, rb.velocity);
 		Debug.DrawRay(debugRayVelocity.origin, debugRayVelocity.direction, Color.magenta);
 	}
-
-	/// <summary>
-	/// 移動スピードを変える
-	/// </summary>
-	void ChangeMoveSpeed()
-	{
-		if (isAim == true)
-		{
-			isDash = false;
-		}
-
-		if (stamina.IsTired == true)
-		{
-			isDash = false;
-		}
-
-		if (isDash == true)
-		{
-			//元気な際の移動速度
-			normalMoveSpeed = energeticNormalMoveSpeed;
-			weaponMoveSpeed = energeticWeaponMoveSpeed;
-		}
-		else
-		{
-			//疲れた際の移動速度
-			normalMoveSpeed = tiredNormalMoveSpeed;
-			weaponMoveSpeed = tiredWeaponMoveSpeed;
-		}
-	}
-
 	void OnCollisionEnter(Collision collision)
 	{
 		// 	Debug.Log("<color=red>当たった！ : " + collision.gameObject.name + "</color>");
@@ -632,7 +544,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary> 
 	void ConsumeStaminaEffect()
 	{
-		playerUI.SliderStamina.value = (float)stamina.CurrentStamina / (float)Stamina.Max_Stamina;
+		playerUI.SliderStamina.value = (float)playerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
 	}
 
 	/// <summary>
@@ -640,7 +552,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void RestoresStaminaEffect()
 	{
-		playerUI.SliderStamina.value = (float)stamina.CurrentStamina / (float)Stamina.Max_Stamina;
+		playerUI.SliderStamina.value = (float)playerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
 		isStaminaHeal = true;
 	}
 
@@ -732,23 +644,23 @@ public class PlayerManager : MonoBehaviour
 		int lineHeight = 50;
 
 		GUI.Box(new Rect(10, 0 * lineHeight, 100, 50), "inputHorizontal", styleGreen);
-		GUI.Box(new Rect(350, 0 * lineHeight, 100, 50), inputHorizontal.ToString(), styleGreen);
+		GUI.Box(new Rect(350, 0 * lineHeight, 100, 50), playerModel.InputHorizontal.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 1 * lineHeight, 100, 50), "inputVertical", styleGreen);
-		GUI.Box(new Rect(350, 1 * lineHeight, 100, 50), inputVertical.ToString(), styleGreen);
+		GUI.Box(new Rect(350, 1 * lineHeight, 100, 50), playerModel.InputVertical.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 2 * lineHeight, 100, 50), "normalMoveSpeed", styleGreen);
-		GUI.Box(new Rect(350, 2 * lineHeight, 100, 50), normalMoveSpeed.ToString(), styleGreen);
+		GUI.Box(new Rect(350, 2 * lineHeight, 100, 50), playerModel.NormalMoveSpeed.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 3 * lineHeight, 100, 50), "weaponMoveSpeed", styleGreen);
-		GUI.Box(new Rect(350, 3 * lineHeight, 100, 50), weaponMoveSpeed.ToString(), styleGreen);
+		GUI.Box(new Rect(350, 3 * lineHeight, 100, 50), playerModel.WeaponMoveSpeed.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 4 * lineHeight, 100, 50), "isDash", styleGreen);
-		GUI.Box(new Rect(350, 4 * lineHeight, 100, 50), isDash.ToString(), styleGreen);
+		GUI.Box(new Rect(350, 4 * lineHeight, 100, 50), playerModel.IsDash.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 5 * lineHeight, 100, 50), "rb.velocity", styleGreen);
 		GUI.Box(new Rect(350, 5 * lineHeight, 100, 50), rb.velocity.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 6 * lineHeight, 100, 50), "moveForward", styleGreen);
-		GUI.Box(new Rect(350, 6 * lineHeight, 100, 50), moveForward.ToString(), styleGreen);
+		GUI.Box(new Rect(350, 6 * lineHeight, 100, 50), playerModel.MoveForward.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 7 * lineHeight, 100, 50), "cameraForward", styleGreen);
-		GUI.Box(new Rect(350, 7 * lineHeight, 100, 50), cameraForward.ToString(), styleGreen);
+		GUI.Box(new Rect(350, 7 * lineHeight, 100, 50), playerModel.CameraForward.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 8 * lineHeight, 100, 50), "isAim", styleGreen);
-		GUI.Box(new Rect(350, 8 * lineHeight, 100, 50), isAim.ToString(), styleGreen);
+		GUI.Box(new Rect(350, 8 * lineHeight, 100, 50), playerModel.IsAim.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 9 * lineHeight, 100, 50), "spine_03.eulerAngles", styleGreen);
 #endif //終了  
 	}

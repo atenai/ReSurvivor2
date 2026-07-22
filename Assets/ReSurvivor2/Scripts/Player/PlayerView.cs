@@ -68,9 +68,9 @@ public class PlayerView : MonoBehaviour
 	/// </summary>
 	void NormalMoveAnimation()
 	{
-		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedX", PlayerManager.SingletonInstance.InputHorizontal);
-		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedY", PlayerManager.SingletonInstance.InputVertical);
-		PlayerManager.SingletonInstance.Animator.SetBool("b_isAim", PlayerManager.SingletonInstance.IsAim);
+		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedX", PlayerManager.SingletonInstance.PlayerModel.InputHorizontal);
+		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedY", PlayerManager.SingletonInstance.PlayerModel.InputVertical);
+		PlayerManager.SingletonInstance.Animator.SetBool("b_isAim", PlayerManager.SingletonInstance.PlayerModel.IsAim);
 	}
 
 	/// <summary>
@@ -86,25 +86,25 @@ public class PlayerView : MonoBehaviour
 	void LateUpdate()
 	{
 		//ボーンを曲げる際は必ずLateUpdateに書く必要がある！（これいつかメモする！）
-		RotateBoneNeck01();
-		RotateBoneSpine03();
-		RotateBoneUpperArmR();
-		RotateBoneUpperArmL();
+		RotateBoneNeck01(PlayerManager.SingletonInstance.PlayerModel.IsAim);
+		RotateBoneSpine03(PlayerManager.SingletonInstance.PlayerModel.IsAim);
+		RotateBoneUpperArmR(PlayerManager.SingletonInstance.PlayerModel.IsAim);
+		RotateBoneUpperArmL(PlayerManager.SingletonInstance.PlayerModel.IsAim);
 	}
 
 	/// <summary>
 	/// キャラクターの首ボーンを曲げる
 	/// </summary> 
-	void RotateBoneNeck01()
+	void RotateBoneNeck01(bool isAim)
 	{
-		if (PlayerManager.SingletonInstance.IsAim == true)
+		if (isAim == true)
 		{
 			const float aimAnimationRotY = -20.0f;
 			//腰のボーンの角度をカメラの向きにする
 			neck_01.rotation = Quaternion.Euler(neck_01.eulerAngles.x, neck_01.eulerAngles.y + aimAnimationRotY, neck_01.eulerAngles.z);
 			isNeck01AnimationRotInit = true;
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == false)
+		else if (isAim == false)
 		{
 			if (isNeck01AnimationRotInit == true)
 			{
@@ -118,9 +118,9 @@ public class PlayerView : MonoBehaviour
 	/// <summary>
 	/// キャラクターの脊椎ボーンを曲げる
 	/// </summary> 
-	void RotateBoneSpine03()
+	void RotateBoneSpine03(bool isAim)
 	{
-		if (PlayerManager.SingletonInstance.IsAim == true)
+		if (isAim == true)
 		{
 			const float aimAnimationRotX = 12.5f;
 			const float aimAnimationRotY = 12.5f;
@@ -128,7 +128,7 @@ public class PlayerView : MonoBehaviour
 			spine_03.rotation = Quaternion.Euler(PlayerCameraManager.SingletonInstance.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
 			isSpine03AnimationRotInit = true;
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == false)
+		else if (isAim == false)
 		{
 			if (isSpine03AnimationRotInit == true)
 			{
@@ -142,15 +142,15 @@ public class PlayerView : MonoBehaviour
 	/// <summary>
 	/// キャラクターの右肩ボーンを曲げる
 	/// </summary> 
-	void RotateBoneUpperArmR()
+	void RotateBoneUpperArmR(bool isAim)
 	{
-		if (PlayerManager.SingletonInstance.IsAim == true)
+		if (isAim == true)
 		{
 			//右肩のボーンの角度をカメラの向きにする
 			//upperarm_r.rotation = Quaternion.Euler(PlayerCamera.singletonInstance.transform.localEulerAngles.x + aimAnimationRotX, upperarm_r.eulerAngles.y + aimAnimationRotY, upperarm_r.eulerAngles.z);
 			upperarm_r.rotation = Quaternion.Euler(upperarm_r.eulerAngles.x + Arm_Aim_Animation_Rot_X, upperarm_r.eulerAngles.y + Arm_Aim_Animation_Rot_Y, upperarm_r.eulerAngles.z);
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == false)
+		else if (isAim == false)
 		{
 			//右肩のボーンの角度を真正面（初期値）にする
 			upperarm_r.rotation = Quaternion.Euler(upperarm_r.eulerAngles.x, upperarm_r.eulerAngles.y, upperarm_r.eulerAngles.z);
@@ -160,14 +160,14 @@ public class PlayerView : MonoBehaviour
 	/// <summary>
 	/// キャラクターの左肩ボーンを曲げる
 	/// </summary> 
-	void RotateBoneUpperArmL()
+	void RotateBoneUpperArmL(bool isAim)
 	{
-		if (PlayerManager.SingletonInstance.IsAim == true)
+		if (isAim == true)
 		{
 			//左肩のボーンの角度をカメラの向きにする
 			upperarm_l.rotation = Quaternion.Euler(upperarm_l.eulerAngles.x + Arm_Aim_Animation_Rot_X, upperarm_l.eulerAngles.y + Arm_Aim_Animation_Rot_Y, upperarm_l.eulerAngles.z);
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == false)
+		else if (isAim == false)
 		{
 			//左肩のボーンの角度を真正面（初期値）にする
 			upperarm_l.rotation = Quaternion.Euler(upperarm_l.eulerAngles.x, upperarm_l.eulerAngles.y, upperarm_l.eulerAngles.z);

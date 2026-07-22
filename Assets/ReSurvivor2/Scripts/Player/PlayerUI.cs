@@ -93,7 +93,7 @@ public class PlayerUI : MonoBehaviour
 	/// </summary> 
 	void InitStamina()
 	{
-		sliderStamina.value = (float)PlayerManager.SingletonInstance.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
+		sliderStamina.value = (float)PlayerManager.SingletonInstance.PlayerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
 	}
 
 	/// <summary>
@@ -149,7 +149,7 @@ public class PlayerUI : MonoBehaviour
 	/// </summary> 
 	void UpdateUITransform()
 	{
-		if (PlayerManager.SingletonInstance.IsAim == false)
+		if (PlayerManager.SingletonInstance.PlayerModel.IsAim == false)
 		{
 			//常にキャンバスをメインカメラの方を向かせる
 			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
@@ -164,7 +164,7 @@ public class PlayerUI : MonoBehaviour
 			imageBG.transform.localRotation = Quaternion.Euler(0.0f, Normal_RotY, 0.0f);
 			imageBG.transform.localPosition = new Vector3(Normal_RightPos, Normal_UpPos, 0.0f);
 		}
-		else if (PlayerManager.SingletonInstance.IsAim == true)
+		else if (PlayerManager.SingletonInstance.PlayerModel.IsAim == true)
 		{
 			//常にキャンバスをメインカメラの方を向かせる
 			canvasPlayer.transform.rotation = Camera.main.transform.rotation;

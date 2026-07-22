@@ -64,7 +64,7 @@ public class ScreenUIManager : MonoBehaviour
 
 	public void AfterUpdate()
 	{
-		screenUIView.Crosshair(PlayerManager.SingletonInstance.IsAim, PlayerCameraManager.SingletonInstance.IsTargetHit);
+		screenUIView.Crosshair(PlayerManager.SingletonInstance.PlayerModel.IsAim, PlayerCameraManager.SingletonInstance.IsTargetHit);
 		screenUIPresenter.UpdateHitReticule();
 		screenUIPresenter.UpdateDamageEffect();
 		screenUIPresenter.UpdateHpHealEffect();
