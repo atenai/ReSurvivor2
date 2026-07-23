@@ -546,7 +546,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 
 		if (collision.collider.tag == "Player")
 		{
-			PlayerManager.SingletonInstance.HP.Damage(10.0f);
+			PlayerManager.SingletonInstance.PlayerModel.HP.Damage(10.0f);
 			CameraShaker();
 		}
 	}

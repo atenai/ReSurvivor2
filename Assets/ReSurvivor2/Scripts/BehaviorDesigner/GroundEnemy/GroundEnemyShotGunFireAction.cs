@@ -176,7 +176,7 @@ public class GroundEnemyShotGunFireAction : Action
 					var player = hit.transform.GetComponent<PlayerManager>();
 					if (player != null)
 					{
-						player.HP.Damage(Damage);
+						player.PlayerModel.HP.Damage(Damage);
 						groundEnemy.CameraShaker();
 						//敵マーカー表示
 						EnemyIndicatorManager.SingletonInstance.ShowIndicator(groundEnemy);

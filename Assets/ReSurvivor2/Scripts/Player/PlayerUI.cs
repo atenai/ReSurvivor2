@@ -68,12 +68,7 @@ public class PlayerUI : MonoBehaviour
 
 	void Start()
 	{
-		InitHP();
-		InitStamina();
-		StartTextArmorPlate();
-		StartTextFood();
 		StartImageReload();
-		StartTextMagazine();
 		SetMinePlacingFillAmount(0.0f);
 		StartTextTimer();
 		UpdateUITransform();
@@ -82,34 +77,34 @@ public class PlayerUI : MonoBehaviour
 	/// <summary>
 	/// HPの初期化処理
 	/// </summary>
-	void InitHP()
+	public void InitHP(float currentHp)
 	{
 		Debug.Log("InitHP");
-		sliderHp.value = (float)PlayerManager.SingletonInstance.HP.CurrentHp / (float)HitPoint.Max_Hp;
+		sliderHp.value = currentHp / HitPoint.Max_Hp;
 	}
 
 	/// <summary>
 	/// スタミナの初期化処理
 	/// </summary> 
-	void InitStamina()
+	public void InitStamina(float currentStamina)
 	{
-		sliderStamina.value = (float)PlayerManager.SingletonInstance.PlayerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
+		sliderStamina.value = currentStamina / Stamina.Max_Stamina;
 	}
 
 	/// <summary>
 	/// アーマープレートテキストの初期化処理
 	/// </summary> 
-	void StartTextArmorPlate()
+	public void StartTextArmorPlate(int currentArmorPlate)
 	{
-		textArmorPlate.text = PlayerManager.SingletonInstance.CurrentArmorPlate.ToString();
+		textArmorPlate.text = currentArmorPlate.ToString();
 	}
 
 	/// <summary>
 	/// 食料テキストの初期化処理
 	/// </summary> 
-	void StartTextFood()
+	public void StartTextFood(int currentFood)
 	{
-		textFood.text = PlayerManager.SingletonInstance.CurrentFood.ToString();
+		textFood.text = currentFood.ToString();
 	}
 
 	/// <summary>
@@ -123,10 +118,18 @@ public class PlayerUI : MonoBehaviour
 	/// <summary>
 	/// 残弾テキストの初期化処理
 	/// </summary>
-	void StartTextMagazine()
+	public void SetTextMagazine(int currentMagazine)
 	{
-		textMagazine.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
-		textAmmo.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
+		textMagazine.text = currentMagazine.ToString();
+	}
+
+	/// <summary>
+	/// 弾薬数テキストの初期化処理
+	/// </summary>
+	/// <param name="currentAmmo"></param>
+	public void SetTextAmmo(int currentAmmo)
+	{
+		textAmmo.text = currentAmmo.ToString();
 	}
 
 	/// <summary>
@@ -141,7 +144,6 @@ public class PlayerUI : MonoBehaviour
 	{
 		UpdateUITransform();
 		UpdateImageReload();
-		UpdateTextMagazine();
 	}
 
 	/// <summary>
@@ -208,20 +210,29 @@ public class PlayerUI : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 残弾テキスト
-	/// </summary>
-	void UpdateTextMagazine()
-	{
-		textMagazine.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine.ToString();
-		textAmmo.text = PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo.ToString();
-	}
-
-	/// <summary>
 	/// 地雷設置イメージのフィルアマウントを設定する
 	/// </summary>
 	/// <param name="amount"></param>
 	public void SetMinePlacingFillAmount(float amount)
 	{
 		imagePlace.fillAmount = amount;
+	}
+
+	/// <summary>
+	/// アーマープレートテキストの処理
+	/// </summary>
+	/// <param name="currentArmorPlate"></param>
+	public void SetTextArmorPlate(int currentArmorPlate)
+	{
+		textArmorPlate.text = currentArmorPlate.ToString();
+	}
+
+	/// <summary>
+	/// 食料テキストの処理
+	/// </summary>
+	/// <param name="currentFood"></param>
+	public void SetTextFood(int currentFood)
+	{
+		textFood.text = currentFood.ToString();
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// プレイヤー
@@ -41,10 +42,11 @@ public class PlayerModel
 	/// <summary>エイムしているか？</summary>
 	bool isAim = false;
 	public bool IsAim => isAim;
+
 	[Tooltip("プレイヤーキャラクターの元気な時の通常移動速度")]
-	[SerializeField] float energeticNormalMoveSpeed = 5.0f;
+	float energeticNormalMoveSpeed = 5.0f;
 	[Tooltip("プレイヤーキャラクターの元気な時のエイム中移動速度")]
-	[SerializeField] float energeticWeaponMoveSpeed = 3.0f;
+	float energeticWeaponMoveSpeed = 3.0f;
 	[Tooltip("プレイヤーキャラクターの疲れた時の通常移動速度")]
 	float tiredNormalMoveSpeed = 4.0f;
 	[Tooltip("プレイヤーキャラクターの疲れた時のエイム中移動速度")]
@@ -56,15 +58,43 @@ public class PlayerModel
 	float weaponMoveSpeed = 3.0f;
 	public float WeaponMoveSpeed => weaponMoveSpeed;
 
+	[Tooltip("HP")]
+	[SerializeField] HitPoint hp;
+	public HitPoint HP => hp;
+
 	[Tooltip("スタミナ")]
 	[SerializeField] Stamina stamina;
 	public Stamina Stamina => stamina;
 
+	[Tooltip("現在のアーマープレート数")]
+	int currentArmorPlate = 2;
+	public int CurrentArmorPlate => currentArmorPlate;
+	[Tooltip("アーマープレートの所持できる最大数")]
+	int maxArmorPlate = 3;
+	public int MaxArmorPlate => maxArmorPlate;
+	[Tooltip("アーマープレートの所持できる限界最大数")]
+	int limitMaximumArmorPlate = 10;
+
+	[Tooltip("現在の食料数")]
+	int currentFood = 2;
+	public int CurrentFood => currentFood;
+	[Tooltip("食料の所持できる最大数")]
+	int maxFood = 3;
+	public int MaxFood => maxFood;
+	[Tooltip("食料の所持できる限界最大数")]
+	int limitMaximumFood = 10;
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	public PlayerModel()
 	{
 		ResetMove();
 	}
 
+	/// <summary>
+	/// 移動パラメーターをリセットする
+	/// </summary>
 	public void ResetMove()
 	{
 		inputHorizontal = 0.0f;
@@ -80,7 +110,10 @@ public class PlayerModel
 	public void Save()
 	{
 		Debug.Log("<color=cyan>プレイヤーセーブ</color>");
+		ES3.Save<float>("Hp", hp.CurrentHp);
 		ES3.Save<float>("Stamina", stamina.CurrentStamina);
+		ES3.Save<int>("ArmorPlate", currentArmorPlate);
+		ES3.Save<int>("Food", currentFood);
 	}
 
 	/// <summary>
@@ -89,9 +122,20 @@ public class PlayerModel
 	public void Load()
 	{
 		//Debug.Log("<color=purple>プレイヤーロード</color>");
+
+		float loadHp = ES3.Load<float>("Hp", HitPoint.Max_Hp);
+		hp = new HitPoint(loadHp);
+		//Debug.Log("<color=purple>HP : " + hp.CurrentHp + "</color>");
+
 		float loadStamina = ES3.Load<float>("Stamina", Stamina.Max_Stamina);
 		stamina = new Stamina(loadStamina);
 		//Debug.Log("<color=purple>スタミナ : " + currentStamina + "</color>");
+
+		currentArmorPlate = ES3.Load<int>("ArmorPlate", 2);
+		//Debug.Log("<color=purple>アーマープレート : " + currentArmorPlate + "</color>");
+
+		currentFood = ES3.Load<int>("Food", 2);
+		//Debug.Log("<color=purple>食料 : " + currentFood + "</color>");
 	}
 
 	public void AfterUpdate()
@@ -142,5 +186,111 @@ public class PlayerModel
 			normalMoveSpeed = tiredNormalMoveSpeed;
 			weaponMoveSpeed = tiredWeaponMoveSpeed;
 		}
+	}
+
+	/// <summary>
+	/// HPを回復する
+	/// </summary>
+	public void Heal()
+	{
+		if (currentArmorPlate <= 0)
+		{
+			return;
+		}
+		hp.Heal();
+	}
+
+	/// <summary>
+	/// スタミナを回復する
+	/// </summary>
+	public void RestoresStamina()
+	{
+		if (currentFood <= 0)
+		{
+			return;
+		}
+		stamina.RestoresStamina();
+	}
+
+	/// <summary>
+	/// アーマープレートを使用
+	/// </summary>
+	public void UseArmorPlate(UnityAction<int> unityAction = null)
+	{
+		if (currentArmorPlate <= 0)
+		{
+			return;
+		}
+
+		currentArmorPlate = currentArmorPlate - 1;
+		unityAction?.Invoke(currentArmorPlate);
+	}
+
+	/// <summary>
+	/// アーマープレートを取得
+	/// </summary> 
+	public void AcquireArmorPlate(UnityAction<int> unityAction = null)
+	{
+		if (maxArmorPlate <= currentArmorPlate)
+		{
+			return;
+		}
+
+		currentArmorPlate = currentArmorPlate + 1;
+		unityAction?.Invoke(currentArmorPlate);
+	}
+
+	/// <summary>
+	/// アーマープレートの所持できる最大数を増加
+	/// </summary>
+	public void IncreaseMaxArmorPlate()
+	{
+		if (limitMaximumArmorPlate <= maxArmorPlate)
+		{
+			return;
+		}
+
+		maxArmorPlate = maxArmorPlate + 1;
+	}
+
+	/// <summary>
+	/// 食料を使用
+	/// </summary>
+	public void UseFood(UnityAction<int> unityAction = null)
+	{
+		if (currentFood <= 0)
+		{
+			return;
+		}
+
+		currentFood = currentFood - 1;
+		unityAction?.Invoke(currentFood);
+	}
+
+	/// <summary>
+	/// 食料を取得
+	/// </summary> 
+	public void AcquireFood(UnityAction<int> unityAction = null)
+	{
+		if (maxFood <= currentFood)
+		{
+			return;
+		}
+
+		currentFood = currentFood + 1;
+		unityAction?.Invoke(currentFood);
+	}
+
+	/// <summary>
+	/// 食料の所持できる最大数を増加
+	/// </summary>
+	public void IncreaseMaxFood()
+	{
+		if (limitMaximumFood <= maxFood)
+		{
+			return;
+		}
+
+		maxFood = maxFood + 1;
 	}
 }

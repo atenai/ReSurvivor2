@@ -11,12 +11,12 @@ public class Food : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			if (PlayerManager.SingletonInstance.MaxFood <= PlayerManager.SingletonInstance.CurrentFood)
+			if (PlayerManager.SingletonInstance.PlayerModel.MaxFood <= PlayerManager.SingletonInstance.PlayerModel.CurrentFood)
 			{
 				return;
 			}
 
-			PlayerManager.SingletonInstance.AcquireFood();
+			PlayerManager.SingletonInstance.PlayerModel.AcquireFood();
 
 			ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.ItemOutPutLog.OutputLog("+Food");
 			Destroy(this.gameObject);//このオブジェクトを削除            

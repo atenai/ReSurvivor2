@@ -65,7 +65,7 @@ public partial class SROptions
 	[Sort(0)]
 	public void AcquireArmorPlate()
 	{
-		PlayerManager.SingletonInstance.AcquireArmorPlate();
+		PlayerManager.SingletonInstance.PlayerModel.AcquireArmorPlate();
 	}
 
 	[Category("Player")]
@@ -73,7 +73,7 @@ public partial class SROptions
 	[Sort(1)]
 	public void IncreaseMaxArmorPlate()
 	{
-		PlayerManager.SingletonInstance.IncreaseMaxArmorPlate();
+		PlayerManager.SingletonInstance.PlayerModel.IncreaseMaxArmorPlate();
 	}
 
 	[Category("Player")]
@@ -81,7 +81,7 @@ public partial class SROptions
 	[Sort(2)]
 	public void AcquireFood()
 	{
-		PlayerManager.SingletonInstance.AcquireFood();
+		PlayerManager.SingletonInstance.PlayerModel.AcquireFood();
 	}
 
 	[Category("Player")]
@@ -89,7 +89,7 @@ public partial class SROptions
 	[Sort(3)]
 	public void IncreaseMaxFood()
 	{
-		PlayerManager.SingletonInstance.IncreaseMaxFood();
+		PlayerManager.SingletonInstance.PlayerModel.IncreaseMaxFood();
 	}
 
 	[Category("Player")]
@@ -114,6 +114,14 @@ public partial class SROptions
 	public void AcquireShotGunAmmo()
 	{
 		PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.ShotGun);
+	}
+
+	[Category("Player")]
+	[DisplayName("地雷を1つ取得する")]
+	[Sort(7)]
+	public void AcquireMine()
+	{
+		PlayerManager.SingletonInstance.AcquireMine();
 	}
 
 	#endregion

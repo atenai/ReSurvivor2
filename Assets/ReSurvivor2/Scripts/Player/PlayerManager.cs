@@ -27,38 +27,31 @@ public class PlayerManager : MonoBehaviour
 	public Animator Animator => animator;
 	[Tooltip("リジッドボディ")]
 	[SerializeField] Rigidbody rb;
+
+	[Header("プレイヤーMVPパターン")]
+	/// <summary>プレイヤーモデル</summary>
+	[SerializeField]
+	PlayerModel playerModel = new PlayerModel();
+	public PlayerModel PlayerModel => playerModel;
+
+	[Tooltip("プレイヤービュー")]
+	[SerializeField] PlayerView playerView;
+	public PlayerView PlayerView => playerView;
+
 	[Tooltip("プレイヤーUI")]
 	[SerializeField] PlayerUI playerUI;
 	public PlayerUI PlayerUI => playerUI;
 
-
+	[Header("ガンモデル")]
+	[Tooltip("ガンモデルファサード")]
+	[SerializeField] GunModelFacade gunModelFacade = new GunModelFacade();
+	public GunModelFacade GunModelFacade => gunModelFacade;
 
 	[Header("リスポーンポイント")]
 	[Tooltip("プレイヤーのリスポーンポイントの位置")]
 	Vector3 respawnPosition = new Vector3(0.0f, 1.0f, 0.0f);
 	[Tooltip("プレイヤーのリスポーンポイントの回転")]
 	Quaternion respawnRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-
-	[Tooltip("HP")]
-	[SerializeField] HitPoint hp;
-	public HitPoint HP => hp;
-
-	[Tooltip("現在のアーマープレート数")]
-	int currentArmorPlate = 2;
-	public int CurrentArmorPlate => currentArmorPlate;
-	[Tooltip("アーマープレートの所持できる最大数")]
-	int maxArmorPlate = 3;
-	public int MaxArmorPlate => maxArmorPlate;
-	[Tooltip("アーマープレートの所持できる限界最大数")]
-	int limitMaximumArmorPlate = 10;
-	[Tooltip("現在の食料数")]
-	int currentFood = 2;
-	public int CurrentFood => currentFood;
-	[Tooltip("食料の所持できる最大数")]
-	int maxFood = 3;
-	public int MaxFood => maxFood;
-	[Tooltip("食料の所持できる限界最大数")]
-	int limitMaximumFood = 10;
 
 	[Tooltip("ダメージ画像エフェクトトリガー")]
 	bool isDamage = false;
@@ -81,6 +74,7 @@ public class PlayerManager : MonoBehaviour
 		get { return isStaminaHeal; }
 		set { isStaminaHeal = value; }
 	}
+
 	[Tooltip("地雷のプレファブ")]
 	[SerializeField] GameObject minePrefab;
 	[Tooltip("キャラクターからの地雷の生成距離")]
@@ -97,21 +91,6 @@ public class PlayerManager : MonoBehaviour
 
 	[SerializeField] private CinemachineImpulseSource cinemachineImpulseSource;
 	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
-
-	[Header("プレイヤーMVPパターン")]
-	[Tooltip("プレイヤービュー")]
-	[SerializeField] PlayerView playerView;
-	public PlayerView PlayerView => playerView;
-
-	/// <summary>プレイヤーモデル</summary>
-	[SerializeField]
-	PlayerModel playerModel = new PlayerModel();
-	public PlayerModel PlayerModel => playerModel;
-
-	[Header("ガンモデル")]
-	[Tooltip("ガンモデルファサード")]
-	[SerializeField] GunModelFacade gunModelFacade = new GunModelFacade();
-	public GunModelFacade GunModelFacade => gunModelFacade;
 
 	void Awake()
 	{
@@ -135,10 +114,7 @@ public class PlayerManager : MonoBehaviour
 	public void Save()
 	{
 		Debug.Log("<color=cyan>プレイヤーセーブ</color>");
-		ES3.Save<float>("Hp", hp.CurrentHp);
 		playerModel.Save();
-		ES3.Save<int>("ArmorPlate", currentArmorPlate);
-		ES3.Save<int>("Food", currentFood);
 		ES3.Save<int>("Mine", currentMine);
 		ES3.Save("PlayerPos", respawnPosition);
 		ES3.Save("PlayerRot", respawnRotation);
@@ -156,16 +132,11 @@ public class PlayerManager : MonoBehaviour
 		isFirstLoad = false;
 
 		//Debug.Log("<color=purple>プレイヤーロード</color>");
-		float loadHp = ES3.Load<float>("Hp", HitPoint.Max_Hp);
-		hp = new HitPoint(loadHp);
-		Debug.Log("<color=purple>HP : " + hp.CurrentHp + "</color>");
 		playerModel.Load();
-		currentArmorPlate = ES3.Load<int>("ArmorPlate", 2);
-		//Debug.Log("<color=purple>アーマープレート : " + currentArmorPlate + "</color>");
-		currentFood = ES3.Load<int>("Food", 2);
-		//Debug.Log("<color=purple>食料 : " + currentFood + "</color>");
+
 		currentMine = ES3.Load<int>("Mine", 3);
 		//Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");
+
 		//ステージが切り替わる度にリスポーン位置が呼ばれるため、リスポーンのオブジェクトは遷移先のステージで敵やオブジェクトにかぶらないように注意すること！！
 		if (ES3.KeyExists("PlayerPos") == true)
 		{
@@ -199,6 +170,13 @@ public class PlayerManager : MonoBehaviour
 		StartStaminaHealEffect();
 		InitMine();
 		InitRespawnPos();
+
+		playerUI.InitHP(playerModel.HP.CurrentHp);
+		playerUI.InitStamina(playerModel.Stamina.CurrentStamina);
+		playerUI.StartTextArmorPlate(playerModel.CurrentArmorPlate);
+		playerUI.StartTextFood(playerModel.CurrentFood);
+		playerUI.SetTextMagazine(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine);
+		playerUI.SetTextAmmo(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo);
 	}
 
 	public void ResetMove()
@@ -213,9 +191,9 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void InitHP()
 	{
-		hp.Initialize(DamageEffect, ChangeSceneManager.SingletonInstance.GameOver, UseArmorPlate, HealEffect);
+		playerModel.HP.Initialize(DamageEffect, ChangeSceneManager.SingletonInstance.GameOver, () => playerModel.UseArmorPlate((armorPlate) => playerUI.StartTextArmorPlate(armorPlate)), HealEffect);
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.Max_Hp);
+		Shader.SetGlobalFloat("HP", PlayerModel.HP.CurrentHp / HitPoint.Max_Hp);
 	}
 
 	/// <summary>
@@ -223,7 +201,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void InitStamina()
 	{
-		playerModel.Stamina.Initialize(ConsumeStaminaEffect, UseFood, RestoresStaminaEffect);
+		playerModel.Stamina.Initialize(ConsumeStaminaEffect, () => playerModel.UseFood((food) => playerUI.SetTextFood(food)), RestoresStaminaEffect);
 	}
 
 	/// <summary>
@@ -274,35 +252,23 @@ public class PlayerManager : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("XInput RB"))
 		{
-			Heal();
+			playerModel.Heal();
 		}
 
 		if (Input.GetKeyDown(KeyCode.Alpha6) || Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("XInput LB"))
 		{
-			RestoresStamina();
+			playerModel.RestoresStamina();
 		}
 
 		Mine();
+
+		playerUI.SetTextMagazine(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine);
+		playerUI.SetTextAmmo(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo);
 	}
 
-	void Heal()
-	{
-		if (currentArmorPlate <= 0)
-		{
-			return;
-		}
-		hp.Heal();
-	}
-
-	void RestoresStamina()
-	{
-		if (currentFood <= 0)
-		{
-			return;
-		}
-		playerModel.Stamina.RestoresStamina();
-	}
-
+	/// <summary>
+	/// 地雷の設置
+	/// </summary>
 	void Mine()
 	{
 		//押しているかを判定
@@ -345,7 +311,7 @@ public class PlayerManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 地雷を生成する
+	/// 地雷を生成
 	/// </summary>
 	void CreateMine()
 	{
@@ -361,6 +327,20 @@ public class PlayerManager : MonoBehaviour
 		// キャラクターの前方にオブジェクトを生成
 		Vector3 spawnPosition = localPosition + (this.transform.forward * mineSpawnDistance);
 		GameObject localGameObject = UnityEngine.Object.Instantiate(minePrefab, spawnPosition, this.transform.rotation);
+	}
+
+	/// <summary>
+	/// 地雷を取得
+	/// </summary> 
+	public void AcquireMine()
+	{
+		if (maxMine <= currentMine)
+		{
+			return;
+		}
+
+		currentMine = currentMine + 1;
+		playerUI.TextMine.text = currentMine.ToString();
 	}
 
 	public void AfterFixedUpdate()
@@ -481,9 +461,9 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void DamageEffect()
 	{
-		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.Max_Hp;
+		playerUI.SliderHp.value = (float)playerModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.Max_Hp);
+		Shader.SetGlobalFloat("HP", playerModel.HP.CurrentHp / HitPoint.Max_Hp);
 		isDamage = true;
 	}
 
@@ -492,51 +472,10 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void HealEffect()
 	{
-		playerUI.SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.Max_Hp;
+		playerUI.SliderHp.value = (float)playerModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
 		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", hp.CurrentHp / HitPoint.Max_Hp);
+		Shader.SetGlobalFloat("HP", playerModel.HP.CurrentHp / HitPoint.Max_Hp);
 		isHpHeal = true;
-	}
-
-	/// <summary>
-	/// アーマープレートを使用
-	/// </summary>
-	public void UseArmorPlate()
-	{
-		if (currentArmorPlate <= 0)
-		{
-			return;
-		}
-
-		currentArmorPlate = currentArmorPlate - 1;
-		playerUI.TextArmorPlate.text = currentArmorPlate.ToString();
-	}
-
-	/// <summary>
-	/// アーマープレートを取得
-	/// </summary> 
-	public void AcquireArmorPlate()
-	{
-		if (maxArmorPlate <= currentArmorPlate)
-		{
-			return;
-		}
-
-		currentArmorPlate = currentArmorPlate + 1;
-		playerUI.TextArmorPlate.text = currentArmorPlate.ToString();
-	}
-
-	/// <summary>
-	/// アーマープレートの所持できる最大数を増加
-	/// </summary>
-	public void IncreaseMaxArmorPlate()
-	{
-		if (limitMaximumArmorPlate <= maxArmorPlate)
-		{
-			return;
-		}
-
-		maxArmorPlate = maxArmorPlate + 1;
 	}
 
 	/// <summary>
@@ -554,63 +493,6 @@ public class PlayerManager : MonoBehaviour
 	{
 		playerUI.SliderStamina.value = (float)playerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
 		isStaminaHeal = true;
-	}
-
-	bool CanUseFood => currentFood <= 0;
-
-	/// <summary>
-	/// 食料を使用
-	/// </summary>
-	void UseFood()
-	{
-		if (currentFood <= 0)
-		{
-			return;
-		}
-
-		currentFood = currentFood - 1;
-		playerUI.TextFood.text = currentFood.ToString();
-	}
-
-	/// <summary>
-	/// 食料を取得
-	/// </summary> 
-	public void AcquireFood()
-	{
-		if (maxFood <= currentFood)
-		{
-			return;
-		}
-
-		currentFood = currentFood + 1;
-		playerUI.TextFood.text = currentFood.ToString();
-	}
-
-	/// <summary>
-	/// 食料の所持できる最大数を増加
-	/// </summary>
-	public void IncreaseMaxFood()
-	{
-		if (limitMaximumFood <= maxFood)
-		{
-			return;
-		}
-
-		maxFood = maxFood + 1;
-	}
-
-	/// <summary>
-	/// 地雷を取得
-	/// </summary> 
-	public void AcquireMine()
-	{
-		if (maxMine <= currentMine)
-		{
-			return;
-		}
-
-		currentMine = currentMine + 1;
-		playerUI.TextMine.text = currentMine.ToString();
 	}
 
 	void OnGUI()

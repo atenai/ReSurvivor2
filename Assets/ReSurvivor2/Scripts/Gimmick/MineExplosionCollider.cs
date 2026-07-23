@@ -53,7 +53,7 @@ public class MineExplosionCollider : MonoBehaviour
 
 		if (collider.CompareTag("Player"))
 		{
-			PlayerManager.SingletonInstance.HP.Damage(damage);
+			PlayerManager.SingletonInstance.PlayerModel.HP.Damage(damage);
 			CameraShaker();
 		}
 	}
