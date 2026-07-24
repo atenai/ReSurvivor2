@@ -133,8 +133,6 @@ public class InGameManager : MonoBehaviour
 		}
 
 		PlayerManager.SingletonInstance.AfterUpdate();
-		PlayerManager.SingletonInstance.PlayerView.AfterUpdate();
-		PlayerManager.SingletonInstance.PlayerUI.AfterUpdate();
 		PlayerCameraManager.SingletonInstance.AfterUpdate();
 		TimerManager.SingletonInstance.AfterUpdate();
 		ScreenUIManager.SingletonInstance.AfterUpdate();

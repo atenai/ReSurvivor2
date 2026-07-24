@@ -16,7 +16,7 @@ public class ArmorPlate : MonoBehaviour
 				return;
 			}
 
-			PlayerManager.SingletonInstance.PlayerModel.AcquireArmorPlate();
+			PlayerManager.SingletonInstance.PlayerModel.AcquireArmorPlate((armorPlate) => PlayerManager.SingletonInstance.PlayerUIView.StartTextArmorPlate(armorPlate));
 
 			ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.ItemOutPutLog.OutputLog("+ArmorPlate");
 			Destroy(this.gameObject);//このオブジェクトを削除            

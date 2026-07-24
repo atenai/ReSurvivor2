@@ -93,7 +93,7 @@ public class ShotGun : GunBase
 		if (reloadCountTimer == 0)
 		{
 			//ショットガンのリロードアニメーションをオン
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isShotGunReload", true);
+			PlayerManager.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isShotGunReload", true);
 
 			ShotGunReloadSE();
 		}
@@ -132,7 +132,7 @@ public class ShotGun : GunBase
 			isReloadTimeActive = false;//リロードのオフ
 
 			//ショットガンのリロードアニメーションをオフ
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isShotGunReload", false);
+			PlayerManager.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isShotGunReload", false);
 		}
 	}
 

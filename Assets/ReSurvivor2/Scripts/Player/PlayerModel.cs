@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// プレイヤー
+/// プレイヤーモデル
 /// MVPパターンのModel担当
 /// </summary>
 [Serializable]
@@ -84,12 +84,46 @@ public class PlayerModel
 	[Tooltip("食料の所持できる限界最大数")]
 	int limitMaximumFood = 10;
 
+	[Tooltip("ダメージ画像エフェクトトリガー")]
+	bool isDamage = false;
+	public bool IsDamage
+	{
+		get { return isDamage; }
+		set { isDamage = value; }
+	}
+	[Tooltip("HP回復画像エフェクトトリガー")]
+	bool isHpHeal = false;
+	public bool IsHpHeal
+	{
+		get { return isHpHeal; }
+		set { isHpHeal = value; }
+	}
+	[Tooltip("スタミナ回復画像エフェクトトリガー")]
+	bool isStaminaHeal = false;
+	public bool IsStaminaHeal
+	{
+		get { return isStaminaHeal; }
+		set { isStaminaHeal = value; }
+	}
+
+	[Header("リスポーンポイント")]
+	[Tooltip("プレイヤーのリスポーンポイントの位置")]
+	Vector3 respawnPosition = new Vector3(0.0f, 1.0f, 0.0f);
+	public Vector3 RespawnPosition => respawnPosition;
+
+	[Tooltip("プレイヤーのリスポーンポイントの回転")]
+	Quaternion respawnRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+	public Quaternion RespawnRotation => respawnRotation;
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	public PlayerModel()
 	{
 		ResetMove();
+		StartDamageEffect();
+		StartHpHealEffect();
+		StartStaminaHealEffect();
 	}
 
 	/// <summary>
@@ -105,6 +139,30 @@ public class PlayerModel
 	}
 
 	/// <summary>
+	/// ダメージ画像エフェクトの初期化処理
+	/// </summary> 
+	void StartDamageEffect()
+	{
+		isDamage = false;
+	}
+
+	/// <summary>
+	/// HP回復画像エフェクトの初期化処理
+	/// </summary> 
+	void StartHpHealEffect()
+	{
+		isHpHeal = false;
+	}
+
+	/// <summary>
+	/// スタミナ回復画像エフェクトの初期化処理
+	/// </summary> 
+	void StartStaminaHealEffect()
+	{
+		isStaminaHeal = false;
+	}
+
+	/// <summary>
 	/// セーブ
 	/// </summary>
 	public void Save()
@@ -114,6 +172,8 @@ public class PlayerModel
 		ES3.Save<float>("Stamina", stamina.CurrentStamina);
 		ES3.Save<int>("ArmorPlate", currentArmorPlate);
 		ES3.Save<int>("Food", currentFood);
+		ES3.Save("PlayerPos", respawnPosition);
+		ES3.Save("PlayerRot", respawnRotation);
 	}
 
 	/// <summary>
@@ -136,6 +196,29 @@ public class PlayerModel
 
 		currentFood = ES3.Load<int>("Food", 2);
 		//Debug.Log("<color=purple>食料 : " + currentFood + "</color>");
+
+		//ステージが切り替わる度にリスポーン位置が呼ばれるため、リスポーンのオブジェクトは遷移先のステージで敵やオブジェクトにかぶらないように注意すること！！
+		if (ES3.KeyExists("PlayerPos") == true)
+		{
+			respawnPosition = ES3.Load<Vector3>("PlayerPos");
+			//Debug.Log("<color=purple>プレイヤー位置 : " + this.transform.position + "</color>");
+		}
+		if (ES3.KeyExists("PlayerRot") == true)
+		{
+			respawnRotation = ES3.Load<Quaternion>("PlayerRot");
+			//Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
+		}
+	}
+
+	/// <summary>
+	/// プレイヤーのリスポーンポイントを設定する
+	/// </summary>
+	/// <param name="pos">プレイヤー位置</param>
+	/// <param name="rot">プレイヤー回転</param>
+	public void SetPlayerRespawnPoint(Vector3 pos, Quaternion rot)
+	{
+		respawnPosition = pos;
+		respawnRotation = rot;
 	}
 
 	public void AfterUpdate()
@@ -215,7 +298,7 @@ public class PlayerModel
 	/// <summary>
 	/// アーマープレートを使用
 	/// </summary>
-	public void UseArmorPlate(UnityAction<int> unityAction = null)
+	public void UseArmorPlate(UnityAction<int> unityAction)
 	{
 		if (currentArmorPlate <= 0)
 		{
@@ -229,7 +312,7 @@ public class PlayerModel
 	/// <summary>
 	/// アーマープレートを取得
 	/// </summary> 
-	public void AcquireArmorPlate(UnityAction<int> unityAction = null)
+	public void AcquireArmorPlate(UnityAction<int> unityAction)
 	{
 		if (maxArmorPlate <= currentArmorPlate)
 		{
@@ -256,7 +339,7 @@ public class PlayerModel
 	/// <summary>
 	/// 食料を使用
 	/// </summary>
-	public void UseFood(UnityAction<int> unityAction = null)
+	public void UseFood(UnityAction<int> unityAction)
 	{
 		if (currentFood <= 0)
 		{
@@ -270,7 +353,7 @@ public class PlayerModel
 	/// <summary>
 	/// 食料を取得
 	/// </summary> 
-	public void AcquireFood(UnityAction<int> unityAction = null)
+	public void AcquireFood(UnityAction<int> unityAction)
 	{
 		if (maxFood <= currentFood)
 		{

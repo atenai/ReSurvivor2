@@ -4,11 +4,18 @@ using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 /// <summary>
-/// プレイヤー
+/// プレイヤーキャラクタービュー
 /// MVPパターンのView担当
 /// </summary>
-public class PlayerView : MonoBehaviour
+public class PlayerCharacterView : MonoBehaviour
 {
+	[Tooltip("アニメーター")]
+	[SerializeField] Animator animator;
+	public Animator Animator => animator;
+	[Tooltip("リジッドボディ")]
+	[SerializeField] Rigidbody rb;
+	public Rigidbody RB => rb;
+
 	[Header("キャラクターモデル")]
 	[Tooltip("キャラクターの首ボーン")]
 	[SerializeField] Transform neck_01;
@@ -58,44 +65,20 @@ public class PlayerView : MonoBehaviour
 		spine_03_InitEulerAnglesX = spine_03.eulerAngles.x;
 	}
 
-	public void AfterUpdate()
-	{
-		NormalMoveAnimation();
-	}
-
-	/// <summary>
-	/// 移動アニメーション
-	/// </summary>
-	void NormalMoveAnimation()
-	{
-		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedX", PlayerManager.SingletonInstance.PlayerModel.InputHorizontal);
-		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedY", PlayerManager.SingletonInstance.PlayerModel.InputVertical);
-		PlayerManager.SingletonInstance.Animator.SetBool("b_isAim", PlayerManager.SingletonInstance.PlayerModel.IsAim);
-	}
-
 	/// <summary>
 	/// 移動アニメーションをリセットする
 	/// </summary>
 	public void ResetMoveAnimation()
 	{
-		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedX", 0.0f);
-		PlayerManager.SingletonInstance.Animator.SetFloat("f_moveSpeedY", 0.0f);
-		PlayerManager.SingletonInstance.Animator.SetBool("b_isAim", false);
-	}
-
-	void LateUpdate()
-	{
-		//ボーンを曲げる際は必ずLateUpdateに書く必要がある！（これいつかメモする！）
-		RotateBoneNeck01(PlayerManager.SingletonInstance.PlayerModel.IsAim);
-		RotateBoneSpine03(PlayerManager.SingletonInstance.PlayerModel.IsAim);
-		RotateBoneUpperArmR(PlayerManager.SingletonInstance.PlayerModel.IsAim);
-		RotateBoneUpperArmL(PlayerManager.SingletonInstance.PlayerModel.IsAim);
+		animator.SetFloat("f_moveSpeedX", 0.0f);
+		animator.SetFloat("f_moveSpeedY", 0.0f);
+		animator.SetBool("b_isAim", false);
 	}
 
 	/// <summary>
 	/// キャラクターの首ボーンを曲げる
 	/// </summary> 
-	void RotateBoneNeck01(bool isAim)
+	public void RotateBoneNeck01(bool isAim)
 	{
 		if (isAim == true)
 		{
@@ -118,14 +101,14 @@ public class PlayerView : MonoBehaviour
 	/// <summary>
 	/// キャラクターの脊椎ボーンを曲げる
 	/// </summary> 
-	void RotateBoneSpine03(bool isAim)
+	public void RotateBoneSpine03(bool isAim, Transform cameraTransform)
 	{
 		if (isAim == true)
 		{
 			const float aimAnimationRotX = 12.5f;
 			const float aimAnimationRotY = 12.5f;
 			//腰のボーンの角度をカメラの向きにする
-			spine_03.rotation = Quaternion.Euler(PlayerCameraManager.SingletonInstance.transform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
+			spine_03.rotation = Quaternion.Euler(cameraTransform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
 			isSpine03AnimationRotInit = true;
 		}
 		else if (isAim == false)
@@ -142,7 +125,7 @@ public class PlayerView : MonoBehaviour
 	/// <summary>
 	/// キャラクターの右肩ボーンを曲げる
 	/// </summary> 
-	void RotateBoneUpperArmR(bool isAim)
+	public void RotateBoneUpperArmR(bool isAim)
 	{
 		if (isAim == true)
 		{
@@ -160,7 +143,7 @@ public class PlayerView : MonoBehaviour
 	/// <summary>
 	/// キャラクターの左肩ボーンを曲げる
 	/// </summary> 
-	void RotateBoneUpperArmL(bool isAim)
+	public void RotateBoneUpperArmL(bool isAim)
 	{
 		if (isAim == true)
 		{

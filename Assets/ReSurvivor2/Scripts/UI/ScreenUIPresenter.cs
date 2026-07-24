@@ -112,17 +112,17 @@ public class ScreenUIPresenter
     /// </summary> 
     public void UpdateDamageEffect()
     {
-        if (PlayerManager.SingletonInstance.IsDamage == true)
+        if (PlayerManager.SingletonInstance.PlayerModel.IsDamage == true)
         {
             screenUIView.ImageDamage.color = new Color(0.5f, 0f, 0f, 0.5f);
         }
 
-        if (PlayerManager.SingletonInstance.IsDamage == false)
+        if (PlayerManager.SingletonInstance.PlayerModel.IsDamage == false)
         {
             screenUIView.ImageDamage.color = Color.Lerp(screenUIView.ImageDamage.color, Color.clear, Time.deltaTime);
         }
 
-        PlayerManager.SingletonInstance.IsDamage = false;
+        PlayerManager.SingletonInstance.PlayerModel.IsDamage = false;
     }
 
     /// <summary>
@@ -130,17 +130,17 @@ public class ScreenUIPresenter
     /// </summary> 
     public void UpdateHpHealEffect()
     {
-        if (PlayerManager.SingletonInstance.IsHpHeal == true)
+        if (PlayerManager.SingletonInstance.PlayerModel.IsHpHeal == true)
         {
             screenUIView.ImageHpHeal.color = new Color(0f, 0.5f, 0f, 0.5f);
         }
 
-        if (PlayerManager.SingletonInstance.IsHpHeal == false)
+        if (PlayerManager.SingletonInstance.PlayerModel.IsHpHeal == false)
         {
             screenUIView.ImageHpHeal.color = Color.Lerp(screenUIView.ImageHpHeal.color, Color.clear, Time.deltaTime);
         }
 
-        PlayerManager.SingletonInstance.IsHpHeal = false;
+        PlayerManager.SingletonInstance.PlayerModel.IsHpHeal = false;
     }
 
     /// <summary>
@@ -148,17 +148,17 @@ public class ScreenUIPresenter
     /// </summary> 
     public void UpdateStaminaHealEffect()
     {
-        if (PlayerManager.SingletonInstance.IsStaminaHeal == true)
+        if (PlayerManager.SingletonInstance.PlayerModel.IsStaminaHeal == true)
         {
             screenUIView.ImageStaminaHeal.color = new Color(0.5f, 0.5f, 0f, 0.5f);
         }
 
-        if (PlayerManager.SingletonInstance.IsStaminaHeal == false)
+        if (PlayerManager.SingletonInstance.PlayerModel.IsStaminaHeal == false)
         {
             screenUIView.ImageStaminaHeal.color = Color.Lerp(screenUIView.ImageStaminaHeal.color, Color.clear, Time.deltaTime);
         }
 
-        PlayerManager.SingletonInstance.IsStaminaHeal = false;
+        PlayerManager.SingletonInstance.PlayerModel.IsStaminaHeal = false;
     }
 
     /// <summary>

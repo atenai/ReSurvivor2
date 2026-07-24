@@ -90,7 +90,7 @@ public class AssaultRifle : GunBase
 		if (reloadCountTimer == 0)
 		{
 			//アサルトライフルのリロードアニメーションをオン
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", true);
+			PlayerManager.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isAssaultRifleReload", true);
 
 			AssaultRifleReloadSE();
 		}
@@ -129,7 +129,7 @@ public class AssaultRifle : GunBase
 			isReloadTimeActive = false;//リロードのオフ
 
 			//アサルトライフルのリロードアニメーションをオフ
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isAssaultRifleReload", false);
+			PlayerManager.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isAssaultRifleReload", false);
 		}
 	}
 

@@ -22,12 +22,6 @@ public class PlayerManager : MonoBehaviour
 		set { isFirstLoad = value; }
 	}
 
-	[Tooltip("アニメーター")]
-	[SerializeField] Animator animator;
-	public Animator Animator => animator;
-	[Tooltip("リジッドボディ")]
-	[SerializeField] Rigidbody rb;
-
 	[Header("プレイヤーMVPパターン")]
 	/// <summary>プレイヤーモデル</summary>
 	[SerializeField]
@@ -35,46 +29,17 @@ public class PlayerManager : MonoBehaviour
 	public PlayerModel PlayerModel => playerModel;
 
 	[Tooltip("プレイヤービュー")]
-	[SerializeField] PlayerView playerView;
-	public PlayerView PlayerView => playerView;
+	[SerializeField] PlayerCharacterView playerCharacterView;
+	public PlayerCharacterView PlayerCharacterView => playerCharacterView;
 
 	[Tooltip("プレイヤーUI")]
-	[SerializeField] PlayerUI playerUI;
-	public PlayerUI PlayerUI => playerUI;
+	[SerializeField] PlayerUIView playerUIView;
+	public PlayerUIView PlayerUIView => playerUIView;
 
 	[Header("ガンモデル")]
 	[Tooltip("ガンモデルファサード")]
 	[SerializeField] GunModelFacade gunModelFacade = new GunModelFacade();
 	public GunModelFacade GunModelFacade => gunModelFacade;
-
-	[Header("リスポーンポイント")]
-	[Tooltip("プレイヤーのリスポーンポイントの位置")]
-	Vector3 respawnPosition = new Vector3(0.0f, 1.0f, 0.0f);
-	[Tooltip("プレイヤーのリスポーンポイントの回転")]
-	Quaternion respawnRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
-
-	[Tooltip("ダメージ画像エフェクトトリガー")]
-	bool isDamage = false;
-	public bool IsDamage
-	{
-		get { return isDamage; }
-		set { isDamage = value; }
-	}
-	[Tooltip("HP回復画像エフェクトトリガー")]
-	bool isHpHeal = false;
-	public bool IsHpHeal
-	{
-		get { return isHpHeal; }
-		set { isHpHeal = value; }
-	}
-	[Tooltip("スタミナ回復画像エフェクトトリガー")]
-	bool isStaminaHeal = false;
-	public bool IsStaminaHeal
-	{
-		get { return isStaminaHeal; }
-		set { isStaminaHeal = value; }
-	}
-
 	[Tooltip("地雷のプレファブ")]
 	[SerializeField] GameObject minePrefab;
 	[Tooltip("キャラクターからの地雷の生成距離")]
@@ -116,8 +81,6 @@ public class PlayerManager : MonoBehaviour
 		Debug.Log("<color=cyan>プレイヤーセーブ</color>");
 		playerModel.Save();
 		ES3.Save<int>("Mine", currentMine);
-		ES3.Save("PlayerPos", respawnPosition);
-		ES3.Save("PlayerRot", respawnRotation);
 	}
 
 	/// <summary>
@@ -135,55 +98,29 @@ public class PlayerManager : MonoBehaviour
 		playerModel.Load();
 
 		currentMine = ES3.Load<int>("Mine", 3);
-		//Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");
-
-		//ステージが切り替わる度にリスポーン位置が呼ばれるため、リスポーンのオブジェクトは遷移先のステージで敵やオブジェクトにかぶらないように注意すること！！
-		if (ES3.KeyExists("PlayerPos") == true)
-		{
-			respawnPosition = ES3.Load<Vector3>("PlayerPos");
-			//Debug.Log("<color=purple>プレイヤー位置 : " + this.transform.position + "</color>");
-		}
-		if (ES3.KeyExists("PlayerRot") == true)
-		{
-			respawnRotation = ES3.Load<Quaternion>("PlayerRot");
-			//Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
-		}
-	}
-
-	/// <summary>
-	/// プレイヤーのリスポーンポイントを設定する
-	/// </summary>
-	/// <param name="pos">プレイヤー位置</param>
-	/// <param name="rot">プレイヤー回転</param>
-	public void SetPlayerRespawnPoint(Vector3 pos, Quaternion rot)
-	{
-		respawnPosition = pos;
-		respawnRotation = rot;
+		//Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");		
 	}
 
 	void Start()
 	{
 		InitHP();
 		InitStamina();
-		StartDamageEffect();
-		StartHpHealEffect();
-		StartStaminaHealEffect();
 		InitMine();
 		InitRespawnPos();
 
-		playerUI.InitHP(playerModel.HP.CurrentHp);
-		playerUI.InitStamina(playerModel.Stamina.CurrentStamina);
-		playerUI.StartTextArmorPlate(playerModel.CurrentArmorPlate);
-		playerUI.StartTextFood(playerModel.CurrentFood);
-		playerUI.SetTextMagazine(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine);
-		playerUI.SetTextAmmo(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo);
+		playerUIView.InitHP(playerModel.HP.CurrentHp);
+		playerUIView.InitStamina(playerModel.Stamina.CurrentStamina);
+		playerUIView.StartTextArmorPlate(playerModel.CurrentArmorPlate);
+		playerUIView.StartTextFood(playerModel.CurrentFood);
+		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine);
+		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo);
 	}
 
 	public void ResetMove()
 	{
-		rb.velocity = Vector3.zero;
+		playerCharacterView.RB.velocity = Vector3.zero;
 		playerModel.ResetMove();
-		playerView.ResetMoveAnimation();
+		playerCharacterView.ResetMoveAnimation();
 	}
 
 	/// <summary>
@@ -191,7 +128,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void InitHP()
 	{
-		playerModel.HP.Initialize(DamageEffect, ChangeSceneManager.SingletonInstance.GameOver, () => playerModel.UseArmorPlate((armorPlate) => playerUI.StartTextArmorPlate(armorPlate)), HealEffect);
+		playerModel.HP.Initialize(DamageEffect, ChangeSceneManager.SingletonInstance.GameOver, () => playerModel.UseArmorPlate((armorPlate) => playerUIView.StartTextArmorPlate(armorPlate)), HealEffect);
 		//シェーダーへ値を渡す（これだけでOK）
 		Shader.SetGlobalFloat("HP", PlayerModel.HP.CurrentHp / HitPoint.Max_Hp);
 	}
@@ -201,31 +138,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void InitStamina()
 	{
-		playerModel.Stamina.Initialize(ConsumeStaminaEffect, () => playerModel.UseFood((food) => playerUI.SetTextFood(food)), RestoresStaminaEffect);
-	}
-
-	/// <summary>
-	/// ダメージ画像エフェクトの初期化処理
-	/// </summary> 
-	void StartDamageEffect()
-	{
-		isDamage = false;
-	}
-
-	/// <summary>
-	/// HP回復画像エフェクトの初期化処理
-	/// </summary> 
-	void StartHpHealEffect()
-	{
-		isHpHeal = false;
-	}
-
-	/// <summary>
-	/// スタミナ回復画像エフェクトの初期化処理
-	/// </summary> 
-	void StartStaminaHealEffect()
-	{
-		isStaminaHeal = false;
+		playerModel.Stamina.Initialize(ConsumeStaminaEffect, () => playerModel.UseFood((food) => playerUIView.SetTextFood(food)), RestoresStaminaEffect);
 	}
 
 	/// <summary>
@@ -234,7 +147,7 @@ public class PlayerManager : MonoBehaviour
 	void InitMine()
 	{
 		mineSpawnCount = 0.0f;
-		playerUI.TextMine.text = currentMine.ToString();
+		playerUIView.TextMine.text = currentMine.ToString();
 	}
 
 	/// <summary>
@@ -242,8 +155,8 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void InitRespawnPos()
 	{
-		this.transform.position = respawnPosition;
-		this.transform.rotation = respawnRotation;
+		this.transform.position = playerModel.RespawnPosition;
+		this.transform.rotation = playerModel.RespawnRotation;
 	}
 
 	public void AfterUpdate()
@@ -262,8 +175,21 @@ public class PlayerManager : MonoBehaviour
 
 		Mine();
 
-		playerUI.SetTextMagazine(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine);
-		playerUI.SetTextAmmo(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo);
+		NormalMoveAnimation();
+		playerUIView.AfterUpdate();
+		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine);
+		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo);
+	}
+
+
+	/// <summary>
+	/// 移動アニメーション
+	/// </summary>
+	void NormalMoveAnimation()
+	{
+		playerCharacterView.Animator.SetFloat("f_moveSpeedX", playerModel.InputHorizontal);
+		playerCharacterView.Animator.SetFloat("f_moveSpeedY", playerModel.InputVertical);
+		playerCharacterView.Animator.SetBool("b_isAim", playerModel.IsAim);
 	}
 
 	/// <summary>
@@ -290,7 +216,7 @@ public class PlayerManager : MonoBehaviour
 	void PlacingMine()
 	{
 		mineSpawnCount = mineSpawnCount + Time.deltaTime;
-		playerUI.SetMinePlacingFillAmount(mineSpawnCount / Mine_Hold_Time);
+		playerUIView.SetMinePlacingFillAmount(mineSpawnCount / Mine_Hold_Time);
 		Debug.Log("押しているフレーム数 : " + mineSpawnCount);
 	}
 
@@ -307,7 +233,7 @@ public class PlayerManager : MonoBehaviour
 		}
 
 		mineSpawnCount = 0.0f;
-		playerUI.SetMinePlacingFillAmount(0.0f);
+		playerUIView.SetMinePlacingFillAmount(0.0f);
 	}
 
 	/// <summary>
@@ -321,7 +247,7 @@ public class PlayerManager : MonoBehaviour
 		}
 
 		currentMine = currentMine - 1;
-		playerUI.TextMine.text = currentMine.ToString();
+		playerUIView.TextMine.text = currentMine.ToString();
 
 		Vector3 localPosition = new Vector3(this.transform.position.x, 0.0f, this.transform.position.z);
 		// キャラクターの前方にオブジェクトを生成
@@ -340,7 +266,7 @@ public class PlayerManager : MonoBehaviour
 		}
 
 		currentMine = currentMine + 1;
-		playerUI.TextMine.text = currentMine.ToString();
+		playerUIView.TextMine.text = currentMine.ToString();
 	}
 
 	public void AfterFixedUpdate()
@@ -369,7 +295,7 @@ public class PlayerManager : MonoBehaviour
 		playerModel.MoveForward.Normalize();
 
 		//移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-		rb.velocity = playerModel.MoveForward * playerModel.NormalMoveSpeed + new Vector3(0, rb.velocity.y, 0);
+		playerCharacterView.RB.velocity = playerModel.MoveForward * playerModel.NormalMoveSpeed + new Vector3(0, playerCharacterView.RB.velocity.y, 0);
 
 		//キャラクターの向きをキャラクターの進行方向にする
 		if (playerModel.MoveForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
@@ -420,7 +346,7 @@ public class PlayerManager : MonoBehaviour
 		playerModel.MoveForward.Normalize();
 
 		//移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-		rb.velocity = playerModel.MoveForward * playerModel.WeaponMoveSpeed + new Vector3(0, rb.velocity.y, 0);
+		playerCharacterView.RB.velocity = playerModel.MoveForward * playerModel.WeaponMoveSpeed + new Vector3(0, playerCharacterView.RB.velocity.y, 0);
 
 		//キャラクターの向きをカメラの前方にする
 		if (playerModel.CameraForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
@@ -434,9 +360,19 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void VectorVisualizer()
 	{
-		Ray debugRayVelocity = new Ray(this.transform.position, rb.velocity);
+		Ray debugRayVelocity = new Ray(this.transform.position, playerCharacterView.RB.velocity);
 		Debug.DrawRay(debugRayVelocity.origin, debugRayVelocity.direction, Color.magenta);
 	}
+
+	void LateUpdate()
+	{
+		//ボーンを曲げる際は必ずLateUpdateに書く必要がある！（これいつかメモする！）
+		playerCharacterView.RotateBoneNeck01(playerModel.IsAim);
+		playerCharacterView.RotateBoneSpine03(playerModel.IsAim, PlayerCameraManager.SingletonInstance.transform);
+		playerCharacterView.RotateBoneUpperArmR(playerModel.IsAim);
+		playerCharacterView.RotateBoneUpperArmL(playerModel.IsAim);
+	}
+
 	void OnCollisionEnter(Collision collision)
 	{
 		// 	Debug.Log("<color=red>当たった！ : " + collision.gameObject.name + "</color>");
@@ -461,10 +397,10 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void DamageEffect()
 	{
-		playerUI.SliderHp.value = (float)playerModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
+		playerUIView.SliderHp.value = (float)playerModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
 		//シェーダーへ値を渡す（これだけでOK）
 		Shader.SetGlobalFloat("HP", playerModel.HP.CurrentHp / HitPoint.Max_Hp);
-		isDamage = true;
+		playerModel.IsDamage = true;
 	}
 
 	/// <summary>
@@ -472,10 +408,10 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	public void HealEffect()
 	{
-		playerUI.SliderHp.value = (float)playerModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
+		playerUIView.SliderHp.value = (float)playerModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
 		//シェーダーへ値を渡す（これだけでOK）
 		Shader.SetGlobalFloat("HP", playerModel.HP.CurrentHp / HitPoint.Max_Hp);
-		isHpHeal = true;
+		playerModel.IsHpHeal = true;
 	}
 
 	/// <summary>
@@ -483,7 +419,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary> 
 	void ConsumeStaminaEffect()
 	{
-		playerUI.SliderStamina.value = (float)playerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
+		playerUIView.SliderStamina.value = (float)playerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
 	}
 
 	/// <summary>
@@ -491,8 +427,8 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void RestoresStaminaEffect()
 	{
-		playerUI.SliderStamina.value = (float)playerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
-		isStaminaHeal = true;
+		playerUIView.SliderStamina.value = (float)playerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
+		playerModel.IsStaminaHeal = true;
 	}
 
 	void OnGUI()
@@ -536,7 +472,7 @@ public class PlayerManager : MonoBehaviour
 		GUI.Box(new Rect(10, 4 * lineHeight, 100, 50), "isDash", styleGreen);
 		GUI.Box(new Rect(350, 4 * lineHeight, 100, 50), playerModel.IsDash.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 5 * lineHeight, 100, 50), "rb.velocity", styleGreen);
-		GUI.Box(new Rect(350, 5 * lineHeight, 100, 50), rb.velocity.ToString(), styleGreen);
+		GUI.Box(new Rect(350, 5 * lineHeight, 100, 50), playerCharacterView.RB.velocity.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 6 * lineHeight, 100, 50), "moveForward", styleGreen);
 		GUI.Box(new Rect(350, 6 * lineHeight, 100, 50), playerModel.MoveForward.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 7 * lineHeight, 100, 50), "cameraForward", styleGreen);

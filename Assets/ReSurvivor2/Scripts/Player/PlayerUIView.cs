@@ -5,9 +5,10 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// プレイヤー3DUI
+/// プレイヤー3DUIビュー
+/// MVPパターンのView担当
 /// </summary>
-public class PlayerUI : MonoBehaviour
+public class PlayerUIView : MonoBehaviour
 {
 	[Header("UI")]
 	[Tooltip("プレイヤーのキャンバス")]

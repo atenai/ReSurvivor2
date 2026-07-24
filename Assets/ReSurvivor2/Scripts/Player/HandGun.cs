@@ -87,7 +87,7 @@ public class HandGun : GunBase
 		if (reloadCountTimer == 0)
 		{
 			//ハンドガンのリロードアニメーションをオン
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isHandGunReload", true);
+			PlayerManager.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isHandGunReload", true);
 
 			HandGunReloadSE();
 		}
@@ -126,7 +126,7 @@ public class HandGun : GunBase
 			isReloadTimeActive = false;//リロードのオフ
 
 			//ハンドガンのリロードアニメーションをオフ
-			PlayerManager.SingletonInstance.Animator.SetBool("b_isHandGunReload", false);
+			PlayerManager.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isHandGunReload", false);
 		}
 	}
 
