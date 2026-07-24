@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// スクリーンUIのビュークラス
+/// スクリーンUIビュー
 /// MVPパターンのView担当
 /// </summary>
 public class ScreenUIView : MonoBehaviour

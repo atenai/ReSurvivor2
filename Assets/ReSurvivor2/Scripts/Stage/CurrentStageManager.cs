@@ -34,8 +34,8 @@ public class CurrentStageManager : MonoBehaviour
 	void Start()
 	{
 		CreateMission();
-		ScreenUIManager.SingletonInstance.ScreenUIPresenter.ScreenUIView.MapUI.SetCurrentPlayerStageNumber((int)currentStage);
-		StartCoroutine(ScreenUIManager.SingletonInstance.ScreenUIPresenter.FadeIn());
+		ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.MapUI.SetCurrentPlayerStageNumber((int)currentStage);
+		StartCoroutine(ScreenUIManagerPresenter.SingletonInstance.FadeIn());
 		StartCoroutine(ChangeSceneManager.SingletonInstance.PreloadScenesCoroutine());
 	}
 
@@ -48,9 +48,9 @@ public class CurrentStageManager : MonoBehaviour
 			UnityEngine.Debug.Log("<color=cyan>ミッション名：" + mission.MissionName + "</color>");
 		}
 
-		ScreenUIManager.SingletonInstance.ScreenUIPresenter.InitComputerMenuMissionList(MissionManager.SingletonInstance.CachedMissionList);
-		ScreenUIManager.SingletonInstance.ScreenUIPresenter.DestroyAllMailListContent();
-		ScreenUIManager.SingletonInstance.ScreenUIPresenter.AddMailListContent();
+		ScreenUIManagerPresenter.SingletonInstance.InitComputerMenuMissionList(MissionManager.SingletonInstance.CachedMissionList);
+		ScreenUIManagerPresenter.SingletonInstance.DestroyAllMailListContent();
+		ScreenUIManagerPresenter.SingletonInstance.AddMailListContent();
 	}
 
 	void Update()

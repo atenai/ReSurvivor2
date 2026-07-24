@@ -251,7 +251,7 @@ public class ChangeSceneManager : MonoBehaviour
         if (MissionManager.SingletonInstance.MissionID0 == true && MissionManager.SingletonInstance.MissionID1 == true && MissionManager.SingletonInstance.MissionID2 == true)
         {
             Debug.Log("<color=blue>ゲームクリアー</color>");
-            ScreenUIManager.SingletonInstance.ScreenUIPresenter.HideComputerMenu();
+            ScreenUIManagerPresenter.SingletonInstance.HideComputerMenu();
             InGameManager.IsFirstLoad = true;
             ChangeSceneManager.IsFirstLoad = true;
             MissionManager.IsFirstLoad = true;
@@ -259,7 +259,7 @@ public class ChangeSceneManager : MonoBehaviour
             PlayerCameraManager.IsFirstLoad = true;
             //シーンを切り替える
             isGameClearTriggered = true;
-            ScreenUIManager.SingletonInstance.ScreenUIPresenter.FadeOut();
+            ScreenUIManagerPresenter.SingletonInstance.FadeOut();
         }
     }
 
@@ -276,6 +276,6 @@ public class ChangeSceneManager : MonoBehaviour
         PlayerCameraManager.IsFirstLoad = true;
         //シーンを切り替える
         isGameOverTriggered = true;
-        ScreenUIManager.SingletonInstance.ScreenUIPresenter.FadeOut();
+        ScreenUIManagerPresenter.SingletonInstance.FadeOut();
     }
 }

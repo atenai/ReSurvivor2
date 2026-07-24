@@ -112,10 +112,10 @@ public class InGameManager : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P) || Input.GetButtonDown("XInput Start"))
 		{
 			isPause = isPause ? false : true;
-			ScreenUIManager.SingletonInstance.InputUpdate(isPause);
+			ScreenUIManagerPresenter.SingletonInstance.InputUpdate(isPause);
 		}
 
-		ScreenUIManager.SingletonInstance.BeforeUpdate1();
+		ScreenUIManagerPresenter.SingletonInstance.BeforeUpdate1();
 
 		//ポーズ中は切り上げる
 		if (isPause == true)
@@ -123,10 +123,10 @@ public class InGameManager : MonoBehaviour
 			return;
 		}
 
-		ScreenUIManager.SingletonInstance.BeforeUpdate2();
+		ScreenUIManagerPresenter.SingletonInstance.BeforeUpdate2();
 
 		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
+		if (ScreenUIManagerPresenter.SingletonInstance.ScreenUIModel.IsComputerMenuActive == true)
 		{
 			PlayerManagerPresenter.SingletonInstance.ResetMove();
 			return;
@@ -135,7 +135,7 @@ public class InGameManager : MonoBehaviour
 		PlayerManagerPresenter.SingletonInstance.AfterUpdate();
 		PlayerCameraManager.SingletonInstance.AfterUpdate();
 		TimerManager.SingletonInstance.AfterUpdate();
-		ScreenUIManager.SingletonInstance.AfterUpdate();
+		ScreenUIManagerPresenter.SingletonInstance.AfterUpdate();
 	}
 
 	void FixedUpdate()

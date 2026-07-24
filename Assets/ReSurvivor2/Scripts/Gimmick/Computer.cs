@@ -58,7 +58,7 @@ public class Computer : MonoBehaviour
 		}
 
 		//コンピュータを使用中は切り上げる
-		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
+		if (ScreenUIManagerPresenter.SingletonInstance.ScreenUIModel.IsComputerMenuActive == true)
 		{
 			return;
 		}
