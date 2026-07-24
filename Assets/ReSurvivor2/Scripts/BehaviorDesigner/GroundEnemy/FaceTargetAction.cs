@@ -13,7 +13,7 @@ public class FaceTargetAction : Action
 
 	public override TaskStatus OnUpdate()
 	{
-		var player = PlayerManager.SingletonInstance;
+		var player = PlayerManagerPresenter.SingletonInstance;
 		if (player == null)
 		{
 			return TaskStatus.Failure;

@@ -56,7 +56,7 @@ public class TimerManager : MonoBehaviour
 	{
 		if (MissionManager.SingletonInstance.IsMissionActive == false)
 		{
-			PlayerManager.SingletonInstance.PlayerUIView.TextTimer.text = "--" + ":" + "--";
+			PlayerManagerPresenter.SingletonInstance.PlayerUIView.TextTimer.text = "--" + ":" + "--";
 			return;
 		}
 
@@ -69,12 +69,12 @@ public class TimerManager : MonoBehaviour
 		if (minute <= 0 && seconds <= 0.0f)
 		{
 			//ゲームオーバー処理
-			PlayerManager.SingletonInstance.PlayerUIView.TextTimer.text = "00" + ":" + "00";
+			PlayerManagerPresenter.SingletonInstance.PlayerUIView.TextTimer.text = "00" + ":" + "00";
 			ChangeSceneManager.SingletonInstance.GameOver();
 		}
 		else
 		{
-			PlayerManager.SingletonInstance.PlayerUIView.TextTimer.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
+			PlayerManagerPresenter.SingletonInstance.PlayerUIView.TextTimer.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
 		}
 	}
 }

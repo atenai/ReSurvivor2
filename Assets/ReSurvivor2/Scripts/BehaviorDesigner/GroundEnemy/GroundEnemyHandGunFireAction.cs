@@ -154,7 +154,7 @@ public class GroundEnemyHandGunFireAction : Action
 			if (hit.collider.gameObject.CompareTag("Player"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 			{
 				//ダメージ
-				var player = hit.transform.GetComponent<PlayerManager>();
+				var player = hit.transform.GetComponent<PlayerManagerPresenter>();
 				if (player != null)
 				{
 					player.PlayerModel.HP.Damage(Damage);

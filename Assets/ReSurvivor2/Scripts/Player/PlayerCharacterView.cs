@@ -12,9 +12,6 @@ public class PlayerCharacterView : MonoBehaviour
 	[Tooltip("アニメーター")]
 	[SerializeField] Animator animator;
 	public Animator Animator => animator;
-	[Tooltip("リジッドボディ")]
-	[SerializeField] Rigidbody rb;
-	public Rigidbody RB => rb;
 
 	[Header("キャラクターモデル")]
 	[Tooltip("キャラクターの首ボーン")]
@@ -39,6 +36,15 @@ public class PlayerCharacterView : MonoBehaviour
 	public readonly float Arm_Aim_Animation_Rot_X = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
 	[Tooltip("肩のYボーンを曲げる数値(エイムアニメーションの銃の位置をカメラの中心に合わせる為の数値)")]
 	public readonly float Arm_Aim_Animation_Rot_Y = 0.0f;//0にすれば武器を構えた際の腕のずれがなくなる
+
+	[Header("ガンモデル")]
+	[Tooltip("ガンモデルファサード")]
+	[SerializeField] GunModelFacade gunModelFacade = new GunModelFacade();
+	public GunModelFacade GunModelFacade => gunModelFacade;
+
+	[Tooltip("地雷のプレファブ")]
+	[SerializeField] GameObject minePrefab;
+	public GameObject MinePrefab => minePrefab;
 
 	void Start()
 	{

@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// スクリーンUIのビュークラス
+/// MVPパターンのView担当
+/// </summary>
 public class ScreenUIView : MonoBehaviour
 {
     [Header("照準")]

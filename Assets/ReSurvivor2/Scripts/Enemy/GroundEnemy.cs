@@ -248,7 +248,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 
 		if (targetPlayer == null)
 		{
-			targetPlayer = PlayerManager.SingletonInstance.gameObject;
+			targetPlayer = PlayerManagerPresenter.SingletonInstance.gameObject;
 		}
 
 		animator.applyRootMotion = false;
@@ -546,7 +546,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 
 		if (collision.collider.tag == "Player")
 		{
-			PlayerManager.SingletonInstance.PlayerModel.HP.Damage(10.0f);
+			PlayerManagerPresenter.SingletonInstance.PlayerModel.HP.Damage(10.0f);
 			CameraShaker();
 		}
 	}
@@ -590,7 +590,8 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary> 
 	public void HandGunFireSE()
 	{
-		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunMuzzleTransform);
+		//参考例
+		//SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunMuzzleTransform);
 	}
 
 	/// <summary>
@@ -598,7 +599,8 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary> 
 	public void HandGunReloadSE()
 	{
-		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
+		//参考例
+		//SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -606,7 +608,8 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	public void HandGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
+		//参考例
+		//SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>

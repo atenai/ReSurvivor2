@@ -98,7 +98,7 @@ public class GroundEnemyMoveTargetAction : Action
 	void UpdateTargetPosition()
 	{
 		// 常にプレイヤーを目的地に設定する（敵 AI などの追従目的）
-		groundEnemy.NavMeshAgent.SetDestination(PlayerManager.SingletonInstance.transform.position);
+		groundEnemy.NavMeshAgent.SetDestination(PlayerManagerPresenter.SingletonInstance.transform.position);
 	}
 
 	public override void OnFixedUpdate()

@@ -87,7 +87,7 @@ public class HandGun : GunBase
 		if (reloadCountTimer == 0)
 		{
 			//ハンドガンのリロードアニメーションをオン
-			PlayerManager.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isHandGunReload", true);
+			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isHandGunReload", true);
 
 			HandGunReloadSE();
 		}
@@ -126,7 +126,7 @@ public class HandGun : GunBase
 			isReloadTimeActive = false;//リロードのオフ
 
 			//ハンドガンのリロードアニメーションをオフ
-			PlayerManager.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isHandGunReload", false);
+			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isHandGunReload", false);
 		}
 	}
 
@@ -136,8 +136,8 @@ public class HandGun : GunBase
 	protected override void Fire()
 	{
 		HandGunBulletCasingSE();
-		PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunMuzzleFlashAndShell();
-		PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunSmoke();
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.HandGunModel.HandGunMuzzleFlashAndShell();
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.HandGunModel.HandGunSmoke();
 
 		HandGunFireSE();
 
@@ -200,7 +200,7 @@ public class HandGun : GunBase
 	/// </summary> 
 	void HandGunFireSE()
 	{
-		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunMuzzleTransform);
+		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.HandGunModel.HandGunMuzzleTransform);
 	}
 
 	/// <summary>
@@ -208,7 +208,7 @@ public class HandGun : GunBase
 	/// </summary> 
 	void HandGunReloadSE()
 	{
-		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
+		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -216,7 +216,7 @@ public class HandGun : GunBase
 	/// </summary>
 	void HandGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(PlayerManager.SingletonInstance.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
+		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.HandGunModel.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>

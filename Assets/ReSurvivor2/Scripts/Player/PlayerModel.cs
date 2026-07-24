@@ -8,7 +8,6 @@ using UnityEngine.Events;
 /// プレイヤーモデル
 /// MVPパターンのModel担当
 /// </summary>
-[Serializable]
 public class PlayerModel
 {
 	[Header("プレイヤーキャラクターの移動関連")]
@@ -115,6 +114,30 @@ public class PlayerModel
 	Quaternion respawnRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 	public Quaternion RespawnRotation => respawnRotation;
 
+	[Header("地雷")]
+	[Tooltip("キャラクターからの地雷の生成距離")]
+	float mineSpawnDistance = 1.0f;
+	public float MineSpawnDistance => mineSpawnDistance;
+	/// <summary>地雷を生成する際に長押しと判定する間隔、例：0.5秒なら（30フレーム ÷ 60fps = 0.5秒）に設定（60fpsの場合）</summary>
+	public static readonly float Mine_Hold_Time = 30.0f / 60.0f;
+	[Tooltip("地雷が再生成できるまでのカウント")]
+	float mineSpawnCount = 0.0f;
+	public float MineSpawnCount
+	{
+		get { return mineSpawnCount; }
+		set { mineSpawnCount = value; }
+	}
+	[Tooltip("現在の地雷数")]
+	int currentMine = 3;
+	public int CurrentMine
+	{
+		get { return currentMine; }
+		set { currentMine = value; }
+	}
+	[Tooltip("地雷の所持できる最大数")]
+	int maxMine = 3;
+	public int MaxMine => maxMine;
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -174,6 +197,7 @@ public class PlayerModel
 		ES3.Save<int>("Food", currentFood);
 		ES3.Save("PlayerPos", respawnPosition);
 		ES3.Save("PlayerRot", respawnRotation);
+		ES3.Save<int>("Mine", currentMine);
 	}
 
 	/// <summary>
@@ -208,6 +232,9 @@ public class PlayerModel
 			respawnRotation = ES3.Load<Quaternion>("PlayerRot");
 			//Debug.Log("<color=purple>プレイヤー回転 : " + this.transform.rotation + "</color>");
 		}
+
+		currentMine = ES3.Load<int>("Mine", 3);
+		//Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");
 	}
 
 	/// <summary>

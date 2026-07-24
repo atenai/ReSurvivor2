@@ -37,7 +37,7 @@ public class SaveAndLoadDataManager : MonoBehaviour
         ChangeSceneManager.SingletonInstance.Save();
         InGameManager.SingletonInstance.Save();
         MissionManager.SingletonInstance.Save();
-        PlayerManager.SingletonInstance.Save();
+        PlayerManagerPresenter.SingletonInstance.Save();
         PlayerCameraManager.SingletonInstance.Save();
 
         //SaveNowのテキストを表示する

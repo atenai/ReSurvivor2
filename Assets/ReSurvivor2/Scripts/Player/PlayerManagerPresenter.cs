@@ -6,13 +6,14 @@ using Cinemachine;
 
 /// <summary>
 /// プレイヤーを管理するマネージャークラス
+/// MVPパターンのPresenter担当
 /// </summary>
-public class PlayerManager : MonoBehaviour
+public class PlayerManagerPresenter : MonoBehaviour
 {
 	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
-	static PlayerManager singletonInstance = null;
+	static PlayerManagerPresenter singletonInstance = null;
 	/// <summary>シングルトンのプロパティ</summary>
-	public static PlayerManager SingletonInstance => singletonInstance;
+	public static PlayerManagerPresenter SingletonInstance => singletonInstance;
 
 	[Tooltip("初回ロードかどうか：なぜなら毎度ステージが切り替わる度にセーブデータをロードしてしまうと不具合が起きるため")]
 	static bool isFirstLoad = true;
@@ -24,7 +25,6 @@ public class PlayerManager : MonoBehaviour
 
 	[Header("プレイヤーMVPパターン")]
 	/// <summary>プレイヤーモデル</summary>
-	[SerializeField]
 	PlayerModel playerModel = new PlayerModel();
 	public PlayerModel PlayerModel => playerModel;
 
@@ -36,25 +36,11 @@ public class PlayerManager : MonoBehaviour
 	[SerializeField] PlayerUIView playerUIView;
 	public PlayerUIView PlayerUIView => playerUIView;
 
-	[Header("ガンモデル")]
-	[Tooltip("ガンモデルファサード")]
-	[SerializeField] GunModelFacade gunModelFacade = new GunModelFacade();
-	public GunModelFacade GunModelFacade => gunModelFacade;
-	[Tooltip("地雷のプレファブ")]
-	[SerializeField] GameObject minePrefab;
-	[Tooltip("キャラクターからの地雷の生成距離")]
-	float mineSpawnDistance = 1.0f;
-	/// <summary>地雷を生成する際に長押しと判定する間隔、例：0.5秒なら（30フレーム ÷ 60fps = 0.5秒）に設定（60fpsの場合）</summary>
-	const float Mine_Hold_Time = 30.0f / 60.0f;
+	[Tooltip("リジッドボディ")]
+	[SerializeField] Rigidbody rb;
 
-	[Tooltip("地雷が再生成できるまでのカウント")]
-	float mineSpawnCount = 0.0f;
-	[Tooltip("現在の地雷数")]
-	int currentMine = 3;
-	[Tooltip("地雷の所持できる最大数")]
-	int maxMine = 3;
-
-	[SerializeField] private CinemachineImpulseSource cinemachineImpulseSource;
+	[Tooltip("カメラの揺れ")]
+	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
 	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
 
 	void Awake()
@@ -80,7 +66,6 @@ public class PlayerManager : MonoBehaviour
 	{
 		Debug.Log("<color=cyan>プレイヤーセーブ</color>");
 		playerModel.Save();
-		ES3.Save<int>("Mine", currentMine);
 	}
 
 	/// <summary>
@@ -96,9 +81,6 @@ public class PlayerManager : MonoBehaviour
 
 		//Debug.Log("<color=purple>プレイヤーロード</color>");
 		playerModel.Load();
-
-		currentMine = ES3.Load<int>("Mine", 3);
-		//Debug.Log("<color=purple>地雷 : " + currentMine + "</color>");		
 	}
 
 	void Start()
@@ -114,11 +96,12 @@ public class PlayerManager : MonoBehaviour
 		playerUIView.StartTextFood(playerModel.CurrentFood);
 		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine);
 		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo);
+		playerUIView.UpdateUITransform(playerModel.IsAim);
 	}
 
 	public void ResetMove()
 	{
-		playerCharacterView.RB.velocity = Vector3.zero;
+		rb.velocity = Vector3.zero;
 		playerModel.ResetMove();
 		playerCharacterView.ResetMoveAnimation();
 	}
@@ -146,8 +129,8 @@ public class PlayerManager : MonoBehaviour
 	/// </summary> 
 	void InitMine()
 	{
-		mineSpawnCount = 0.0f;
-		playerUIView.TextMine.text = currentMine.ToString();
+		playerModel.MineSpawnCount = 0.0f;
+		playerUIView.TextMine.text = playerModel.CurrentMine.ToString();
 	}
 
 	/// <summary>
@@ -176,7 +159,8 @@ public class PlayerManager : MonoBehaviour
 		Mine();
 
 		NormalMoveAnimation();
-		playerUIView.AfterUpdate();
+		playerUIView.UpdateUITransform(playerModel.IsAim);
+		playerUIView.UpdateImageReload(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive);
 		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine);
 		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo);
 	}
@@ -215,9 +199,9 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void PlacingMine()
 	{
-		mineSpawnCount = mineSpawnCount + Time.deltaTime;
-		playerUIView.SetMinePlacingFillAmount(mineSpawnCount / Mine_Hold_Time);
-		Debug.Log("押しているフレーム数 : " + mineSpawnCount);
+		playerModel.MineSpawnCount = playerModel.MineSpawnCount + Time.deltaTime;
+		playerUIView.SetMinePlacingFillAmount(playerModel.MineSpawnCount / PlayerModel.Mine_Hold_Time);
+		Debug.Log("押しているフレーム数 : " + playerModel.MineSpawnCount);
 	}
 
 	/// <summary>
@@ -226,13 +210,13 @@ public class PlayerManager : MonoBehaviour
 	void PlacedMine()
 	{
 		//長押しを判定
-		if (Mine_Hold_Time <= mineSpawnCount)
+		if (PlayerModel.Mine_Hold_Time <= playerModel.MineSpawnCount)
 		{
 			Debug.Log("長押し");
 			CreateMine();
 		}
 
-		mineSpawnCount = 0.0f;
+		playerModel.MineSpawnCount = 0.0f;
 		playerUIView.SetMinePlacingFillAmount(0.0f);
 	}
 
@@ -241,18 +225,18 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void CreateMine()
 	{
-		if (currentMine <= 0)
+		if (playerModel.CurrentMine <= 0)
 		{
 			return;
 		}
 
-		currentMine = currentMine - 1;
-		playerUIView.TextMine.text = currentMine.ToString();
+		playerModel.CurrentMine = playerModel.CurrentMine - 1;
+		playerUIView.TextMine.text = playerModel.CurrentMine.ToString();
 
 		Vector3 localPosition = new Vector3(this.transform.position.x, 0.0f, this.transform.position.z);
 		// キャラクターの前方にオブジェクトを生成
-		Vector3 spawnPosition = localPosition + (this.transform.forward * mineSpawnDistance);
-		GameObject localGameObject = UnityEngine.Object.Instantiate(minePrefab, spawnPosition, this.transform.rotation);
+		Vector3 spawnPosition = localPosition + (this.transform.forward * playerModel.MineSpawnDistance);
+		GameObject localGameObject = UnityEngine.Object.Instantiate(playerCharacterView.MinePrefab, spawnPosition, this.transform.rotation);
 	}
 
 	/// <summary>
@@ -260,13 +244,13 @@ public class PlayerManager : MonoBehaviour
 	/// </summary> 
 	public void AcquireMine()
 	{
-		if (maxMine <= currentMine)
+		if (playerModel.MaxMine <= playerModel.CurrentMine)
 		{
 			return;
 		}
 
-		currentMine = currentMine + 1;
-		playerUIView.TextMine.text = currentMine.ToString();
+		playerModel.CurrentMine = playerModel.CurrentMine + 1;
+		playerUIView.TextMine.text = playerModel.CurrentMine.ToString();
 	}
 
 	public void AfterFixedUpdate()
@@ -295,7 +279,7 @@ public class PlayerManager : MonoBehaviour
 		playerModel.MoveForward.Normalize();
 
 		//移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-		playerCharacterView.RB.velocity = playerModel.MoveForward * playerModel.NormalMoveSpeed + new Vector3(0, playerCharacterView.RB.velocity.y, 0);
+		rb.velocity = playerModel.MoveForward * playerModel.NormalMoveSpeed + new Vector3(0, rb.velocity.y, 0);
 
 		//キャラクターの向きをキャラクターの進行方向にする
 		if (playerModel.MoveForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
@@ -346,7 +330,7 @@ public class PlayerManager : MonoBehaviour
 		playerModel.MoveForward.Normalize();
 
 		//移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-		playerCharacterView.RB.velocity = playerModel.MoveForward * playerModel.WeaponMoveSpeed + new Vector3(0, playerCharacterView.RB.velocity.y, 0);
+		rb.velocity = playerModel.MoveForward * playerModel.WeaponMoveSpeed + new Vector3(0, rb.velocity.y, 0);
 
 		//キャラクターの向きをカメラの前方にする
 		if (playerModel.CameraForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
@@ -360,7 +344,7 @@ public class PlayerManager : MonoBehaviour
 	/// </summary>
 	void VectorVisualizer()
 	{
-		Ray debugRayVelocity = new Ray(this.transform.position, playerCharacterView.RB.velocity);
+		Ray debugRayVelocity = new Ray(this.transform.position, rb.velocity);
 		Debug.DrawRay(debugRayVelocity.origin, debugRayVelocity.direction, Color.magenta);
 	}
 
@@ -472,7 +456,7 @@ public class PlayerManager : MonoBehaviour
 		GUI.Box(new Rect(10, 4 * lineHeight, 100, 50), "isDash", styleGreen);
 		GUI.Box(new Rect(350, 4 * lineHeight, 100, 50), playerModel.IsDash.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 5 * lineHeight, 100, 50), "rb.velocity", styleGreen);
-		GUI.Box(new Rect(350, 5 * lineHeight, 100, 50), playerCharacterView.RB.velocity.ToString(), styleGreen);
+		GUI.Box(new Rect(350, 5 * lineHeight, 100, 50), rb.velocity.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 6 * lineHeight, 100, 50), "moveForward", styleGreen);
 		GUI.Box(new Rect(350, 6 * lineHeight, 100, 50), playerModel.MoveForward.ToString(), styleGreen);
 		GUI.Box(new Rect(10, 7 * lineHeight, 100, 50), "cameraForward", styleGreen);

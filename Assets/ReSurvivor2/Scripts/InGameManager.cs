@@ -104,7 +104,7 @@ public class InGameManager : MonoBehaviour
 		//↑ロード中に動かせる処理
 		if (InGameManager.SingletonInstance.IsGamePlayReady == false)
 		{
-			PlayerManager.SingletonInstance.ResetMove();
+			PlayerManagerPresenter.SingletonInstance.ResetMove();
 			return;
 		}
 		//↓ロード中に動かせない処理
@@ -128,11 +128,11 @@ public class InGameManager : MonoBehaviour
 		//コンピュータを使用中は切り上げる
 		if (ScreenUIManager.SingletonInstance.ScreenUIPresenter.IsComputerMenuActive == true)
 		{
-			PlayerManager.SingletonInstance.ResetMove();
+			PlayerManagerPresenter.SingletonInstance.ResetMove();
 			return;
 		}
 
-		PlayerManager.SingletonInstance.AfterUpdate();
+		PlayerManagerPresenter.SingletonInstance.AfterUpdate();
 		PlayerCameraManager.SingletonInstance.AfterUpdate();
 		TimerManager.SingletonInstance.AfterUpdate();
 		ScreenUIManager.SingletonInstance.AfterUpdate();
@@ -161,7 +161,7 @@ public class InGameManager : MonoBehaviour
 		}
 		//↓ロード中に動かせない処理
 
-		PlayerManager.SingletonInstance.AfterFixedUpdate();
+		PlayerManagerPresenter.SingletonInstance.AfterFixedUpdate();
 		PlayerCameraManager.SingletonInstance.AfterFixedUpdate();
 	}
 }

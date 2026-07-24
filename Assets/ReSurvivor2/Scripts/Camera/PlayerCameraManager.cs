@@ -158,7 +158,7 @@ public class PlayerCameraManager : MonoBehaviour
 			return;
 		}
 
-		gunFacade.UpdateGun(PlayerManager.SingletonInstance.PlayerModel.IsAim);
+		gunFacade.UpdateGun(PlayerManagerPresenter.SingletonInstance.PlayerModel.IsAim);
 	}
 
 	public void AlwaysFixedUpdate()
@@ -169,11 +169,11 @@ public class PlayerCameraManager : MonoBehaviour
 			return;
 		}
 
-		if (PlayerManager.SingletonInstance.PlayerModel.IsAim == false)
+		if (PlayerManagerPresenter.SingletonInstance.PlayerModel.IsAim == false)
 		{
 			CameraNormalMove();
 		}
-		else if (PlayerManager.SingletonInstance.PlayerModel.IsAim == true)
+		else if (PlayerManagerPresenter.SingletonInstance.PlayerModel.IsAim == true)
 		{
 			CameraAimMove();
 		}
@@ -195,9 +195,9 @@ public class PlayerCameraManager : MonoBehaviour
 	void CameraNormalMove()
 	{
 		//通常カメラ位置をプレイヤーの座標位置から計算
-		Vector3 cameraPos = PlayerManager.SingletonInstance.transform.position + (Vector3.up * normalUpPos) + (this.transform.forward * normalForwardPos);
+		Vector3 cameraPos = PlayerManagerPresenter.SingletonInstance.transform.position + (Vector3.up * normalUpPos) + (this.transform.forward * normalForwardPos);
 		//カメラの位置を移動させる
-		this.transform.position = Vector3.Lerp(transform.position, cameraPos, PlayerManager.SingletonInstance.PlayerModel.NormalMoveSpeed * 10 * Time.deltaTime);
+		this.transform.position = Vector3.Lerp(transform.position, cameraPos, PlayerManagerPresenter.SingletonInstance.PlayerModel.NormalMoveSpeed * 10 * Time.deltaTime);
 	}
 
 	/// <summary>
@@ -206,9 +206,9 @@ public class PlayerCameraManager : MonoBehaviour
 	void CameraAimMove()
 	{
 		//肩越しカメラ位置をプレイヤーの座標位置から計算
-		Vector3 cameraPos = PlayerManager.SingletonInstance.transform.position + (PlayerManager.SingletonInstance.transform.right * aimRightPos) + (Vector3.up * aimUpPos) + (this.transform.forward * aimForwardPos);
+		Vector3 cameraPos = PlayerManagerPresenter.SingletonInstance.transform.position + (PlayerManagerPresenter.SingletonInstance.transform.right * aimRightPos) + (Vector3.up * aimUpPos) + (this.transform.forward * aimForwardPos);
 		//カメラの位置を移動させる
-		this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, PlayerManager.SingletonInstance.PlayerModel.WeaponMoveSpeed * 10 * Time.deltaTime);
+		this.transform.position = Vector3.Lerp(transform.localPosition, cameraPos, PlayerManagerPresenter.SingletonInstance.PlayerModel.WeaponMoveSpeed * 10 * Time.deltaTime);
 	}
 
 	/// <summary>
@@ -220,7 +220,7 @@ public class PlayerCameraManager : MonoBehaviour
 		float x_Rotation = Input.GetAxis("Mouse X") + Input.GetAxis("XInput R_Stick_Left&Right");
 		float y_Rotation = Input.GetAxis("Mouse Y") + Input.GetAxis("XInput R_Stick_Up&Down");
 
-		if (PlayerManager.SingletonInstance.PlayerModel.IsAim == true)
+		if (PlayerManagerPresenter.SingletonInstance.PlayerModel.IsAim == true)
 		{
 			localCameraSpeedX = aimCameraSpeedX;
 			localCameraSpeedY = aimCameraSpeedY;
@@ -254,7 +254,7 @@ public class PlayerCameraManager : MonoBehaviour
 				}
 			}
 		}
-		else if (PlayerManager.SingletonInstance.PlayerModel.IsAim == false)
+		else if (PlayerManagerPresenter.SingletonInstance.PlayerModel.IsAim == false)
 		{
 			localCameraSpeedX = normalCameraSpeedX;
 			localCameraSpeedY = normalCameraSpeedY;
@@ -268,7 +268,7 @@ public class PlayerCameraManager : MonoBehaviour
 		if (deadZoneX < Mathf.Abs(x_Rotation))
 		{
 			// 回転軸はワールド座標のY軸
-			this.transform.RotateAround(PlayerManager.SingletonInstance.transform.position, Vector3.up, x_Rotation * Time.deltaTime * localCameraSpeedX);
+			this.transform.RotateAround(PlayerManagerPresenter.SingletonInstance.transform.position, Vector3.up, x_Rotation * Time.deltaTime * localCameraSpeedX);
 		}
 
 		// Y方向に一定量移動していれば縦回転
@@ -282,7 +282,7 @@ public class PlayerCameraManager : MonoBehaviour
 			if (lookingUp < cameraAngles && cameraAngles < lookingUpLimit || lookingDownLimit < cameraAngles && cameraAngles < lookingDown)//ここの数値を変えればカメラの上下の止まる限界値が変わる
 			{
 				// 回転軸はカメラ自身のX軸
-				this.transform.RotateAround(PlayerManager.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
+				this.transform.RotateAround(PlayerManagerPresenter.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
 			}
 			else
 			{
@@ -291,7 +291,7 @@ public class PlayerCameraManager : MonoBehaviour
 					if (y_Rotation < 0)
 					{
 						//マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
-						this.transform.RotateAround(PlayerManager.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
+						this.transform.RotateAround(PlayerManagerPresenter.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
 					}
 				}
 				else
@@ -299,7 +299,7 @@ public class PlayerCameraManager : MonoBehaviour
 					if (0 < y_Rotation)
 					{
 						//マウスYの入力量 × カメラのスピード × 時間 = の値をY回転の量にする
-						this.transform.RotateAround(PlayerManager.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
+						this.transform.RotateAround(PlayerManagerPresenter.SingletonInstance.transform.position, -transform.right, y_Rotation * Time.deltaTime * localCameraSpeedY);
 					}
 
 				}
@@ -312,7 +312,7 @@ public class PlayerCameraManager : MonoBehaviour
 	/// </summary>
 	void CameraDash()
 	{
-		if (PlayerManager.SingletonInstance.PlayerModel.IsDash == true)
+		if (PlayerManagerPresenter.SingletonInstance.PlayerModel.IsDash == true)
 		{
 			//徐々に子カメラをダッシュ時の位置にする
 			childMainLongDistanceVirtualCamera.Priority = longDistanceCameraHighPriority;
@@ -329,19 +329,19 @@ public class PlayerCameraManager : MonoBehaviour
 	/// </summary>
 	void CameraOcclusion()
 	{
-		if (PlayerManager.SingletonInstance == null)
+		if (PlayerManagerPresenter.SingletonInstance == null)
 		{
 			return;
 		}
 
-		if (PlayerManager.SingletonInstance.PlayerModel.IsAim == true)
+		if (PlayerManagerPresenter.SingletonInstance.PlayerModel.IsAim == true)
 		{
 			childMainShortDistanceVirtualCamera.Priority = shortDistanceCameraNormalPriority;
 			return;
 		}
 
 		Vector3 origin = childMainMidDistanceVirtualCamera.transform.position;
-		Vector3 targetPosition = PlayerManager.SingletonInstance.transform.position;
+		Vector3 targetPosition = PlayerManagerPresenter.SingletonInstance.transform.position;
 		Vector3 direction = targetPosition - origin;
 		float distance = direction.magnitude;
 		if (distance <= 0.001f)
@@ -366,17 +366,17 @@ public class PlayerCameraManager : MonoBehaviour
 
 	bool IsPlayerCollider(Collider collider)
 	{
-		if (collider == null || PlayerManager.SingletonInstance == null)
+		if (collider == null || PlayerManagerPresenter.SingletonInstance == null)
 		{
 			return false;
 		}
 
-		if (collider.gameObject == PlayerManager.SingletonInstance.gameObject)
+		if (collider.gameObject == PlayerManagerPresenter.SingletonInstance.gameObject)
 		{
 			return true;
 		}
 
-		return collider.transform.IsChildOf(PlayerManager.SingletonInstance.transform);
+		return collider.transform.IsChildOf(PlayerManagerPresenter.SingletonInstance.transform);
 	}
 
 	void OnGUI()

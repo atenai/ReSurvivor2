@@ -255,7 +255,7 @@ public class ChangeSceneManager : MonoBehaviour
             InGameManager.IsFirstLoad = true;
             ChangeSceneManager.IsFirstLoad = true;
             MissionManager.IsFirstLoad = true;
-            PlayerManager.IsFirstLoad = true;
+            PlayerManagerPresenter.IsFirstLoad = true;
             PlayerCameraManager.IsFirstLoad = true;
             //シーンを切り替える
             isGameClearTriggered = true;
@@ -272,7 +272,7 @@ public class ChangeSceneManager : MonoBehaviour
         InGameManager.IsFirstLoad = true;
         ChangeSceneManager.IsFirstLoad = true;
         MissionManager.IsFirstLoad = true;
-        PlayerManager.IsFirstLoad = true;
+        PlayerManagerPresenter.IsFirstLoad = true;
         PlayerCameraManager.IsFirstLoad = true;
         //シーンを切り替える
         isGameOverTriggered = true;

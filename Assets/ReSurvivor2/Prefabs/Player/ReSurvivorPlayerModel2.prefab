@@ -1166,6 +1166,11 @@ MonoBehaviour:
   spine_03: {fileID: 4101313241586222435}
   upperarm_r: {fileID: 7620289508562309265}
   upperarm_l: {fileID: 2379261457025652818}
+  gunModelFacade:
+    handGunModel: {fileID: 3099343492085402758}
+    assaultRifleModel: {fileID: 3029799190864042039}
+    shotGunModel: {fileID: 7140144329826878951}
+  minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
 --- !u!114 &8735078247964254621
 MonoBehaviour:
   m_ObjectHideFlags: 0

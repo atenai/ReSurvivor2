@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 /// <summary>
 /// スクリーンUIを管理するマネージャークラス
+/// MVPパターンのPresenter担当
 /// </summary>
 public class ScreenUIManager : MonoBehaviour
 {
@@ -64,7 +65,7 @@ public class ScreenUIManager : MonoBehaviour
 
 	public void AfterUpdate()
 	{
-		screenUIView.Crosshair(PlayerManager.SingletonInstance.PlayerModel.IsAim, PlayerCameraManager.SingletonInstance.IsTargetHit);
+		screenUIView.Crosshair(PlayerManagerPresenter.SingletonInstance.PlayerModel.IsAim, PlayerCameraManager.SingletonInstance.IsTargetHit);
 		screenUIPresenter.UpdateHitReticule();
 		screenUIPresenter.UpdateDamageEffect();
 		screenUIPresenter.UpdateHpHealEffect();

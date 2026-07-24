@@ -23,7 +23,7 @@ public class CurrentStageManager : MonoBehaviour
 	{
 		if (playerRespawnPoint != null)
 		{
-			PlayerManager.SingletonInstance.PlayerModel.SetPlayerRespawnPoint(playerRespawnPoint.position, playerRespawnPoint.rotation);
+			PlayerManagerPresenter.SingletonInstance.PlayerModel.SetPlayerRespawnPoint(playerRespawnPoint.position, playerRespawnPoint.rotation);
 		}
 		else
 		{

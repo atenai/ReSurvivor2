@@ -94,7 +94,7 @@ public class EnemyCollider : MonoBehaviour
 
     void Start()
     {
-        target = PlayerManager.SingletonInstance.gameObject;
+        target = PlayerManagerPresenter.SingletonInstance.gameObject;
     }
 
 

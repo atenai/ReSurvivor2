@@ -15,7 +15,7 @@ public class AttackObject : MonoBehaviour
         if (collider.gameObject.CompareTag("Player"))
         {
             Debug.Log("プレイヤーにダメージ！");
-            collider.gameObject.GetComponent<PlayerManager>().PlayerModel.HP.Damage(damage);
+            collider.gameObject.GetComponent<PlayerManagerPresenter>().PlayerModel.HP.Damage(damage);
             Destroy(this.gameObject);
         }
     }

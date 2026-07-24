@@ -72,7 +72,6 @@ public class PlayerUIView : MonoBehaviour
 		StartImageReload();
 		SetMinePlacingFillAmount(0.0f);
 		StartTextTimer();
-		UpdateUITransform();
 	}
 
 	/// <summary>
@@ -141,23 +140,17 @@ public class PlayerUIView : MonoBehaviour
 		textTimer.text = "--" + ":" + "--"; ;
 	}
 
-	public void AfterUpdate()
-	{
-		UpdateUITransform();
-		UpdateImageReload();
-	}
-
 	/// <summary>
 	/// プレイヤーキャラクターの右横にある3DのUI
 	/// </summary> 
-	void UpdateUITransform()
+	public void UpdateUITransform(bool isAim)
 	{
-		if (PlayerManager.SingletonInstance.PlayerModel.IsAim == false)
+		if (isAim == false)
 		{
 			//常にキャンバスをメインカメラの方を向かせる
 			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
-			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManager.SingletonInstance.transform.position.x, PlayerManager.SingletonInstance.transform.position.y + PlayerCameraManager.SingletonInstance.NormalUpPos, PlayerManager.SingletonInstance.transform.position.z);
+			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManagerPresenter.SingletonInstance.transform.position.x, PlayerManagerPresenter.SingletonInstance.transform.position.y + PlayerCameraManager.SingletonInstance.NormalUpPos, PlayerManagerPresenter.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
 			const float Normal_Scale = 0.6f;
 			const float Normal_RotY = 0.4f;
@@ -167,12 +160,12 @@ public class PlayerUIView : MonoBehaviour
 			imageBG.transform.localRotation = Quaternion.Euler(0.0f, Normal_RotY, 0.0f);
 			imageBG.transform.localPosition = new Vector3(Normal_RightPos, Normal_UpPos, 0.0f);
 		}
-		else if (PlayerManager.SingletonInstance.PlayerModel.IsAim == true)
+		else if (isAim == true)
 		{
 			//常にキャンバスをメインカメラの方を向かせる
 			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
-			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManager.SingletonInstance.transform.position.x, PlayerManager.SingletonInstance.transform.position.y + PlayerCameraManager.SingletonInstance.AimUpPos, PlayerManager.SingletonInstance.transform.position.z);
+			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManagerPresenter.SingletonInstance.transform.position.x, PlayerManagerPresenter.SingletonInstance.transform.position.y + PlayerCameraManager.SingletonInstance.AimUpPos, PlayerManagerPresenter.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
 			const float Aim_Scale = 0.2f;
 			const float Aim_RotY = 0.2f;
@@ -187,12 +180,12 @@ public class PlayerUIView : MonoBehaviour
 	/// <summary>
 	/// リロードイメージの処理
 	/// </summary>
-	void UpdateImageReload()
+	public void UpdateImageReload(bool isReloadTimeActive)
 	{
 		const float Rotate_Speed = -500.0f;
 		imageReload.gameObject.GetComponent<RectTransform>().transform.Rotate(0.0f, 0.0f, Rotate_Speed * Time.deltaTime);
 
-		if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
+		if (isReloadTimeActive == true)
 		{
 			if (reloadColor.a <= 1)
 			{
@@ -200,7 +193,7 @@ public class PlayerUIView : MonoBehaviour
 				imageReload.color = reloadColor;
 			}
 		}
-		else if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == false)
+		else if (isReloadTimeActive == false)
 		{
 			if (reloadColor.a >= 0)
 			{
