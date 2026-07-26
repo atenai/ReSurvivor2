@@ -90,7 +90,7 @@ public class Option : OutGameBase
 		switch (currentSelectedIndex)
 		{
 			case 0:
-
+				StartMotionViewer();
 				break;
 			case 1:
 
@@ -102,6 +102,15 @@ public class Option : OutGameBase
 				BackToTitle();
 				break;
 		}
+	}
+
+	/// <summary>
+	/// モーションビューアーを起動する
+	/// </summary>
+	void StartMotionViewer()
+	{
+		isDisableConsecutiveKeystrokes = false;
+		Load("MotionViewer");
 	}
 
 	/// <summary>
