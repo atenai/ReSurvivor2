@@ -93,43 +93,12 @@ MonoBehaviour:
   rendererListCulling: 0
   DLSSProjectId: 000000
   useDLSSCustomProjectId: 0
-  supportProbeVolumes: 1
+  supportProbeVolumes: 0
   supportRuntimeDebugDisplay: 0
   apvScenesData:
     serializedBounds: []
-    serializedHasVolumes:
-    - sceneGUID: 1ac2dda6dd6084740a3d0990fb6250ee
-      hasProbeVolumes: 0
-    serializedProfiles:
-    - sceneGUID: 1ac2dda6dd6084740a3d0990fb6250ee
-      profile: {fileID: 11400000, guid: 673ee635950a8204c9fa164a32c9b0ae, type: 2}
-    serializedBakeSettings:
-    - sceneGUID: 1ac2dda6dd6084740a3d0990fb6250ee
-      settings:
-        dilationSettings:
-          enableDilation: 1
-          dilationDistance: 1
-          dilationValidityThreshold: 0.25
-          dilationIterations: 1
-          squaredDistWeighting: 1
-        virtualOffsetSettings:
-          useVirtualOffset: 1
-          outOfGeoOffset: 0.01
-          searchMultiplier: 0.2
-    serializedBakingSets:
-    - name: Default
-      sceneGUIDs:
-      - 1ac2dda6dd6084740a3d0990fb6250ee
-      settings:
-        dilationSettings:
-          enableDilation: 1
-          dilationDistance: 1
-          dilationValidityThreshold: 0.25
-          dilationIterations: 1
-          squaredDistWeighting: 1
-        virtualOffsetSettings:
-          useVirtualOffset: 1
-          outOfGeoOffset: 0.01
-          searchMultiplier: 0.2
-      profile: {fileID: 11400000, guid: 673ee635950a8204c9fa164a32c9b0ae, type: 2}
+    serializedHasVolumes: []
+    serializedProfiles: []
+    serializedBakeSettings: []
+    serializedBakingSets: []
   m_Version: 3
