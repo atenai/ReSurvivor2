@@ -15,22 +15,10 @@ public class GroundEnemyAssaultRifleReloadAction : Action
 	{
 		groundEnemy = this.GetComponent<GroundEnemy>();
 
-		InitAnimation();
+		groundEnemy.InitAnimation();
+		groundEnemy.Animator.SetBool("b_isReload", true);
 		InitMove();
 		InitReload();
-	}
-
-	/// <summary>
-	/// アニメーションの初期化処理
-	/// </summary>
-	void InitAnimation()
-	{
-		groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
-		groundEnemy.Animator.SetBool("b_isReload", true);
-		groundEnemy.Animator.SetBool("b_isRifleAim", false);
-		groundEnemy.Animator.SetBool("b_isRifleFire", false);
-		groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
-		groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
 	}
 
 	/// <summary>

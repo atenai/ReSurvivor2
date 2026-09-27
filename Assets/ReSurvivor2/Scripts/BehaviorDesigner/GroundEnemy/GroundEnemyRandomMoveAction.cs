@@ -50,7 +50,8 @@ public class GroundEnemyRandomMoveAction : Action
 	{
 		groundEnemy = this.GetComponent<GroundEnemy>();
 
-		InitAnimation();
+		groundEnemy.InitAnimation();
+		groundEnemy.Animator.SetFloat("f_moveSpeed", 1.0f);
 		InitMove();
 		InitEnemyCanNotMove();
 		TargetPos();
@@ -69,19 +70,6 @@ public class GroundEnemyRandomMoveAction : Action
 		GameObject debugGameObject = UnityEngine.Object.Instantiate(obj, targetPos, Quaternion.identity);//プレハブを元に、インスタンスを生成（デバッグ用）
 		UnityEngine.Object.Destroy(debugGameObject, 5.0f);// 5秒後にゲームオブジェクトを削除
 #endif
-	}
-
-	/// <summary>
-	/// アニメーションの初期化処理
-	/// </summary>
-	void InitAnimation()
-	{
-		groundEnemy.Animator.SetFloat("f_moveSpeed", 1.0f);
-		groundEnemy.Animator.SetBool("b_isReload", false);
-		groundEnemy.Animator.SetBool("b_isRifleAim", false);
-		groundEnemy.Animator.SetBool("b_isRifleFire", false);
-		groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
-		groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
 	}
 
 	void InitMove()

@@ -25,21 +25,9 @@ public class GroundEnemyHandGunFireAction : Action
 	{
 		groundEnemy = this.GetComponent<GroundEnemy>();
 
-		InitAnimation();
+		groundEnemy.InitAnimation();
+		groundEnemy.Animator.SetBool("b_isRifleFire", true);
 		InitMove();
-	}
-
-	/// <summary>
-	/// アニメーションの初期化処理
-	/// </summary>
-	void InitAnimation()
-	{
-		groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
-		groundEnemy.Animator.SetBool("b_isReload", false);
-		groundEnemy.Animator.SetBool("b_isRifleAim", true);
-		groundEnemy.Animator.SetBool("b_isRifleFire", false);
-		groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
-		groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
 	}
 
 	/// <summary>
@@ -57,24 +45,14 @@ public class GroundEnemyHandGunFireAction : Action
 		if (isEnd == true)
 		{
 			isEnd = false;
-			groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
-			groundEnemy.Animator.SetBool("b_isReload", false);
-			groundEnemy.Animator.SetBool("b_isRifleAim", false);
-			groundEnemy.Animator.SetBool("b_isRifleFire", false);
-			groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
-			groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
+			groundEnemy.InitAnimation();
 			//射撃終了
 			return TaskStatus.Success;
 		}
 
 		if (groundEnemy.IsChase == false)
 		{
-			groundEnemy.Animator.SetFloat("f_moveSpeed", 0.0f);
-			groundEnemy.Animator.SetBool("b_isReload", false);
-			groundEnemy.Animator.SetBool("b_isRifleAim", false);
-			groundEnemy.Animator.SetBool("b_isRifleFire", false);
-			groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
-			groundEnemy.Animator.SetBool("b_isGrenadeThrow", false);
+			groundEnemy.InitAnimation();
 			return TaskStatus.Success;
 
 		}
@@ -122,18 +100,12 @@ public class GroundEnemyHandGunFireAction : Action
 
 	void Shot()
 	{
-		groundEnemy.Animator.SetBool("b_isRifleFire", false);
-
 		count = count + Time.deltaTime;
 		if (shootTime < count)
 		{
 			count = 0.0f;
-
-			groundEnemy.Animator.SetBool("b_isRifleFire", true);
 			HandGunFire();
-
 			groundEnemy.CurrentMagazine = groundEnemy.CurrentMagazine - 1;//現在のマガジンの弾数を-1する
-
 			isEnd = true;
 			return;
 		}

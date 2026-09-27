@@ -721,4 +721,16 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	{
 		return this.gameObject;
 	}
+
+	/// <summary>
+	/// アニメーションの初期化処理
+	/// </summary>
+	public void InitAnimation()
+	{
+		this.Animator.SetFloat("f_moveSpeed", 0.0f);
+		this.Animator.SetBool("b_isReload", false);
+		this.Animator.SetBool("b_isRifleFire", false);
+		this.Animator.SetBool("b_isGrenadeEquip", false);
+		this.Animator.SetBool("b_isGrenadeThrow", false);
+	}
 }
