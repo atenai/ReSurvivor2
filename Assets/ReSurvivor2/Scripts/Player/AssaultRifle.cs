@@ -148,10 +148,14 @@ public class AssaultRifle : GunBase
 		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), PlayerCameraManager.SingletonInstance.transform.up) * direction;
 		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), PlayerCameraManager.SingletonInstance.transform.right) * direction;
 
-		Ray ray = new Ray(PlayerCameraManager.SingletonInstance.transform.position, direction);
-		Debug.DrawRay(ray.origin, ray.direction * PlayerCameraManager.SingletonInstance.RaycastRange, Color.red, 10.0f);
+		Transform muzzle = PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleTransform;
+		//カメラの中心で狙い、銃口から着弾点までの間に障害物が無いかも調べる（障害物があればそこに当たる）
 		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, PlayerCameraManager.SingletonInstance.RaycastRange) == true) // もしRayを投射して何らかのコライダーに衝突したら
+		bool isHit = TraceShot(direction, muzzle, out hit, out Vector3 tracerStart, out Vector3 tracerEnd);
+		Debug.DrawLine(tracerStart, tracerEnd, Color.red, 10.0f);
+		//弾道エフェクト（光の筋）
+		FireTracer(tracerStart, tracerEnd);
+		if (isHit == true) // もし何らかのコライダーに衝突したら
 		{
 #if UNITY_EDITOR//Unityエディター上での処理
 			PlayerCameraManager.SingletonInstance.HitName = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得

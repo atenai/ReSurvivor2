@@ -53,6 +53,13 @@ public class EnemyBullet : MonoBehaviour
 	bool isFlying = false;
 	[Tooltip("使用中か")]
 	bool isActive = false;
+	[Tooltip("風切り音を鳴らしたか（1発につき1回だけ）")]
+	bool isFlybyPlayed = false;
+
+	[Tooltip("風切り音が鳴る、プレイヤーと弾の距離")]
+	const float FlybyRadius = 2.5f;
+	[Tooltip("風切り音の判定に使うプレイヤーの高さ（頭のあたり）")]
+	const float FlybyHeight = 1.5f;
 	[Tooltip("弾が消えた時に呼ぶ処理（プールへの返却）")]
 	Action<EnemyBullet> onFinished;
 
@@ -76,6 +83,7 @@ public class EnemyBullet : MonoBehaviour
 		tail = origin;
 		isFlying = true;
 		isActive = true;
+		isFlybyPlayed = false;
 
 		this.transform.position = origin;
 		this.transform.rotation = Quaternion.LookRotation(this.direction);
@@ -160,12 +168,18 @@ public class EnemyBullet : MonoBehaviour
 
 		if (FindHit(head, direction, distance, out RaycastHit hit) == true)
 		{
+			//プレイヤー以外に当たった時は、当たるまでの間にプレイヤーの近くを通ったか調べる
+			if (hit.collider.CompareTag("Player") == false)
+			{
+				CheckFlyby(head, hit.point);
+			}
 			head = hit.point;
 			isFlying = false;
 			OnHit(hit);
 			return;
 		}
 
+		CheckFlyby(head, head + direction * distance);
 		head = head + direction * distance;
 		remainingRange = remainingRange - distance;
 		if (remainingRange <= 0.0f)
@@ -173,6 +187,46 @@ public class EnemyBullet : MonoBehaviour
 			//射程の終わりまで飛んだ
 			isFlying = false;
 		}
+	}
+
+	/// <summary>
+	/// 弾がプレイヤーをかすめたら風切り音を鳴らす（1発につき1回だけ）
+	/// この区間の中でプレイヤーの頭に一番近づき、その距離が FlybyRadius 以内なら、一番近づいた位置で鳴らす
+	/// </summary>
+	void CheckFlyby(Vector3 from, Vector3 to)
+	{
+		if (isFlybyPlayed == true)
+		{
+			return;
+		}
+		if (PlayerManagerPresenter.SingletonInstance == null || SoundManager.SingletonInstance == null || SoundManager.SingletonInstance.BulletFlybySEPool == null)
+		{
+			return;
+		}
+
+		Vector3 listener = PlayerManagerPresenter.SingletonInstance.transform.position + Vector3.up * FlybyHeight;
+		Vector3 segment = to - from;
+		float lengthSqr = segment.sqrMagnitude;
+		if (lengthSqr < 0.000001f)
+		{
+			return;
+		}
+
+		//一番近づく位置（区間の端の時は、まだ近づいている途中か、もう離れていくところなので鳴らさない）
+		float t = Vector3.Dot(listener - from, segment) / lengthSqr;
+		if (t <= 0.0f || 1.0f <= t)
+		{
+			return;
+		}
+
+		Vector3 closest = from + segment * t;
+		if ((closest - listener).sqrMagnitude > FlybyRadius * FlybyRadius)
+		{
+			return;
+		}
+
+		isFlybyPlayed = true;
+		SoundManager.SingletonInstance.BulletFlybySEPool.Play(closest);
 	}
 
 	/// <summary>

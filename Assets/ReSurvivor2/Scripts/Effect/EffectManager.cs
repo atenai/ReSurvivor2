@@ -34,6 +34,9 @@ public class EffectManager : MonoBehaviour
 	[Tooltip("エネミーの弾（弾道処理と弾道エフェクト）")]
 	[SerializeField] EnemyBulletPool enemyBulletPool;
 	public EnemyBulletPool EnemyBulletPool => enemyBulletPool;
+	[Tooltip("プレイヤーの弾道エフェクト（光の筋）")]
+	[SerializeField] PlayerBulletTracerPool playerBulletTracerPool;
+	public PlayerBulletTracerPool PlayerBulletTracerPool => playerBulletTracerPool;
 
 
 	void Awake()
