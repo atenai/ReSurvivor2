@@ -25,8 +25,8 @@ public class GroundEnemyAssaultRifleFireAction : Action
 	int rapidFire = 3;
 	[UnityEngine.Tooltip("連射回数のカウント")]
 	int fireCount = 0;
-	[UnityEngine.Tooltip("弾道エフェクトのスピード")]
-	float bulletEffectSpeed = 100.0f;
+	[UnityEngine.Tooltip("弾の速度")]
+	[SerializeField] float bulletSpeed = 120.0f;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
@@ -140,45 +140,7 @@ public class GroundEnemyAssaultRifleFireAction : Action
 		groundEnemy.AfterFireSmoke();
 		groundEnemy.AssaultRifleFireSE();
 
-		Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 1f, this.transform.position.z);
-
-		Vector3 direction = this.transform.forward;
-		direction = Quaternion.AngleAxis(Random.Range(-randomAngle, randomAngle), this.transform.up) * direction;
-		direction = Quaternion.AngleAxis(Random.Range(-randomAngle, randomAngle), this.transform.right) * direction;
-		direction.Normalize();
-
-		Ray ray = new Ray(pos, direction);
-		Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, range) == true)//もしRayを投射して何らかのコライダーに衝突したら
-		{
-			if (hit.collider.gameObject.CompareTag("Player"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
-			{
-				//ダメージ
-				var player = hit.transform.GetComponent<PlayerManagerPresenter>();
-				if (player != null)
-				{
-					player.PlayerModel.HP.Damage(Damage);
-					groundEnemy.CameraShaker();
-					//敵マーカー表示
-					EnemyIndicatorManager.SingletonInstance.ShowIndicator(groundEnemy);
-				}
-			}
-
-			EffectManager.SingletonInstance.ImpactEffect(hit);
-		}
-		CreateBulletEffect(pos, direction);
-	}
-
-	/// <summary>
-	/// 弾道オブジェクトを生成して飛ばす
-	/// </summary>
-	/// <param name="gunPosition"></param>
-	/// <param name="direction"></param>
-	void CreateBulletEffect(Vector3 gunPosition, Vector3 direction)
-	{
-		GameObject newBullet = UnityEngine.Object.Instantiate(groundEnemy.BulletEffect, gunPosition, Quaternion.LookRotation(direction));
-		Rigidbody rb = newBullet.GetComponent<Rigidbody>();
-		rb.velocity = direction * bulletEffectSpeed;
+		//銃口から弾を撃つ（当たり判定・ダメージ・着弾エフェクト・弾道エフェクトは EnemyBullet が行う）
+		groundEnemy.FireBullet(randomAngle, range, Damage, bulletSpeed);
 	}
 }

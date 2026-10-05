@@ -172,9 +172,15 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	[SerializeField] ParticleGroupPlayer afterFireSmoke;
 	//↑アセットストアのプログラム↑//
 
-	[UnityEngine.Tooltip("弾道オブジェクト")]
-	[SerializeField] GameObject bulletEffect;
-	public GameObject BulletEffect => bulletEffect;
+	[Header("射撃")]
+	[Tooltip("銃口（弾の発射位置）")]
+	[SerializeField] Transform muzzle;
+	[Tooltip("プレイヤーのどの高さを狙うか（足元からの高さ）")]
+	[SerializeField] float aimHeight = 1.2f;
+	[Tooltip("正面から何度までならプレイヤーの方へ狙って撃てるか（それ以上は正面に撃つ）")]
+	[SerializeField] float maxAimAngle = 30.0f;
+	[Tooltip("銃口が壁の向こうに出ていないかを調べる、体の中の基準点の高さ")]
+	readonly float bodyCenterHeight = 1.2f;
 
 	[Tooltip("現在のグレネード数")]
 	int currentGrenade = 3;
@@ -683,6 +689,109 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 		{
 			afterFireSmoke.Play();
 		}
+	}
+
+	/// <summary>
+	/// 弾を1発撃つ（弾道処理と弾道エフェクトは EnemyBullet が行う）
+	/// </summary>
+	/// <param name="spreadAngle">散乱角度（左右・上下それぞれ ±spreadAngle 度）</param>
+	/// <param name="range">射程</param>
+	/// <param name="damage">ダメージ</param>
+	/// <param name="speed">弾の速度</param>
+	public void FireBullet(float spreadAngle, float range, float damage, float speed)
+	{
+		if (EffectManager.SingletonInstance == null || EffectManager.SingletonInstance.EnemyBulletPool == null)
+		{
+			return;
+		}
+
+		Vector3 origin = GetMuzzlePosition();
+		Vector3 direction = GetAimDirection(origin);
+
+		//散乱（今までの射撃と同じく、左右と上下にそれぞれランダムでずらす）
+		Vector3 right = Vector3.Cross(Vector3.up, direction);
+		if (right.sqrMagnitude < 0.0001f)
+		{
+			right = this.transform.right;
+		}
+		right.Normalize();
+		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-spreadAngle, spreadAngle), Vector3.up) * direction;
+		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-spreadAngle, spreadAngle), right) * direction;
+		direction.Normalize();
+
+		EffectManager.SingletonInstance.EnemyBulletPool.Fire(this, origin, direction, speed, range, damage);
+	}
+
+	/// <summary>
+	/// 弾の発射位置（銃口）
+	/// 銃口が壁などの向こう側に出ている時は、壁越しに撃てないように体の中から撃つ
+	/// </summary>
+	Vector3 GetMuzzlePosition()
+	{
+		Vector3 bodyCenter = this.transform.position + Vector3.up * bodyCenterHeight;
+		if (muzzle == null)
+		{
+			return bodyCenter;
+		}
+
+		Vector3 muzzlePosition = muzzle.position;
+		Vector3 toMuzzle = muzzlePosition - bodyCenter;
+		float distance = toMuzzle.magnitude;
+		if (distance < 0.001f)
+		{
+			return muzzlePosition;
+		}
+
+		RaycastHit[] hits = Physics.RaycastAll(bodyCenter, toMuzzle / distance, distance, EnemyBullet.HitLayerMask, QueryTriggerInteraction.Ignore);
+		foreach (var hit in hits)
+		{
+			//自分のコライダーは無視
+			if (hit.collider.transform == this.transform || hit.collider.transform.IsChildOf(this.transform))
+			{
+				continue;
+			}
+			//体と銃口の間に何かある（銃口が壁にめり込んでいる）
+			return bodyCenter;
+		}
+
+		return muzzlePosition;
+	}
+
+	/// <summary>
+	/// 狙う方向（プレイヤーの胸のあたり）
+	/// 正面から maxAimAngle 度より外にいる時は、正面寄りに撃つ（真横や後ろには撃たない）
+	/// </summary>
+	Vector3 GetAimDirection(Vector3 origin)
+	{
+		Vector3 forward = this.transform.forward;
+		Vector3 flatForward = new Vector3(forward.x, 0.0f, forward.z);
+		if (flatForward.sqrMagnitude < 0.0001f)
+		{
+			flatForward = Vector3.forward;
+		}
+		flatForward.Normalize();
+
+		if (targetPlayer == null)
+		{
+			return flatForward;
+		}
+
+		Vector3 target = targetPlayer.transform.position + Vector3.up * aimHeight;
+		Vector3 aim = target - origin;
+		Vector3 flatAim = new Vector3(aim.x, 0.0f, aim.z);
+		float flatDistance = flatAim.magnitude;
+		if (flatDistance < 0.01f)
+		{
+			return flatForward;
+		}
+
+		//上下の角度（傾き）
+		float slope = aim.y / flatDistance;
+
+		//左右の角度を正面から maxAimAngle 度までにする
+		Vector3 flatDirection = Vector3.RotateTowards(flatForward, flatAim / flatDistance, maxAimAngle * Mathf.Deg2Rad, 0.0f);
+
+		return (flatDirection + Vector3.up * slope).normalized;
 	}
 
 	/// <summary>

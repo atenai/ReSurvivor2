@@ -30,6 +30,11 @@ public class EffectManager : MonoBehaviour
 	[SerializeField] RockImpactEffectPool rockImpactEffectPool;
 	public RockImpactEffectPool RockImpactEffectPool => rockImpactEffectPool;
 
+	[Header("弾道")]
+	[Tooltip("エネミーの弾（弾道処理と弾道エフェクト）")]
+	[SerializeField] EnemyBulletPool enemyBulletPool;
+	public EnemyBulletPool EnemyBulletPool => enemyBulletPool;
+
 
 	void Awake()
 	{

@@ -45,6 +45,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 7258679735602562002, guid: ecf023e38c504bd478f43b43950bd2e7, type: 3}
+--- !u!1 &4158858521281348209
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8372206614021545349}
+  - component: {fileID: 4469551024902128130}
+  m_Layer: 0
+  m_Name: EnemyBulletPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8372206614021545349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4158858521281348209}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6531511205072101186}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4469551024902128130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4158858521281348209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 047be08ccec5ddb49a44a97bbbe784c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 3399629819277175998, guid: f40c2857d82fe7a429d5569cf0fb37c1, type: 3}
 --- !u!1 &4525537689388281808
 GameObject:
   m_ObjectHideFlags: 0
@@ -79,6 +124,7 @@ Transform:
   - {fileID: 1511603215667460484}
   - {fileID: 3133530726884962263}
   - {fileID: 4388870389678819521}
+  - {fileID: 8372206614021545349}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4167680471265424459
@@ -97,6 +143,7 @@ MonoBehaviour:
   metalImpactEffectPool: {fileID: 8836355004662574085}
   groundImpactEffectPool: {fileID: 7342838267977735144}
   rockImpactEffectPool: {fileID: 6999288054837412509}
+  enemyBulletPool: {fileID: 4469551024902128130}
 --- !u!1 &6625896136996527362
 GameObject:
   m_ObjectHideFlags: 0
