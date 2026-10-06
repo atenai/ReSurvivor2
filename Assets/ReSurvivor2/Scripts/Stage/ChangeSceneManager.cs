@@ -86,71 +86,30 @@ public class ChangeSceneManager : MonoBehaviour
     /// <summary>
     /// ゲームクリアーシーンとゲームオーバーシーンを事前ロードする
     /// </summary>
-    public IEnumerator PreloadScenesCoroutine()
+    public void PreloadScenes()
     {
-        yield return StartCoroutine(LoadSceneAdditiveAndHide(gameClearSceneName));
-        yield return StartCoroutine(LoadSceneAdditiveAndHide(gameOverSceneName));
+        //前のステージで読み込んだシーンはステージの切り替えで破棄されているので、読み込み済みフラグを戻す
+        isGameClearLoaded = false;
+        isGameOverLoaded = false;
+
+        //読み込みはSceneLoadManagerが順番に行い、読み込んだ直後（Startが呼ばれる前）にルートオブジェクトを非表示にする
+        SceneLoadManager.SingletonInstance.LoadSceneAdditive(gameClearSceneName, true, OnPreloadedScene);
+        SceneLoadManager.SingletonInstance.LoadSceneAdditive(gameOverSceneName, true, OnPreloadedScene);
     }
 
     /// <summary>
-    /// シーンを Additive で非同期ロードし、読み込み後にルートオブジェクトを非表示にする
+    /// 事前ロードしたシーンの読み込みが終わった時の処理
     /// </summary>
-    IEnumerator LoadSceneAdditiveAndHide(string sceneName)
+    void OnPreloadedScene(Scene loadedScene)
     {
-        if (Application.CanStreamedLevelBeLoaded(sceneName) == false)
-        {
-            Debug.LogError(sceneName + " が Build Settings に含まれていないか、名前が一致しません。");
-            yield break;
-        }
-
-        Debug.Log("Start loading scene: " + sceneName);
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-
-        if (asyncOperation == null)
-        {
-            Debug.LogError("LoadSceneAsync failed for: " + sceneName);
-            yield break;
-        }
-
-        // シンプルに AsyncOperation を待機し、その後シーンが実際にロードされたか確認する
-        yield return asyncOperation;
-
-        Scene loadedScene = SceneManager.GetSceneByName(sceneName);
-
-        // AsyncOperation が完了してもシーン取得に時間が掛かる場合があるため、短いタイムアウト付きで確認する
-        int checks = 0;
-        while ((loadedScene.IsValid() == false || loadedScene.isLoaded == false) && checks < 60)
-        {
-            Debug.Log("Waiting for scene to become available: " + sceneName + " (check=" + checks + ")");
-            checks++;
-            yield return null;
-            loadedScene = SceneManager.GetSceneByName(sceneName);
-        }
-
-        if (loadedScene.IsValid() && loadedScene.isLoaded)
-        {
-            GameObject[] rootObjects = loadedScene.GetRootGameObjects();
-
-            for (int i = 0; i < rootObjects.Length; i++)
-            {
-                rootObjects[i].SetActive(false);
-            }
-        }
-        else
-        {
-            Debug.LogWarning(sceneName + " のロードが完了していません。");
-        }
-
-        if (sceneName == gameClearSceneName)
+        if (loadedScene.name == gameClearSceneName)
         {
             isGameClearLoaded = true;
         }
-        else if (sceneName == gameOverSceneName)
+        else if (loadedScene.name == gameOverSceneName)
         {
             isGameOverLoaded = true;
         }
-
-        Debug.Log("Finished loading scene: " + sceneName);
     }
 
     void Start()
@@ -268,6 +227,13 @@ public class ChangeSceneManager : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
+        //シーン切り替え中はゲームオーバーを受け付けない（切り替え中にゲームオーバー画面が割り込むと、シーンの読み込みが止まってしまうため）
+        if (SceneLoadManager.IsChangingScene == true)
+        {
+            Debug.Log("<color=red>シーン切り替え中のためゲームオーバーを受け付けません</color>");
+            return;
+        }
+
         Debug.Log("<color=red>ゲームオーバー</color>");
         InGameManager.IsFirstLoad = true;
         ChangeSceneManager.IsFirstLoad = true;

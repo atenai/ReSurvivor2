@@ -111,7 +111,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 	/// </summary>
 	void InitHP()
 	{
-		playerModel.HP.Initialize(DamageEffect, ChangeSceneManager.SingletonInstance.GameOver, () => playerModel.UseArmorPlate((armorPlate) => playerUIView.StartTextArmorPlate(armorPlate)), HealEffect);
+		//シーン切り替え中は無敵にする（切り替え中に死亡してゲームオーバー画面が割り込まないようにする）
+		playerModel.HP.Initialize(DamageEffect, ChangeSceneManager.SingletonInstance.GameOver, () => playerModel.UseArmorPlate((armorPlate) => playerUIView.StartTextArmorPlate(armorPlate)), HealEffect, () => SceneLoadManager.IsChangingScene);
 		//シェーダーへ値を渡す（これだけでOK）
 		Shader.SetGlobalFloat("HP", PlayerModel.HP.CurrentHp / HitPoint.Max_Hp);
 	}
