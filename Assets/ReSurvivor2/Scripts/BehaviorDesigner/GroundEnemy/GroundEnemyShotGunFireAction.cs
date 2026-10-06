@@ -23,8 +23,8 @@ public class GroundEnemyShotGunFireAction : Action
 	float randomAngle = 15.0f;
 	[UnityEngine.Tooltip("ショットガンが一度で出る弾の数")]
 	[SerializeField] int shotGunBullet = 10;
-	[UnityEngine.Tooltip("弾道エフェクトのスピード")]
-	float bulletEffectSpeed = 100.0f;
+	[UnityEngine.Tooltip("弾の速度")]
+	[SerializeField] float bulletSpeed = 100.0f;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
@@ -130,47 +130,10 @@ public class GroundEnemyShotGunFireAction : Action
 		groundEnemy.AfterFireSmoke();
 		groundEnemy.ShotGunFireSE();
 
+		//散弾を1発ずつ銃口から撃つ（当たり判定・ダメージ・着弾エフェクト・弾道エフェクトは EnemyBullet が行う）
 		for (int i = 0; i < shotGunBullet; i++)
 		{
-			Vector3 direction = this.transform.forward;
-			direction = Quaternion.AngleAxis(Random.Range(-randomAngle, randomAngle), this.transform.up) * direction;
-			direction = Quaternion.AngleAxis(Random.Range(-randomAngle, randomAngle), this.transform.right) * direction;
-			direction.Normalize();
-
-			Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 1f, this.transform.position.z);
-			Ray ray = new Ray(pos, direction);
-			Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
-			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit, range) == true)//もしRayを投射して何らかのコライダーに衝突したら
-			{
-				if (hit.collider.gameObject.CompareTag("Player"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
-				{
-					//ダメージ
-					var player = hit.transform.GetComponent<PlayerManagerPresenter>();
-					if (player != null)
-					{
-						player.PlayerModel.HP.Damage(Damage);
-						groundEnemy.CameraShaker();
-						//敵マーカー表示
-						EnemyIndicatorManager.SingletonInstance.ShowIndicator(groundEnemy);
-					}
-				}
-
-				EffectManager.SingletonInstance.ImpactEffect(hit);
-			}
-			CreateBulletEffect(pos, direction);
+			groundEnemy.FireBullet(randomAngle, range, Damage, bulletSpeed);
 		}
-	}
-
-	/// <summary>
-	/// 弾道オブジェクトを生成して飛ばす
-	/// </summary>
-	/// <param name="gunPosition"></param>
-	/// <param name="direction"></param>
-	void CreateBulletEffect(Vector3 gunPosition, Vector3 direction)
-	{
-		GameObject newBullet = UnityEngine.Object.Instantiate(groundEnemy.BulletEffect, gunPosition, Quaternion.LookRotation(direction));
-		Rigidbody rb = newBullet.GetComponent<Rigidbody>();
-		rb.velocity = direction * bulletEffectSpeed;
 	}
 }

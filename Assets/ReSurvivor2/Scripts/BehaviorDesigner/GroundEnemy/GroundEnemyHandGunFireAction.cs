@@ -19,6 +19,8 @@ public class GroundEnemyHandGunFireAction : Action
 	[SerializeField] float range = 100.0f;
 	[UnityEngine.Tooltip("銃のダメージ")]
 	[SerializeField] float Damage = 10.0f;
+	[UnityEngine.Tooltip("弾の速度")]
+	[SerializeField] float bulletSpeed = 110.0f;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
@@ -116,27 +118,7 @@ public class GroundEnemyHandGunFireAction : Action
 	/// </summary> 
 	void HandGunFire()
 	{
-		Vector3 pos = new Vector3(this.transform.position.x, this.transform.position.y + 1f, this.transform.position.z);
-
-		Ray ray = new Ray(pos, this.transform.forward);
-		Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10.0f);
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, range) == true)//もしRayを投射して何らかのコライダーに衝突したら
-		{
-			if (hit.collider.gameObject.CompareTag("Player"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
-			{
-				//ダメージ
-				var player = hit.transform.GetComponent<PlayerManagerPresenter>();
-				if (player != null)
-				{
-					player.PlayerModel.HP.Damage(Damage);
-					groundEnemy.CameraShaker();
-					//敵マーカー表示
-					EnemyIndicatorManager.SingletonInstance.ShowIndicator(groundEnemy);
-				}
-			}
-
-			EffectManager.SingletonInstance.ImpactEffect(hit);
-		}
+		//銃口から弾を撃つ（当たり判定・ダメージ・着弾エフェクト・弾道エフェクトは EnemyBullet が行う）
+		groundEnemy.FireBullet(0.0f, range, Damage, bulletSpeed);
 	}
 }

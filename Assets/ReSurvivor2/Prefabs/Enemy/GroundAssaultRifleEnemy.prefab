@@ -343,7 +343,9 @@ MonoBehaviour:
   - {fileID: 1717239033193219912}
   - {fileID: 7646512579346927600}
   afterFireSmoke: {fileID: 6181686689946337306}
-  bulletEffect: {fileID: 4201021530631008514, guid: 3a43c0de06af14b45936ab799e201084, type: 3}
+  muzzle: {fileID: 1153128297474760027}
+  aimHeight: 1.2
+  maxAimAngle: 30
   cinemachineImpulseSource: {fileID: 4678478672489473311}
   debugEnemy:
     isDebugMode: 1
@@ -1556,6 +1558,11 @@ PrefabInstance:
 --- !u!1 &740881606135455463 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7144168654218833848, guid: 44f269219b94a914d81a2300c6df9bb0, type: 3}
+  m_PrefabInstance: {fileID: 7596741817733919071}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1153128297474760027 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8749843700610083844, guid: 44f269219b94a914d81a2300c6df9bb0, type: 3}
   m_PrefabInstance: {fileID: 7596741817733919071}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1717239033193219912 stripped
