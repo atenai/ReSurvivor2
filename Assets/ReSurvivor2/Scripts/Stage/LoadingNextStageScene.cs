@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class LoadingNextStageScene : MonoBehaviour
 {
@@ -16,11 +14,19 @@ public class LoadingNextStageScene : MonoBehaviour
 		{
 			if (isLoadOnce == false)
 			{
+				//シーンの読み込みはSceneLoadManagerに任せる（このオブジェクトが破棄されても切り替えは必ず行われる）
+				//他のシーンに切り替え中などで受け付けられなかった場合は何もしない
+				bool isAccepted = SceneLoadManager.SingletonInstance.LoadScene(nextStage.ToString(), SetLoadingSliderValue, null, HideLoadingPanel);
+				if (isAccepted == false)
+				{
+					return;
+				}
+
 				isLoadOnce = true;
 				//ロード中にプレイヤーが移動してロードトリガーに触り連続ロードを行わないようにするための処理
 				InGameManager.SingletonInstance.IsGamePlayReady = false;
 				SetPlayerSpawnPos(collider, spawnPos);
-				StartCoroutine(LoadScene());
+				ShowLoadingPanel();
 			}
 		}
 	}
@@ -41,45 +47,49 @@ public class LoadingNextStageScene : MonoBehaviour
 	}
 
 	/// <summary>
-	/// シーンをロードする
+	/// ロードUIを表示する
 	/// </summary>
-	IEnumerator LoadScene()
+	static void ShowLoadingPanel()
 	{
-		//不透明にする
-		ScreenUIManagerPresenter.SingletonInstance.FadeOut();
-
-		//スライダーの値を最低にする
-		ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.SliderLoading.value = float.MinValue;
-		//ロードUIをOnにする
-		ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.PanelLoading.gameObject.SetActive(true);
-
-		//シーンをロード
-		AsyncOperation async = SceneManager.LoadSceneAsync(nextStage.ToString());
-		//シーンが勝手に切り替わらないようにする
-		async.allowSceneActivation = false;
-		//シーンをロードするまでのループ処理
-		while (async.isDone == false)
+		ScreenUIManagerPresenter screenUIManagerPresenter = ScreenUIManagerPresenter.SingletonInstance;
+		if (screenUIManagerPresenter == null)
 		{
-			//ロード数値をスライダーに反映
-			ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.SliderLoading.value = async.progress;
-			Debug.Log("<color=red>読み込み進捗: " + async.progress * 100 + "%</color>");
-
-			//ロード数値が0.9より同じかそれ以上大きくなったら中身を実行する
-			if (0.9f <= async.progress)
-			{
-				//スライダーの値を最大にする
-				ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.SliderLoading.value = float.MaxValue;
-				//フレームのラストまで待つ
-				yield return new WaitForEndOfFrame();
-
-				//ロードUIをOffにする
-				ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.PanelLoading.gameObject.SetActive(false);
-				//シーンを切り替える
-				async.allowSceneActivation = true;
-			}
-
-			//1フレーム待つ
-			yield return null;
+			return;
 		}
+
+		//不透明にする
+		screenUIManagerPresenter.FadeOut();
+		//スライダーの値を最低にする
+		screenUIManagerPresenter.ScreenUIView.SliderLoading.value = float.MinValue;
+		//ロードUIをOnにする
+		screenUIManagerPresenter.ScreenUIView.PanelLoading.gameObject.SetActive(true);
+	}
+
+	/// <summary>
+	/// ロード数値をスライダーに反映する
+	/// </summary>
+	static void SetLoadingSliderValue(float progress)
+	{
+		ScreenUIManagerPresenter screenUIManagerPresenter = ScreenUIManagerPresenter.SingletonInstance;
+		if (screenUIManagerPresenter == null)
+		{
+			return;
+		}
+
+		screenUIManagerPresenter.ScreenUIView.SliderLoading.value = progress;
+	}
+
+	/// <summary>
+	/// ロードUIを非表示にする（シーンを切り替える直前に呼ばれる）
+	/// </summary>
+	static void HideLoadingPanel()
+	{
+		ScreenUIManagerPresenter screenUIManagerPresenter = ScreenUIManagerPresenter.SingletonInstance;
+		if (screenUIManagerPresenter == null)
+		{
+			return;
+		}
+
+		screenUIManagerPresenter.ScreenUIView.PanelLoading.gameObject.SetActive(false);
 	}
 }

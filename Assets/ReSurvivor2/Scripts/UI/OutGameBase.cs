@@ -101,48 +101,30 @@ public class OutGameBase : MonoBehaviour
 	{
 		if (isLoadOnce == false)
 		{
-			isLoadOnce = true;
-			StartCoroutine(SceneLoad(nextSceneName));
+			//シーンの読み込みはSceneLoadManagerに任せる（このシーンが破棄されても切り替えは必ず行われる）
+			//シーン切り替え中などで受け付けられなかった場合は、もう一度押せるようにする
+			//シェーダーロードが1と同じかそれ以上になったらシーンを切り替える
+			isLoadOnce = SceneLoadManager.SingletonInstance.LoadScene(nextSceneName, SetSceneLoadingSliderValue, IsShaderWarmupCompleted);
 		}
 	}
 
 	/// <summary>
-	/// シーンをロードする
+	/// ロード数値をスライダーに反映する
 	/// </summary>
-	/// <param name="nextSceneName">次にロードするシーン名</param>
-	/// <returns></returns>
-	IEnumerator SceneLoad(string nextSceneName)
+	void SetSceneLoadingSliderValue(float progress)
 	{
-		//スライダーの値を最低にする
-		sliderSceneLoading.value = float.MinValue;
-
-		//シーンをロード
-		AsyncOperation async = SceneManager.LoadSceneAsync(nextSceneName);
-		//シーンが勝手に切り替わらないようにする
-		async.allowSceneActivation = false;
-		//シーンをロードするまでのループ処理
-		while (async.isDone == false)
+		if (sliderSceneLoading != null)
 		{
-			//ロード数値をスライダーに反映
-			sliderSceneLoading.value = async.progress;
-			Debug.Log("<color=red>読み込み進捗: " + async.progress * 100 + "%</color>");
-
-			//ロード数値が0.9より同じかそれ以上大きくなったら かつ シェーダーロードが1と同じかそれ以上になったら 中身を実行する
-			if (0.9f <= async.progress && 1.0f <= GetShaderWarmupProgressRate())
-			{
-				//スライダーの値を最大にする
-				sliderSceneLoading.value = float.MaxValue;
-
-				//フレームのラストまで待つ
-				yield return new WaitForEndOfFrame();
-
-				//シーンを切り替える
-				async.allowSceneActivation = true;
-			}
-
-			//1フレーム待つ
-			yield return null;
+			sliderSceneLoading.value = progress;
 		}
+	}
+
+	/// <summary>
+	/// シェーダーのウォームアップが終わったか？
+	/// </summary>
+	bool IsShaderWarmupCompleted()
+	{
+		return 1.0f <= GetShaderWarmupProgressRate();
 	}
 
 	/// <summary>

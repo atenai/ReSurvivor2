@@ -36,7 +36,7 @@ public class CurrentStageManager : MonoBehaviour
 		CreateMission();
 		ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.MapUI.SetCurrentPlayerStageNumber((int)currentStage);
 		StartCoroutine(ScreenUIManagerPresenter.SingletonInstance.FadeIn());
-		StartCoroutine(ChangeSceneManager.SingletonInstance.PreloadScenesCoroutine());
+		ChangeSceneManager.SingletonInstance.PreloadScenes();
 	}
 
 	void CreateMission()
