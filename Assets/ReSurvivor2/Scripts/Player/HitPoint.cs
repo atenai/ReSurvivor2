@@ -33,6 +33,9 @@ public class HitPoint
     [Tooltip("ヒール終了処理")]
     UnityAction healFinalize = null;
 
+    [Tooltip("無敵判定（trueを返す間はダメージを受けない）")]
+    Func<bool> isInvincible = null;
+
     public HitPoint(float initHP)
     {
         currentHp = initHP;
@@ -45,12 +48,14 @@ public class HitPoint
     /// <param name="dead">死亡処理処理</param>
     /// <param name="healProcessing">ヒール中間処理</param>
     /// <param name="healFinalize">ヒール修了処理</param>
-    public void Initialize(UnityAction damageProcessing = null, UnityAction dead = null, UnityAction healProcessing = null, UnityAction healFinalize = null)
+    /// <param name="isInvincible">無敵判定（trueを返す間はダメージを受けない）</param>
+    public void Initialize(UnityAction damageProcessing = null, UnityAction dead = null, UnityAction healProcessing = null, UnityAction healFinalize = null, Func<bool> isInvincible = null)
     {
         this.damageProcessing = damageProcessing;
         this.dead = dead;
         this.healProcessing = healProcessing;
         this.healFinalize = healFinalize;
+        this.isInvincible = isInvincible;
     }
 
     /// <summary>
@@ -59,6 +64,12 @@ public class HitPoint
     /// <param name="amount">ダメージ量</param>
     public void Damage(float amount)
     {
+        //無敵中はダメージを受けない
+        if (isInvincible != null && isInvincible() == true)
+        {
+            return;
+        }
+
         currentHp = currentHp - amount;
 
         damageProcessing?.Invoke();
