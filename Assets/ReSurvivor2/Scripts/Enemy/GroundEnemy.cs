@@ -181,6 +181,12 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	[SerializeField] float maxAimAngle = 30.0f;
 	[Tooltip("銃口が壁の向こうに出ていないかを調べる、体の中の基準点の高さ")]
 	readonly float bodyCenterHeight = 1.2f;
+	[Tooltip("これより短いベクトルは向きが決まらないものとして扱う（長さの2乗）")]
+	const float MinSqrLength = 0.0001f;
+	[Tooltip("体の基準点と銃口がこれより近ければ、銃口の位置をそのまま使う")]
+	const float MinMuzzleDistance = 0.001f;
+	[Tooltip("プレイヤーとの水平距離がこれより近ければ、正面に撃つ")]
+	const float MinAimDistance = 0.01f;
 
 	[Tooltip("現在のグレネード数")]
 	int currentGrenade = 3;
@@ -710,7 +716,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 
 		//散乱（今までの射撃と同じく、左右と上下にそれぞれランダムでずらす）
 		Vector3 right = Vector3.Cross(Vector3.up, direction);
-		if (right.sqrMagnitude < 0.0001f)
+		if (right.sqrMagnitude < MinSqrLength)
 		{
 			right = this.transform.right;
 		}
@@ -737,16 +743,16 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 		Vector3 muzzlePosition = muzzle.position;
 		Vector3 toMuzzle = muzzlePosition - bodyCenter;
 		float distance = toMuzzle.magnitude;
-		if (distance < 0.001f)
+		if (distance < MinMuzzleDistance)
 		{
 			return muzzlePosition;
 		}
 
 		RaycastHit[] hits = Physics.RaycastAll(bodyCenter, toMuzzle / distance, distance, EnemyBullet.HitLayerMask, QueryTriggerInteraction.Ignore);
-		foreach (var hit in hits)
+		foreach (RaycastHit hit in hits)
 		{
-			//自分のコライダーは無視
-			if (hit.collider.transform == this.transform || hit.collider.transform.IsChildOf(this.transform))
+			//自分のコライダーと、弾が当たらないコライダー（BulletEffect レイヤー）は無視
+			if (hit.collider.transform == this.transform || hit.collider.transform.IsChildOf(this.transform) || EnemyBullet.IsIgnoredCollider(hit.collider) == true)
 			{
 				continue;
 			}
@@ -765,7 +771,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	{
 		Vector3 forward = this.transform.forward;
 		Vector3 flatForward = new Vector3(forward.x, 0.0f, forward.z);
-		if (flatForward.sqrMagnitude < 0.0001f)
+		if (flatForward.sqrMagnitude < MinSqrLength)
 		{
 			flatForward = Vector3.forward;
 		}
@@ -780,7 +786,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 		Vector3 aim = target - origin;
 		Vector3 flatAim = new Vector3(aim.x, 0.0f, aim.z);
 		float flatDistance = flatAim.magnitude;
-		if (flatDistance < 0.01f)
+		if (flatDistance < MinAimDistance)
 		{
 			return flatForward;
 		}

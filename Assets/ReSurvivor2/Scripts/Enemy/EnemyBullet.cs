@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 /// <summary>
@@ -19,22 +18,41 @@ public class EnemyBullet : MonoBehaviour
 	static readonly RaycastHit[] hitBuffer = new RaycastHit[HitBufferSize];
 	static readonly Collider[] overlapBuffer = new Collider[HitBufferSize];
 
+	[Tooltip("光の筋（LineRenderer）の点の数（後端と先端の2点）")]
+	const int TracerPointCount = 2;
+	[Tooltip("光の筋の後端の点の番号")]
+	const int TracerTailIndex = 0;
+	[Tooltip("光の筋の先端の点の番号")]
+	const int TracerHeadIndex = 1;
+
 	[Tooltip("弾の先端に重なったコライダーを調べ直す時に、どれだけ手前からレイを撃つか（カプセルの直径より長くする）")]
 	const float BacktrackDistance = 1.5f;
+	[Tooltip("手前から撃ち直すレイの余裕（先端より少し先まで調べる）")]
+	const float BacktrackMargin = 0.05f;
+	[Tooltip("弾の先端がコライダーに重なっていないか調べる球の半径")]
+	const float HeadOverlapRadius = 0.01f;
+	[Tooltip("弾の最低速度")]
+	const float MinSpeed = 0.1f;
+	[Tooltip("これより短いベクトルは向きが決まらないものとして扱う（長さの2乗）")]
+	const float MinSqrLength = 0.0001f;
+	[Tooltip("光の筋の長さがこれ以下になったら消えたものとして扱う")]
+	const float TracerEndLength = 0.001f;
 
-	[Tooltip("弾道エフェクト用のレイヤー（BulletEffect）")]
-	const int BulletEffectLayer = 11;
+	[Tooltip("弾道エフェクト用のレイヤー名（このレイヤーのコライダーには当たらない）")]
+	const string BulletEffectLayerName = "BulletEffect";
 
 	/// <summary>
-	/// 弾が当たるレイヤー
-	/// Ignore Raycast（トリガーやフェンスの移動ブロッカー）と BulletEffect レイヤーには当たらない
+	/// 弾が当たるレイヤー（Ignore Raycast 以外のすべて。トリガーやフェンスの移動ブロッカーは Ignore Raycast なので当たらない）
+	/// BulletEffect レイヤーは IsIgnoredCollider で除外する
 	/// </summary>
-	public static int HitLayerMask => Physics.DefaultRaycastLayers & ~(1 << BulletEffectLayer);
+	public static int HitLayerMask => Physics.DefaultRaycastLayers;
 
 	[Tooltip("撃ったエネミー")]
 	GroundEnemy shooter;
 	[Tooltip("撃ったエネミー自身のコライダーには当たらないようにするための親")]
 	Transform shooterRoot;
+	[Tooltip("この弾を返却するプール（プール無しで撃った時は null）")]
+	EnemyBulletPool pool;
 	[Tooltip("ダメージ")]
 	float damage;
 	[Tooltip("弾の速度")]
@@ -60,24 +78,29 @@ public class EnemyBullet : MonoBehaviour
 	const float FlybyRadius = 2.5f;
 	[Tooltip("風切り音の判定に使うプレイヤーの高さ（頭のあたり）")]
 	const float FlybyHeight = 1.5f;
-	[Tooltip("弾が消えた時に呼ぶ処理（プールへの返却）")]
-	Action<EnemyBullet> onFinished;
+	[Tooltip("区間の長さ（2乗）がこれより短い時は、風切り音の判定をしない")]
+	const float MinFlybySegmentSqrLength = 0.000001f;
+	[Tooltip("区間の始点を表す割合")]
+	const float SegmentStart = 0.0f;
+	[Tooltip("区間の終点を表す割合")]
+	const float SegmentEnd = 1.0f;
 
 	public bool IsActive => isActive;
 
 	/// <summary>
 	/// 弾を発射する
 	/// </summary>
-	public void Launch(GroundEnemy shooter, Vector3 origin, Vector3 direction, float speed, float range, float damage, Action<EnemyBullet> onFinished)
+	/// <param name="pool">弾が消えた時に返却するプール（null の時は非表示にするだけ）</param>
+	public void Launch(GroundEnemy shooter, Vector3 origin, Vector3 direction, float speed, float range, float damage, EnemyBulletPool pool)
 	{
 		this.shooter = shooter;
 		this.shooterRoot = shooter != null ? shooter.transform : null;
+		this.pool = pool;
 		this.origin = origin;
-		this.direction = direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector3.forward;
-		this.speed = Mathf.Max(speed, 0.1f);
+		this.direction = MinSqrLength < direction.sqrMagnitude ? direction.normalized : Vector3.forward;
+		this.speed = Mathf.Max(speed, MinSpeed);
 		this.remainingRange = Mathf.Max(range, 0.0f);
 		this.damage = damage;
-		this.onFinished = onFinished;
 
 		head = origin;
 		tail = origin;
@@ -90,7 +113,7 @@ public class EnemyBullet : MonoBehaviour
 
 		if (lineRenderer != null)
 		{
-			lineRenderer.positionCount = 2;
+			lineRenderer.positionCount = TracerPointCount;
 			lineRenderer.enabled = false;//まだ長さが0なので表示しない
 		}
 	}
@@ -130,7 +153,7 @@ public class EnemyBullet : MonoBehaviour
 
 		UpdateTracer();
 
-		if (isFlying == false && traveled - tailDistance <= 0.001f)
+		if (isFlying == false && traveled - tailDistance <= TracerEndLength)
 		{
 			Finish();
 		}
@@ -207,20 +230,21 @@ public class EnemyBullet : MonoBehaviour
 		Vector3 listener = PlayerManagerPresenter.SingletonInstance.transform.position + Vector3.up * FlybyHeight;
 		Vector3 segment = to - from;
 		float lengthSqr = segment.sqrMagnitude;
-		if (lengthSqr < 0.000001f)
+		if (lengthSqr < MinFlybySegmentSqrLength)
 		{
 			return;
 		}
 
-		//一番近づく位置（区間の端の時は、まだ近づいている途中か、もう離れていくところなので鳴らさない）
+		//一番近づく位置（区間の始点から終点までの割合 t）
+		//区間の端の時は、まだ近づいている途中か、もう離れていくところなので鳴らさない
 		float t = Vector3.Dot(listener - from, segment) / lengthSqr;
-		if (t <= 0.0f || 1.0f <= t)
+		if (t <= SegmentStart || SegmentEnd <= t)
 		{
 			return;
 		}
 
 		Vector3 closest = from + segment * t;
-		if ((closest - listener).sqrMagnitude > FlybyRadius * FlybyRadius)
+		if (FlybyRadius * FlybyRadius < (closest - listener).sqrMagnitude)
 		{
 			return;
 		}
@@ -230,15 +254,15 @@ public class EnemyBullet : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 区間内で一番手前にある当たり（撃ったエネミー自身とトリガーは除く）を探す
+	/// 区間内で一番手前にある当たり（撃ったエネミー自身・BulletEffect レイヤー・トリガーは除く）を探す
 	/// </summary>
 	bool FindHit(Vector3 from, Vector3 dir, float distance, out RaycastHit nearest)
 	{
-		nearest = default;
+		nearest = new RaycastHit();//見つからなかった時の空の結果
 		int count = Physics.RaycastNonAlloc(from, dir, hitBuffer, distance, HitLayerMask, QueryTriggerInteraction.Ignore);
 		//バッファがいっぱいの時は一番手前の当たりが入っていない可能性があるので、全部取り直す（大きくフレームが飛んだ時など）
 		RaycastHit[] hits = hitBuffer;
-		if (count >= HitBufferSize)
+		if (HitBufferSize <= count)
 		{
 			hits = Physics.RaycastAll(from, dir, distance, HitLayerMask, QueryTriggerInteraction.Ignore);
 			count = hits.Length;
@@ -252,7 +276,7 @@ public class EnemyBullet : MonoBehaviour
 			{
 				continue;
 			}
-			if (IsShooterCollider(hit.collider) == true)
+			if (IsShooterCollider(hit.collider) == true || IsIgnoredCollider(hit.collider) == true)
 			{
 				continue;
 			}
@@ -267,27 +291,28 @@ public class EnemyBullet : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 弾の先端がコライダーの中に入っていないか調べる（撃ったエネミー自身は除く）
+	/// 弾の先端がコライダーの中に入っていないか調べる（撃ったエネミー自身と BulletEffect レイヤーは除く）
 	/// 入っていれば、そのコライダーだけに手前からレイを撃って着弾点と法線を求める
 	/// </summary>
 	bool FindOverlapAtHead(out RaycastHit hit, out bool hasHitInfo, out Collider overlapCollider)
 	{
-		hit = default;
+		hit = new RaycastHit();//着弾点が求まらなかった時の空の結果
 		hasHitInfo = false;
 		overlapCollider = null;
 
-		int count = Physics.OverlapSphereNonAlloc(head, 0.01f, overlapBuffer, HitLayerMask, QueryTriggerInteraction.Ignore);
+		//弾の先端に置いた小さな球に重なっているコライダーを、用意しておいた配列 overlapBuffer に入れてもらう（戻り値はその数）
+		int count = Physics.OverlapSphereNonAlloc(head, HeadOverlapRadius, overlapBuffer, HitLayerMask, QueryTriggerInteraction.Ignore);
 		for (int i = 0; i < count; i++)
 		{
 			Collider collider = overlapBuffer[i];
-			if (collider == null || IsShooterCollider(collider) == true)
+			if (collider == null || IsShooterCollider(collider) == true || IsIgnoredCollider(collider) == true)
 			{
 				continue;
 			}
 
 			overlapCollider = collider;
 			Ray ray = new Ray(head - direction * BacktrackDistance, direction);
-			if (collider.Raycast(ray, out hit, BacktrackDistance + 0.05f) == true)
+			if (collider.Raycast(ray, out hit, BacktrackDistance + BacktrackMargin) == true)
 			{
 				hasHitInfo = true;
 			}
@@ -306,6 +331,14 @@ public class EnemyBullet : MonoBehaviour
 			return false;
 		}
 		return collider.transform == shooterRoot || collider.transform.IsChildOf(shooterRoot);
+	}
+
+	/// <summary>
+	/// 弾が当たらないコライダーか？（弾道エフェクト用の BulletEffect レイヤー）
+	/// </summary>
+	public static bool IsIgnoredCollider(Collider collider)
+	{
+		return collider.gameObject.layer == LayerMask.NameToLayer(BulletEffectLayerName);
 	}
 
 	/// <summary>
@@ -330,7 +363,7 @@ public class EnemyBullet : MonoBehaviour
 		if (collider != null && collider.CompareTag("Player"))//※間違ってオブジェクトの設定にレイヤーとタグを間違えるなよおれｗ
 		{
 			//ダメージ
-			var player = collider.GetComponentInParent<PlayerManagerPresenter>();
+			PlayerManagerPresenter player = collider.GetComponentInParent<PlayerManagerPresenter>();
 			if (player != null)
 			{
 				player.PlayerModel.HP.Damage(damage);
@@ -358,18 +391,18 @@ public class EnemyBullet : MonoBehaviour
 			return;
 		}
 
-		bool visible = (head - tail).sqrMagnitude > 0.0001f;
+		bool visible = MinSqrLength < (head - tail).sqrMagnitude;
 		lineRenderer.enabled = visible;
 		if (visible == true)
 		{
-			lineRenderer.SetPosition(0, tail);
-			lineRenderer.SetPosition(1, head);
+			lineRenderer.SetPosition(TracerTailIndex, tail);
+			lineRenderer.SetPosition(TracerHeadIndex, head);
 		}
 		this.transform.position = head;
 	}
 
 	/// <summary>
-	/// 弾を消す（プールに返却）
+	/// 弾を消す（プールがあればプールに返却、無ければ非表示にする）
 	/// </summary>
 	public void Finish()
 	{
@@ -387,11 +420,11 @@ public class EnemyBullet : MonoBehaviour
 			lineRenderer.enabled = false;
 		}
 
-		var callback = onFinished;
-		onFinished = null;
-		if (callback != null)
+		EnemyBulletPool returnPool = pool;
+		pool = null;
+		if (returnPool != null)
 		{
-			callback(this);
+			returnPool.ReleaseBullet(this);
 		}
 		else
 		{
