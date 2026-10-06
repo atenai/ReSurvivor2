@@ -32,7 +32,7 @@ public class EnemyBulletPool : MonoBehaviour
 			initBulletList.Add(objectPool.Get());
 		}
 
-		foreach (var initBullet in initBulletList)
+		foreach (EnemyBullet initBullet in initBulletList)
 		{
 			objectPool.Release(initBullet);
 		}
@@ -122,13 +122,13 @@ public class EnemyBulletPool : MonoBehaviour
 		CreatePool();
 		EnemyBullet bullet = objectPool.Get();
 		activeBullets.Add(bullet);
-		bullet.Launch(shooter, origin, direction, speed, range, damage, ReleaseBullet);
+		bullet.Launch(shooter, origin, direction, speed, range, damage, this);
 	}
 
 	/// <summary>
-	/// 弾が消えた時にプールへ返却する
+	/// 弾が消えた時にプールへ返却する（EnemyBullet.Finish から呼ばれる）
 	/// </summary>
-	void ReleaseBullet(EnemyBullet bullet)
+	public void ReleaseBullet(EnemyBullet bullet)
 	{
 		activeBullets.Remove(bullet);
 		objectPool.Release(bullet);
@@ -139,7 +139,7 @@ public class EnemyBulletPool : MonoBehaviour
 	/// </summary>
 	public void ReleaseAll()
 	{
-		for (int i = activeBullets.Count - 1; i >= 0; i--)
+		for (int i = activeBullets.Count - 1; 0 <= i; i--)
 		{
 			if (activeBullets[i] != null)
 			{
