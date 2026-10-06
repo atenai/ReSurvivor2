@@ -42,6 +42,10 @@ public class SoundManager : MonoBehaviour
 	[SerializeField] ShotGunReloadSEPool shotGunReloadSEPool;
 	public ShotGunReloadSEPool ShotGunReloadSEPool => shotGunReloadSEPool;
 
+	[Tooltip("弾がかすめた時の風切り音")]
+	[SerializeField] BulletFlybySEPool bulletFlybySEPool;
+	public BulletFlybySEPool BulletFlybySEPool => bulletFlybySEPool;
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
