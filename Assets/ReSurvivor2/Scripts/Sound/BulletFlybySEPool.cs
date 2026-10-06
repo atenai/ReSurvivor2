@@ -15,8 +15,10 @@ public class BulletFlybySEPool : MonoBehaviour
 
 	[Tooltip("風切り音を続けて鳴らす時の最短の間隔（ショットガンの散弾などで同時に何発もかすめた時に重なりすぎないようにする）")]
 	[SerializeField] float minInterval = 0.08f;
+	[Tooltip("一度でも鳴らしたか")]
+	bool hasPlayed = false;
 	[Tooltip("最後に鳴らした時間")]
-	float lastPlayTime = -1.0f;
+	float lastPlayTime = 0.0f;
 	public float LastPlayTime => lastPlayTime;
 	[Tooltip("最後に鳴らした位置")]
 	Vector3 lastPlayPosition;
@@ -40,7 +42,7 @@ public class BulletFlybySEPool : MonoBehaviour
 			initGameObjectList.Add(initGameObject);
 		}
 
-		foreach (var initGameObject in initGameObjectList)
+		foreach (GameObject initGameObject in initGameObjectList)
 		{
 			ReleaseGameObject(initGameObject);
 		}
@@ -110,10 +112,11 @@ public class BulletFlybySEPool : MonoBehaviour
 	public void Play(Vector3 position)
 	{
 		//間隔が短すぎる時は鳴らさない
-		if (lastPlayTime >= 0.0f && Time.time - lastPlayTime < minInterval)
+		if (hasPlayed == true && Time.time - lastPlayTime < minInterval)
 		{
 			return;
 		}
+		hasPlayed = true;
 		lastPlayTime = Time.time;
 		lastPlayPosition = position;
 
