@@ -15,27 +15,13 @@ public class SceneLoadManager : MonoBehaviour
 {
 	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static SceneLoadManager singletonInstance = null;
-	/// <summary>シングルトンのプロパティ（まだ無ければ常駐オブジェクトを作成する）</summary>
-	public static SceneLoadManager SingletonInstance
-	{
-		get
-		{
-			if (singletonInstance == null)
-			{
-				GameObject managerGameObject = new GameObject("SceneLoadManager");
-				singletonInstance = managerGameObject.AddComponent<SceneLoadManager>();
-			}
-			return singletonInstance;
-		}
-	}
+	/// <summary>シングルトンのプロパティ</summary>
+	public static SceneLoadManager SingletonInstance => singletonInstance;
 
 	/// <summary>
 	/// シーンを切り替え中か？（切り替えを受け付けてから次のシーンが読み込まれるまで）
 	/// </summary>
-	public static bool IsChangingScene => singletonInstance != null && singletonInstance.isChangingScene;
-
-	/// <summary>切り替えの条件が揃わない場合に、待たずに切り替えるまでの秒数</summary>
-	const float CanActivateTimeoutSeconds = 10.0f;
+	public static bool IsChangingScene => singletonInstance.isChangingScene;
 
 	/// <summary>
 	/// 読み込み要求
@@ -46,8 +32,6 @@ public class SceneLoadManager : MonoBehaviour
 		public LoadSceneMode mode;
 		/// <summary>読み込み進捗（0～1）を受け取る処理</summary>
 		public UnityAction<float> onProgress;
-		/// <summary>シーンを切り替えてよいか？（nullなら条件なし）</summary>
-		public Func<bool> canActivate;
 		/// <summary>シーンを切り替える直前の処理</summary>
 		public UnityAction onBeforeActivate;
 		/// <summary>追加読み込みしたシーンのルートオブジェクトを非表示にするか？</summary>
@@ -63,14 +47,15 @@ public class SceneLoadManager : MonoBehaviour
 
 	void Awake()
 	{
-		if (singletonInstance == null || singletonInstance == this)
+		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
+		if (singletonInstance == null)
 		{
-			singletonInstance = this;
+			singletonInstance = this;//thisというのは自分自身のインスタンスという意味になります。この場合、Playerのインスタンスという意味になります。
 			DontDestroyOnLoad(this.gameObject);//シーンを切り替えた時に破棄しない
 		}
 		else
 		{
-			Destroy(this.gameObject);
+			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
 		}
 	}
 
@@ -84,23 +69,14 @@ public class SceneLoadManager : MonoBehaviour
 		SceneManager.sceneLoaded -= OnSceneLoaded;
 	}
 
-	void OnDestroy()
-	{
-		if (singletonInstance == this)
-		{
-			singletonInstance = null;
-		}
-	}
-
 	/// <summary>
 	/// シーンを切り替える（Single読み込み）
 	/// </summary>
 	/// <param name="sceneName">次のシーン名</param>
 	/// <param name="onProgress">読み込み進捗（0～1）を受け取る処理</param>
-	/// <param name="canActivate">シーンを切り替えてよいか？（nullなら条件なし）</param>
 	/// <param name="onBeforeActivate">シーンを切り替える直前の処理</param>
 	/// <returns>受け付けたらtrue、他のシーンに切り替え中などで受け付けなかったらfalse</returns>
-	public bool LoadScene(string sceneName, UnityAction<float> onProgress = null, Func<bool> canActivate = null, UnityAction onBeforeActivate = null)
+	public bool LoadScene(string sceneName, UnityAction<float> onProgress = null, UnityAction onBeforeActivate = null)
 	{
 		if (isChangingScene == true)
 		{
@@ -108,13 +84,6 @@ public class SceneLoadManager : MonoBehaviour
 			return false;
 		}
 
-		if (Application.CanStreamedLevelBeLoaded(sceneName) == false)
-		{
-			Debug.LogError(sceneName + " が Build Settings に含まれていないか、名前が一致しません。");
-			return false;
-		}
-
-		//まだ始まっていない追加読み込みは今のシーン用なので取りやめる
 		requestQueue.Clear();
 		isChangingScene = true;
 		requestQueue.Enqueue(new LoadRequest
@@ -122,7 +91,6 @@ public class SceneLoadManager : MonoBehaviour
 			sceneName = sceneName,
 			mode = LoadSceneMode.Single,
 			onProgress = onProgress,
-			canActivate = canActivate,
 			onBeforeActivate = onBeforeActivate,
 		});
 		StartProcess();
@@ -142,12 +110,6 @@ public class SceneLoadManager : MonoBehaviour
 		if (isChangingScene == true)
 		{
 			Debug.LogWarning("シーン切り替え中のため追加読み込みを受け付けません: " + sceneName);
-			return false;
-		}
-
-		if (Application.CanStreamedLevelBeLoaded(sceneName) == false)
-		{
-			Debug.LogError(sceneName + " が Build Settings に含まれていないか、名前が一致しません。");
 			return false;
 		}
 
@@ -201,50 +163,26 @@ public class SceneLoadManager : MonoBehaviour
 	{
 		Debug.Log("<color=red>シーン読み込み開始: " + request.sceneName + "</color>");
 		AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(request.sceneName, LoadSceneMode.Single);
-		if (asyncOperation == null)
-		{
-			Debug.LogError("LoadSceneAsync failed for: " + request.sceneName);
-			isChangingScene = false;
-			yield break;
-		}
 
 		//読み込みが終わっても勝手にシーンが切り替わらないようにする
 		asyncOperation.allowSceneActivation = false;
 
-		//読み込み数値が0.9になるまで待つ（切り替えを許可するまでは0.9で止まる）
-		float lastProgress = -1.0f;
-		while (asyncOperation.progress < 0.9f)
+		//allowSceneActivation が false の時、読み込みが終わると progress はこの値で止まる（ここから先はシーンを切り替えると進む）
+		const float ActivationReadyProgress = 0.9f;
+		while (asyncOperation.progress < ActivationReadyProgress)
 		{
-			if (asyncOperation.progress != lastProgress)
-			{
-				lastProgress = asyncOperation.progress;
-				Debug.Log("<color=red>読み込み進捗: " + lastProgress * 100 + "%</color>");
-			}
-			InvokeProgress(request, asyncOperation.progress);
+			Debug.Log("<color=red>読み込み進捗: " + asyncOperation.progress * 100 + "%</color>");
+			request.onProgress?.Invoke(asyncOperation.progress);
 			yield return null;
 		}
 
 		//スライダーを満タンにして1フレーム表示する
-		//※WaitForEndOfFrameはエディターでGameビューが描画されていないと再開しないため使わない
-		Debug.Log("<color=red>読み込み進捗: 90%</color>");
-		InvokeProgress(request, 1.0f);
+		request.onProgress?.Invoke(float.MaxValue);
 		yield return null;
 
-		//切り替えの条件が揃うまで待つ（揃わない場合も時間切れで切り替える）
-		float waitStartTime = Time.realtimeSinceStartup;
-		while (CanActivate(request) == false)
-		{
-			if (CanActivateTimeoutSeconds <= Time.realtimeSinceStartup - waitStartTime)
-			{
-				Debug.LogWarning("切り替えの条件が揃わないまま時間切れになったため切り替えます: " + request.sceneName);
-				break;
-			}
-			yield return null;
-		}
+		request.onBeforeActivate?.Invoke();
 
-		InvokeBeforeActivate(request);
-
-		//シーンを切り替える（要求したオブジェクトが破棄されていても必ず許可する）
+		//シーンを切り替える
 		Debug.Log("<color=red>シーン切り替え: " + request.sceneName + "</color>");
 		asyncOperation.allowSceneActivation = true;
 		while (asyncOperation.isDone == false)
@@ -270,20 +208,49 @@ public class SceneLoadManager : MonoBehaviour
 			yield break;
 		}
 
-		Debug.Log("Start loading scene: " + request.sceneName);
+		Debug.Log("<color=red>シーン読み込み開始: " + request.sceneName + "</color>");
 		AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(request.sceneName, LoadSceneMode.Additive);
-		if (asyncOperation == null)
-		{
-			Debug.LogError("LoadSceneAsync failed for: " + request.sceneName);
-			yield break;
-		}
 
 		while (asyncOperation.isDone == false)
 		{
 			yield return null;
 		}
 
-		Debug.Log("Finished loading scene: " + request.sceneName);
+		Debug.Log("<color=red>シーン読み込み完了: " + request.sceneName + "</color>");
+	}
+
+	/// <summary>
+	/// 読み込み済みのシーンを名前で探す
+	/// </summary>
+	Scene FindLoadedScene(string sceneName)
+	{
+		for (int i = 0; i < SceneManager.sceneCount; i++)
+		{
+			Scene scene = SceneManager.GetSceneAt(i);
+			if (scene.name == sceneName && scene.isLoaded == true)
+			{
+				return scene;
+			}
+		}
+		return new Scene();
+	}
+
+	/// <summary>
+	/// 追加読み込みが終わった時の処理
+	/// </summary>
+	void OnAdditiveSceneLoaded(LoadRequest request, Scene scene)
+	{
+		if (request.isHideRootObjects == true)
+		{
+			//Startが呼ばれる前に非表示にして、表示するまでシーンの処理が動かないようにする
+			GameObject[] rootObjects = scene.GetRootGameObjects();
+			for (int i = 0; i < rootObjects.Length; i++)
+			{
+				rootObjects[i].SetActive(false);
+			}
+		}
+
+		request.onLoaded?.Invoke(scene);
 	}
 
 	/// <summary>
@@ -304,91 +271,6 @@ public class SceneLoadManager : MonoBehaviour
 		else
 		{
 			OnAdditiveSceneLoaded(currentRequest, scene);
-		}
-	}
-
-	/// <summary>
-	/// 追加読み込みが終わった時の処理
-	/// </summary>
-	void OnAdditiveSceneLoaded(LoadRequest request, Scene scene)
-	{
-		if (request.isHideRootObjects == true)
-		{
-			//Startが呼ばれる前に非表示にして、表示するまでシーンの処理が動かないようにする
-			GameObject[] rootObjects = scene.GetRootGameObjects();
-			for (int i = 0; i < rootObjects.Length; i++)
-			{
-				rootObjects[i].SetActive(false);
-			}
-		}
-
-		try
-		{
-			request.onLoaded?.Invoke(scene);
-		}
-		catch (Exception exception)
-		{
-			Debug.LogException(exception);
-		}
-	}
-
-	/// <summary>
-	/// 読み込み済みのシーンを名前で探す
-	/// </summary>
-	Scene FindLoadedScene(string sceneName)
-	{
-		for (int i = 0; i < SceneManager.sceneCount; i++)
-		{
-			Scene scene = SceneManager.GetSceneAt(i);
-			if (scene.name == sceneName && scene.isLoaded == true)
-			{
-				return scene;
-			}
-		}
-		return new Scene();
-	}
-
-	//要求元の処理で例外が起きても読み込みが止まらないようにする
-
-	void InvokeProgress(LoadRequest request, float progress)
-	{
-		try
-		{
-			request.onProgress?.Invoke(progress);
-		}
-		catch (Exception exception)
-		{
-			Debug.LogException(exception);
-		}
-	}
-
-	bool CanActivate(LoadRequest request)
-	{
-		if (request.canActivate == null)
-		{
-			return true;
-		}
-
-		try
-		{
-			return request.canActivate();
-		}
-		catch (Exception exception)
-		{
-			Debug.LogException(exception);
-			return true;
-		}
-	}
-
-	void InvokeBeforeActivate(LoadRequest request)
-	{
-		try
-		{
-			request.onBeforeActivate?.Invoke();
-		}
-		catch (Exception exception)
-		{
-			Debug.LogException(exception);
 		}
 	}
 }

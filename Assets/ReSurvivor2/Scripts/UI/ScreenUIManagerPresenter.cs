@@ -647,4 +647,33 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 		});
 		seq.Play();
 	}
+
+	/// <summary>
+	/// ロードUIを表示する
+	/// </summary>
+	public void ShowLoadingPanel()
+	{
+		//不透明にする
+		ScreenUIManagerPresenter.SingletonInstance.FadeOut();
+		//スライダーの値を最低にする
+		ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.SliderLoading.value = float.MinValue;
+		//ロードUIをOnにする
+		ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.PanelLoading.gameObject.SetActive(true);
+	}
+
+	/// <summary>
+	/// ロードUIを非表示にする
+	/// </summary>
+	public void HideLoadingPanel()
+	{
+		ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.PanelLoading.gameObject.SetActive(false);
+	}
+
+	/// <summary>
+	/// ロード数値をスライダーに反映する
+	/// </summary>
+	public void SetLoadingSliderValue(float progress)
+	{
+		ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.SliderLoading.value = progress;
+	}
 }

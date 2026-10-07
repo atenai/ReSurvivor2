@@ -17,7 +17,7 @@ public class LoadingNextStageScene : MonoBehaviour
 			{
 				//シーンの読み込みはSceneLoadManagerに任せる（このオブジェクトが破棄されても切り替えは必ず行われる）
 				//他のシーンに切り替え中などで受け付けられなかった場合は何もしない
-				bool isAccepted = SceneLoadManager.SingletonInstance.LoadScene(nextStage.ToString(), SetLoadingSliderValue, null, HideLoadingPanel);
+				bool isAccepted = SceneLoadManager.SingletonInstance.LoadScene(nextStage.ToString(), ScreenUIManagerPresenter.SingletonInstance.SetLoadingSliderValue, ScreenUIManagerPresenter.SingletonInstance.HideLoadingPanel);
 				if (isAccepted == false)
 				{
 					return;
@@ -27,7 +27,7 @@ public class LoadingNextStageScene : MonoBehaviour
 				//ロード中にプレイヤーが移動してロードトリガーに触り連続ロードを行わないようにするための処理
 				InGameManager.SingletonInstance.IsGamePlayReady = false;
 				SetPlayerSpawnPos(collider, spawnPos);
-				ShowLoadingPanel();
+				ScreenUIManagerPresenter.SingletonInstance.ShowLoadingPanel();
 			}
 		}
 	}
@@ -45,52 +45,5 @@ public class LoadingNextStageScene : MonoBehaviour
 		{
 			collider.gameObject.transform.position = new Vector3(0, 1, 0);
 		}
-	}
-
-	/// <summary>
-	/// ロードUIを表示する
-	/// </summary>
-	static void ShowLoadingPanel()
-	{
-		ScreenUIManagerPresenter screenUIManagerPresenter = ScreenUIManagerPresenter.SingletonInstance;
-		if (screenUIManagerPresenter == null)
-		{
-			return;
-		}
-
-		//不透明にする
-		screenUIManagerPresenter.FadeOut();
-		//スライダーの値を最低にする
-		screenUIManagerPresenter.ScreenUIView.SliderLoading.value = float.MinValue;
-		//ロードUIをOnにする
-		screenUIManagerPresenter.ScreenUIView.PanelLoading.gameObject.SetActive(true);
-	}
-
-	/// <summary>
-	/// ロード数値をスライダーに反映する
-	/// </summary>
-	static void SetLoadingSliderValue(float progress)
-	{
-		ScreenUIManagerPresenter screenUIManagerPresenter = ScreenUIManagerPresenter.SingletonInstance;
-		if (screenUIManagerPresenter == null)
-		{
-			return;
-		}
-
-		screenUIManagerPresenter.ScreenUIView.SliderLoading.value = progress;
-	}
-
-	/// <summary>
-	/// ロードUIを非表示にする（シーンを切り替える直前に呼ばれる）
-	/// </summary>
-	static void HideLoadingPanel()
-	{
-		ScreenUIManagerPresenter screenUIManagerPresenter = ScreenUIManagerPresenter.SingletonInstance;
-		if (screenUIManagerPresenter == null)
-		{
-			return;
-		}
-
-		screenUIManagerPresenter.ScreenUIView.PanelLoading.gameObject.SetActive(false);
 	}
 }
