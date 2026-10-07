@@ -85,6 +85,11 @@ public class EnemyBullet : MonoBehaviour
 	[Tooltip("区間の終点を表す割合")]
 	const float SegmentEnd = 1.0f;
 
+	[Tooltip("着弾音（パチュン）が鳴る、プレイヤーと着弾点の距離")]
+	const float NearImpactRadius = 5.0f;
+	[Tooltip("着弾音の判定に使うプレイヤーの高さ（体の真ん中あたり）")]
+	const float NearImpactHeight = 1.0f;
+
 	public bool IsActive => isActive;
 
 	/// <summary>
@@ -347,12 +352,37 @@ public class EnemyBullet : MonoBehaviour
 	void OnHit(RaycastHit hit)
 	{
 		DamagePlayer(hit.collider);
+		CheckNearImpact(hit);
 
 		//着弾エフェクト
 		if (EffectManager.SingletonInstance != null)
 		{
 			EffectManager.SingletonInstance.ImpactEffect(hit);
 		}
+	}
+
+	/// <summary>
+	/// プレイヤーには当たらず、プレイヤーの近く（NearImpactRadius 以内）に着弾した時に、着弾した位置から「パチュン」という着弾音を鳴らす
+	/// （撃たれている怖さと、どこに撃ち込まれたかを音で分かるようにする）
+	/// </summary>
+	void CheckNearImpact(RaycastHit hit)
+	{
+		if (hit.collider == null || hit.collider.CompareTag("Player") == true)
+		{
+			return;
+		}
+		if (PlayerManagerPresenter.SingletonInstance == null || SoundManager.SingletonInstance == null || SoundManager.SingletonInstance.BulletImpactSEPool == null)
+		{
+			return;
+		}
+
+		Vector3 playerCenter = PlayerManagerPresenter.SingletonInstance.transform.position + Vector3.up * NearImpactHeight;
+		if (NearImpactRadius * NearImpactRadius < (hit.point - playerCenter).sqrMagnitude)
+		{
+			return;
+		}
+
+		SoundManager.SingletonInstance.BulletImpactSEPool.Play(hit.point);
 	}
 
 	/// <summary>

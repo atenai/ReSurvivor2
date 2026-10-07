@@ -46,6 +46,10 @@ public class SoundManager : MonoBehaviour
 	[SerializeField] BulletFlybySEPool bulletFlybySEPool;
 	public BulletFlybySEPool BulletFlybySEPool => bulletFlybySEPool;
 
+	[Tooltip("エネミーの弾がプレイヤーの近くに着弾した時の着弾音")]
+	[SerializeField] BulletImpactSEPool bulletImpactSEPool;
+	public BulletImpactSEPool BulletImpactSEPool => bulletImpactSEPool;
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
