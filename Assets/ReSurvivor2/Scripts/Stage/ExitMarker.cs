@@ -13,9 +13,9 @@ using UnityEngine.UI;
 public class ExitMarker : MonoBehaviour
 {
 	[Tooltip("この目印を出す出口")]
-	[SerializeField] LoadingNextStageScene exit;
+	[SerializeField] LoadingNextStageScene loadingNextStageScene;
 	[Tooltip("出口の当たり判定（LoadNextStageSceneObject の BoxCollider）")]
-	[SerializeField] BoxCollider exitTrigger;
+	[SerializeField] BoxCollider boxCollider;
 
 	[Header("UI")]
 	[Tooltip("目印のワールド空間のキャンバス（プレハブでは非表示にしておき、Start で位置を決めてから表示する）")]
@@ -61,8 +61,6 @@ public class ExitMarker : MonoBehaviour
 	const float WallCheckLowHeight = 0.3f;
 	[Tooltip("目印の大きさの倍率の最小（近い時は実際の大きさのまま）")]
 	const float MinSizeScale = 1.0f;
-	[Tooltip("カメラの向きを計算できないほど近い時の、長さの2乗の下限")]
-	const float MinFacingSqrLength = 0.0001f;
 	[Tooltip("エリア番号を2桁で表示する書式（例: 03）")]
 	const string AreaNumberFormat = "00";
 	[Tooltip("エリア名の上に小さく出す見出し（TextMeshPro のリッチテキストで小さくする）")]
@@ -85,14 +83,8 @@ public class ExitMarker : MonoBehaviour
 
 	void Start()
 	{
-		if (exit == null || exitTrigger == null)
-		{
-			Debug.LogError("ExitMarker：出口が設定されていません。");
-			return;
-		}
-
 		CalculateLayout();
-		SetDestination(exit.NextStage);
+		SetDestination(loadingNextStageScene.NextStage);
 		//プレハブで作った真ん中のすき間（横線の左半分の右端の位置）を覚えておく
 		centerGap = Mathf.Abs(barLeft.anchoredPosition.x);
 		markerCanvas.position = barCenter;
@@ -117,12 +109,12 @@ public class ExitMarker : MonoBehaviour
 	/// </summary>
 	void CalculateLayout()
 	{
-		Transform triggerTransform = exitTrigger.transform;
-		Vector3 center = triggerTransform.TransformPoint(exitTrigger.center);
+		Transform triggerTransform = boxCollider.transform;
+		Vector3 center = triggerTransform.TransformPoint(boxCollider.center);
 		//箱の横（X）・奥（Z）・高さ（Y）の辺を、回転と拡大を含めたワールドの向きと長さにする
-		Vector3 sideX = triggerTransform.TransformVector(new Vector3(exitTrigger.size.x, 0.0f, 0.0f));
-		Vector3 sideZ = triggerTransform.TransformVector(new Vector3(0.0f, 0.0f, exitTrigger.size.z));
-		Vector3 sideY = triggerTransform.TransformVector(new Vector3(0.0f, exitTrigger.size.y, 0.0f));
+		Vector3 sideX = triggerTransform.TransformVector(new Vector3(boxCollider.size.x, 0.0f, 0.0f));
+		Vector3 sideZ = triggerTransform.TransformVector(new Vector3(0.0f, 0.0f, boxCollider.size.z));
+		Vector3 sideY = triggerTransform.TransformVector(new Vector3(0.0f, boxCollider.size.y, 0.0f));
 		//長い方の辺に沿って横線を張る
 		Vector3 widthSide = sideZ.sqrMagnitude <= sideX.sqrMagnitude ? sideX : sideZ;
 		widthSide.y = 0.0f;
@@ -256,24 +248,8 @@ public class ExitMarker : MonoBehaviour
 			return;
 		}
 
-		//文字が左右反転しないように、横線の右向きをカメラの右向きにそろえる
-		Vector3 right = barDirection;
-		if (Vector3.Dot(right, mainCamera.transform.right) < 0.0f)
-		{
-			right = -right;
-		}
-
-		//横線を軸にして回して、カメラの方を向かせる（横線は出口の幅の向きのまま）
-		Vector3 toMarker = barCenter - mainCamera.transform.position;
-		Vector3 forward = toMarker - right * Vector3.Dot(toMarker, right);
-		if (forward.sqrMagnitude < MinFacingSqrLength)
-		{
-			return;
-		}
-		//Cross(forward, right) は forward と right の両方に直角な向き（ここでは上向き）
-		markerCanvas.rotation = Quaternion.LookRotation(forward, Vector3.Cross(forward, right));
-
 		//遠くでも線の太さや文字が小さくなりすぎないように、距離に合わせて大きくする（横線の長さは出口の幅のまま）
+		Vector3 toMarker = barCenter - mainCamera.transform.position;
 		float sizeScale = Mathf.Max(MinSizeScale, toMarker.magnitude / constantSizeDistance);
 		markerCanvas.localScale = Vector3.one * (sizeScale / CanvasUnitsPerMeter);
 		SetBarLength(barLength * Half * CanvasUnitsPerMeter / sizeScale);
