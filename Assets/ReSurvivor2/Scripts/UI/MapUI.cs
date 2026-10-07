@@ -224,9 +224,10 @@ public class MapUI : MonoBehaviour
 
 	/// <summary>
 	/// ステージ番号のエリアを取得（マップにないステージは null）
+	/// ExitMarker（出口の黄色い横線の目印）も、行き先のエリア名とアイコンを出すのに使う
 	/// </summary>
 	/// <param name="stageNumber">ステージ番号</param>
-	AreaNode GetAreaNode(int stageNumber)
+	public AreaNode GetAreaNode(int stageNumber)
 	{
 		if (areaNodes == null || stageNumber < 0 || areaNodes.Length <= stageNumber)
 		{
