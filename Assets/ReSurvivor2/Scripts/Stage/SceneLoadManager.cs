@@ -6,36 +6,32 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// シーンの読み込みを一か所で管理するマネージャークラス（常駐）
+/// インゲームのシーンの読み込みを一か所で管理するマネージャークラス
 /// ・読み込みは要求された順番に1つずつ行う
 /// ・シーンの切り替え（Single読み込み）は同時に1つしか受け付けない
 /// ・読み込みを要求したオブジェクトが途中で破棄されても、シーンの切り替えは必ず許可する
+/// ・他のインゲームのマネージャーと同じく各ステージのヒエラルキーに置き、アウトゲームに移動した時に OutGameBase で破棄する
 /// </summary>
 public class SceneLoadManager : MonoBehaviour
 {
 	/// <summary> シングルトンで作成（ゲーム中に１つのみにする）</summary>
 	static SceneLoadManager singletonInstance = null;
-	/// <summary>シングルトンのプロパティ（まだ無ければ常駐オブジェクトを作成する）</summary>
-	public static SceneLoadManager SingletonInstance
-	{
-		get
-		{
-			if (singletonInstance == null)
-			{
-				GameObject managerGameObject = new GameObject("SceneLoadManager");
-				singletonInstance = managerGameObject.AddComponent<SceneLoadManager>();
-			}
-			return singletonInstance;
-		}
-	}
+	/// <summary>シングルトンのプロパティ</summary>
+	public static SceneLoadManager SingletonInstance => singletonInstance;
 
 	/// <summary>
 	/// シーンを切り替え中か？（切り替えを受け付けてから次のシーンが読み込まれるまで）
 	/// </summary>
-	public static bool IsChangingScene => singletonInstance != null && singletonInstance.isChangingScene;
+	public static bool IsChangingScene => singletonInstance.isChangingScene;
 
-	/// <summary>切り替えの条件が揃わない場合に、待たずに切り替えるまでの秒数</summary>
-	const float CanActivateTimeoutSeconds = 10.0f;
+	[Tooltip("allowSceneActivation が false の時、読み込みが終わると progress はこの値で止まる（ここから先はシーンを切り替えると進む）")]
+	const float ActivationReadyProgress = 0.9f;
+	[Tooltip("スライダーを満タンにする時の進捗")]
+	const float FullProgress = 1.0f;
+	[Tooltip("読み込み進捗をまだ一度もログに出していないことを表す値（進捗は 0〜0.9 なので、この値なら最初の 0% も必ずログに出る）")]
+	const float NotLoggedProgress = -1.0f;
+	[Tooltip("ログに出す時に進捗（0〜1）をパーセントにする倍率")]
+	const float PercentRate = 100.0f;
 
 	/// <summary>
 	/// 読み込み要求
@@ -46,8 +42,6 @@ public class SceneLoadManager : MonoBehaviour
 		public LoadSceneMode mode;
 		/// <summary>読み込み進捗（0～1）を受け取る処理</summary>
 		public UnityAction<float> onProgress;
-		/// <summary>シーンを切り替えてよいか？（nullなら条件なし）</summary>
-		public Func<bool> canActivate;
 		/// <summary>シーンを切り替える直前の処理</summary>
 		public UnityAction onBeforeActivate;
 		/// <summary>追加読み込みしたシーンのルートオブジェクトを非表示にするか？</summary>
@@ -63,14 +57,15 @@ public class SceneLoadManager : MonoBehaviour
 
 	void Awake()
 	{
-		if (singletonInstance == null || singletonInstance == this)
+		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
+		if (singletonInstance == null)
 		{
 			singletonInstance = this;
 			DontDestroyOnLoad(this.gameObject);//シーンを切り替えた時に破棄しない
 		}
 		else
 		{
-			Destroy(this.gameObject);
+			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
 		}
 	}
 
@@ -84,33 +79,18 @@ public class SceneLoadManager : MonoBehaviour
 		SceneManager.sceneLoaded -= OnSceneLoaded;
 	}
 
-	void OnDestroy()
-	{
-		if (singletonInstance == this)
-		{
-			singletonInstance = null;
-		}
-	}
-
 	/// <summary>
 	/// シーンを切り替える（Single読み込み）
 	/// </summary>
 	/// <param name="sceneName">次のシーン名</param>
 	/// <param name="onProgress">読み込み進捗（0～1）を受け取る処理</param>
-	/// <param name="canActivate">シーンを切り替えてよいか？（nullなら条件なし）</param>
 	/// <param name="onBeforeActivate">シーンを切り替える直前の処理</param>
-	/// <returns>受け付けたらtrue、他のシーンに切り替え中などで受け付けなかったらfalse</returns>
-	public bool LoadScene(string sceneName, UnityAction<float> onProgress = null, Func<bool> canActivate = null, UnityAction onBeforeActivate = null)
+	/// <returns>受け付けたらtrue、他のシーンに切り替え中で受け付けなかったらfalse</returns>
+	public bool LoadScene(string sceneName, UnityAction<float> onProgress = null, UnityAction onBeforeActivate = null)
 	{
 		if (isChangingScene == true)
 		{
 			Debug.LogWarning("シーン切り替え中のため読み込みを受け付けません: " + sceneName);
-			return false;
-		}
-
-		if (Application.CanStreamedLevelBeLoaded(sceneName) == false)
-		{
-			Debug.LogError(sceneName + " が Build Settings に含まれていないか、名前が一致しません。");
 			return false;
 		}
 
@@ -122,7 +102,6 @@ public class SceneLoadManager : MonoBehaviour
 			sceneName = sceneName,
 			mode = LoadSceneMode.Single,
 			onProgress = onProgress,
-			canActivate = canActivate,
 			onBeforeActivate = onBeforeActivate,
 		});
 		StartProcess();
@@ -142,12 +121,6 @@ public class SceneLoadManager : MonoBehaviour
 		if (isChangingScene == true)
 		{
 			Debug.LogWarning("シーン切り替え中のため追加読み込みを受け付けません: " + sceneName);
-			return false;
-		}
-
-		if (Application.CanStreamedLevelBeLoaded(sceneName) == false)
-		{
-			Debug.LogError(sceneName + " が Build Settings に含まれていないか、名前が一致しません。");
 			return false;
 		}
 
@@ -212,13 +185,14 @@ public class SceneLoadManager : MonoBehaviour
 		asyncOperation.allowSceneActivation = false;
 
 		//読み込み数値が0.9になるまで待つ（切り替えを許可するまでは0.9で止まる）
-		float lastProgress = -1.0f;
-		while (asyncOperation.progress < 0.9f)
+		//進捗が変わった時だけログに出す（lastProgress は前回ログに出した進捗）
+		float lastProgress = NotLoggedProgress;
+		while (asyncOperation.progress < ActivationReadyProgress)
 		{
 			if (asyncOperation.progress != lastProgress)
 			{
 				lastProgress = asyncOperation.progress;
-				Debug.Log("<color=red>読み込み進捗: " + lastProgress * 100 + "%</color>");
+				Debug.Log("<color=red>読み込み進捗: " + lastProgress * PercentRate + "%</color>");
 			}
 			InvokeProgress(request, asyncOperation.progress);
 			yield return null;
@@ -226,21 +200,9 @@ public class SceneLoadManager : MonoBehaviour
 
 		//スライダーを満タンにして1フレーム表示する
 		//※WaitForEndOfFrameはエディターでGameビューが描画されていないと再開しないため使わない
-		Debug.Log("<color=red>読み込み進捗: 90%</color>");
-		InvokeProgress(request, 1.0f);
+		Debug.Log("<color=red>読み込み進捗: " + ActivationReadyProgress * PercentRate + "%</color>");
+		InvokeProgress(request, FullProgress);
 		yield return null;
-
-		//切り替えの条件が揃うまで待つ（揃わない場合も時間切れで切り替える）
-		float waitStartTime = Time.realtimeSinceStartup;
-		while (CanActivate(request) == false)
-		{
-			if (CanActivateTimeoutSeconds <= Time.realtimeSinceStartup - waitStartTime)
-			{
-				Debug.LogWarning("切り替えの条件が揃わないまま時間切れになったため切り替えます: " + request.sceneName);
-				break;
-			}
-			yield return null;
-		}
 
 		InvokeBeforeActivate(request);
 
@@ -359,24 +321,6 @@ public class SceneLoadManager : MonoBehaviour
 		catch (Exception exception)
 		{
 			Debug.LogException(exception);
-		}
-	}
-
-	bool CanActivate(LoadRequest request)
-	{
-		if (request.canActivate == null)
-		{
-			return true;
-		}
-
-		try
-		{
-			return request.canActivate();
-		}
-		catch (Exception exception)
-		{
-			Debug.LogException(exception);
-			return true;
 		}
 	}
 

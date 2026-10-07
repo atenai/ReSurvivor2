@@ -25,6 +25,11 @@ public class OutGameBase : MonoBehaviour
 	[SerializeField] protected string nextSceneName;
 	bool isLoadOnce = false;
 
+	[Tooltip("allowSceneActivation が false の時、読み込みが終わると progress はこの値で止まる（ここから先はシーンを切り替えると進む）")]
+	const float ActivationReadyProgress = 0.9f;
+	[Tooltip("スライダーを満タンにする時の進捗")]
+	const float FullProgress = 1.0f;
+
 	protected void Start()
 	{
 		//インゲームのマネージャークラスを必ずデストロイする
@@ -79,6 +84,11 @@ public class OutGameBase : MonoBehaviour
 			Destroy(EnemyManager.SingletonInstance.gameObject);
 		}
 
+		if (SceneLoadManager.SingletonInstance != null)
+		{
+			Destroy(SceneLoadManager.SingletonInstance.gameObject);
+		}
+
 		//シェーダーをロード
 		ShaderLoad();
 	}
@@ -101,11 +111,41 @@ public class OutGameBase : MonoBehaviour
 	{
 		if (isLoadOnce == false)
 		{
-			//シーンの読み込みはSceneLoadManagerに任せる（このシーンが破棄されても切り替えは必ず行われる）
-			//シーン切り替え中などで受け付けられなかった場合は、もう一度押せるようにする
-			//シェーダーロードが1と同じかそれ以上になったらシーンを切り替える
-			isLoadOnce = SceneLoadManager.SingletonInstance.LoadScene(nextSceneName, SetSceneLoadingSliderValue, IsShaderWarmupCompleted);
+			isLoadOnce = true;
+			StartCoroutine(SceneLoad(nextSceneName));
 		}
+	}
+
+	/// <summary>
+	/// シーンをロードする
+	/// （SceneLoadManager はインゲームのマネージャーなので Start で破棄している。アウトゲームではここでロードする）
+	/// </summary>
+	/// <param name="nextSceneName">次にロードするシーン名</param>
+	IEnumerator SceneLoad(string nextSceneName)
+	{
+		//スライダーの値を最低にする
+		SetSceneLoadingSliderValue(float.MinValue);
+
+		//シーンをロード
+		AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(nextSceneName);
+		//シーンが勝手に切り替わらないようにする
+		asyncOperation.allowSceneActivation = false;
+
+		//ロード数値が0.9になる かつ シェーダーロードが終わる まで待つ（必ず両方の条件が揃ってから切り替える）
+		while (asyncOperation.progress < ActivationReadyProgress || IsShaderWarmupCompleted() == false)
+		{
+			//ロード数値をスライダーに反映
+			SetSceneLoadingSliderValue(asyncOperation.progress);
+			yield return null;
+		}
+
+		//スライダーを満タンにして1フレーム表示する
+		//※WaitForEndOfFrameはエディターでGameビューが描画されていないと再開しないため使わない
+		SetSceneLoadingSliderValue(FullProgress);
+		yield return null;
+
+		//シーンを切り替える
+		asyncOperation.allowSceneActivation = true;
 	}
 
 	/// <summary>

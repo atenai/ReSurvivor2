@@ -16,8 +16,10 @@ public class LoadingNextStageScene : MonoBehaviour
 			if (isLoadOnce == false)
 			{
 				//シーンの読み込みはSceneLoadManagerに任せる（このオブジェクトが破棄されても切り替えは必ず行われる）
-				//他のシーンに切り替え中などで受け付けられなかった場合は何もしない
-				bool isAccepted = SceneLoadManager.SingletonInstance.LoadScene(nextStage.ToString(), SetLoadingSliderValue, null, HideLoadingPanel);
+				//受け付けられないのは、別の出口ですでにシーンの切り替えが始まっている時だけ
+				//（その時はプレイヤーは IsGamePlayReady = false で動けないので、この出口を通り越すことはない。ここでは何もしない）
+				//※ゲームクリアー・ゲームオーバーの事前読み込み（追加読み込み）中は受け付けられる
+				bool isAccepted = SceneLoadManager.SingletonInstance.LoadScene(nextStage.ToString(), SetLoadingSliderValue, HideLoadingPanel);
 				if (isAccepted == false)
 				{
 					return;
