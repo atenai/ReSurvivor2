@@ -4,6 +4,7 @@ public class LoadingNextStageScene : MonoBehaviour
 {
 	[Tooltip("次のステージ名")]
 	[SerializeField] EnumManager.StageTYPE nextStage;
+	public EnumManager.StageTYPE NextStage => nextStage;
 	[SerializeField] GameObject spawnPos;
 	[Tooltip("連続ロードしないための変数")]
 	bool isLoadOnce = false;
