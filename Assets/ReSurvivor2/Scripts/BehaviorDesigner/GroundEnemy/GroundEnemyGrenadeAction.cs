@@ -48,8 +48,8 @@ public class GroundEnemyGrenadeAction : Action
 	{
 		groundEnemy = this.GetComponent<GroundEnemy>();
 
-		groundEnemy.InitAnimation();
-		groundEnemy.Animator.SetBool("b_isGrenadeEquip", true);
+		groundEnemy.GroundEnemyAnimation.InitAnimation();
+		groundEnemy.GroundEnemyAnimation.Animator.SetBool("b_isGrenadeEquip", true);
 		InitMove();
 		InitThrow();
 	}
@@ -80,17 +80,17 @@ public class GroundEnemyGrenadeAction : Action
 		if (groundEnemy.IsChase == false && isThrow == false && isCancel == false)
 		{
 			isCancel = true;
-			groundEnemy.InitAnimation();
+			groundEnemy.GroundEnemyAnimation.InitAnimation();
 		}
 
 		//GetCurrentAnimatorStateInfoは今再生中のステート、GetNextAnimatorStateInfoは切り替え中（ブレンド中）の切り替え先のステートの情報を返す
-		AnimatorStateInfo currentState = groundEnemy.Animator.GetCurrentAnimatorStateInfo(BaseLayer);
-		AnimatorStateInfo nextState = groundEnemy.Animator.GetNextAnimatorStateInfo(BaseLayer);
+		AnimatorStateInfo currentState = groundEnemy.GroundEnemyAnimation.Animator.GetCurrentAnimatorStateInfo(BaseLayer);
+		AnimatorStateInfo nextState = groundEnemy.GroundEnemyAnimation.Animator.GetNextAnimatorStateInfo(BaseLayer);
 
 		//構えるアニメーションに切り替わり始めたら、銃を左手に持ち替える（右手でグレネードを投げるため）
 		if (currentState.IsName(EquipStateName) == true || nextState.IsName(EquipStateName) == true)
 		{
-			groundEnemy.HoldWeaponInLeftHand();
+			groundEnemy.GroundEnemyAnimation.HoldWeaponInLeftHand();
 		}
 
 		//投げるアニメーションが腕を振り下ろす所まで進んだら、グレネードを手から離す
@@ -98,16 +98,16 @@ public class GroundEnemyGrenadeAction : Action
 		{
 			isRelease = true;
 			//投げ終わった後に、もう一度構えるアニメーションに戻らないようにする
-			groundEnemy.Animator.SetBool("b_isGrenadeEquip", false);
+			groundEnemy.GroundEnemyAnimation.Animator.SetBool("b_isGrenadeEquip", false);
 			GrenadeSpawn();
 			groundEnemy.CurrentGrenade = groundEnemy.CurrentGrenade - 1;//現在のグレネード数を-1する
 		}
 
 		//投げ終わって（または構えるのをやめて）待機アニメーションに戻りきったら、銃を右手に戻してタスクを終了する
-		if ((isRelease == true || isCancel == true) && currentState.IsName(IdleStateName) == true && groundEnemy.Animator.IsInTransition(BaseLayer) == false)
+		if ((isRelease == true || isCancel == true) && currentState.IsName(IdleStateName) == true && groundEnemy.GroundEnemyAnimation.Animator.IsInTransition(BaseLayer) == false)
 		{
-			groundEnemy.HoldWeaponInRightHand();
-			groundEnemy.InitAnimation();
+			groundEnemy.GroundEnemyAnimation.HoldWeaponInRightHand();
+			groundEnemy.GroundEnemyAnimation.InitAnimation();
 			//投擲終了
 			return TaskStatus.Success;
 		}
@@ -147,7 +147,7 @@ public class GroundEnemyGrenadeAction : Action
 		}
 
 		//それ以外の理由で途中で中断された場合は、銃を右手に戻しておく
-		groundEnemy.HoldWeaponInRightHand();
+		groundEnemy.GroundEnemyAnimation.HoldWeaponInRightHand();
 	}
 
 	/// <summary>
@@ -183,13 +183,13 @@ public class GroundEnemyGrenadeAction : Action
 		count = count + Time.deltaTime;
 
 		//構えるアニメーションを最後まで再生して、グレネードを肩の上まで持ち上げ終わったか？
-		AnimatorStateInfo currentState = groundEnemy.Animator.GetCurrentAnimatorStateInfo(BaseLayer);
-		bool isEquipEnd = currentState.IsName(EquipStateName) == true && EquipEndNormalizedTime <= currentState.normalizedTime && groundEnemy.Animator.IsInTransition(BaseLayer) == false;
+		AnimatorStateInfo currentState = groundEnemy.GroundEnemyAnimation.Animator.GetCurrentAnimatorStateInfo(BaseLayer);
+		bool isEquipEnd = currentState.IsName(EquipStateName) == true && EquipEndNormalizedTime <= currentState.normalizedTime && groundEnemy.GroundEnemyAnimation.Animator.IsInTransition(BaseLayer) == false;
 
 		if (attackTime < count && isEquipEnd == true)
 		{
 			isThrow = true;
-			groundEnemy.Animator.SetTrigger("t_isGrenadeThrow");
+			groundEnemy.GroundEnemyAnimation.Animator.SetTrigger("t_isGrenadeThrow");
 		}
 	}
 
@@ -204,7 +204,7 @@ public class GroundEnemyGrenadeAction : Action
 		}
 
 		//手を離す瞬間の右手の位置から投げる
-		Vector3 spawnPosition = groundEnemy.Animator.GetBoneTransform(HumanBodyBones.RightHand).position;
+		Vector3 spawnPosition = groundEnemy.GroundEnemyAnimation.Animator.GetBoneTransform(HumanBodyBones.RightHand).position;
 		GameObject localGameObject = UnityEngine.Object.Instantiate(grenadeGameObjectPrefab, spawnPosition, this.transform.rotation);
 
 		//投げた本人の体のコライダーとはぶつからないようにする
