@@ -9900,7 +9900,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4224995513277155759, guid: 055073063f1572549b56eedcbab1e8e9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.7
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 4224995513277155759, guid: 055073063f1572549b56eedcbab1e8e9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -11457,9 +11457,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1879904463516481938, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -400
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887368719608437958, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078692261928778650, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 377
+      objectReference: {fileID: 0}
     - target: {fileID: 4162473275932356503, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_Name
       value: LoadNextStageSceneParent
+      objectReference: {fileID: 0}
+    - target: {fileID: 5818784868603880339, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 377
+      objectReference: {fileID: 0}
+    - target: {fileID: 6414264561867679179, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.125
+      objectReference: {fileID: 0}
+    - target: {fileID: 6449527853449128758, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6617248888777553093, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: nextStage
