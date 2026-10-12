@@ -7927,13 +7927,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1879904463516481938, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -450
+      objectReference: {fileID: 0}
     - target: {fileID: 3516955404163393452, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_LocalPosition.z
       value: 23
       objectReference: {fileID: 0}
+    - target: {fileID: 3887368719608437958, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 450
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078692261928778650, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 427
+      objectReference: {fileID: 0}
     - target: {fileID: 4162473275932356503, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_Name
       value: LoadNextStageSceneParent (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5818784868603880339, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 427
+      objectReference: {fileID: 0}
+    - target: {fileID: 6414264561867679179, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.11111111
       objectReference: {fileID: 0}
     - target: {fileID: 6449527853449128758, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_LocalScale.x
@@ -8513,6 +8533,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1879904463516481938, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -600.0003
+      objectReference: {fileID: 0}
     - target: {fileID: 3516955404163393452, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_LocalPosition.x
       value: 18
@@ -8521,9 +8545,29 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3887368719608437958, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 600.0003
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078692261928778650, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 577.0003
+      objectReference: {fileID: 0}
     - target: {fileID: 4162473275932356503, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_Name
       value: LoadNextStageSceneParent (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5818784868603880339, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 577.0003
+      objectReference: {fileID: 0}
+    - target: {fileID: 6414264561867679179, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.08333328
+      objectReference: {fileID: 0}
+    - target: {fileID: 6414264561867679179, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.9999995
       objectReference: {fileID: 0}
     - target: {fileID: 6449527853449128758, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_LocalScale.x
@@ -65368,9 +65412,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1879904463516481938, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -400
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887368719608437958, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078692261928778650, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 377
+      objectReference: {fileID: 0}
     - target: {fileID: 4162473275932356503, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_Name
       value: LoadNextStageSceneParent
+      objectReference: {fileID: 0}
+    - target: {fileID: 5818784868603880339, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 377
+      objectReference: {fileID: 0}
+    - target: {fileID: 6414264561867679179, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.125
       objectReference: {fileID: 0}
     - target: {fileID: 6449527853449128758, guid: dcfd53b0a82fb324d9087902362b52ae, type: 3}
       propertyPath: m_LocalScale.x
