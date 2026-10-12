@@ -106,6 +106,7 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 		UpdateDamageEffect();
 		UpdateHpHealEffect();
 		UpdateStaminaHealEffect();
+		UpdateWeaponQuickSelect();
 
 		if (Input.GetKeyDown(KeyCode.M) || Input.GetButtonDown("XInput Pause"))
 		{
@@ -342,6 +343,67 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 		seq.AppendInterval(staySeconds);
 		seq.Append(screenUIView.SaveNowText.DOFade(0f, fadeDuration));
 		seq.Play();
+	}
+
+	/// <summary>
+	/// 武器クイックセレクトUI（十字キーの武器アイコンと弾数）を一時的に表示する
+	/// 押している間ずっと呼ばれても、表示時間をリセットするだけなので表示が途切れない
+	/// </summary>
+	public void ShowWeaponQuickSelect()
+	{
+		screenUIModel.WeaponQuickSelectStayTimer = screenUIModel.WeaponQuickSelectStayTime;
+	}
+
+	/// <summary>
+	/// 武器クイックセレクトUIの表示処理
+	/// </summary>
+	void UpdateWeaponQuickSelect()
+	{
+		//表示中のアルファ値
+		const float Show_Alpha = 1.0f;
+		//非表示のアルファ値
+		const float Hide_Alpha = 0.0f;
+
+		if (0.0f < screenUIModel.WeaponQuickSelectStayTimer)
+		{
+			//表示時間中はフェードインして表示し続ける
+			screenUIModel.WeaponQuickSelectStayTimer = screenUIModel.WeaponQuickSelectStayTimer - Time.deltaTime;
+			screenUIView.WeaponQuickSelect.alpha = Mathf.MoveTowards(screenUIView.WeaponQuickSelect.alpha, Show_Alpha, screenUIModel.WeaponQuickSelectFadeInSpeed * Time.deltaTime);
+		}
+		else
+		{
+			//表示時間が終わったらフェードアウトする
+			screenUIView.WeaponQuickSelect.alpha = Mathf.MoveTowards(screenUIView.WeaponQuickSelect.alpha, Hide_Alpha, screenUIModel.WeaponQuickSelectFadeOutSpeed * Time.deltaTime);
+		}
+
+		//見えていない時は中身を更新しない
+		if (screenUIView.WeaponQuickSelect.alpha <= Hide_Alpha)
+		{
+			return;
+		}
+
+		//銃のスロット：今持っている銃を選択中にして、弾数を表示する
+		GunFacade gunFacade = PlayerCameraManager.SingletonInstance.GetGunFacade;
+		UpdateWeaponQuickSelectGunSlot(screenUIView.HandGunSlot, gunFacade, EnumManager.GunTYPE.HandGun);
+		UpdateWeaponQuickSelectGunSlot(screenUIView.AssaultRifleSlot, gunFacade, EnumManager.GunTYPE.AssaultRifle);
+		UpdateWeaponQuickSelectGunSlot(screenUIView.ShotGunSlot, gunFacade, EnumManager.GunTYPE.ShotGun);
+
+		//地雷のスロット：選択する物ではないので、所持数だけを表示する
+		screenUIView.MineSlot.SetSelected(false);
+		screenUIView.MineSlot.SetCountText(PlayerManagerPresenter.SingletonInstance.PlayerModel.CurrentMine);
+	}
+
+	/// <summary>
+	/// 武器クイックセレクトUIの銃のスロット1つ分を更新する
+	/// </summary>
+	/// <param name="slot">更新するスロット</param>
+	/// <param name="gunFacade">ガンファサード</param>
+	/// <param name="gunTYPE">このスロットの銃のタイプ</param>
+	void UpdateWeaponQuickSelectGunSlot(WeaponQuickSelectSlot slot, GunFacade gunFacade, EnumManager.GunTYPE gunTYPE)
+	{
+		GunBase gun = gunFacade.FindGunBase(gunTYPE);
+		slot.SetSelected(gunFacade.GetGunTYPE == gunTYPE);
+		slot.SetAmmoText(gun.CurrentMagazine, gun.CurrentAmmo);
 	}
 
 	/// <summary>

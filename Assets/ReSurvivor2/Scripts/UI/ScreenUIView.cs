@@ -19,6 +19,27 @@ public class ScreenUIView : MonoBehaviour
     [SerializeField] Image imageHitReticule;
     public Image ImageHitReticule => imageHitReticule;
 
+    [Header("武器クイックセレクト")]
+    [Tooltip("武器切り替え時に一時的に表示する十字キーの武器UI全体（CanvasGroupのアルファ値でまとめてフェードする）")]
+    [SerializeField] CanvasGroup weaponQuickSelect;
+    public CanvasGroup WeaponQuickSelect => weaponQuickSelect;
+
+    [Tooltip("十字キー右：ハンドガンのスロット")]
+    [SerializeField] WeaponQuickSelectSlot handGunSlot;
+    public WeaponQuickSelectSlot HandGunSlot => handGunSlot;
+
+    [Tooltip("十字キー左：アサルトライフルのスロット")]
+    [SerializeField] WeaponQuickSelectSlot assaultRifleSlot;
+    public WeaponQuickSelectSlot AssaultRifleSlot => assaultRifleSlot;
+
+    [Tooltip("十字キー下：ショットガンのスロット")]
+    [SerializeField] WeaponQuickSelectSlot shotGunSlot;
+    public WeaponQuickSelectSlot ShotGunSlot => shotGunSlot;
+
+    [Tooltip("十字キー上：地雷のスロット")]
+    [SerializeField] WeaponQuickSelectSlot mineSlot;
+    public WeaponQuickSelectSlot MineSlot => mineSlot;
+
     [Header("画面エフェクト")]
     [Tooltip("ダメージ画像エフェクト")]
     [SerializeField] Image imageDamage;
@@ -105,6 +126,11 @@ public class ScreenUIView : MonoBehaviour
     {
         //ヒットレティクル
         imageHitReticule.color = Color.clear;
+
+        //武器クイックセレクトUIを透明にする
+        //非表示のアルファ値
+        const float Weapon_Quick_Select_Hide_Alpha = 0.0f;
+        weaponQuickSelect.alpha = Weapon_Quick_Select_Hide_Alpha;
 
         //ダメージ画像エフェクト
         imageDamage.color = Color.clear;
