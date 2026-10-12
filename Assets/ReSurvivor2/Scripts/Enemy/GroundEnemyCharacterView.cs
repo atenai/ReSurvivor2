@@ -1,10 +1,10 @@
 using UnityEngine;
 
 /// <summary>
-/// 地上敵のアニメーション
-/// アニメーターと、アニメーションに合わせた銃の持ち替え（グレネードを投げる間だけ左手に持つ）を担当する
+/// 地上敵キャラクタービュー
+/// MVPパターンのView担当
 /// </summary>
-public class GroundEnemyAnimation : MonoBehaviour
+public class GroundEnemyCharacterView : MonoBehaviour
 {
 	[Tooltip("アニメーター")]
 	[SerializeField] Animator animator;

@@ -8,7 +8,7 @@ using UnityEngine;
 [TaskCategory("GroundEnemy")]
 public class GroundEnemyMoveTargetAction : Action
 {
-	GroundEnemy groundEnemy;
+	GroundEnemyPresenter groundEnemy;
 	[UnityEngine.Tooltip("移動終了フラグ")]
 	bool isEnd = false;
 	[UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
@@ -25,10 +25,10 @@ public class GroundEnemyMoveTargetAction : Action
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		groundEnemy = this.GetComponent<GroundEnemy>();
+		groundEnemy = this.GetComponent<GroundEnemyPresenter>();
 
-		groundEnemy.GroundEnemyAnimation.InitAnimation();
-		groundEnemy.GroundEnemyAnimation.Animator.SetFloat("f_moveSpeed", 1.0f);
+		groundEnemy.GroundEnemyCharacterView.InitAnimation();
+		groundEnemy.GroundEnemyCharacterView.Animator.SetFloat("f_moveSpeed", 1.0f);
 		InitMove();
 		AdjustNavMeshPosition();
 	}

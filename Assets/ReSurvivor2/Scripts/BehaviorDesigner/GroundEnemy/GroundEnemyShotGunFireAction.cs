@@ -8,7 +8,7 @@ using UnityEngine;
 [TaskCategory("GroundEnemy")]
 public class GroundEnemyShotGunFireAction : Action
 {
-	GroundEnemy groundEnemy;
+	GroundEnemyPresenter groundEnemy;
 	bool isEnd = false;
 
 	[UnityEngine.Tooltip("射撃間隔")]
@@ -29,10 +29,10 @@ public class GroundEnemyShotGunFireAction : Action
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		groundEnemy = this.GetComponent<GroundEnemy>();
+		groundEnemy = this.GetComponent<GroundEnemyPresenter>();
 
-		groundEnemy.GroundEnemyAnimation.InitAnimation();
-		groundEnemy.GroundEnemyAnimation.Animator.SetBool("b_isRifleFire", true);
+		groundEnemy.GroundEnemyCharacterView.InitAnimation();
+		groundEnemy.GroundEnemyCharacterView.Animator.SetBool("b_isRifleFire", true);
 		InitMove();
 	}
 
@@ -51,14 +51,14 @@ public class GroundEnemyShotGunFireAction : Action
 		if (isEnd == true)
 		{
 			isEnd = false;
-			groundEnemy.GroundEnemyAnimation.InitAnimation();
+			groundEnemy.GroundEnemyCharacterView.InitAnimation();
 			//射撃終了
 			return TaskStatus.Success;
 		}
 
 		if (groundEnemy.IsChase == false)
 		{
-			groundEnemy.GroundEnemyAnimation.InitAnimation();
+			groundEnemy.GroundEnemyCharacterView.InitAnimation();
 			//追跡終了
 			return TaskStatus.Success;
 		}

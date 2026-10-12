@@ -48,7 +48,7 @@ public class EnemyBullet : MonoBehaviour
 	public static int HitLayerMask => Physics.DefaultRaycastLayers;
 
 	[Tooltip("撃ったエネミー")]
-	GroundEnemy shooter;
+	GroundEnemyPresenter shooter;
 	[Tooltip("撃ったエネミー自身のコライダーには当たらないようにするための親")]
 	Transform shooterRoot;
 	[Tooltip("この弾を返却するプール（プール無しで撃った時は null）")]
@@ -96,7 +96,7 @@ public class EnemyBullet : MonoBehaviour
 	/// 弾を発射する
 	/// </summary>
 	/// <param name="pool">弾が消えた時に返却するプール（null の時は非表示にするだけ）</param>
-	public void Launch(GroundEnemy shooter, Vector3 origin, Vector3 direction, float speed, float range, float damage, EnemyBulletPool pool)
+	public void Launch(GroundEnemyPresenter shooter, Vector3 origin, Vector3 direction, float speed, float range, float damage, EnemyBulletPool pool)
 	{
 		this.shooter = shooter;
 		this.shooterRoot = shooter != null ? shooter.transform : null;

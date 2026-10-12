@@ -13,6 +13,7 @@ public class EnemyManager : MonoBehaviour
 	/// <summary>シングルトンのプロパティ</summary>
 	public static EnemyManager SingletonInstance => singletonInstance;
 
+	[Tooltip("エネミー")]
 	[SerializeField] List<GameObject> enemies;
 
 	[Tooltip("カバーポイント")]
@@ -46,7 +47,10 @@ public class EnemyManager : MonoBehaviour
 	{
 		foreach (GameObject enemy in enemies)
 		{
-			enemy.GetComponentInChildren<IEnemy>().SetCoverPoints(coverPoints);
+			if (enemy.GetComponentInChildren<GroundEnemyPresenter>() == true)
+			{
+				enemy.GetComponentInChildren<GroundEnemyPresenter>().SetCoverPoints(coverPoints);
+			}
 		}
 	}
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 using Cinemachine;
 
 /// <summary>
-/// プレイヤーを管理するマネージャークラス
+/// プレイヤーを管理するマネージャープレゼンタークラス
 /// MVPパターンのPresenter担当
 /// </summary>
 public class PlayerManagerPresenter : MonoBehaviour
@@ -28,11 +28,11 @@ public class PlayerManagerPresenter : MonoBehaviour
 	PlayerModel playerModel = new PlayerModel();
 	public PlayerModel PlayerModel => playerModel;
 
-	[Tooltip("プレイヤービュー")]
+	[Tooltip("プレイヤーキャラクタービュー")]
 	[SerializeField] PlayerCharacterView playerCharacterView;
 	public PlayerCharacterView PlayerCharacterView => playerCharacterView;
 
-	[Tooltip("プレイヤーUI")]
+	[Tooltip("プレイヤーUIビュー")]
 	[SerializeField] PlayerUIView playerUIView;
 	public PlayerUIView PlayerUIView => playerUIView;
 

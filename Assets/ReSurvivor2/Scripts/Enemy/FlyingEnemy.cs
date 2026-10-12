@@ -38,14 +38,6 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 	[SerializeField] Rigidbody enemyRigidbody;
 	public Rigidbody Rigidbody => enemyRigidbody;
 
-	[Tooltip("カバーポイント")]
-	CoverPoint[] coverPoints;
-	public CoverPoint[] GetCoverPoints => coverPoints;
-	public void SetCoverPoints(CoverPoint[] coverPoints)
-	{
-		this.coverPoints = coverPoints;
-	}
-
 	[Tooltip("プレイヤー")]
 	GameObject targetPlayer;
 	public GameObject TargetPlayer => targetPlayer;

@@ -21,10 +21,4 @@ public interface IEnemy
 	/// 追跡開始
 	/// </summary>
 	public void ChaseOn();
-
-    /// <summary>
-    /// カバーポイントをセット
-    /// </summary>
-    /// <param name="coverPoints">カバーポイント</param>
-    public void SetCoverPoints(CoverPoint[] coverPoints);
 }

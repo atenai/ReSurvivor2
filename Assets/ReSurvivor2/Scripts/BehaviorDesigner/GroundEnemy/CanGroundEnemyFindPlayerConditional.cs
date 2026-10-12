@@ -7,7 +7,7 @@ using UnityEngine;
 [TaskCategory("GroundEnemy")]
 public class CanGroundEnemyFindPlayerConditional : Conditional
 {
-    GroundEnemy groundEnemy;
+    GroundEnemyPresenter groundEnemy;
 
     [UnityEngine.Tooltip("配列に設定したコライダーのどの番数目を当たり判定に使うか？を指定する数値")]
     [SerializeField] int checkCollisionIndex = default;
@@ -15,7 +15,7 @@ public class CanGroundEnemyFindPlayerConditional : Conditional
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        groundEnemy = this.GetComponent<GroundEnemy>();
+        groundEnemy = this.GetComponent<GroundEnemyPresenter>();
     }
 
     // 更新時に呼ばれる

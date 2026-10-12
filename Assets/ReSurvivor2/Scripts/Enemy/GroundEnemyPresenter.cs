@@ -9,8 +9,9 @@ using UnityEngine.AI;
 
 /// <summary>
 /// 地上敵
+/// MVPパターンのPresenter担当
 /// </summary>
-public class GroundEnemy : MonoBehaviour, IEnemy
+public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 {
 	[UnityEngine.Tooltip("HP")]
 	[SerializeField] HitPoint hp;
@@ -18,18 +19,6 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	{
 		return hp;
 	}
-
-	[UnityEngine.Tooltip("HPバー")]
-	[SerializeField] Slider sliderHp;
-	public Slider SliderHp
-	{
-		get { return sliderHp; }
-		set { sliderHp = value; }
-	}
-
-	[UnityEngine.Tooltip("キャンバス")]
-	[SerializeField] Canvas canvas;
-	public Canvas Canvas => canvas;
 
 	[Tooltip("ナビメッシュ")]
 	[SerializeField] NavMeshAgent navMeshAgent;
@@ -50,9 +39,19 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	[Tooltip("プレイヤー")]
 	GameObject targetPlayer;
 	public GameObject TargetPlayer => targetPlayer;
-	[Tooltip("アニメーション（アニメーターと銃の持ち替え）")]
-	[SerializeField] GroundEnemyAnimation groundEnemyAnimation;
-	public GroundEnemyAnimation GroundEnemyAnimation => groundEnemyAnimation;
+
+	[Header("地上敵MVPパターン")]
+	/// <summary>地上敵モデル</summary>
+	GroundEnemyModel groundEnemyModel = new GroundEnemyModel();
+	GroundEnemyModel GroundEnemyModel => groundEnemyModel;
+
+	[Tooltip("地上敵キャラクタービュー")]
+	[SerializeField] GroundEnemyCharacterView groundEnemyCharacterView;
+	public GroundEnemyCharacterView GroundEnemyCharacterView => groundEnemyCharacterView;
+
+	[Tooltip("地上敵UIビュー")]
+	[SerializeField] GroundEnemyUIView groundEnemyUIView;
+	public GroundEnemyUIView GroundEnemyUIView => groundEnemyUIView;
 
 	[Header("コライダー")]
 
@@ -106,9 +105,6 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	[Tooltip("エネミー追跡範囲の中心点")]
 	[SerializeField] GameObject centerPos;
 	public GameObject CenterPos => centerPos;
-	[Tooltip("追跡中か？のアラートイメージ")]
-	[SerializeField] GameObject alert;
-
 
 	[Header("パトロール")]
 	[Tooltip("パトロールポイントの位置")]
@@ -253,7 +249,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	{
 		hp = new HitPoint(HitPoint.Max_Hp);
 		hp.Initialize(DamageEffect, Dead);
-		sliderHp.value = 1;
+		groundEnemyUIView.InitHP(hp.CurrentHp);
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
 		EnemyManager.SingletonInstance.ChaseEvent.AddListener(ChaseOn);
@@ -263,7 +259,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 			targetPlayer = PlayerManagerPresenter.SingletonInstance.gameObject;
 		}
 
-		groundEnemyAnimation.InitRootMotion();
+		groundEnemyCharacterView.InitRootMotion();
 		enemyRigidbody.useGravity = true;
 		enemyCollider.enabled = true;
 
@@ -338,7 +334,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	void Update()
 	{
-		RotCanvas();
+		groundEnemyUIView.RotCanvas();
 		GroundCheck();
 
 		if (Eyesight() == true)
@@ -353,14 +349,6 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 		//デバッグ関連の処理
 		DebugText();
 #endif
-	}
-
-	/// <summary>
-	/// 常にキャンバスをメインカメラの方を向かせる
-	/// </summary>
-	void RotCanvas()
-	{
-		canvas.transform.rotation = Camera.main.transform.rotation;
 	}
 
 	/// <summary>
@@ -433,11 +421,11 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	{
 		if (hp.IsDead == false)
 		{
-			alert.gameObject.SetActive(isChase);
+			groundEnemyUIView.Alert.gameObject.SetActive(isChase);
 		}
 		else
 		{
-			alert.gameObject.SetActive(false);
+			groundEnemyUIView.Alert.gameObject.SetActive(false);
 		}
 	}
 
@@ -489,7 +477,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 		}
 		debugTexts[0] = "hits[0] : " + hits[0].ToString();
 
-		debugEnemy.DebugSystem(debugEnemy.IsDebugMode, Canvas, debugTexts.Length);
+		debugEnemy.DebugSystem(debugEnemy.IsDebugMode, groundEnemyUIView.Canvas, debugTexts.Length);
 		debugEnemy.SetDebugText(debugTexts);
 	}
 
@@ -584,7 +572,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	public void DamageEffect()
 	{
-		SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.Max_Hp;
+		groundEnemyUIView.SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.Max_Hp;
 	}
 
 	/// <summary>

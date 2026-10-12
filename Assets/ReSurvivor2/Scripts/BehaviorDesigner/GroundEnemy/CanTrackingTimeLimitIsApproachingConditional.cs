@@ -7,13 +7,13 @@ using UnityEngine;
 [TaskCategory("GroundEnemy")]
 public class CanTrackingTimeLimitIsApproachingConditional : Conditional
 {
-	GroundEnemy groundEnemy;
+	GroundEnemyPresenter groundEnemy;
 	float timeLimit = 10.0f;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		groundEnemy = this.GetComponent<GroundEnemy>();
+		groundEnemy = this.GetComponent<GroundEnemyPresenter>();
 	}
 
 	// 更新時に呼ばれる

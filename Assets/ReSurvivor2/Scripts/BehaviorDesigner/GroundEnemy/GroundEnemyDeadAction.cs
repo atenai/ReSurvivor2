@@ -8,16 +8,16 @@ using UnityEngine;
 [TaskCategory("GroundEnemy")]
 public class GroundEnemyDeadAction : Action
 {
-	GroundEnemy groundEnemy;
+	GroundEnemyPresenter groundEnemy;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		groundEnemy = this.GetComponent<GroundEnemy>();
+		groundEnemy = this.GetComponent<GroundEnemyPresenter>();
 
-		groundEnemy.GroundEnemyAnimation.InitAnimation();
-		groundEnemy.GroundEnemyAnimation.Animator.applyRootMotion = true;
-		groundEnemy.GroundEnemyAnimation.Animator.SetBool("b_isDead", true);
+		groundEnemy.GroundEnemyCharacterView.InitAnimation();
+		groundEnemy.GroundEnemyCharacterView.Animator.applyRootMotion = true;
+		groundEnemy.GroundEnemyCharacterView.Animator.SetBool("b_isDead", true);
 		InitMove();
 
 		groundEnemy.Rigidbody.useGravity = false;

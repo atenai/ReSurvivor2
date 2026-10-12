@@ -316,17 +316,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fdcdbb3a7f89cd44b0612ff0c7f221d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sliderHp: {fileID: 4582419977116525393}
-  canvas: {fileID: 2419519451328426163}
   navMeshAgent: {fileID: 7379415921181432295}
   enemyRigidbody: {fileID: 4553017098955803893}
-  groundEnemyAnimation: {fileID: 87990681495451970}
+  groundEnemyCharacterView: {fileID: 87990681495451970}
+  groundEnemyUIView: {fileID: 3239304602059752881}
   enemyCollider: {fileID: 8595419044903638177}
   colliders:
   - {fileID: 3131403555685646428}
   head: {fileID: 740881606135455463}
   centerPos: {fileID: 7430666133111987251}
-  alert: {fileID: 6114367730951322678}
   patrolPoints:
   - {fileID: 9062189167038372566}
   - {fileID: 7114279790199196112}
@@ -1236,6 +1234,7 @@ GameObject:
   - component: {fileID: 2419519451328426163}
   - component: {fileID: 6376348873349847793}
   - component: {fileID: 7545366891270320952}
+  - component: {fileID: 3239304602059752881}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1327,6 +1326,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &3239304602059752881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8134744988983888367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b66681c19dff61f4482f18469f5aca72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 2419519451328426163}
+  sliderHp: {fileID: 4582419977116525393}
+  alert: {fileID: 6114367730951322678}
 --- !u!1 &8551202896597882167
 GameObject:
   m_ObjectHideFlags: 0

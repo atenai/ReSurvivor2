@@ -7,12 +7,12 @@ using UnityEngine;
 [TaskCategory("GroundEnemy")]
 public class CanGroundEnemyGrenadeConditional : Conditional
 {
-    GroundEnemy groundEnemy;
+    GroundEnemyPresenter groundEnemy;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        groundEnemy = this.GetComponent<GroundEnemy>();
+        groundEnemy = this.GetComponent<GroundEnemyPresenter>();
     }
 
     // 更新時に呼ばれる

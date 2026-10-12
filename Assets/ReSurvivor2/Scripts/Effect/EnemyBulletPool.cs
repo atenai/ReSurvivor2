@@ -117,7 +117,7 @@ public class EnemyBulletPool : MonoBehaviour
 	/// <summary>
 	/// 外部から呼ぶ弾の発射関数
 	/// </summary>
-	public void Fire(GroundEnemy shooter, Vector3 origin, Vector3 direction, float speed, float range, float damage)
+	public void Fire(GroundEnemyPresenter shooter, Vector3 origin, Vector3 direction, float speed, float range, float damage)
 	{
 		CreatePool();
 		EnemyBullet bullet = objectPool.Get();

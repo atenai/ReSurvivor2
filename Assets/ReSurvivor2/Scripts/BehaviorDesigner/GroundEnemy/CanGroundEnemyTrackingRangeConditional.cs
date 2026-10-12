@@ -8,7 +8,7 @@ using UnityEngine;
 [TaskCategory("GroundEnemy")]
 public class CanGroundEnemyTrackingRangeConditional : Conditional
 {
-    GroundEnemy groundEnemy;
+    GroundEnemyPresenter groundEnemy;
 
     [UnityEngine.Tooltip("エネミーの追跡範囲")]
     float range = 60.0f;
@@ -16,7 +16,7 @@ public class CanGroundEnemyTrackingRangeConditional : Conditional
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        groundEnemy = this.GetComponent<GroundEnemy>();
+        groundEnemy = this.GetComponent<GroundEnemyPresenter>();
     }
 
     // 更新時に呼ばれる

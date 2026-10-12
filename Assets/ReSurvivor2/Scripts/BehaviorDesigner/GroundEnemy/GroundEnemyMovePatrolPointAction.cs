@@ -8,7 +8,7 @@ using UnityEngine;
 [TaskCategory("GroundEnemy")]
 public class GroundEnemyMovePatrolPointAction : Action
 {
-	GroundEnemy groundEnemy;
+	GroundEnemyPresenter groundEnemy;
 	[UnityEngine.Tooltip("移動終了フラグ")]
 	bool isEnd = false;
 	[UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
@@ -35,10 +35,10 @@ public class GroundEnemyMovePatrolPointAction : Action
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		groundEnemy = this.GetComponent<GroundEnemy>();
+		groundEnemy = this.GetComponent<GroundEnemyPresenter>();
 
-		groundEnemy.GroundEnemyAnimation.InitAnimation();
-		groundEnemy.GroundEnemyAnimation.Animator.SetFloat("f_moveSpeed", 0.5f);
+		groundEnemy.GroundEnemyCharacterView.InitAnimation();
+		groundEnemy.GroundEnemyCharacterView.Animator.SetFloat("f_moveSpeed", 0.5f);
 		InitMove();
 		InitEnemyCanNotMove();
 		SetPatrolPoint();

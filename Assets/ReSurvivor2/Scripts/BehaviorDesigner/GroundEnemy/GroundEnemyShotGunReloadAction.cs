@@ -8,15 +8,15 @@ using UnityEngine;
 [TaskCategory("GroundEnemy")]
 public class GroundEnemyShotGunReloadAction : Action
 {
-	GroundEnemy groundEnemy;
+	GroundEnemyPresenter groundEnemy;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		groundEnemy = this.GetComponent<GroundEnemy>();
+		groundEnemy = this.GetComponent<GroundEnemyPresenter>();
 
-		groundEnemy.GroundEnemyAnimation.InitAnimation();
-		groundEnemy.GroundEnemyAnimation.Animator.SetBool("b_isReload", true);
+		groundEnemy.GroundEnemyCharacterView.InitAnimation();
+		groundEnemy.GroundEnemyCharacterView.Animator.SetBool("b_isReload", true);
 		InitMove();
 		InitReload();
 	}
@@ -74,7 +74,7 @@ public class GroundEnemyShotGunReloadAction : Action
 				groundEnemy.IsReloadTimeActive = false;//リロードのオフ
 
 				//リロードアニメーションをオフ
-				groundEnemy.GroundEnemyAnimation.Animator.SetBool("b_isReload", false);
+				groundEnemy.GroundEnemyCharacterView.Animator.SetBool("b_isReload", false);
 			}
 		}
 	}
