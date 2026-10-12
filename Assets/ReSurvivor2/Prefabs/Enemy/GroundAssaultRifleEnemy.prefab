@@ -346,6 +346,7 @@ MonoBehaviour:
   muzzle: {fileID: 1153128297474760027}
   aimHeight: 1.2
   maxAimAngle: 30
+  weaponModel: {fileID: 7484485470922885549}
   cinemachineImpulseSource: {fileID: 4678478672489473311}
   debugEnemy:
     isDebugMode: 1
@@ -1595,6 +1596,11 @@ MonoBehaviour:
 --- !u!4 &6481659067314226004 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3503368382933561867, guid: 44f269219b94a914d81a2300c6df9bb0, type: 3}
+  m_PrefabInstance: {fileID: 7596741817733919071}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7484485470922885549 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1059251422610913522, guid: 44f269219b94a914d81a2300c6df9bb0, type: 3}
   m_PrefabInstance: {fileID: 7596741817733919071}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &7646512579346927600 stripped

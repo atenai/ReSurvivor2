@@ -196,6 +196,18 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 		set { currentGrenade = value; }
 	}
 
+	[Header("銃の持ち替え")]
+	[Tooltip("手に持っている銃のモデル（右手でグレネードを投げる間だけ左手に持ち替える）")]
+	[SerializeField] Transform weaponModel;
+	[Tooltip("銃を右手に持っている時の親（右手の骨）")]
+	Transform weaponRightHandParent;
+	[Tooltip("銃を右手に持っている時の位置（親から見た位置）")]
+	Vector3 weaponRightHandLocalPosition;
+	[Tooltip("銃を右手に持っている時の向き（親から見た向き）")]
+	Quaternion weaponRightHandLocalRotation;
+	[Tooltip("銃を左手に持ち替えているか？")]
+	bool isWeaponInLeftHand = false;
+
 	[Tooltip("シネマシーンインパルス")]
 	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
 
@@ -206,6 +218,17 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	void Awake()
 	{
 		InitNavMeshAgent();
+		InitWeaponModel();
+	}
+
+	/// <summary>
+	/// 銃を右手に持っている時の親・位置・向きを覚えておく（左手から右手に戻す時に使う）
+	/// </summary>
+	void InitWeaponModel()
+	{
+		weaponRightHandParent = weaponModel.parent;
+		weaponRightHandLocalPosition = weaponModel.localPosition;
+		weaponRightHandLocalRotation = weaponModel.localRotation;
 	}
 
 	/// <summary>
@@ -846,6 +869,38 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 		this.Animator.SetBool("b_isReload", false);
 		this.Animator.SetBool("b_isRifleFire", false);
 		this.Animator.SetBool("b_isGrenadeEquip", false);
-		this.Animator.SetBool("b_isGrenadeThrow", false);
+		//使われずに残っているトリガーを消す（残っていると次にグレネードを構えた瞬間に投げてしまう）
+		this.Animator.ResetTrigger("t_isGrenadeThrow");
+	}
+
+	/// <summary>
+	/// 銃を左手に持ち替える（右手でグレネードを投げる間、銃が右手と一緒に振り回されないようにする）
+	/// </summary>
+	public void HoldWeaponInLeftHand()
+	{
+		if (isWeaponInLeftHand == true)
+		{
+			return;
+		}
+
+		//SetParentの第2引数をtrueにすると、今の見た目の位置・向きのまま親だけを左手の骨に変える
+		weaponModel.SetParent(animator.GetBoneTransform(HumanBodyBones.LeftHand), true);
+		isWeaponInLeftHand = true;
+	}
+
+	/// <summary>
+	/// 銃を右手に戻す
+	/// </summary>
+	public void HoldWeaponInRightHand()
+	{
+		if (isWeaponInLeftHand == false)
+		{
+			return;
+		}
+
+		weaponModel.SetParent(weaponRightHandParent, false);
+		weaponModel.localPosition = weaponRightHandLocalPosition;
+		weaponModel.localRotation = weaponRightHandLocalRotation;
+		isWeaponInLeftHand = false;
 	}
 }
