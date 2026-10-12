@@ -42,8 +42,8 @@ public class MoveToCoverPointAction : Action
 	{
 		groundEnemy = this.GetComponent<GroundEnemy>();
 
-		groundEnemy.InitAnimation();
-		groundEnemy.Animator.SetFloat("f_moveSpeed", 1.0f);
+		groundEnemy.GroundEnemyAnimation.InitAnimation();
+		groundEnemy.GroundEnemyAnimation.Animator.SetFloat("f_moveSpeed", 1.0f);
 		InitMove();
 		InitEnemyCanNotMove();
 		TargetPos();

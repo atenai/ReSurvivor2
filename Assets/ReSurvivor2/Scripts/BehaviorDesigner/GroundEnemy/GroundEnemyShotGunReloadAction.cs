@@ -15,8 +15,8 @@ public class GroundEnemyShotGunReloadAction : Action
 	{
 		groundEnemy = this.GetComponent<GroundEnemy>();
 
-		groundEnemy.InitAnimation();
-		groundEnemy.Animator.SetBool("b_isReload", true);
+		groundEnemy.GroundEnemyAnimation.InitAnimation();
+		groundEnemy.GroundEnemyAnimation.Animator.SetBool("b_isReload", true);
 		InitMove();
 		InitReload();
 	}
@@ -74,7 +74,7 @@ public class GroundEnemyShotGunReloadAction : Action
 				groundEnemy.IsReloadTimeActive = false;//リロードのオフ
 
 				//リロードアニメーションをオフ
-				groundEnemy.Animator.SetBool("b_isReload", false);
+				groundEnemy.GroundEnemyAnimation.Animator.SetBool("b_isReload", false);
 			}
 		}
 	}

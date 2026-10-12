@@ -15,9 +15,9 @@ public class GroundEnemyDeadAction : Action
 	{
 		groundEnemy = this.GetComponent<GroundEnemy>();
 
-		groundEnemy.InitAnimation();
-		groundEnemy.Animator.applyRootMotion = true;
-		groundEnemy.Animator.SetBool("b_isDead", true);
+		groundEnemy.GroundEnemyAnimation.InitAnimation();
+		groundEnemy.GroundEnemyAnimation.Animator.applyRootMotion = true;
+		groundEnemy.GroundEnemyAnimation.Animator.SetBool("b_isDead", true);
 		InitMove();
 
 		groundEnemy.Rigidbody.useGravity = false;

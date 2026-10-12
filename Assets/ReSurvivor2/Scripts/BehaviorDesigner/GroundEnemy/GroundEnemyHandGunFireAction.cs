@@ -27,8 +27,8 @@ public class GroundEnemyHandGunFireAction : Action
 	{
 		groundEnemy = this.GetComponent<GroundEnemy>();
 
-		groundEnemy.InitAnimation();
-		groundEnemy.Animator.SetBool("b_isRifleFire", true);
+		groundEnemy.GroundEnemyAnimation.InitAnimation();
+		groundEnemy.GroundEnemyAnimation.Animator.SetBool("b_isRifleFire", true);
 		InitMove();
 	}
 
@@ -47,14 +47,14 @@ public class GroundEnemyHandGunFireAction : Action
 		if (isEnd == true)
 		{
 			isEnd = false;
-			groundEnemy.InitAnimation();
+			groundEnemy.GroundEnemyAnimation.InitAnimation();
 			//射撃終了
 			return TaskStatus.Success;
 		}
 
 		if (groundEnemy.IsChase == false)
 		{
-			groundEnemy.InitAnimation();
+			groundEnemy.GroundEnemyAnimation.InitAnimation();
 			return TaskStatus.Success;
 
 		}

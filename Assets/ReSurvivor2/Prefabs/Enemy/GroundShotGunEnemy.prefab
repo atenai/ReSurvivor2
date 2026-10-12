@@ -320,7 +320,7 @@ MonoBehaviour:
   canvas: {fileID: 2419519451328426163}
   navMeshAgent: {fileID: 2265207154070741179}
   enemyRigidbody: {fileID: 4553017098955803893}
-  animator: {fileID: 7403507082190380116}
+  groundEnemyAnimation: {fileID: 685487114609522409}
   enemyCollider: {fileID: 8595419044903638177}
   colliders:
   - {fileID: 3131403555685646428}
@@ -1560,6 +1560,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2894660805785215362, guid: cdc3b166cec466f44b89efd43f57457c, type: 3}
   m_PrefabInstance: {fileID: 3369802069438808062}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &685487114609522409 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2828445038259652887, guid: cdc3b166cec466f44b89efd43f57457c, type: 3}
+  m_PrefabInstance: {fileID: 3369802069438808062}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf3bff54a31b6ca49b34e809e92e8d28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3485406383786296878 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2206015614432098768, guid: cdc3b166cec466f44b89efd43f57457c, type: 3}
@@ -1590,11 +1601,6 @@ MonoBehaviour:
 --- !u!4 &5289452379283929940 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7468122441149482154, guid: cdc3b166cec466f44b89efd43f57457c, type: 3}
-  m_PrefabInstance: {fileID: 3369802069438808062}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &7403507082190380116 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5223466760410063786, guid: cdc3b166cec466f44b89efd43f57457c, type: 3}
   m_PrefabInstance: {fileID: 3369802069438808062}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &7838858869353460217 stripped

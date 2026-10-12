@@ -50,9 +50,9 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	[Tooltip("プレイヤー")]
 	GameObject targetPlayer;
 	public GameObject TargetPlayer => targetPlayer;
-	[Tooltip("アニメーター")]
-	[SerializeField] Animator animator;
-	public Animator Animator => animator;
+	[Tooltip("アニメーション（アニメーターと銃の持ち替え）")]
+	[SerializeField] GroundEnemyAnimation groundEnemyAnimation;
+	public GroundEnemyAnimation GroundEnemyAnimation => groundEnemyAnimation;
 
 	[Header("コライダー")]
 
@@ -263,7 +263,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 			targetPlayer = PlayerManagerPresenter.SingletonInstance.gameObject;
 		}
 
-		animator.applyRootMotion = false;
+		groundEnemyAnimation.InitRootMotion();
 		enemyRigidbody.useGravity = true;
 		enemyCollider.enabled = true;
 
@@ -835,17 +835,5 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	public GameObject GetEnemyGameObject()
 	{
 		return this.gameObject;
-	}
-
-	/// <summary>
-	/// アニメーションの初期化処理
-	/// </summary>
-	public void InitAnimation()
-	{
-		this.Animator.SetFloat("f_moveSpeed", 0.0f);
-		this.Animator.SetBool("b_isReload", false);
-		this.Animator.SetBool("b_isRifleFire", false);
-		this.Animator.SetBool("b_isGrenadeEquip", false);
-		this.Animator.SetBool("b_isGrenadeThrow", false);
 	}
 }

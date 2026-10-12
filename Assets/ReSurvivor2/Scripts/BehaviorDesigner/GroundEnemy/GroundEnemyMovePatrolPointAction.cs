@@ -37,8 +37,8 @@ public class GroundEnemyMovePatrolPointAction : Action
 	{
 		groundEnemy = this.GetComponent<GroundEnemy>();
 
-		groundEnemy.InitAnimation();
-		groundEnemy.Animator.SetFloat("f_moveSpeed", 0.5f);
+		groundEnemy.GroundEnemyAnimation.InitAnimation();
+		groundEnemy.GroundEnemyAnimation.Animator.SetFloat("f_moveSpeed", 0.5f);
 		InitMove();
 		InitEnemyCanNotMove();
 		SetPatrolPoint();
