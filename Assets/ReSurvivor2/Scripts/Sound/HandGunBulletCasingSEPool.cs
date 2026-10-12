@@ -10,6 +10,10 @@ public class HandGunBulletCasingSEPool : MonoBehaviour
 {
 	ObjectPool<GameObject> objectPool;
 	[SerializeField] GameObject prefab;
+	[Tooltip("プレイヤーが鳴らす時の3Dの設定（カメラはプレイヤーの3〜4m後ろにあるので、その距離では音量が下がらないようにしている）")]
+	[SerializeField] SpatialSoundSetting playerSpatialSetting = new SpatialSoundSetting(5.0f, 25.0f);
+	[Tooltip("エネミーが鳴らす時の3Dの設定（遠くのエネミーの音は小さく、鳴った方向から聞こえる）")]
+	[SerializeField] SpatialSoundSetting enemySpatialSetting = new SpatialSoundSetting(1.5f, 25.0f);
 	int defalutCapacity = 7 * 3;
 	int maxCount = 70;
 
@@ -89,12 +93,31 @@ public class HandGunBulletCasingSEPool : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 外部から呼ぶObj取得関数
+	/// 外部から呼ぶObj取得関数（プレイヤーが鳴らす時）
 	/// </summary>
 	public void GetGameObject(Transform transform)
 	{
+		Play(transform, false);
+	}
+
+	/// <summary>
+	/// エネミーから呼ぶObj取得関数
+	/// </summary>
+	public void GetGameObjectForEnemy(Transform transform)
+	{
+		Play(transform, true);
+	}
+
+	/// <summary>
+	/// プールから取り出して、プレイヤー用かエネミー用の3Dの設定にしてから鳴らす
+	/// （プールはプレイヤーとエネミーで同じものを使うので、鳴らすたびに設定し直す）
+	/// </summary>
+	void Play(Transform transform, bool isEnemy)
+	{
 		GameObject gameObject = objectPool.Get();
 		gameObject.transform.position = transform.position;
+		SpatialSoundSetting spatialSetting = isEnemy == true ? enemySpatialSetting : playerSpatialSetting;
+		spatialSetting.Apply(gameObject.GetComponent<AudioSource>());
 		gameObject.GetComponent<AudioPlayHandGunBulletCasingSEPool>().PlaySound();
 	}
 

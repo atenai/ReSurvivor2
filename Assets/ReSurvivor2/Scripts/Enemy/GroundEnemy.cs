@@ -629,7 +629,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary> 
 	public void AssaultRifleFireSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObjectForEnemy(this.transform);
 	}
 
 	/// <summary>
@@ -637,7 +637,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary> 
 	public void AssaultRifleReloadSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObjectForEnemy(this.transform);
 	}
 
 	/// <summary>
@@ -645,7 +645,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	public void AssaultRifleBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObjectForEnemy(this.transform);
 	}
 
 	/// <summary>
@@ -653,7 +653,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary> 
 	public void ShotGunFireSE()
 	{
-		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObjectForEnemy(this.transform);
 	}
 
 	/// <summary>
@@ -661,7 +661,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary> 
 	public void ShotGunReloadSE()
 	{
-		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObjectForEnemy(this.transform);
 	}
 
 	/// <summary>
@@ -669,7 +669,7 @@ public class GroundEnemy : MonoBehaviour, IEnemy
 	/// </summary>
 	public void ShotGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObjectForEnemy(this.transform);
 	}
 
 	/// <summary>
