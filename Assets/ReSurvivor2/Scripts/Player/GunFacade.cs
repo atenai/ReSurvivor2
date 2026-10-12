@@ -89,6 +89,8 @@ public class GunFacade
 			this.gunTYPE = EnumManager.GunTYPE.HandGun;
 			SwitchWeapon(this.gunTYPE);
 			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			//十字キーの武器アイコンと弾数を一時的に表示する
+			ScreenUIManagerPresenter.SingletonInstance.ShowWeaponQuickSelect();
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetAxisRaw("XInput DPad Left&Right") < -0.5f)
 		{
@@ -96,6 +98,8 @@ public class GunFacade
 			this.gunTYPE = EnumManager.GunTYPE.AssaultRifle;
 			SwitchWeapon(this.gunTYPE);
 			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			//十字キーの武器アイコンと弾数を一時的に表示する
+			ScreenUIManagerPresenter.SingletonInstance.ShowWeaponQuickSelect();
 		}
 		else if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetAxisRaw("XInput DPad Up&Down") < -0.5f)
 		{
@@ -103,6 +107,8 @@ public class GunFacade
 			this.gunTYPE = EnumManager.GunTYPE.ShotGun;
 			SwitchWeapon(this.gunTYPE);
 			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			//十字キーの武器アイコンと弾数を一時的に表示する
+			ScreenUIManagerPresenter.SingletonInstance.ShowWeaponQuickSelect();
 		}
 	}
 
@@ -118,6 +124,23 @@ public class GunFacade
 				gunBase = gun;
 			}
 		}
+	}
+
+	/// <summary>
+	/// 銃のタイプから銃を探す
+	/// </summary>
+	/// <param name="gunTYPE">銃のタイプ</param>
+	/// <returns>見つかった銃（見つからなかった場合はnull）</returns>
+	public GunBase FindGunBase(EnumManager.GunTYPE gunTYPE)
+	{
+		foreach (GunBase gun in gunBaseList)
+		{
+			if (gun.GetGunType == gunTYPE)
+			{
+				return gun;
+			}
+		}
+		return null;
 	}
 
 	/// <summary>
