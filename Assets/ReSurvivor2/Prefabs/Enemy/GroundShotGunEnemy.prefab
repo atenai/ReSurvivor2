@@ -347,6 +347,7 @@ MonoBehaviour:
   aimHeight: 1.2
   maxAimAngle: 30
   weaponModel: {fileID: 6229982023448405682}
+  weaponLeftHandHoldPos: {fileID: 728848341308744036}
   cinemachineImpulseSource: {fileID: 618625889514685405}
   debugEnemy:
     isDebugMode: 1
@@ -1559,6 +1560,11 @@ PrefabInstance:
 --- !u!1 &497673641410190972 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2894660805785215362, guid: cdc3b166cec466f44b89efd43f57457c, type: 3}
+  m_PrefabInstance: {fileID: 3369802069438808062}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &728848341308744036 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2656721997745200794, guid: cdc3b166cec466f44b89efd43f57457c, type: 3}
   m_PrefabInstance: {fileID: 3369802069438808062}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &3485406383786296878 stripped
