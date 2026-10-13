@@ -79,7 +79,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: 174cc41d6a818564c9a9a0d4cc8c56c1, type: 3}
+  m_Motion: {fileID: 1827226128182048838, guid: 815904dbf16fc3549be49cf4554a5b0f, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -232,7 +232,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GroundEnemyReSurvivor2AnimationController
+  m_Name: GroundShotGunEnemyAnimationController
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: f_moveSpeed
