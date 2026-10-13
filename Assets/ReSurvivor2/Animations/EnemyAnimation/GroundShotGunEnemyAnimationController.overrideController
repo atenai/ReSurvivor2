@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GroundShotGunEnemyAnimationController
+  m_Controller: {fileID: 9100000, guid: ae904db59a681534d95078846830f7d7, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 1827226128182048838, guid: ea5a3855532c20b43b2dd15868c0aaea, type: 3}
+    m_OverrideClip: {fileID: 0}
+  - m_OriginalClip: {fileID: 1827226128182048838, guid: 91723c8f6fa3c4e48bb9310580afdaf5, type: 3}
+    m_OverrideClip: {fileID: 0}
+  - m_OriginalClip: {fileID: 1827226128182048838, guid: f9546a410dbe1964294557de8fa34ebe, type: 3}
+    m_OverrideClip: {fileID: 0}
+  - m_OriginalClip: {fileID: 1827226128182048838, guid: 51ac11a3825f7544b81be1b4ec5e590d, type: 3}
+    m_OverrideClip: {fileID: 0}
+  - m_OriginalClip: {fileID: -6006803263182056350, guid: b069d8dfd938fa14cb56f60a2b19c48d, type: 3}
+    m_OverrideClip: {fileID: 0}
+  - m_OriginalClip: {fileID: 6192193280067810160, guid: 62c011de0aea25d47a750ea04fa9de9a, type: 3}
+    m_OverrideClip: {fileID: 0}
+  - m_OriginalClip: {fileID: 7400000, guid: d81aeae6102d7434dbdf61a7b7501416, type: 3}
+    m_OverrideClip: {fileID: 0}
+  - m_OriginalClip: {fileID: 1827226128182048838, guid: 174cc41d6a818564c9a9a0d4cc8c56c1, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: 815904dbf16fc3549be49cf4554a5b0f, type: 3}

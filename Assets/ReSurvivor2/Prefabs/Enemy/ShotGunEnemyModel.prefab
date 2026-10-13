@@ -475,7 +475,7 @@ Animator:
   m_GameObject: {fileID: 1573593759797535594}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 580c3d93ab385194388eec8b534353f0, type: 3}
-  m_Controller: {fileID: 9100000, guid: ae904db59a681534d95078846830f7d7, type: 2}
+  m_Controller: {fileID: 22100000, guid: c470fc2d05229724daedb359a1ca6e51, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -504,6 +504,13 @@ MonoBehaviour:
   rightHandAnimationPos: {fileID: 8060860358246303714}
   rightHandFirePos: {fileID: 3050270827408098614}
   leftHandGripPos: {fileID: 4499198647015033317}
+  weaponReloadHoldPos: {fileID: 2842796460070607632}
+  leftHandReloadGripPos: {fileID: 6298540579602380506}
+  reloadHoldStartTime: 0.10714285
+  reloadHoldEndTime: 0.8935714
+  magazineModel: {fileID: 0}
+  magazineOutTime: 0
+  magazineInTime: 0
 --- !u!1 &1600761837649256393
 GameObject:
   m_ObjectHideFlags: 0
@@ -1761,6 +1768,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1392623018969241498}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4014640716357130627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6298540579602380506}
+  m_Layer: 0
+  m_Name: LeftHandReloadGripPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6298540579602380506
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4014640716357130627}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5419701, y: 0.08768685, z: -0.83553755, w: -0.02136772}
+  m_LocalPosition: {x: -0.09072509, y: 0.018631117, z: -0.059420247}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2842796460070607632}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4027704563965800772
 GameObject:
   m_ObjectHideFlags: 0
@@ -2266,6 +2304,38 @@ Transform:
   m_Children:
   - {fileID: 1986450033346872143}
   m_Father: {fileID: 5719433589759528595}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5444668080118078086
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2842796460070607632}
+  m_Layer: 0
+  m_Name: WeaponReloadPosLeftHand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2842796460070607632
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5444668080118078086}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.15013038, y: -0.8720221, z: 0.35431585, w: 0.30248746}
+  m_LocalPosition: {x: -0.0027989836, y: -0.10385314, z: -0.06894277}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6298540579602380506}
+  m_Father: {fileID: 4020079741877788957}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5494289383965828762
 GameObject:
@@ -3487,6 +3557,7 @@ Transform:
   - {fileID: 2063756054343916268}
   - {fileID: 6126995568609076035}
   - {fileID: 2656721997745200794}
+  - {fileID: 2842796460070607632}
   m_Father: {fileID: 207612549289624482}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7677008323771220166
