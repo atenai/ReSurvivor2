@@ -52,12 +52,37 @@ public class GroundEnemyCharacterView : MonoBehaviour
 	const string IdleAndWalkStateName = "IdleAndWalk";
 	[Tooltip("今の射撃中の手のIKの効き具合（0でアニメーションのまま、1で目印にぴったり合わせる）")]
 	float fireHandIKWeight = 0.0f;
-	[Tooltip("今の待機・移動中の左手のIKの効き具合（0でアニメーションのまま、1で銃をぴったり握る）")]
+	[Tooltip("今の待機・移動中の手のIKの効き具合（0でアニメーションのまま、1で銃を体から離して両手でぴったり握る）")]
 	float idleHandIKWeight = 0.0f;
+
+	[Header("待機・移動中の腕のめり込み対策")]
+	//※待機・移動のアニメーションは体の細いキャラクター用に作られたもので、そのままでは腕と銃が体の装備（ベストや腰のポーチ）にめり込むため、
+	//  銃を体の前へ離し、両肘を体の外側へ向ける
+	[Tooltip("待機・移動中に、右手（と右手に持った銃・それを握る左手）をアニメーションの位置から動かす量（m）（キャラクターから見た向き。xが右、yが上、zが前）")]
+	static readonly Vector3 IdleRightHandOffset = new Vector3(0.0f, 0.0f, 0.12f);
+	[Tooltip("待機・移動中に、右肘を向ける位置（アニメーションの右肘の位置からずらす量）（m）（キャラクターから見た向き。xが右、yが上、zが前）")]
+	static readonly Vector3 IdleRightElbowHintOffset = new Vector3(0.4f, 0.0f, 0.15f);
+	[Tooltip("待機・移動中に、左肘を向ける位置（アニメーションの左肘の位置からずらす量）（m）（キャラクターから見た向き。xが右、yが上、zが前）")]
+	static readonly Vector3 IdleLeftElbowHintOffset = new Vector3(-0.4f, 0.0f, 0.15f);
+	[Tooltip("右肘の骨")]
+	Transform rightElbow;
+	[Tooltip("左肘の骨")]
+	Transform leftElbow;
 
 	void Awake()
 	{
 		InitWeaponModel();
+		InitElbow();
+	}
+
+	/// <summary>
+	/// 肘の骨を取得する（待機・移動中に肘を向ける位置の基準にする）
+	/// </summary>
+	void InitElbow()
+	{
+		//GetBoneTransformは、ヒューマノイドの決まった部位（ここでは肘＝前腕の付け根）の骨のTransformを返す
+		rightElbow = animator.GetBoneTransform(HumanBodyBones.RightLowerArm);
+		leftElbow = animator.GetBoneTransform(HumanBodyBones.LeftLowerArm);
 	}
 
 	/// <summary>
@@ -99,8 +124,9 @@ public class GroundEnemyCharacterView : MonoBehaviour
 
 	/// <summary>
 	/// IK用のUnity標準の関数（アニメーターのレイヤーの「IK Pass」をオンにすると、アニメーションの計算の後に毎フレーム呼ばれる）
-	/// 射撃・待機・移動のアニメーションは別の体型のキャラクター用に作られたもので、そのままでは銃床が顔にめり込んだり左手が銃から離れたりするため、
-	/// 射撃中は右手を構える目印に合わせ、左手はいつも右手に持った銃の前側を握るようにする
+	/// 射撃・待機・移動のアニメーションは別の体型のキャラクター用に作られたもので、そのままでは銃床が顔にめり込んだり、
+	/// 左手が銃から離れたり、腕が体の装備にめり込んだりするため、
+	/// 射撃中は右手を構える目印に合わせ、待機・移動中は銃を体の前へ離して両肘を外側へ向け、左手はいつも右手に持った銃の前側を握るようにする
 	/// </summary>
 	void OnAnimatorIK(int layerIndex)
 	{
@@ -109,14 +135,16 @@ public class GroundEnemyCharacterView : MonoBehaviour
 
 		//OnAnimatorIKが呼ばれる時点では、骨はまだIKをかける前の今のアニメーションどおりの位置にあるので、
 		//右手の骨の子の目印から、アニメーションどおりの右手の位置・向きが分かる
-		//右手は射撃中だけ構える目印に合わせる（右手の子の銃も一緒に動く。待機・移動中はアニメーションのまま）
+		//待機・移動中は、右手を体の前へ離す（右手の子の銃も一緒に動く。キャラクターの向きに合わせて回してから足す）
+		Vector3 idleRightHandPosition = rightHandAnimationPos.position + animator.transform.rotation * IdleRightHandOffset * idleHandIKWeight;
+		//射撃中は、右手を構える目印に合わせる
 		//Lerp・Slerpは、第1引数と第2引数の間を第3引数の割合（0〜1）で混ぜた位置・向きを返す
-		Vector3 rightHandPosition = Vector3.Lerp(rightHandAnimationPos.position, rightHandFirePos.position, fireHandIKWeight);
+		Vector3 rightHandPosition = Vector3.Lerp(idleRightHandPosition, rightHandFirePos.position, fireHandIKWeight);
 		Quaternion rightHandRotation = Quaternion.Slerp(rightHandAnimationPos.rotation, rightHandFirePos.rotation, fireHandIKWeight);
 		//SetIKPositionWeight・SetIKRotationWeightは、アニメーションの手とIKの手をどれだけ混ぜるか（0でアニメーションのまま、1でIKの手にぴったり）
 		//ここでは混ぜ具合を上でLerp・Slerpして決めているので、重みは右手を動かす時は1にする
 		float rightHandWeight = NoIKWeight;
-		if (NoIKWeight < fireHandIKWeight)
+		if (NoIKWeight < fireHandIKWeight || NoIKWeight < idleHandIKWeight)
 		{
 			rightHandWeight = FullIKWeight;
 		}
@@ -135,6 +163,14 @@ public class GroundEnemyCharacterView : MonoBehaviour
 		animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, leftHandWeight);
 		animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPosition);
 		animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandRotation);
+
+		//待機・移動中は、両肘を体の外側・少し前へ向ける（肘や前腕が体の装備にめり込まないようにする）
+		//SetIKHintPositionは、手のIKで腕を曲げる時に肘をどちらへ向けるかの目安の位置（ヒント）を決める（手の位置は変わらない）
+		//SetIKHintPositionWeightは、そのヒントをどれだけ効かせるか（0でUnityのおまかせ、1でヒントの方へ向ける）
+		animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, idleHandIKWeight);
+		animator.SetIKHintPosition(AvatarIKHint.RightElbow, rightElbow.position + animator.transform.rotation * IdleRightElbowHintOffset);
+		animator.SetIKHintPositionWeight(AvatarIKHint.LeftElbow, idleHandIKWeight);
+		animator.SetIKHintPosition(AvatarIKHint.LeftElbow, leftElbow.position + animator.transform.rotation * IdleLeftElbowHintOffset);
 	}
 
 	/// <summary>
