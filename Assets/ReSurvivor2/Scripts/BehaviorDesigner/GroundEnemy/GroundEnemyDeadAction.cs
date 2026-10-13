@@ -15,13 +15,13 @@ public class GroundEnemyDeadAction : Action
 	{
 		groundEnemy = this.GetComponent<GroundEnemyPresenter>();
 
-		groundEnemy.GroundEnemyCharacterView.InitAnimation();
-		groundEnemy.GroundEnemyCharacterView.Animator.applyRootMotion = true;
-		groundEnemy.GroundEnemyCharacterView.Animator.SetBool("b_isDead", true);
-		InitMove();
-
 		groundEnemy.Rigidbody.useGravity = false;
+		//死亡アニメーションを選ぶ時に倒れる広さを調べるので、その前に自分のコライダーを無効にしておく
 		groundEnemy.EnemyCollider.enabled = false;
+
+		groundEnemy.GroundEnemyCharacterView.InitAnimation();
+		groundEnemy.GroundEnemyCharacterView.PlayDeadAnimation();
+		InitMove();
 	}
 
 	/// <summary>

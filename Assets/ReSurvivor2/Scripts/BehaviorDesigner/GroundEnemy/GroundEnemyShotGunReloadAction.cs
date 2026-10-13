@@ -58,14 +58,16 @@ public class GroundEnemyShotGunReloadAction : Action
 
 	/// <summary>
 	/// リロード
+	/// 決まった時間で終わらせるとリロードの動きが途中で切れてしまうため、リロードのアニメーションが
+	/// 銃を右手に戻すところまで再生されたら完了にする
 	/// </summary>
 	void Reload()
 	{
 		if (groundEnemy.IsReloadTimeActive == true)//リロードがオンになったら
 		{
-			groundEnemy.ReloadTime += Time.deltaTime;//リロードタイムをプラス
+			groundEnemy.ReloadTime += Time.deltaTime;//リロードを始めてからの経過時間をプラス（デバッグ表示用）
 
-			if (groundEnemy.ReloadTimeDefine <= groundEnemy.ReloadTime)//リロードタイムが10以上になったら
+			if (groundEnemy.GroundEnemyCharacterView.IsReloadAnimationFinished() == true)//リロードのアニメーションが終わったら
 			{
 				//弾リセット
 				groundEnemy.CurrentMagazine = groundEnemy.MagazineCapacity;

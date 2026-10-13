@@ -151,15 +151,13 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 		get { return isReloadTimeActive; }
 		set { isReloadTimeActive = value; }
 	}
+	[Tooltip("リロードを始めてからの経過時間（デバッグ表示用。リロードはアニメーションが終わったら完了する）")]
 	float reloadTime = 0.0f;
 	public float ReloadTime
 	{
 		get { return reloadTime; }
 		set { reloadTime = value; }
 	}
-	[Tooltip("銃のリロード時間")]
-	readonly float reloadTimeDefine = 1.5f;
-	public float ReloadTimeDefine => reloadTimeDefine;
 
 	//↓アセットストアのプログラム↓//
 	[Tooltip("マズルフラッシュと薬莢")]
