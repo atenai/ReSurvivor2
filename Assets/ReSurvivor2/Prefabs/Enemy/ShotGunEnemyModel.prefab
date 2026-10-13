@@ -511,6 +511,15 @@ MonoBehaviour:
   magazineModel: {fileID: 0}
   magazineOutTime: 0
   magazineInTime: 0
+  deathAnimations:
+  - fallDirection: {x: 0, y: 0, z: 1}
+    fallDistance: 2.2
+  - fallDirection: {x: 0, y: 0, z: -1}
+    fallDistance: 2.45
+  - fallDirection: {x: -0.94, y: 0, z: 0.34}
+    fallDistance: 2.3
+  - fallDirection: {x: 0.99, y: 0, z: 0.14}
+    fallDistance: 2.4
 --- !u!1 &1600761837649256393
 GameObject:
   m_ObjectHideFlags: 0

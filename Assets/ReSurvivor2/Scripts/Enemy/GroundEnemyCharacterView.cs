@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -6,6 +7,18 @@ using UnityEngine;
 /// </summary>
 public class GroundEnemyCharacterView : MonoBehaviour
 {
+	/// <summary>
+	/// 死亡アニメーション1つ分の設定
+	/// </summary>
+	[System.Serializable]
+	public class DeathAnimation
+	{
+		[Tooltip("倒れる向き（キャラクターから見た向き。xが右、zが前）")]
+		public Vector3 fallDirection;
+		[Tooltip("倒れるのに必要な広さ（m）（倒れ始めた足元から、倒れていく体・銃の一番遠い所までの長さ）")]
+		public float fallDistance;
+	}
+
 	[Tooltip("アニメーター")]
 	[SerializeField] Animator animator;
 	public Animator Animator => animator;
@@ -117,6 +130,22 @@ public class GroundEnemyCharacterView : MonoBehaviour
 	Quaternion magazineLocalRotation;
 	[Tooltip("マガジンを右手に持っているか？")]
 	bool isMagazineInRightHand = false;
+
+	[Header("死亡")]
+	//※死亡アニメーションは複数あり、死亡した時にランダムで1つ選んで再生する
+	//  （アニメーターの死亡ステートは、i_deathIndexの番号ごとに「Any State」から遷移する）
+	//※死亡アニメーションは体ごと1〜1.5mほど動いて倒れるため、壁際でそのまま倒れると体が壁にめり込む。
+	//  そのため、倒れる向きに壁などが無い死亡アニメーションの中から選ぶ（どれも無い時は、一番広く倒れられるものを選ぶ）
+	[Tooltip("死亡アニメーションの一覧（要素の番号がアニメーターのi_deathIndexの番号。0: Death_F（前に倒れる）、1: Death_B（後ろに倒れる）、2: Death_L（左に倒れる）、3: Death_R（右に倒れる））")]
+	[SerializeField] DeathAnimation[] deathAnimations;
+	[Tooltip("アニメーターの、再生する死亡アニメーションの番号の名前")]
+	const string DeathIndexParameterName = "i_deathIndex";
+	[Tooltip("配列・リストの最初の要素の番号")]
+	const int FirstIndex = 0;
+	[Tooltip("倒れる広さを調べる球の、足元からの高さ（m）（倒れた体の高さ。地面のわずかな凸凹には当たらない高さにする）")]
+	const float FallSpaceCheckHeight = 0.4f;
+	[Tooltip("倒れる広さを調べる球の半径（m）")]
+	const float FallSpaceCheckRadius = 0.25f;
 
 	void Awake()
 	{
@@ -460,6 +489,75 @@ public class GroundEnemyCharacterView : MonoBehaviour
 	public void InitRootMotion()
 	{
 		animator.applyRootMotion = false;
+	}
+
+	/// <summary>
+	/// 死亡アニメーションを再生する（複数ある死亡アニメーションから、倒れる向きに壁などが無いものをランダムで1つ選ぶ）
+	/// ※自分のコライダーを無効にしてから呼ぶ（有効のままだと、倒れる広さを調べる時に自分のコライダーに当たる）
+	/// </summary>
+	public void PlayDeadAnimation()
+	{
+		//死亡アニメーションは体ごと倒れて動くので、ルートモーションをオンにする
+		animator.applyRootMotion = true;
+		animator.SetInteger(DeathIndexParameterName, ChooseDeathIndex());
+		animator.SetBool(IsDeadParameterName, true);
+	}
+
+	/// <summary>
+	/// 再生する死亡アニメーションの番号を選ぶ
+	/// （倒れる向きに壁などが無いものの中からランダムで選ぶ。どれも無い時は、必要な広さに対して一番広く倒れられるものを選ぶ）
+	/// </summary>
+	int ChooseDeathIndex()
+	{
+		List<int> clearIndexes = new List<int>();
+		int widestIndex = FirstIndex;
+		float widestRate = 0.0f;
+		for (int i = FirstIndex; i < deathAnimations.Length; i++)
+		{
+			float fallSpace = GetFallSpace(deathAnimations[i]);
+			if (deathAnimations[i].fallDistance <= fallSpace)
+			{
+				clearIndexes.Add(i);
+			}
+
+			//必要な広さのうち、どれだけ倒れられるかの割合
+			float rate = fallSpace / deathAnimations[i].fallDistance;
+			if (widestRate < rate)
+			{
+				widestRate = rate;
+				widestIndex = i;
+			}
+		}
+
+		if (clearIndexes.Count == 0)
+		{
+			return widestIndex;
+		}
+
+		//Random.Range(最小値, 最大値)は、int型の場合は「最小値以上・最大値未満」の乱数を返す
+		return clearIndexes[Random.Range(FirstIndex, clearIndexes.Count)];
+	}
+
+	/// <summary>
+	/// 倒れる向きに、壁などに当たらずに倒れられる広さ（m）を求める（必要な広さより広い時は、必要な広さを返す）
+	/// </summary>
+	/// <param name="deathAnimation">死亡アニメーションの設定</param>
+	float GetFallSpace(DeathAnimation deathAnimation)
+	{
+		Vector3 origin = transform.position + transform.up * FallSpaceCheckHeight;
+		Vector3 direction = transform.rotation * deathAnimation.fallDirection.normalized;
+		//球の先が、必要な広さの所まで届くように動かす
+		float castDistance = deathAnimation.fallDistance - FallSpaceCheckRadius;
+		//SphereCastAllは、球を指定した向きへ動かした時に当たったコライダーを全部返す
+		//（最初から球と重なっているコライダーは、距離0で返す。トリガーのコライダーは無視する）
+		RaycastHit[] hits = Physics.SphereCastAll(origin, FallSpaceCheckRadius, direction, castDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+		float fallSpace = deathAnimation.fallDistance;
+		foreach (RaycastHit hit in hits)
+		{
+			fallSpace = Mathf.Min(fallSpace, hit.distance + FallSpaceCheckRadius);
+		}
+
+		return fallSpace;
 	}
 
 	/// <summary>
