@@ -70,7 +70,7 @@ public class SceneLoadManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// シーンを切り替える（Single読み込み）
+	/// ロードしてシーンを切り替える（Single読み込み）
 	/// </summary>
 	/// <param name="sceneName">次のシーン名</param>
 	/// <param name="onProgress">読み込み進捗（0～1）を受け取る処理</param>
@@ -98,7 +98,7 @@ public class SceneLoadManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// シーンを追加で読み込む（Additive読み込み）
+	/// ロードしてシーンを追加で読み込む（Additive読み込み）
 	/// 既に読み込まれているシーンは読み込み直さない
 	/// </summary>
 	/// <param name="sceneName">追加するシーン名</param>
