@@ -52,7 +52,7 @@ public class GroundEnemyMoveTargetAction : Action
 			return TaskStatus.Failure;
 		}
 
-		if (groundEnemy.IsChase == false)
+		if (groundEnemy.GroundEnemyModel.IsChase == false)
 		{
 			InitMove();
 			//追跡終了

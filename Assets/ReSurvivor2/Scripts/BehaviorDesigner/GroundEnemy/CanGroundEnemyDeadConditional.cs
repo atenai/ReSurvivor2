@@ -18,7 +18,7 @@ public class CanGroundEnemyDeadConditional : Conditional
 	// 更新時に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
-		if (groundEnemy.GetHitPoint().IsDead == true)
+		if (groundEnemy.GroundEnemyModel.HP.IsDead == true)
 		{
 			return TaskStatus.Success;
 		}

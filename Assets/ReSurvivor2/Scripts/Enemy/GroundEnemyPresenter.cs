@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Knife.Effects;
 using Cinemachine;
-using UnityEngine.UI;
 using UnityEngine.AI;
 
 /// <summary>
@@ -13,12 +12,18 @@ using UnityEngine.AI;
 /// </summary>
 public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 {
-	[UnityEngine.Tooltip("HP")]
-	[SerializeField] HitPoint hp;
-	public HitPoint GetHitPoint()
-	{
-		return hp;
-	}
+	[Header("地上敵MVPパターン")]
+	/// <summary>地上敵モデル</summary>
+	GroundEnemyModel groundEnemyModel = new GroundEnemyModel();
+	public GroundEnemyModel GroundEnemyModel => groundEnemyModel;
+
+	[Tooltip("地上敵キャラクタービュー")]
+	[SerializeField] GroundEnemyCharacterView groundEnemyCharacterView;
+	public GroundEnemyCharacterView GroundEnemyCharacterView => groundEnemyCharacterView;
+
+	[Tooltip("地上敵UIビュー")]
+	[SerializeField] GroundEnemyUIView groundEnemyUIView;
+	public GroundEnemyUIView GroundEnemyUIView => groundEnemyUIView;
 
 	[Tooltip("ナビメッシュ")]
 	[SerializeField] NavMeshAgent navMeshAgent;
@@ -39,19 +44,6 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	[Tooltip("プレイヤー")]
 	GameObject targetPlayer;
 	public GameObject TargetPlayer => targetPlayer;
-
-	[Header("地上敵MVPパターン")]
-	/// <summary>地上敵モデル</summary>
-	GroundEnemyModel groundEnemyModel = new GroundEnemyModel();
-	GroundEnemyModel GroundEnemyModel => groundEnemyModel;
-
-	[Tooltip("地上敵キャラクタービュー")]
-	[SerializeField] GroundEnemyCharacterView groundEnemyCharacterView;
-	public GroundEnemyCharacterView GroundEnemyCharacterView => groundEnemyCharacterView;
-
-	[Tooltip("地上敵UIビュー")]
-	[SerializeField] GroundEnemyUIView groundEnemyUIView;
-	public GroundEnemyUIView GroundEnemyUIView => groundEnemyUIView;
 
 	[Header("コライダー")]
 
@@ -84,24 +76,6 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	/// <summary>角度の回転方向（+1で右へ、-1で左へ）</summary>
 	float angleDir = 1f;
 
-	[Header("追跡")]
-	/// <summary>追跡時間</summary>
-	float chaseTime = 30.0f;
-	public float ChaseTime => chaseTime;
-	/// <summary>追跡カウントタイマー</summary>
-	float chaseCountTime;
-	public float ChaseCountTime
-	{
-		get { return chaseCountTime; }
-		set { chaseCountTime = value; }
-	}
-	/// <summary>追跡中か？</summary>
-	bool isChase = false;
-	public bool IsChase
-	{
-		get { return isChase; }
-		set { isChase = value; }
-	}
 	[Tooltip("エネミー追跡範囲の中心点")]
 	[SerializeField] GameObject centerPos;
 	public GameObject CenterPos => centerPos;
@@ -197,6 +171,18 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	[SerializeField] DebugEnemy debugEnemy;
 	public DebugEnemy DebugEnemy => debugEnemy;
 
+	/// <summary>エネミーのゲームオブジェクトを取得する</summary>
+	public GameObject GetEnemyGameObject()
+	{
+		return this.gameObject;
+	}
+
+	/// <summary>HPを取得する</summary>
+	public HitPoint GetHitPoint()
+	{
+		return groundEnemyModel.HP;
+	}
+
 	void Awake()
 	{
 		InitNavMeshAgent();
@@ -245,12 +231,12 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	/// </summary>
 	void Initialize()
 	{
-		hp = new HitPoint(HitPoint.Max_Hp);
-		hp.Initialize(DamageEffect, Dead);
-		groundEnemyUIView.InitHP(hp.CurrentHp);
+		groundEnemyModel.Initialize();
+		groundEnemyModel.HP.Initialize(DamageEffect, Dead);
+		groundEnemyUIView.InitHP(groundEnemyModel.HP.CurrentHp);
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
-		EnemyManager.SingletonInstance.ChaseEvent.AddListener(ChaseOn);
+		EnemyManager.SingletonInstance.ChaseEvent.AddListener(groundEnemyModel.ChaseOn);
 
 		if (targetPlayer == null)
 		{
@@ -263,12 +249,28 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 
 		ResetSensorCollider();
 
-		//各種パラメーターを初期化
-		isChase = false;
 		patrolPointNumber = 0;
 		isGrounded = false;
 		InitGunMagazine();
 		GroundCheck();
+	}
+
+	/// <summary>
+	/// ダメージエフェクト
+	/// </summary>
+	public void DamageEffect()
+	{
+		groundEnemyUIView.SliderHp.value = (float)groundEnemyModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
+	}
+
+	/// <summary>
+	/// 死んだ際の処理
+	/// </summary>
+	public void Dead()
+	{
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(groundEnemyModel.ChaseOn);
+		//敵マーカー削除
+		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 	}
 
 	/// <summary>
@@ -341,7 +343,7 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 			EnemyManager.SingletonInstance.ChaseEvent.Invoke();
 		}
 		Alert();
-		ChasePlayer();
+		groundEnemyModel.ChasePlayer();
 
 #if UNITY_EDITOR
 		//デバッグ関連の処理
@@ -354,7 +356,7 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	/// </summary>
 	public bool Eyesight()
 	{
-		if (hp.IsDead == true)
+		if (groundEnemyModel.HP.IsDead == true)
 		{
 			return false;
 		}
@@ -403,43 +405,17 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	}
 
 	/// <summary>
-	/// 追跡開始
-	/// </summary>
-	public void ChaseOn()
-	{
-		//Debug.Log("<color=red>GroundEnemyのChaseOn()</color>");
-		isChase = true;
-		chaseCountTime = chaseTime;
-	}
-
-	/// <summary>
 	/// アラートイメージの表示・非表示
 	/// </summary>
 	void Alert()
 	{
-		if (hp.IsDead == false)
+		if (groundEnemyModel.HP.IsDead == false)
 		{
-			groundEnemyUIView.Alert.gameObject.SetActive(isChase);
+			groundEnemyUIView.Alert.gameObject.SetActive(groundEnemyModel.IsChase);
 		}
 		else
 		{
 			groundEnemyUIView.Alert.gameObject.SetActive(false);
-		}
-	}
-
-	/// <summary>
-	/// プレイヤーを追跡中の処理
-	/// </summary>
-	void ChasePlayer()
-	{
-		if (isChase == true)
-		{
-			chaseCountTime -= Time.deltaTime;
-			const float minTimer = 0.0f;
-			if (chaseCountTime <= minTimer)
-			{
-				isChase = false;
-			}
 		}
 	}
 
@@ -450,7 +426,7 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	{
 		string[] debugTexts = new string[11];
 
-		debugTexts[10] = "IsDead : " + hp.IsDead.ToString();
+		debugTexts[10] = "IsDead : " + groundEnemyModel.HP.IsDead.ToString();
 
 		debugTexts[9] = "currentGrenade : " + currentGrenade.ToString();
 
@@ -458,8 +434,8 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 		debugTexts[7] = "isReloadTimeActive : " + isReloadTimeActive.ToString();
 		debugTexts[6] = "currentMagazine : " + currentMagazine.ToString();
 
-		debugTexts[5] = "chaseCountTime : " + chaseCountTime.ToString();
-		debugTexts[4] = "isChase : " + isChase.ToString();
+		debugTexts[5] = "chaseCountTime : " + groundEnemyModel.ChaseCountTime.ToString();
+		debugTexts[4] = "isChase : " + groundEnemyModel.IsChase.ToString();
 
 		debugTexts[3] = "patrolPointNumber : " + patrolPointNumber.ToString();
 		debugTexts[2] = "isGrounded : " + isGrounded.ToString();
@@ -563,24 +539,6 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	public void OnTriggerExitHitCliff(Collider collider)
 	{
 		//Debug.Log("<color=green>OnTriggerExitHitGround</color>");
-	}
-
-	/// <summary>
-	/// ダメージエフェクト
-	/// </summary>
-	public void DamageEffect()
-	{
-		groundEnemyUIView.SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.Max_Hp;
-	}
-
-	/// <summary>
-	/// 死んだ際の処理
-	/// </summary>
-	public void Dead()
-	{
-		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(ChaseOn);
-		//敵マーカー削除
-		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 	}
 
 	/// <summary>
@@ -799,7 +757,7 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	/// </summary>
 	void OnDisable()
 	{
-		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(ChaseOn);
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(groundEnemyModel.ChaseOn);
 		//敵マーカー削除
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 		UnInitRigidbody();
@@ -812,14 +770,5 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	void UnInitRigidbody()
 	{
 		enemyRigidbody.velocity = Vector3.zero;
-	}
-
-	/// <summary>
-	/// エネミーのゲームオブジェクトを取得する
-	/// </summary>
-	/// <returns></returns>
-	public GameObject GetEnemyGameObject()
-	{
-		return this.gameObject;
 	}
 }

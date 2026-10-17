@@ -56,7 +56,7 @@ public class GroundEnemyShotGunFireAction : Action
 			return TaskStatus.Success;
 		}
 
-		if (groundEnemy.IsChase == false)
+		if (groundEnemy.GroundEnemyModel.IsChase == false)
 		{
 			groundEnemy.GroundEnemyCharacterView.InitAnimation();
 			//追跡終了
@@ -78,7 +78,7 @@ public class GroundEnemyShotGunFireAction : Action
 		if (groundEnemy.TargetPlayer == null)
 		{
 			Debug.Log("<color=red>プレイヤーが破棄されています</color>");
-			groundEnemy.IsChase = false;
+			groundEnemy.GroundEnemyModel.IsChase = false;
 			return;
 		}
 

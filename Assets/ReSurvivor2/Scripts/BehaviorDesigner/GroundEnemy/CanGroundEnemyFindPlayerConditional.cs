@@ -24,8 +24,8 @@ public class CanGroundEnemyFindPlayerConditional : Conditional
         if (groundEnemy.GetHit(checkCollisionIndex) == true && groundEnemy.HitCollider.tag == "Player")
         {
             //Debug.Log("<color=green>プレイヤーを発見!3</color>");
-            groundEnemy.IsChase = true;
-            groundEnemy.ChaseCountTime = groundEnemy.ChaseTime;
+            groundEnemy.GroundEnemyModel.IsChase = true;
+            groundEnemy.GroundEnemyModel.ChaseCountTime = groundEnemy.GroundEnemyModel.ChaseTime;
 
         }
 

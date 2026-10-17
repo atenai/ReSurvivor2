@@ -91,7 +91,7 @@ public class GroundEnemyRandomMoveAction : Action
 	// 更新時に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
-		if (groundEnemy.IsChase == false)
+		if (groundEnemy.GroundEnemyModel.IsChase == false)
 		{
 			//追跡終了
 			return TaskStatus.Success;

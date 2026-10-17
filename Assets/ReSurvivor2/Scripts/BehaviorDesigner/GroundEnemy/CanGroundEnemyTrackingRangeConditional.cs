@@ -29,7 +29,7 @@ public class CanGroundEnemyTrackingRangeConditional : Conditional
         //↑の値が特定の範囲以上だとfalse、範囲以内だとtrue
         if (range * range < sqrCurrentDistance)
         {
-            groundEnemy.IsChase = false;
+            groundEnemy.GroundEnemyModel.IsChase = false;
             //範囲以上
             return TaskStatus.Failure;
         }

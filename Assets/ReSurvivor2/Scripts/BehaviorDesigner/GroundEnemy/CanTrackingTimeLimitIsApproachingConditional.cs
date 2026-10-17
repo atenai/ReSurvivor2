@@ -38,9 +38,9 @@ public class CanTrackingTimeLimitIsApproachingConditional : Conditional
 		}
 
 		//追跡制限時間がせまっている場合は中身を実行する
-		if (groundEnemy.ChaseCountTime <= timeLimit)
+		if (groundEnemy.GroundEnemyModel.ChaseCountTime <= timeLimit)
 		{
-			Debug.Log("<color=red>groundEnemy.ChaseCountTime : " + groundEnemy.ChaseCountTime + "</color>");
+			Debug.Log("<color=red>groundEnemy.GroundEnemyModel.ChaseCountTime : " + groundEnemy.GroundEnemyModel.ChaseCountTime + "</color>");
 			return TaskStatus.Success;
 		}
 

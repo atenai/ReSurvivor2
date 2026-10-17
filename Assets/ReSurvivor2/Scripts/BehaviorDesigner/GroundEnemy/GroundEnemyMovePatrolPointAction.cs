@@ -85,7 +85,7 @@ public class GroundEnemyMovePatrolPointAction : Action
 	// Tick毎に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
-		if (groundEnemy.IsChase == true)
+		if (groundEnemy.GroundEnemyModel.IsChase == true)
 		{
 			//プレイヤーを発見した
 			return TaskStatus.Success;

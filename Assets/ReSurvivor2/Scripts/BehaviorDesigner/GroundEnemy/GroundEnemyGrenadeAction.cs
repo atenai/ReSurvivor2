@@ -77,7 +77,7 @@ public class GroundEnemyGrenadeAction : Action
 	public override TaskStatus OnUpdate()
 	{
 		//まだ投げ始めていない時に追跡が終わったら、構えるのをやめる（投げ始めていたら最後まで投げる）
-		if (groundEnemy.IsChase == false && isThrow == false && isCancel == false)
+		if (groundEnemy.GroundEnemyModel.IsChase == false && isThrow == false && isCancel == false)
 		{
 			isCancel = true;
 			groundEnemy.GroundEnemyCharacterView.InitAnimation();
@@ -127,7 +127,7 @@ public class GroundEnemyGrenadeAction : Action
 		if (groundEnemy.TargetPlayer == null)
 		{
 			Debug.Log("<color=red>プレイヤーが破棄されています</color>");
-			groundEnemy.IsChase = false;
+			groundEnemy.GroundEnemyModel.IsChase = false;
 			return;
 		}
 
@@ -141,7 +141,7 @@ public class GroundEnemyGrenadeAction : Action
 	public override void OnEnd()
 	{
 		//死亡で中断された時は、銃を左手に持ったまま倒れさせる（右手に戻すと、倒れ始めた瞬間に銃が右手へ瞬間移動して見えるため）
-		if (groundEnemy.GetHitPoint().IsDead == true)
+		if (groundEnemy.GroundEnemyModel.HP.IsDead == true)
 		{
 			return;
 		}

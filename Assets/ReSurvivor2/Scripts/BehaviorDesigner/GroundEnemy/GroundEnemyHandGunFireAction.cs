@@ -52,7 +52,7 @@ public class GroundEnemyHandGunFireAction : Action
 			return TaskStatus.Success;
 		}
 
-		if (groundEnemy.IsChase == false)
+		if (groundEnemy.GroundEnemyModel.IsChase == false)
 		{
 			groundEnemy.GroundEnemyCharacterView.InitAnimation();
 			return TaskStatus.Success;
@@ -72,7 +72,7 @@ public class GroundEnemyHandGunFireAction : Action
 		// TargetPlayer が破棄されている可能性があるためチェックする
 		if (groundEnemy.TargetPlayer == null)
 		{
-			groundEnemy.IsChase = false;
+			groundEnemy.GroundEnemyModel.IsChase = false;
 			return;
 		}
 

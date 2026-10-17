@@ -8,17 +8,12 @@ public interface IEnemy
     /// <summary>
     /// エネミーのゲームオブジェクトを取得する
     /// </summary>
-    /// <returns></returns>
+    /// <returns>エネミーのゲームオブジェクト</returns>
     public GameObject GetEnemyGameObject();
 
     /// <summary>
     /// ヒットポイントを取得する
     /// </summary>
-    /// <returns></returns>
+    /// <returns>ヒットポイント</returns>
     public HitPoint GetHitPoint();
-
-    /// <summary>
-	/// 追跡開始
-	/// </summary>
-	public void ChaseOn();
 }
