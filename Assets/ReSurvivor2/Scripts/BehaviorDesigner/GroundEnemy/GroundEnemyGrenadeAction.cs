@@ -100,7 +100,7 @@ public class GroundEnemyGrenadeAction : Action
 			//投げ終わった後に、もう一度構えるアニメーションに戻らないようにする
 			groundEnemy.GroundEnemyCharacterView.Animator.SetBool("b_isGrenadeEquip", false);
 			GrenadeSpawn();
-			groundEnemy.CurrentGrenade = groundEnemy.CurrentGrenade - 1;//現在のグレネード数を-1する
+			groundEnemy.GroundEnemyModel.CurrentGrenade = groundEnemy.GroundEnemyModel.CurrentGrenade - 1;//現在のグレネード数を-1する
 		}
 
 		//投げ終わって（または構えるのをやめて）待機アニメーションに戻りきったら、銃を右手に戻してタスクを終了する

@@ -14,7 +14,7 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 {
 	[Header("地上敵MVPパターン")]
 	/// <summary>地上敵モデル</summary>
-	GroundEnemyModel groundEnemyModel = new GroundEnemyModel();
+	[SerializeField] GroundEnemyModel groundEnemyModel = new GroundEnemyModel();
 	public GroundEnemyModel GroundEnemyModel => groundEnemyModel;
 
 	[Tooltip("地上敵キャラクタービュー")]
@@ -62,20 +62,6 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	Collider hitCollider = null;
 	public Collider HitCollider => hitCollider;
 
-	[Header("レイキャスト")]
-	[Tooltip("視界用の頭ゲームオブジェクト")]
-	[SerializeField] GameObject head;
-	/// <summary>視界な長さ</summary>
-	float rayDistance = 14.0f;
-	/// <summary>左右の最大角</summary>
-	float halfAngle = 45f;
-	/// <summary>度/秒（例：90なら1秒で90度回る）</summary>
-	float sweepSpeed = 180f;
-	/// <summary>現在の角度</summary>
-	float currentAngle = 0f;
-	/// <summary>角度の回転方向（+1で右へ、-1で左へ）</summary>
-	float angleDir = 1f;
-
 	[Tooltip("エネミー追跡範囲の中心点")]
 	[SerializeField] GameObject centerPos;
 	public GameObject CenterPos => centerPos;
@@ -103,36 +89,6 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	bool isGrounded = false;
 	public bool IsGrounded => isGrounded;
 
-	[Header("攻撃")]
-	[Tooltip("交戦距離")]
-	[SerializeField] float engagementDistance = 14.0f;
-	public float EngagementDistance => engagementDistance;
-
-	[Tooltip("銃の現在のマガジンの弾数")]
-	int currentMagazine;
-	public int CurrentMagazine
-	{
-		get { return currentMagazine; }
-		set { currentMagazine = value; }
-	}
-	[Tooltip("銃の最大マガジン数")]
-	[SerializeField] int magazineCapacity = 8;
-	public int MagazineCapacity => magazineCapacity;
-	[Tooltip("銃のリロードのオン・オフ")]
-	bool isReloadTimeActive = false;
-	public bool IsReloadTimeActive
-	{
-		get { return isReloadTimeActive; }
-		set { isReloadTimeActive = value; }
-	}
-	[Tooltip("リロードを始めてからの経過時間（デバッグ表示用。リロードはアニメーションが終わったら完了する）")]
-	float reloadTime = 0.0f;
-	public float ReloadTime
-	{
-		get { return reloadTime; }
-		set { reloadTime = value; }
-	}
-
 	//↓アセットストアのプログラム↓//
 	[Tooltip("マズルフラッシュと薬莢")]
 	[SerializeField] ParticleGroupEmitter[] shotEmitters;
@@ -155,14 +111,6 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	const float MinMuzzleDistance = 0.001f;
 	[Tooltip("プレイヤーとの水平距離がこれより近ければ、正面に撃つ")]
 	const float MinAimDistance = 0.01f;
-
-	[Tooltip("現在のグレネード数")]
-	int currentGrenade = 3;
-	public int CurrentGrenade
-	{
-		get { return currentGrenade; }
-		set { currentGrenade = value; }
-	}
 
 	[Tooltip("シネマシーンインパルス")]
 	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
@@ -251,7 +199,7 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 
 		patrolPointNumber = 0;
 		isGrounded = false;
-		InitGunMagazine();
+
 		GroundCheck();
 	}
 
@@ -289,14 +237,7 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 		hitCollider = null;
 	}
 
-	/// <summary>
-	/// 銃の弾数の初期化処理
-	/// </summary>
-	void InitGunMagazine()
-	{
-		CurrentMagazine = MagazineCapacity;
-		isReloadTimeActive = false;
-	}
+
 
 	/// <summary>
 	/// 地面に接触しているか？をチェックする関数
@@ -337,7 +278,7 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 		groundEnemyUIView.RotCanvas();
 		GroundCheck();
 
-		if (Eyesight() == true)
+		if (groundEnemyModel.Eyesight(groundEnemyCharacterView.Head.transform.position, this.transform.forward, this.transform.up) == true)
 		{
 			//Debug.Log("<color=red>プレイヤーを発見!</color>");
 			EnemyManager.SingletonInstance.ChaseEvent.Invoke();
@@ -349,59 +290,6 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 		//デバッグ関連の処理
 		DebugText();
 #endif
-	}
-
-	/// <summary>
-	/// レイキャストによる視界
-	/// </summary>
-	public bool Eyesight()
-	{
-		if (groundEnemyModel.HP.IsDead == true)
-		{
-			return false;
-		}
-
-		// 角度を進める
-		currentAngle = currentAngle + angleDir * sweepSpeed * Time.deltaTime;
-
-		// 端で反転（往復）
-		if (halfAngle < currentAngle)
-		{
-			currentAngle = halfAngle;
-			angleDir = -1f;
-		}
-		else if (currentAngle < -halfAngle)
-		{
-			currentAngle = -halfAngle;
-			angleDir = 1f;
-		}
-
-		Vector3 pos = head.transform.position;
-		Vector3 forward = this.transform.forward;
-		Vector3 up = this.transform.up;
-
-		if (forward.sqrMagnitude < 0.0001f)
-		{
-			forward = Vector3.forward;
-		}
-		forward.Normalize();
-
-		// 今の角度だけ回した方向に1本Ray
-		Vector3 dir = Quaternion.AngleAxis(currentAngle, up) * forward;
-
-		Debug.DrawRay(pos, dir * rayDistance, Color.yellow);
-
-		RaycastHit hit;
-		if (Physics.Raycast(pos, dir, out hit, rayDistance))
-		{
-			// ヒット時の処理（例：プレイヤー検知など）
-			if (hit.collider.CompareTag("Player"))
-			{
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	/// <summary>
@@ -426,13 +314,12 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	{
 		string[] debugTexts = new string[11];
 
-		debugTexts[10] = "IsDead : " + groundEnemyModel.HP.IsDead.ToString();
+		debugTexts[9] = "IsDead : " + groundEnemyModel.HP.IsDead.ToString();
 
-		debugTexts[9] = "currentGrenade : " + currentGrenade.ToString();
+		debugTexts[8] = "currentGrenade : " + groundEnemyModel.CurrentGrenade.ToString();
 
-		debugTexts[8] = "reloadTime : " + reloadTime.ToString();
-		debugTexts[7] = "isReloadTimeActive : " + isReloadTimeActive.ToString();
-		debugTexts[6] = "currentMagazine : " + currentMagazine.ToString();
+		debugTexts[7] = "isReloadTimeActive : " + groundEnemyModel.IsReloadTimeActive.ToString();
+		debugTexts[6] = "currentMagazine : " + groundEnemyModel.CurrentMagazine.ToString();
 
 		debugTexts[5] = "chaseCountTime : " + groundEnemyModel.ChaseCountTime.ToString();
 		debugTexts[4] = "isChase : " + groundEnemyModel.IsChase.ToString();

@@ -59,7 +59,7 @@ public class GroundEnemyMoveTargetAction : Action
 			return TaskStatus.Success;
 		}
 
-		if (groundEnemy.Eyesight() == true)
+		if (groundEnemy.GroundEnemyModel.Eyesight(groundEnemy.GroundEnemyCharacterView.Head.transform.position, this.transform.forward, this.transform.up) == true)
 		{
 			InitMove();
 			//目的地にたどりついた

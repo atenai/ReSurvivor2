@@ -34,14 +34,14 @@ public class GroundEnemyAssaultRifleReloadAction : Action
 	/// </summary>
 	void InitReload()
 	{
-		groundEnemy.IsReloadTimeActive = true;
+		groundEnemy.GroundEnemyModel.IsReloadTimeActive = true;
 		groundEnemy.AssaultRifleReloadSE();
 	}
 
 	// Tick毎に呼ばれる
 	public override TaskStatus OnUpdate()
 	{
-		if (groundEnemy.IsReloadTimeActive == true)
+		if (groundEnemy.GroundEnemyModel.IsReloadTimeActive == true)
 		{
 			//リロード実行中
 			return TaskStatus.Running;
@@ -63,17 +63,12 @@ public class GroundEnemyAssaultRifleReloadAction : Action
 	/// </summary>
 	void Reload()
 	{
-		if (groundEnemy.IsReloadTimeActive == true)//リロードがオンになったら
+		if (groundEnemy.GroundEnemyModel.IsReloadTimeActive == true)//リロードがオンになったら
 		{
-			groundEnemy.ReloadTime += Time.deltaTime;//リロードを始めてからの経過時間をプラス（デバッグ表示用）
-
 			if (groundEnemy.GroundEnemyCharacterView.IsReloadAnimationFinished() == true)//リロードのアニメーションが終わったら
 			{
-				//弾リセット
-				groundEnemy.CurrentMagazine = groundEnemy.MagazineCapacity;
-
-				groundEnemy.ReloadTime = 0.0f;//リロードタイムをリセット
-				groundEnemy.IsReloadTimeActive = false;//リロードのオフ
+				groundEnemy.GroundEnemyModel.CurrentMagazine = groundEnemy.GroundEnemyModel.MagazineCapacity;//弾リセット
+				groundEnemy.GroundEnemyModel.IsReloadTimeActive = false;//リロードのオフ
 
 				//リロードアニメーションをオフ
 				groundEnemy.GroundEnemyCharacterView.Animator.SetBool("b_isReload", false);

@@ -96,7 +96,7 @@ public class MoveToCoverPointAction : Action
 
 			//エネミーに設定している交戦距離よりカバーポイントが遠いなら中身を実行する
 			float coverPointDistance = Vector3.Distance(this.transform.position, coverPoint.Position);
-			if (groundEnemy.EngagementDistance < coverPointDistance)
+			if (groundEnemy.GroundEnemyModel.EngagementDistance < coverPointDistance)
 			{
 				//スキップ
 				continue;
@@ -151,7 +151,7 @@ public class MoveToCoverPointAction : Action
 
 			//エネミーに設定している交戦距離よりカバーポイントが遠いなら中身を実行する
 			float coverPointDistance = Vector3.Distance(this.transform.position, coverPoint.Position);
-			if (groundEnemy.EngagementDistance < coverPointDistance)
+			if (groundEnemy.GroundEnemyModel.EngagementDistance < coverPointDistance)
 			{
 				//スキップ
 				continue;

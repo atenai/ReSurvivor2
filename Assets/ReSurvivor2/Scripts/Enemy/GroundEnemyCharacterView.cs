@@ -23,6 +23,11 @@ public class GroundEnemyCharacterView : MonoBehaviour
 	[SerializeField] Animator animator;
 	public Animator Animator => animator;
 
+	[Header("レイキャスト")]
+	[Tooltip("視界用の頭ゲームオブジェクト")]
+	[SerializeField] GameObject head;
+	public GameObject Head => head;
+
 	[Header("銃の持ち替え")]
 	[Tooltip("手に持っている銃のモデル（右手でグレネードを投げる間だけ左手に持ち替える。リロードで右手がマガジンを取りに行く間は、左手で握る位置に置く）")]
 	[SerializeField] Transform weaponModel;

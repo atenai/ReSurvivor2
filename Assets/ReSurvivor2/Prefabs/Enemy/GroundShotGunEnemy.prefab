@@ -317,6 +317,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fdcdbb3a7f89cd44b0612ff0c7f221d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundEnemyModel:
+    chaseTime: 30
+    rayDistance: 14
+    halfAngle: 45
+    sweepSpeed: 180
+    engagementDistance: 14
+    magazineCapacity: 8
+    currentGrenade: 3
   groundEnemyCharacterView: {fileID: 685487114609522409}
   groundEnemyUIView: {fileID: 3429455625778295112}
   navMeshAgent: {fileID: 2265207154070741179}
@@ -324,7 +332,6 @@ MonoBehaviour:
   enemyCollider: {fileID: 8595419044903638177}
   colliders:
   - {fileID: 3131403555685646428}
-  head: {fileID: 497673641410190972}
   centerPos: {fileID: 7430666133111987251}
   patrolPoints:
   - {fileID: 9062189167038372566}
@@ -336,8 +343,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   groundedRadius: 0.2
-  engagementDistance: 12
-  magazineCapacity: 8
   shotEmitters:
   - {fileID: 5060550449447609551}
   - {fileID: 4833272750533174554}
@@ -1570,11 +1575,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdc3b166cec466f44b89efd43f57457c, type: 3}
---- !u!1 &497673641410190972 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2894660805785215362, guid: cdc3b166cec466f44b89efd43f57457c, type: 3}
-  m_PrefabInstance: {fileID: 3369802069438808062}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &685487114609522409 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2828445038259652887, guid: cdc3b166cec466f44b89efd43f57457c, type: 3}

@@ -32,7 +32,7 @@ public class CanTrackingTimeLimitIsApproachingConditional : Conditional
 			return TaskStatus.Failure;
 		}
 
-		if (groundEnemy.CurrentMagazine <= 0)
+		if (groundEnemy.GroundEnemyModel.CurrentMagazine <= 0)
 		{
 			return TaskStatus.Failure;
 		}

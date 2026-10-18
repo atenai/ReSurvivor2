@@ -8,6 +8,7 @@ using UnityEngine.Events;
 /// プレイヤーモデル
 /// MVPパターンのModel担当
 /// </summary>
+[Serializable]
 public class PlayerModel
 {
 	[Header("プレイヤーキャラクターの移動関連")]

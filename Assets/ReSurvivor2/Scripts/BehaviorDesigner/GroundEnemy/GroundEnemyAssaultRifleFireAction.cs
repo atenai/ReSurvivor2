@@ -117,7 +117,7 @@ public class GroundEnemyAssaultRifleFireAction : Action
 			{
 				count = 0.0f;
 				Fire();
-				groundEnemy.CurrentMagazine = groundEnemy.CurrentMagazine - 1;//現在のマガジンの弾数を-1する
+				groundEnemy.GroundEnemyModel.CurrentMagazine = groundEnemy.GroundEnemyModel.CurrentMagazine - 1;//現在のマガジンの弾数を-1する
 
 				fireCount++;
 				if (rapidFire <= fireCount)

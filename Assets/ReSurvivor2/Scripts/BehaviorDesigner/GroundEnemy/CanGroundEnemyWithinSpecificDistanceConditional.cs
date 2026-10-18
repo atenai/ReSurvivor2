@@ -31,7 +31,7 @@ public class CanGroundEnemyWithinSpecificDistanceConditional : Conditional
 			return TaskStatus.Failure;
 		}
 
-		if (groundEnemy.CurrentMagazine <= 0)
+		if (groundEnemy.GroundEnemyModel.CurrentMagazine <= 0)
 		{
 			return TaskStatus.Failure;
 		}
@@ -41,7 +41,7 @@ public class CanGroundEnemyWithinSpecificDistanceConditional : Conditional
 		//Debug.Log("<color=red>sqrCurrentDistance : " + sqrCurrentDistance + "</color>");
 
 		//↑の値が特定の範囲以上だとtrue、範囲以内だとfalse
-		if (sqrCurrentDistance < groundEnemy.EngagementDistance * groundEnemy.EngagementDistance)
+		if (sqrCurrentDistance < groundEnemy.GroundEnemyModel.EngagementDistance * groundEnemy.GroundEnemyModel.EngagementDistance)
 		{
 			//範囲以内
 			return TaskStatus.Success;

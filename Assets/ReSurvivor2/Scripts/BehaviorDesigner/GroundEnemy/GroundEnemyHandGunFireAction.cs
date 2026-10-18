@@ -107,7 +107,7 @@ public class GroundEnemyHandGunFireAction : Action
 		{
 			count = 0.0f;
 			HandGunFire();
-			groundEnemy.CurrentMagazine = groundEnemy.CurrentMagazine - 1;//現在のマガジンの弾数を-1する
+			groundEnemy.GroundEnemyModel.CurrentMagazine = groundEnemy.GroundEnemyModel.CurrentMagazine - 1;//現在のマガジンの弾数を-1する
 			isEnd = true;
 			return;
 		}

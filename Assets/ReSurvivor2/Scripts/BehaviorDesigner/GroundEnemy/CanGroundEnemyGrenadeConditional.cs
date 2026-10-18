@@ -18,7 +18,7 @@ public class CanGroundEnemyGrenadeConditional : Conditional
     // 更新時に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (0 < groundEnemy.CurrentGrenade)
+        if (0 < groundEnemy.GroundEnemyModel.CurrentGrenade)
         {
             return TaskStatus.Success;
         }
