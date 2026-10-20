@@ -8,6 +8,11 @@ using Knife.Effects;
 /// </summary>
 public class AssaultRifleModel : GunModelBase
 {
+	/// <summary>
+	/// この銃の種類
+	/// </summary>
+	protected override EnumManager.GunTYPE GunType => EnumManager.GunTYPE.AssaultRifle;
+
 	[Header("アサルトライフルモデル")]
 	[Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]
 	[SerializeField] GameObject assaultRifleModel;

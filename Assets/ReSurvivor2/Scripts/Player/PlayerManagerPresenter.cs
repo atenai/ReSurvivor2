@@ -43,6 +43,25 @@ public class PlayerManagerPresenter : MonoBehaviour
 	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
 	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
 
+	[Tooltip("アニメーターに渡す構えの値（構えていない時）")]
+	const float NotAimValue = 0.0f;
+	[Tooltip("アニメーターに渡す構えの値（構えている時）")]
+	const float AimValue = 1.0f;
+	[Tooltip("アニメーターに渡す構えの値が、構えの切り替えに追いつくまでのおおよその時間（秒）（待機・移動の構えの切り替えの遷移時間と同じにする）")]
+	const float AimValueDampTime = 0.25f;
+	[Tooltip("アニメーターに渡す移動の値が、移動の入力に追いつくまでのおおよその時間（秒）（移動の入力はキーを押した瞬間に0から1に変わるので、立ち止まる・歩き出す時にアニメーションが一瞬で切り替わらないようにする）")]
+	const float MoveSpeedDampTime = 0.1f;
+	[Tooltip("ハンドガンを構え始めてから、片手で狙う時間（秒）（この後、左手を添えて両手で狙う）")]
+	const float OneHandAimTime = 1.0f;
+	[Tooltip("片手で狙う構えから、両手で狙う構えに移るのにかける時間（秒）")]
+	const float TwoHandAimBlendTime = 0.3f;
+	[Tooltip("アニメーターに渡す、片手で狙っている割合（片手で狙っている時）")]
+	const float OneHandAimValue = 1.0f;
+	[Tooltip("アニメーターに渡す、片手で狙っている割合（両手で狙っている時）")]
+	const float TwoHandAimValue = 0.0f;
+	[Tooltip("構え続けている時間（秒）")]
+	float aimContinueTime = 0.0f;
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -172,9 +191,25 @@ public class PlayerManagerPresenter : MonoBehaviour
 	/// </summary>
 	void NormalMoveAnimation()
 	{
-		playerCharacterView.Animator.SetFloat("f_moveSpeedX", playerModel.InputHorizontal);
-		playerCharacterView.Animator.SetFloat("f_moveSpeedY", playerModel.InputVertical);
+		playerCharacterView.Animator.SetFloat("f_moveSpeedX", playerModel.InputHorizontal, MoveSpeedDampTime, Time.deltaTime);
+		playerCharacterView.Animator.SetFloat("f_moveSpeedY", playerModel.InputVertical, MoveSpeedDampTime, Time.deltaTime);
 		playerCharacterView.Animator.SetBool("b_isAim", playerModel.IsAim);
+		//リロードアニメーションの「構えていない時の動き」と「構えている時の動き」を混ぜる割合（0〜1）
+		//※SetFloatの3つ目の引数（dampTime）を渡すと、値が一瞬で切り替わらず、その時間をかけてなめらかに近づく
+		playerCharacterView.Animator.SetFloat("f_aim", playerModel.IsAim ? AimValue : NotAimValue, AimValueDampTime, Time.deltaTime);
+		//ハンドガンは、構えていない時に片手で持つので、構えていない時の移動のアニメーションをライフル・ショットガンと分ける
+		playerCharacterView.Animator.SetBool("b_isHandGun", PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun);
+		//ハンドガンを構え始めた時は、まず片手で狙い、少ししてから左手を添えて両手で狙う
+		if (playerModel.IsAim == true)
+		{
+			aimContinueTime = aimContinueTime + Time.deltaTime;
+			playerCharacterView.Animator.SetFloat("f_oneHandAim", Mathf.SmoothStep(OneHandAimValue, TwoHandAimValue, (aimContinueTime - OneHandAimTime) / TwoHandAimBlendTime));
+		}
+		else
+		{
+			//構えをやめた時は、片手で狙っている割合はそのままにしておく（構えをやめるアニメーションの間に、左手が急に銃から離れないようにする）
+			aimContinueTime = 0.0f;
+		}
 	}
 
 	/// <summary>

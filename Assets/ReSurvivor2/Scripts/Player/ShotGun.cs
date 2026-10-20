@@ -27,8 +27,43 @@ public class ShotGun : GunBase
 	[Tooltip("ショットガンの最大残弾数")]
 	readonly int maxShotGunAmmo = 80;//将来的には拡張マガジンポーチを取得すると増える的なものを入れるかも
 
-	[Tooltip("ショットガンのリロード時間")]
-	readonly float shotGunReloadTimeDefine = 1.5f;
+	//※ショットガンは弾を1発ずつ込める。込める弾の数（マガジンの空き数と残弾数の少ない方）だけ「ポーチから弾を取る → 装填口に込める」を繰り返し、
+	//  込めるたびにマガジンの弾が1発増える。リロード中でも構えて撃てば、そこでリロードをやめて撃てる（込め終わった弾はそのまま）
+	[Tooltip("ショットガンのリロードの最初に、銃を弾を込める姿勢にして、左手が腰の後ろのポーチまで弾を取りに行くまでの時間（秒）")]
+	readonly float shotGunReloadStartTime = 0.6f;
+
+	[Tooltip("ショットガンの1発目の弾を、腰の後ろのポーチから装填口まで持っていって込めるまでの時間（秒）（2発目以降より手の動く距離が長いので、長めにする）")]
+	readonly float shotGunFirstShellInsertTime = 0.4f;
+
+	[Tooltip("ショットガンの弾を込めた後、次の弾を取りに腰のベルトへ戻るまでの時間（秒）")]
+	readonly float shotGunShellReturnTime = 0.2f;
+
+	[Tooltip("ショットガンの2発目以降の弾を、腰のベルトから装填口まで持っていって込めるまでの時間（秒）")]
+	readonly float shotGunShellInsertTime = 0.25f;
+
+	[Tooltip("ショットガンの最後の弾を込めてから、元の構えに戻るまでの時間（秒）")]
+	readonly float shotGunReloadEndTime = 0.7f;
+
+	[Tooltip("今回のリロードで込める弾の数")]
+	int shellCountToLoad = 0;
+
+	[Tooltip("今回のリロードで込め終わった弾の数")]
+	int loadedShellCount = 0;
+
+	[Tooltip("リロードを始めた時に、銃に弾が1発も入っていなかったか？（入っていなかった時は、最後の弾を込めた後に弾を送り込む音を鳴らす）")]
+	bool isEmptyAtReloadStart = false;
+
+	[Tooltip("1回で込める弾の数")]
+	const int ShellCountPerLoad = 1;
+
+	[Tooltip("弾が1発も入っていない時のマガジンの弾数")]
+	const int EmptyMagazineCount = 0;
+
+	[Tooltip("リロードアニメーションの始まりの再生位置")]
+	const float ReloadAnimationStartTime = 0.0f;
+
+	[Tooltip("リロードアニメーションの終わりの再生位置")]
+	const float ReloadAnimationEndTime = 1.0f;
 
 	/// <summary>
 	/// コンストラクタ
@@ -69,6 +104,7 @@ public class ShotGun : GunBase
 	{
 		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.DownRT)//左クリックまたはEnterを押している場合に中身を実行する
 		{
+			InterruptReload(isAim);
 			Shoot(isAim);
 		}
 		ResetFireCountTimer();
@@ -81,8 +117,8 @@ public class ShotGun : GunBase
 	}
 
 	/// <summary>
-	/// リロード
-	/// </summary> 
+	/// リロード（弾を1発ずつ込める）
+	/// </summary>
 	protected override void ReloadSystem()
 	{
 		if (isReloadTimeActive == false)
@@ -95,45 +131,149 @@ public class ShotGun : GunBase
 			//ショットガンのリロードアニメーションをオン
 			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isShotGunReload", true);
 
-			ShotGunReloadSE();
+			//今回込める弾の数（マガジンの空き数と残弾数の少ない方）
+			shellCountToLoad = Mathf.Min(shotGunMagazineCapacity - currentMagazine, currentAmmo);
+			loadedShellCount = 0;
+			isEmptyAtReloadStart = currentMagazine == EmptyMagazineCount;
 		}
 
-		//リロード中画像
 		reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
 
-		if (shotGunReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
+		//込めるタイミングを過ぎた弾を、1発ずつマガジンに入れる
+		while (loadedShellCount < shellCountToLoad && GetShellInsertedTime(loadedShellCount) <= reloadCountTimer)
 		{
-			//弾リセット
-			int oldMagazine = currentMagazine;
-			int localMagazine = shotGunMagazineCapacity - currentMagazine;
-			int localAmmo = currentAmmo - localMagazine;
-			if (localAmmo < 0)
-			{
-				if (currentAmmo + oldMagazine < shotGunMagazineCapacity)
-				{
-					currentMagazine = currentAmmo + oldMagazine;
-					currentAmmo = 0;
-				}
-				else
-				{
-					currentMagazine = shotGunMagazineCapacity;
-					int totalAmmo = currentAmmo + oldMagazine;
-					int resultAmmo = totalAmmo - shotGunMagazineCapacity;
-					currentAmmo = resultAmmo;
-				}
-			}
-			else
-			{
-				currentMagazine = shotGunMagazineCapacity;
-				currentAmmo = localAmmo;
-			}
-
-			reloadCountTimer = 0.0f;//リロードタイムをリセット
-			isReloadTimeActive = false;//リロードのオフ
-
-			//ショットガンのリロードアニメーションをオフ
-			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isShotGunReload", false);
+			LoadShell();
 		}
+
+		UpdateShotGunReloadAnimationTime();
+
+		if (GetReloadEndTime() <= reloadCountTimer)
+		{
+			FinishReload();
+		}
+	}
+
+	/// <summary>
+	/// 弾を1発込める
+	/// </summary>
+	void LoadShell()
+	{
+		currentMagazine = currentMagazine + ShellCountPerLoad;
+		currentAmmo = currentAmmo - ShellCountPerLoad;
+		loadedShellCount = loadedShellCount + ShellCountPerLoad;
+		ShotGunShellInsertSE();
+
+		//空の銃に最後の弾まで込めたら、弾を送り込む音を鳴らす
+		if (loadedShellCount == shellCountToLoad && isEmptyAtReloadStart == true)
+		{
+			ShotGunReloadSE();
+		}
+	}
+
+	/// <summary>
+	/// 指定した弾を込め終わる時間（リロードを始めてからの秒数）を求める
+	/// </summary>
+	/// <param name="shellIndex">何発目の弾か（0が1発目）</param>
+	/// <returns>その弾を込め終わる時間（秒）</returns>
+	float GetShellInsertedTime(int shellIndex)
+	{
+		//最初 → 1発目を込める → （次の弾を取りに戻る → 込める）を2発目以降の数だけ
+		return shotGunReloadStartTime + shotGunFirstShellInsertTime + (shotGunShellReturnTime + shotGunShellInsertTime) * shellIndex;
+	}
+
+	/// <summary>
+	/// 今回のリロードで最後に込める弾の番号を求める
+	/// </summary>
+	/// <returns>最後の弾の番号（0が1発目）</returns>
+	int GetLastShellIndex()
+	{
+		return shellCountToLoad - ShellCountPerLoad;
+	}
+
+	/// <summary>
+	/// リロードが終わる時間（リロードを始めてからの秒数）を求める
+	/// </summary>
+	/// <returns>リロードが終わる時間（秒）</returns>
+	float GetReloadEndTime()
+	{
+		return GetShellInsertedTime(GetLastShellIndex()) + shotGunReloadEndTime;
+	}
+
+	/// <summary>
+	/// リロードアニメーションの再生位置を、今込めている弾に合わせて決める
+	/// （最初 → 込める弾の数だけ「ポーチ → 装填口」を繰り返す → 最後、の順に進める。装填口から次の弾を取りに戻る間は巻き戻す）
+	/// </summary>
+	void UpdateShotGunReloadAnimationTime()
+	{
+		ShotGunModel shotGunModel = PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.ShotGunModel;
+
+		//最初：銃を弾を込める姿勢にして、左手がポーチまで弾を取りに行く
+		if (reloadCountTimer < shotGunReloadStartTime)
+		{
+			SetReloadAnimationTime(Mathf.SmoothStep(ReloadAnimationStartTime, shotGunModel.MagazineOutTime, reloadCountTimer / shotGunReloadStartTime), true);
+			return;
+		}
+
+		//1発目：最初にポーチに着いた所から、装填口まで進めて込める
+		float firstShellTime = reloadCountTimer - shotGunReloadStartTime;
+		if (firstShellTime < shotGunFirstShellInsertTime)
+		{
+			SetReloadAnimationTime(Mathf.SmoothStep(shotGunModel.MagazineOutTime, shotGunModel.MagazineInTime, firstShellTime / shotGunFirstShellInsertTime), true);
+			return;
+		}
+
+		//2発目以降：「次の弾を取る所まで巻き戻す → 装填口まで進めて込める」を、残りの弾の数だけ繰り返す
+		float nextShellsTime = firstShellTime - shotGunFirstShellInsertTime;
+		float shellCycleTime = shotGunShellReturnTime + shotGunShellInsertTime;
+		int cycleIndex = Mathf.FloorToInt(nextShellsTime / shellCycleTime);
+		if (cycleIndex < GetLastShellIndex())
+		{
+			float timeInCycle = nextShellsTime - shellCycleTime * cycleIndex;
+			if (timeInCycle < shotGunShellReturnTime)
+			{
+				SetReloadAnimationTime(Mathf.SmoothStep(shotGunModel.MagazineInTime, shotGunModel.ShellPickTime, timeInCycle / shotGunShellReturnTime), false);
+				return;
+			}
+
+			SetReloadAnimationTime(Mathf.SmoothStep(shotGunModel.ShellPickTime, shotGunModel.MagazineInTime, (timeInCycle - shotGunShellReturnTime) / shotGunShellInsertTime), true);
+			return;
+		}
+
+		//最後：最後の弾を込めた所から、元の構えに戻す
+		float endTime = reloadCountTimer - GetShellInsertedTime(GetLastShellIndex());
+		SetReloadAnimationTime(Mathf.SmoothStep(shotGunModel.MagazineInTime, ReloadAnimationEndTime, endTime / shotGunReloadEndTime), true);
+	}
+
+	/// <summary>
+	/// リロード中に撃とうとした時は、そこでリロードをやめる（込め終わった弾はそのまま）
+	/// </summary>
+	/// <param name="isAim">構えているか？</param>
+	void InterruptReload(bool isAim)
+	{
+		if (isReloadTimeActive == false)
+		{
+			return;
+		}
+
+		//構えていない時と、まだ1発も入っていない時は撃てないので、リロードを続ける
+		if (isAim == false || currentMagazine <= EmptyMagazineCount)
+		{
+			return;
+		}
+
+		FinishReload();
+	}
+
+	/// <summary>
+	/// リロードを終える
+	/// </summary>
+	void FinishReload()
+	{
+		reloadCountTimer = 0.0f;//リロードタイムをリセット
+		isReloadTimeActive = false;//リロードのオフ
+
+		//ショットガンのリロードアニメーションをオフ
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isShotGunReload", false);
 	}
 
 	/// <summary>
@@ -222,11 +362,19 @@ public class ShotGun : GunBase
 	}
 
 	/// <summary>
-	/// ショットガンのリロードSE
-	/// </summary> 
+	/// ショットガンのリロードSE（空の銃に弾を込め終わった時に、弾を送り込む音として鳴らす）
+	/// </summary>
 	void ShotGunReloadSE()
 	{
 		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
+	}
+
+	/// <summary>
+	/// ショットガンの弾込めSE（弾を1発込めるたびに鳴らす）
+	/// </summary>
+	void ShotGunShellInsertSE()
+	{
+		SoundManager.SingletonInstance.ShotGunShellInsertSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.ShotGunModel.ShotGunBulletCasingTransform);
 	}
 
 	/// <summary>

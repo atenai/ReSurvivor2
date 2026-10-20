@@ -94,6 +94,7 @@ public class HandGun : GunBase
 
 		//リロード中画像
 		reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
+		UpdateReloadAnimationTime(handGunReloadTimeDefine);
 
 		if (handGunReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
 		{

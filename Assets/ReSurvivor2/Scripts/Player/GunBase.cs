@@ -34,6 +34,17 @@ public abstract class GunBase
 	[Tooltip("リロード時間用のカウントタイマー")]
 	protected float reloadCountTimer = 0.0f;
 
+	[Tooltip("リロードアニメーションの再生位置（0がアニメーションの始まり、1が終わり）")]
+	float reloadAnimationTime = 0.0f;
+	public float ReloadAnimationTime => reloadAnimationTime;
+
+	[Tooltip("リロードアニメーションを前へ進めているか？（ショットガンは弾を1発込めるたびに少し巻き戻して次の弾を取りに行くので、巻き戻している間はfalseになる）")]
+	bool isReloadAnimationForward = true;
+	public bool IsReloadAnimationForward => isReloadAnimationForward;
+
+	[Tooltip("アニメーターのリロードアニメーションの再生位置のパラメーターの名前")]
+	const string ReloadAnimationTimeParameterName = "f_reloadAnimationTime";
+
 	/// <summary>
 	/// セーブ
 	/// </summary>
@@ -133,6 +144,28 @@ public abstract class GunBase
 	/// リロード
 	/// </summary> 
 	protected abstract void ReloadSystem();
+
+	/// <summary>
+	/// リロードアニメーションの再生位置を、リロードの進み具合（経過時間 ÷ リロード時間）に合わせる
+	/// （こうすると、リロード時間が変わっても、アニメーションがちょうどリロードの終わりで終わる）
+	/// </summary>
+	/// <param name="reloadTime">リロードにかかる時間（秒）</param>
+	protected void UpdateReloadAnimationTime(float reloadTime)
+	{
+		SetReloadAnimationTime(reloadCountTimer / reloadTime, true);
+	}
+
+	/// <summary>
+	/// リロードアニメーションの再生位置を決める（アニメーターにも渡す）
+	/// </summary>
+	/// <param name="animationTime">再生位置（0がアニメーションの始まり、1が終わり）</param>
+	/// <param name="isForward">前へ進めているか？（巻き戻している間はfalse）</param>
+	protected void SetReloadAnimationTime(float animationTime, bool isForward)
+	{
+		reloadAnimationTime = Mathf.Clamp01(animationTime);
+		isReloadAnimationForward = isForward;
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetFloat(ReloadAnimationTimeParameterName, reloadAnimationTime);
+	}
 
 	/// <summary>
 	/// 弾を発射
