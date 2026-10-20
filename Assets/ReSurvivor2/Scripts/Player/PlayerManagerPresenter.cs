@@ -61,6 +61,12 @@ public class PlayerManagerPresenter : MonoBehaviour
 	const float TwoHandAimValue = 0.0f;
 	[Tooltip("構え続けている時間（秒）")]
 	float aimContinueTime = 0.0f;
+	[Tooltip("アニメーターに渡す、近距離の構え（C.A.R.システムのような構え）の割合（狙っている敵が近い時）")]
+	const float CloseQuarterAimValue = 1.0f;
+	[Tooltip("アニメーターに渡す、近距離の構えの割合（狙っている敵が近くない時）")]
+	const float NotCloseQuarterAimValue = 0.0f;
+	[Tooltip("アニメーターに渡す近距離の構えの割合が、切り替えに追いつくまでのおおよその時間（秒）")]
+	const float CloseQuarterAimDampTime = 0.2f;
 
 	void Awake()
 	{
@@ -210,6 +216,9 @@ public class PlayerManagerPresenter : MonoBehaviour
 			//構えをやめた時は、片手で狙っている割合はそのままにしておく（構えをやめるアニメーションの間に、左手が急に銃から離れないようにする）
 			aimContinueTime = 0.0f;
 		}
+		//狙っている方向に近い敵がいる時は、ハンドガンを近距離の構え（C.A.R.システムのような構え）にする
+		//（構えていない時も変えておき、構え始めた時には、もう近距離の構えの割合になっているようにする）
+		playerCharacterView.Animator.SetFloat("f_closeQuarterAim", PlayerCameraManager.SingletonInstance.IsEnemyClose == true ? CloseQuarterAimValue : NotCloseQuarterAimValue, CloseQuarterAimDampTime, Time.deltaTime);
 	}
 
 	/// <summary>
