@@ -8,6 +8,11 @@ using Knife.Effects;
 /// </summary>
 public class HandGunModel : GunModelBase
 {
+	/// <summary>
+	/// この銃の種類
+	/// </summary>
+	protected override EnumManager.GunTYPE GunType => EnumManager.GunTYPE.HandGun;
+
 	[Header("ハンドガンモデル")]
 	[Tooltip("キャラクターの手に持っているハンドガンのモデル")]
 	[SerializeField] GameObject handGunModel;

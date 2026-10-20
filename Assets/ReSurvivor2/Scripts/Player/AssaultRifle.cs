@@ -97,6 +97,7 @@ public class AssaultRifle : GunBase
 
 		//リロード中画像
 		reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
+		UpdateReloadAnimationTime(assaultRifleReloadTimeDefine);
 
 		if (assaultRifleReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
 		{
