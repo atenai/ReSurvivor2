@@ -42,6 +42,10 @@ public class SoundManager : MonoBehaviour
 	[SerializeField] ShotGunReloadSEPool shotGunReloadSEPool;
 	public ShotGunReloadSEPool ShotGunReloadSEPool => shotGunReloadSEPool;
 
+	[Tooltip("ショットガンの弾込めのSE（弾を1発込めるたびに鳴らす）")]
+	[SerializeField] ShotGunShellInsertSEPool shotGunShellInsertSEPool;
+	public ShotGunShellInsertSEPool ShotGunShellInsertSEPool => shotGunShellInsertSEPool;
+
 	[Tooltip("弾がかすめた時の風切り音")]
 	[SerializeField] BulletFlybySEPool bulletFlybySEPool;
 	public BulletFlybySEPool BulletFlybySEPool => bulletFlybySEPool;
