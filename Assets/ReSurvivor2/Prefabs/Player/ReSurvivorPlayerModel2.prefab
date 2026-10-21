@@ -1310,7 +1310,8 @@ MonoBehaviour:
     relaxedRightHandAngle: {x: 0, y: 0, z: 0}
     relaxedReloadRightHandOffset: {x: 0, y: 0, z: 0}
     relaxedReloadRightHandAngle: {x: 0, y: 0, z: 0}
-    dashRightHandOffset: {x: 0, y: 0, z: 0}
+    dashRightHandPosition: {x: 0, y: 0, z: 0}
+    dashGunAngle: {x: 0, y: 0, z: 0}
   assaultRifleAnimation:
     magazineModels:
     - {fileID: 2121356204759452830}
@@ -1329,7 +1330,8 @@ MonoBehaviour:
     relaxedRightHandAngle: {x: 0, y: 0, z: 0}
     relaxedReloadRightHandOffset: {x: 0, y: 0.06, z: 0.14}
     relaxedReloadRightHandAngle: {x: 0, y: 0, z: 0}
-    dashRightHandOffset: {x: 0.04, y: 0.08, z: 0.2}
+    dashRightHandPosition: {x: 0.12, y: 0.05, z: 0.25}
+    dashGunAngle: {x: 10, y: 0, z: 10}
   shotGunAnimation:
     magazineModels:
     - {fileID: 5094681170906548818}
@@ -1344,7 +1346,8 @@ MonoBehaviour:
     relaxedRightHandAngle: {x: 0, y: 0, z: 0}
     relaxedReloadRightHandOffset: {x: 0, y: 0.03, z: 0.18}
     relaxedReloadRightHandAngle: {x: 0, y: -25, z: 0}
-    dashRightHandOffset: {x: 0.04, y: 0.08, z: 0.2}
+    dashRightHandPosition: {x: 0.12, y: 0.05, z: 0.25}
+    dashGunAngle: {x: 10, y: 0, z: 10}
   shotGunShellPickTime: 0.45
   minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
 --- !u!114 &8735078247964254621

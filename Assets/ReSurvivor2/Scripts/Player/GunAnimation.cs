@@ -75,10 +75,15 @@ public class GunAnimation
 	[Tooltip("構えずにリロードしている時に、右手（と銃）を右手の位置を中心に回す角度（度。キャラクターから見た向き）")]
 	[SerializeField] Vector3 relaxedReloadRightHandAngle;
 	public Vector3 RelaxedReloadRightHandAngle => relaxedReloadRightHandAngle;
-	//※ダッシュのアニメーションは銃床を右肩に抱え込むので、そのままだと銃が防弾ベストにめり込む。そのため、ダッシュしている時も右手をIKで体から離す
-	[Tooltip("ダッシュしている時に、右手（と銃）をずらす量（m。キャラクターから見た向きで、xが右、yが上、zが前）")]
-	[SerializeField] Vector3 dashRightHandOffset;
-	public Vector3 DashRightHandOffset => dashRightHandOffset;
+	[Header("ダッシュしている時の銃の持ち方（アサルトライフル・ショットガン）")]
+	//※ダッシュしている時は、右手だけで銃を縦に持ち上げて走る（ゴーストリコン フューチャーソルジャーのダッシュのような持ち方）。
+	//  左手は銃から離して、ダッシュのアニメーションどおりに振る。ハンドガンは片手で持つ別のアニメーションなので使わない
+	[Tooltip("ダッシュしている時の右手の位置（m。右肩からのずれで、キャラクターから見た向き。xが右、yが上、zが前）")]
+	[SerializeField] Vector3 dashRightHandPosition;
+	public Vector3 DashRightHandPosition => dashRightHandPosition;
+	[Tooltip("ダッシュしている時の銃の傾き（度。銃口をまっすぐ上に向けて銃の上側を後ろに向けた向きから、xが銃口を前へ倒す角度、yが銃身を軸に銃の上側を右へ回す角度、zが銃口を右へ倒す角度）")]
+	[SerializeField] Vector3 dashGunAngle;
+	public Vector3 DashGunAngle => dashGunAngle;
 
 	/// <summary>
 	/// マガジンを銃に付けている時の親・位置・向きを覚えておく（差し込む時に元に戻すため）

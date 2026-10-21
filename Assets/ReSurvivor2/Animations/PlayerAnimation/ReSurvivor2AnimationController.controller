@@ -253,19 +253,19 @@ BlendTree:
   m_Name: NormalDash
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 1827226128182048838, guid: db91ffada18fc5348a3fba0c88007735, type: 3}
+    m_Motion: {fileID: 7400000, guid: fecca7e4744aaa34dabebeb573bad09a, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 1}
-    m_TimeScale: 1.48
-    m_CycleOffset: 0
+    m_TimeScale: 0.9
+    m_CycleOffset: 0.69
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 1827226128182048838, guid: db91ffada18fc5348a3fba0c88007735, type: 3}
+    m_Motion: {fileID: 7400000, guid: fecca7e4744aaa34dabebeb573bad09a, type: 2}
     m_Threshold: 0.25
     m_Position: {x: -1, y: 0}
-    m_TimeScale: 1.48
-    m_CycleOffset: 0
+    m_TimeScale: 0.9
+    m_CycleOffset: 0.69
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
@@ -277,19 +277,19 @@ BlendTree:
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 1827226128182048838, guid: db91ffada18fc5348a3fba0c88007735, type: 3}
+    m_Motion: {fileID: 7400000, guid: fecca7e4744aaa34dabebeb573bad09a, type: 2}
     m_Threshold: 0.75
     m_Position: {x: 1, y: 0}
-    m_TimeScale: 1.48
-    m_CycleOffset: 0
+    m_TimeScale: 0.9
+    m_CycleOffset: 0.69
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 1827226128182048838, guid: db91ffada18fc5348a3fba0c88007735, type: 3}
+    m_Motion: {fileID: 7400000, guid: fecca7e4744aaa34dabebeb573bad09a, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: -1}
-    m_TimeScale: 1.48
-    m_CycleOffset: 0
+    m_TimeScale: 0.9
+    m_CycleOffset: 0.69
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   m_BlendParameter: f_moveSpeedX
@@ -299,6 +299,32 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 1
+--- !u!1102 &-4103330923119367271
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RifleRunRightArm
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 0
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 1827226128182048838, guid: 5be9a62e06179cb469b277bbbed47317, type: 3}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!206 &-3893651598025243867
 BlendTree:
   m_ObjectHideFlags: 1
@@ -850,6 +876,18 @@ AnimatorController:
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
   - serializedVersion: 5
+    m_Name: DashRightArm
+    m_StateMachine: {fileID: 4184982246717275901}
+    m_Mask: {fileID: 31900000, guid: 1196d93c51299374ea914ca732c66acb, type: 2}
+    m_Motions: []
+    m_Behaviours: []
+    m_BlendingMode: 0
+    m_SyncedLayerIndex: -1
+    m_DefaultWeight: 0
+    m_IKPass: 0
+    m_SyncedLayerAffectsTiming: 0
+    m_Controller: {fileID: 9100000}
+  - serializedVersion: 5
     m_Name: UpperBodyReload
     m_StateMachine: {fileID: 4979751188366874494}
     m_Mask: {fileID: 31900000, guid: e352b89fbcfe492498a8f051cc58e50e, type: 2}
@@ -1068,6 +1106,28 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1107 &4184982246717275901
+AnimatorStateMachine:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RifleGripRightFingers
+  m_ChildStates:
+  - serializedVersion: 1
+    m_State: {fileID: -4103330923119367271}
+    m_Position: {x: 300, y: 100, z: 0}
+  m_ChildStateMachines: []
+  m_AnyStateTransitions: []
+  m_EntryTransitions: []
+  m_StateMachineTransitions: {}
+  m_StateMachineBehaviours: []
+  m_AnyStatePosition: {x: 50, y: 20, z: 0}
+  m_EntryPosition: {x: 50, y: 120, z: 0}
+  m_ExitPosition: {x: 800, y: 120, z: 0}
+  m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
+  m_DefaultState: {fileID: -4103330923119367271}
 --- !u!1107 &4979751188366874494
 AnimatorStateMachine:
   serializedVersion: 6

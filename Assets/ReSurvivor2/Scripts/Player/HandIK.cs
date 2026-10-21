@@ -39,8 +39,10 @@ public class HandIK : MonoBehaviour
 	const int LocomotionLayerIndex = 0;
 	[Tooltip("アニメーターの、ハンドガンを片手で構えている間だけ左腕を下ろしておくレイヤーの番号")]
 	const int HandGunOneHandAimLeftArmLayerIndex = 1;
+	[Tooltip("アニメーターの、ダッシュしている間だけ右腕と右手の指を走りのアニメーション（銃を持つ腕）にしておくレイヤーの番号")]
+	const int DashRightArmLayerIndex = 2;
 	[Tooltip("アニメーターの上半身のリロードのレイヤーの番号")]
-	const int UpperBodyReloadLayerIndex = 2;
+	const int UpperBodyReloadLayerIndex = 3;
 	[Tooltip("構えていない時の移動のステート（アニメーターのステート名から作った番号）")]
 	readonly int normalIdleAndWalkStateHash = Animator.StringToHash("NormalIdleAndWalk");
 	[Tooltip("リロードしていない時のステート（アニメーターのステート名から作った番号）")]
@@ -104,6 +106,13 @@ public class HandIK : MonoBehaviour
 	static readonly Vector3 CloseQuarterAimRightElbowHintOffset = new Vector3(0.30f, -0.15f, -0.05f);
 	[Tooltip("近距離の構えの時に、左肘を向ける位置（m。左肩からのずれで、キャラクターから見た向き）（左肘は横へ張り出して、左腕が胸の前を横切るようにする）")]
 	static readonly Vector3 CloseQuarterAimLeftElbowHintOffset = new Vector3(-0.30f, -0.05f, 0.05f);
+	//↓ダッシュしている時に、アサルトライフル・ショットガンを右手だけで縦に持ち上げるのに使う↓//
+	[Tooltip("今のフレームで、銃を縦に持ち上げている割合（構えていない時の移動で、ダッシュのアニメーションが混ざっている割合）")]
+	float dashRaiseWeight = NoIKWeight;
+	[Tooltip("銃を縦に持ち上げている時に、右肘を向ける位置（m。右肩からのずれで、キャラクターから見た向き）（右肘は体の外側へ張り出す）")]
+	static readonly Vector3 DashRaiseRightElbowHintOffset = new Vector3(0.35f, -0.15f, -0.05f);
+	[Tooltip("右腕を走りのアニメーションにしておくレイヤーを、ダッシュの割合の何倍で効かせるか（ダッシュのアニメーションの右腕が混ざり始めるより早く、走りの右腕にしておく）")]
+	const float DashRightArmWeightScale = 2.0f;
 
 	/// <summary>
 	/// IK用のUnity標準の関数
@@ -114,10 +123,18 @@ public class HandIK : MonoBehaviour
 		PlayerCharacterView playerCharacterView = PlayerManagerPresenter.SingletonInstance.PlayerCharacterView;
 		GunAnimation gunAnimation = playerCharacterView.FindGunAnimation(gunFacade.GetGunTYPE);
 
-		UpdateHoldStyle(gunAnimation, gunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun ? playerCharacterView.GunModelFacade.HandGunModel : null);
+		UpdateHoldStyle(gunAnimation, FindGunModelTransform(playerCharacterView.GunModelFacade, gunFacade.GetGunTYPE), gunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun ? playerCharacterView.GunModelFacade.HandGunModel : null);
 		SetRightHandIK();
-		SetElbowHint(AvatarIKHint.RightElbow, HumanBodyBones.RightUpperArm, CloseQuarterAimRightElbowHintOffset);
-		SetElbowHint(AvatarIKHint.LeftElbow, HumanBodyBones.LeftUpperArm, CloseQuarterAimLeftElbowHintOffset);
+		//※近距離の構え（ハンドガン）と、銃を縦に持ち上げるダッシュ（アサルトライフル・ショットガン）は、同時には起きない
+		if (NoIKWeight < dashRaiseWeight)
+		{
+			SetElbowHint(AvatarIKHint.RightElbow, HumanBodyBones.RightUpperArm, dashRaiseWeight, DashRaiseRightElbowHintOffset);
+		}
+		else
+		{
+			SetElbowHint(AvatarIKHint.RightElbow, HumanBodyBones.RightUpperArm, closeQuarterAimWeight, CloseQuarterAimRightElbowHintOffset);
+		}
+		SetElbowHint(AvatarIKHint.LeftElbow, HumanBodyBones.LeftUpperArm, closeQuarterAimWeight, CloseQuarterAimLeftElbowHintOffset);
 
 		if (gunFacade.GetGunBase.IsReloadTimeActive == true)
 		{
@@ -141,23 +158,40 @@ public class HandIK : MonoBehaviour
 	/// 銃の持ち方を求める
 	/// ・構えていない時に、右手（と銃）を体から離す量（構えていない時のアニメーションは体の細いキャラクター用に作られたもので、そのままだと右手や銃や左腕が防弾ベストやポーチにめり込むため）
 	/// ・ハンドガンを片手で持つ割合（構えていない時と、構え始めの少しの間）
+	/// ・アサルトライフル・ショットガンを、右手だけで縦に持ち上げる割合（ダッシュしている時）
 	/// ※それぞれの動きがどれだけ混ざっているかに合わせて効かせるので、構えた時や構えをやめた時は、アニメーションと一緒になめらかに切り替わる
 	///   （立ち止まっている時・歩いている時は「移動のレイヤーのステート」、リロード中は「リロードのアニメーションの構えていない時の動き（1 - f_aim）」が混ざっている割合）
 	/// </summary>
 	/// <param name="gunAnimation">今持っている銃のアニメーションの設定（銃ごとに体から離す量が違う）</param>
+	/// <param name="gunModelTransform">今持っている銃のモデル（前向きが銃身、上向きが銃の上側）</param>
 	/// <param name="handGunModel">ハンドガンを持っている時は、ハンドガンのモデル（ほかの銃の時はnull）</param>
-	void UpdateHoldStyle(GunAnimation gunAnimation, HandGunModel handGunModel)
+	void UpdateHoldStyle(GunAnimation gunAnimation, Transform gunModelTransform, HandGunModel handGunModel)
 	{
 		float relaxedLocomotionWeight = GetStateWeight(LocomotionLayerIndex, normalIdleAndWalkStateHash);
 		float relaxedReloadWeight = FullIKWeight - animator.GetFloat(AimParameterName);
 		float noReloadWeight = GetStateWeight(UpperBodyReloadLayerIndex, noReloadStateHash);
-		//ダッシュしている時は、ダッシュのアニメーション用のずらし量にする（走りのアニメーションとダッシュのアニメーションが混ざっている割合に合わせて混ぜる）
-		Vector3 relaxedLocomotionOffset = Vector3.Lerp(gunAnimation.RelaxedRightHandOffset, gunAnimation.DashRightHandOffset, animator.GetFloat(DashParameterName));
 		Quaternion characterRotation = animator.transform.rotation;
 		Quaternion relaxedLocomotionRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(gunAnimation.RelaxedRightHandAngle) * Quaternion.Inverse(characterRotation), relaxedLocomotionWeight);
 		Quaternion relaxedReloadRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(gunAnimation.RelaxedReloadRightHandAngle) * Quaternion.Inverse(characterRotation), relaxedReloadWeight);
 		relaxedRotation = Quaternion.Slerp(relaxedReloadRotation, relaxedLocomotionRotation, noReloadWeight);
-		relaxedOffset = characterRotation * Vector3.Lerp(gunAnimation.RelaxedReloadRightHandOffset * relaxedReloadWeight, relaxedLocomotionOffset * relaxedLocomotionWeight, noReloadWeight);
+		relaxedOffset = characterRotation * Vector3.Lerp(gunAnimation.RelaxedReloadRightHandOffset * relaxedReloadWeight, gunAnimation.RelaxedRightHandOffset * relaxedLocomotionWeight, noReloadWeight);
+
+		//ダッシュしている時は（アサルトライフル・ショットガン）、右手だけで銃を縦に持ち上げる（左手は銃から離して、アニメーションどおりに振る）
+		//（構えていない時の移動のステートで、ダッシュのアニメーションが混ざっている割合だけ効かせる。ハンドガンは別のステートなので、0になる）
+		float dash = animator.GetFloat(DashParameterName);
+		dashRaiseWeight = dash * relaxedLocomotionWeight * noReloadWeight;
+		//※ダッシュのアニメーションは、手に小さい物を持って腕を大きく振る動きなので、右腕をそのまま使うと、
+		//  ・銃を持ち上げる途中で、振っている腕の向きから回すため、銃の向きが一瞬ひっくり返る
+		//  ・右手が小さく握った拳になり、銃のグリップを握らない
+		//  そのため、右腕と右手の指だけは、専用のレイヤーで走りのアニメーション（銃を持つ腕）にしておき、そこから銃を持ち上げる
+		animator.SetLayerWeight(DashRightArmLayerIndex, Mathf.Clamp01(dash * DashRightArmWeightScale) * relaxedLocomotionWeight * noReloadWeight);
+		if (NoIKWeight < dashRaiseWeight)
+		{
+			Quaternion dashRaiseRotation = GetDashRaiseRotation(gunModelTransform, gunAnimation.DashGunAngle);
+			Vector3 handPosition = animator.GetBoneTransform(HumanBodyBones.RightUpperArm).position + characterRotation * gunAnimation.DashRightHandPosition;
+			relaxedRotation = Quaternion.Slerp(relaxedRotation, dashRaiseRotation, dashRaiseWeight);
+			relaxedOffset = Vector3.Lerp(relaxedOffset, handPosition - rightHandAnimationPos.position, dashRaiseWeight);
+		}
 
 		//ハンドガンを構えていない時は、片手（右手）だけで持つ
 		//（立ち止まっている時・歩いている時は「ハンドガンの構えていない時の移動のステート」、リロード中は「ハンドガンのリロードの構えていない時の動き」が混ざっている割合）
@@ -170,7 +204,7 @@ public class HandIK : MonoBehaviour
 		//（近距離の構えの時は、片手で狙わずに、すぐに両手で構える）
 		oneHandAimWeight = animator.GetFloat(OneHandAimParameterName) * handGunAimWeight * (FullIKWeight - closeQuarterAim);
 		animator.SetLayerWeight(HandGunOneHandAimLeftArmLayerIndex, oneHandAimWeight);
-		oneHandWeight = oneHandLocomotionWeight + oneHandAimWeight + GetStateWeight(UpperBodyReloadLayerIndex, handGunReloadStateHash) * relaxedReloadWeight;
+		oneHandWeight = oneHandLocomotionWeight + oneHandAimWeight + GetStateWeight(UpperBodyReloadLayerIndex, handGunReloadStateHash) * relaxedReloadWeight + dashRaiseWeight;
 
 		upperBodyTwistAngle = NoTwistAngle;
 		if (handGunModel == null)
@@ -204,6 +238,22 @@ public class HandIK : MonoBehaviour
 			relaxedRotation = Quaternion.Slerp(relaxedRotation, closeQuarterAimRotation, closeQuarterAimWeight);
 			relaxedOffset = Vector3.Lerp(relaxedOffset, handPosition - rightHandAnimationPos.position, closeQuarterAimWeight);
 		}
+	}
+
+	/// <summary>
+	/// ダッシュしている時に、銃を縦に持ち上げるように、右手（と銃）を右手の位置を中心に回す回転を求める
+	/// （銃口をまっすぐ上に向けて銃の上側を後ろに向けた向きから、決めた角度だけ傾けた向きにする）
+	/// </summary>
+	/// <param name="gunTransform">銃のモデル（前向きが銃身、上向きが銃の上側）</param>
+	/// <param name="gunAngle">銃の傾き（度。xが銃口を前へ倒す角度、yが銃身を軸に銃の上側を右へ回す角度、zが銃口を右へ倒す角度）</param>
+	/// <returns>右手（と銃）を回す回転</returns>
+	Quaternion GetDashRaiseRotation(Transform gunTransform, Vector3 gunAngle)
+	{
+		//キャラクターから見た向きで、まっすぐ上に向けた銃を、前（右向きの軸で回す）と右（前向きの軸で逆に回す）へ倒してから、銃身を軸にひねる
+		Quaternion uprightRotation = Quaternion.LookRotation(Vector3.up, Vector3.back);
+		Quaternion tiltRotation = Quaternion.AngleAxis(gunAngle.x, Vector3.right) * Quaternion.AngleAxis(-gunAngle.z, Vector3.forward);
+		Quaternion gunRotation = animator.transform.rotation * tiltRotation * uprightRotation * Quaternion.AngleAxis(-gunAngle.y, Vector3.forward);
+		return gunRotation * Quaternion.Inverse(gunTransform.rotation);
 	}
 
 	/// <summary>
@@ -401,16 +451,17 @@ public class HandIK : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 近距離の構えの時に、肘を曲げる向きを決める（肘を、肩から決めた量だけずれた位置の方へ曲げる）
-	/// ※IKで手を体に引き寄せると、そのままでは肘が下に垂れて、二の腕が体にめり込むため
+	/// 近距離の構えの時と、銃を縦に持ち上げている時に、肘を曲げる向きを決める（肘を、肩から決めた量だけずれた位置の方へ曲げる）
+	/// ※IKで手を体に引き寄せたり持ち上げたりすると、そのままでは肘が下に垂れて、二の腕が体にめり込むため
 	/// </summary>
 	/// <param name="elbowHint">肘</param>
 	/// <param name="upperArmBone">肘と同じ側の肩（二の腕の付け根）の骨</param>
+	/// <param name="weight">肘の向きを決める効き具合（0でIKに任せる、1で決めた位置の方へ曲げる）</param>
 	/// <param name="offset">肘を向ける位置の、肩からのずれ（キャラクターから見た向き）</param>
-	void SetElbowHint(AvatarIKHint elbowHint, HumanBodyBones upperArmBone, Vector3 offset)
+	void SetElbowHint(AvatarIKHint elbowHint, HumanBodyBones upperArmBone, float weight, Vector3 offset)
 	{
-		animator.SetIKHintPositionWeight(elbowHint, closeQuarterAimWeight);
-		if (closeQuarterAimWeight <= NoIKWeight)
+		animator.SetIKHintPositionWeight(elbowHint, weight);
+		if (weight <= NoIKWeight)
 		{
 			return;
 		}
@@ -477,6 +528,26 @@ public class HandIK : MonoBehaviour
 		//アニメーションどおりの右手の位置を中心に回してから、ずらす
 		Vector3 rightHandPosition = rightHandAnimationPos.position;
 		return rightHandPosition + relaxedRotation * (position - rightHandPosition) + relaxedOffset;
+	}
+
+	/// <summary>
+	/// 銃の種類から、右手に持っている銃のモデルを探す
+	/// </summary>
+	/// <param name="gunModelFacade">銃のモデル</param>
+	/// <param name="gunTYPE">銃の種類</param>
+	/// <returns>銃のモデル（前向きが銃身、上向きが銃の上側）</returns>
+	Transform FindGunModelTransform(GunModelFacade gunModelFacade, EnumManager.GunTYPE gunTYPE)
+	{
+		switch (gunTYPE)
+		{
+			case EnumManager.GunTYPE.HandGun:
+				return gunModelFacade.HandGunModel.GetHandGunModel.transform;
+			case EnumManager.GunTYPE.AssaultRifle:
+				return gunModelFacade.AssaultRifleModel.GetAssaultRifleModel.transform;
+			case EnumManager.GunTYPE.ShotGun:
+				return gunModelFacade.ShotGunModel.GetShotGunModel.transform;
+		}
+		return null;
 	}
 
 	/// <summary>
