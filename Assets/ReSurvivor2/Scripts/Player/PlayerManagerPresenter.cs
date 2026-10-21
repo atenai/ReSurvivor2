@@ -57,16 +57,6 @@ public class PlayerManagerPresenter : MonoBehaviour
 	const float NotDashValue = 0.0f;
 	[Tooltip("アニメーターに渡すダッシュの割合が、ダッシュの切り替えに追いつくまでのおおよその時間（秒）")]
 	const float DashDampTime = 0.2f;
-	[Tooltip("ハンドガンを構え始めてから、片手で狙う時間（秒）（この後、左手を添えて両手で狙う）")]
-	const float OneHandAimTime = 1.0f;
-	[Tooltip("片手で狙う構えから、両手で狙う構えに移るのにかける時間（秒）")]
-	const float TwoHandAimBlendTime = 0.3f;
-	[Tooltip("アニメーターに渡す、片手で狙っている割合（片手で狙っている時）")]
-	const float OneHandAimValue = 1.0f;
-	[Tooltip("アニメーターに渡す、片手で狙っている割合（両手で狙っている時）")]
-	const float TwoHandAimValue = 0.0f;
-	[Tooltip("構え続けている時間（秒）")]
-	float aimContinueTime = 0.0f;
 	[Tooltip("アニメーターに渡す、近距離の構え（C.A.R.システムのような構え）の割合（狙っている敵が近い時）")]
 	const float CloseQuarterAimValue = 1.0f;
 	[Tooltip("アニメーターに渡す、近距離の構えの割合（狙っている敵が近くない時）")]
@@ -213,17 +203,10 @@ public class PlayerManagerPresenter : MonoBehaviour
 		playerCharacterView.Animator.SetFloat("f_aim", playerModel.IsAim ? AimValue : NotAimValue, AimValueDampTime, Time.deltaTime);
 		//ハンドガンは、構えていない時に片手で持つので、構えていない時の移動のアニメーションをライフル・ショットガンと分ける
 		playerCharacterView.Animator.SetBool("b_isHandGun", PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun);
-		//ハンドガンを構え始めた時は、まず片手で狙い、少ししてから左手を添えて両手で狙う
-		if (playerModel.IsAim == true)
-		{
-			aimContinueTime = aimContinueTime + Time.deltaTime;
-			playerCharacterView.Animator.SetFloat("f_oneHandAim", Mathf.SmoothStep(OneHandAimValue, TwoHandAimValue, (aimContinueTime - OneHandAimTime) / TwoHandAimBlendTime));
-		}
-		else
-		{
-			//構えをやめた時は、片手で狙っている割合はそのままにしておく（構えをやめるアニメーションの間に、左手が急に銃から離れないようにする）
-			aimContinueTime = 0.0f;
-		}
+		//ハンドガンを構え始めた時は、まず片手で狙い、少ししてから左手を添えて両手で狙う（敵が警戒体制の時は、最初から両手で狙う）
+		//※敵のマネージャーがないシーンでは、警戒体制の敵はいないことにする
+		bool isEnemyAlert = EnemyManager.SingletonInstance != null && EnemyManager.SingletonInstance.IsAnyEnemyAlert() == true;
+		playerCharacterView.UpdateOneHandAimAnimation(playerModel.IsAim, isEnemyAlert);
 		//狙っている方向に近い敵がいる時は、ハンドガンを近距離の構え（C.A.R.システムのような構え）にする
 		//（構えていない時も変えておき、構え始めた時には、もう近距離の構えの割合になっているようにする）
 		playerCharacterView.Animator.SetFloat("f_closeQuarterAim", PlayerCameraManager.SingletonInstance.IsEnemyClose == true ? CloseQuarterAimValue : NotCloseQuarterAimValue, CloseQuarterAimDampTime, Time.deltaTime);

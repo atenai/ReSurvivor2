@@ -74,6 +74,22 @@ public class PlayerCharacterView : MonoBehaviour
 	[Tooltip("リロードアニメーションを前へ進めているか？（ショットガンは弾を1発込めるたびに少し巻き戻して次の弾を取りに行くので、巻き戻している間はfalseになる）")]
 	bool isReloadAnimationForward = true;
 
+	[Header("ハンドガンの片手で狙う構え")]
+	[Tooltip("アニメーターの、片手で狙っている割合のパラメーターの名前")]
+	const string OneHandAimParameterName = "f_oneHandAim";
+	[Tooltip("ハンドガンを構え始めてから、片手で狙う時間（秒）（この後、左手を添えて両手で狙う）")]
+	const float OneHandAimTime = 1.0f;
+	[Tooltip("片手で狙う構えから、両手で狙う構えに移るのにかける時間（秒）")]
+	const float TwoHandAimBlendTime = 0.3f;
+	[Tooltip("アニメーターに渡す、片手で狙っている割合（片手で狙っている時）")]
+	const float OneHandAimValue = 1.0f;
+	[Tooltip("アニメーターに渡す、片手で狙っている割合（両手で狙っている時）")]
+	const float TwoHandAimValue = 0.0f;
+	[Tooltip("構え続けている時間（秒）（構えていない時）")]
+	const float NotAimContinueTime = 0.0f;
+	[Tooltip("構え続けている時間（秒）")]
+	float aimContinueTime = NotAimContinueTime;
+
 	[Tooltip("地雷のプレファブ")]
 	[SerializeField] GameObject minePrefab;
 	public GameObject MinePrefab => minePrefab;
@@ -189,6 +205,40 @@ public class PlayerCharacterView : MonoBehaviour
 		handGunAnimation.UpdateReloadMagazine(gunFacade.FindGunBase(EnumManager.GunTYPE.HandGun).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, hand_l);
 		assaultRifleAnimation.UpdateReloadMagazine(gunFacade.FindGunBase(EnumManager.GunTYPE.AssaultRifle).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, hand_l);
 		shotGunAnimation.UpdateReloadMagazine(gunFacade.FindGunBase(EnumManager.GunTYPE.ShotGun).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, hand_l);
+	}
+
+	/// <summary>
+	/// ハンドガンを構えた時の、片手で狙う構えと両手で狙う構えを切り替える
+	/// ・構え始めた時は、まず片手で狙い、少ししてから左手を添えて両手で狙う
+	/// ・敵が警戒体制の時は、片手で狙わずに、最初から両手で狙う
+	/// </summary>
+	/// <param name="isAim">構えているか？</param>
+	/// <param name="isEnemyAlert">警戒体制の敵がいるか？</param>
+	public void UpdateOneHandAimAnimation(bool isAim, bool isEnemyAlert)
+	{
+		if (isAim == false)
+		{
+			//構えをやめた時は、片手で狙っている割合はそのままにしておく（構えをやめるアニメーションの間に、左手が急に銃から離れないようにする）
+			aimContinueTime = NotAimContinueTime;
+			return;
+		}
+
+		if (isEnemyAlert == true)
+		{
+			if (aimContinueTime <= NotAimContinueTime)
+			{
+				//構え始めた時は、片手で狙う時間を飛ばして、すぐに両手で狙う
+				aimContinueTime = OneHandAimTime + TwoHandAimBlendTime;
+			}
+			else if (aimContinueTime < OneHandAimTime)
+			{
+				//片手で狙っている途中で警戒体制になった時は、そこから両手で狙う構えに移る（左手が急に銃に飛びつかないようにする）
+				aimContinueTime = OneHandAimTime;
+			}
+		}
+
+		aimContinueTime = aimContinueTime + Time.deltaTime;
+		animator.SetFloat(OneHandAimParameterName, Mathf.SmoothStep(OneHandAimValue, TwoHandAimValue, (aimContinueTime - OneHandAimTime) / TwoHandAimBlendTime));
 	}
 
 	/// <summary>
