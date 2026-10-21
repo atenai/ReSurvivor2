@@ -387,8 +387,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 	void LateUpdate()
 	{
 		//ボーンを曲げる際は必ずLateUpdateに書く必要がある！（これいつかメモする！）
-		playerCharacterView.RotateBoneNeck01(playerModel.IsAim);
-		playerCharacterView.RotateBoneSpine03(playerModel.IsAim, PlayerCameraManager.SingletonInstance.transform);
+		playerCharacterView.RotateBoneNeck01();
+		playerCharacterView.RotateBoneSpine03(PlayerCameraManager.SingletonInstance.transform);
 		playerCharacterView.RotateBoneUpperArmR(playerModel.IsAim);
 		playerCharacterView.RotateBoneUpperArmL(playerModel.IsAim);
 	}

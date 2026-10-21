@@ -16,15 +16,10 @@ public class PlayerCharacterView : MonoBehaviour
 	[Header("キャラクターモデル")]
 	[Tooltip("キャラクターの首ボーン")]
 	[SerializeField] Transform neck_01;
-	[Tooltip("キャラクターの首ボーンの初期値")]
-	float neck_01_InitEulerAnglesY;
-	bool isNeck01AnimationRotInit = false;
 	[Tooltip("キャラクターの脊椎ボーン")]
 	[SerializeField] Transform spine_03;
-
-	[Tooltip("キャラクターの脊椎ボーンの初期値")]
-	float spine_03_InitEulerAnglesX;
-	bool isSpine03AnimationRotInit = false;
+	[Tooltip("アニメーターの、構えている割合のパラメーターの名前（0で構えていない、1で構えている。構えの切り替えに合わせて、なめらかに変わる）")]
+	const string AimParameterName = "f_aim";
 	//※型のボーンを曲げると銃の持つ位置がずれておかしくなる為、首と背骨のボーンを曲げる事によって型のボーンを曲げずに済むようにする必要がある
 	[Tooltip("キャラクターの右肩ボーン")]
 	[SerializeField] Transform upperarm_r;
@@ -96,8 +91,6 @@ public class PlayerCharacterView : MonoBehaviour
 
 	void Start()
 	{
-		InitBoneNeck01();
-		InitBoneSpine03();
 		ResetMoveAnimation();
 		handGunAnimation.Initialize();
 		assaultRifleAnimation.Initialize();
@@ -242,24 +235,6 @@ public class PlayerCharacterView : MonoBehaviour
 	}
 
 	/// <summary>
-	/// キャラクターの首ボーンの初期化処理
-	/// </summary> 
-	void InitBoneNeck01()
-	{
-		//キャラクターの脊椎ボーンの初期値を取得する（真正面に戻す際に必要なため）
-		neck_01_InitEulerAnglesY = neck_01.eulerAngles.y;
-	}
-
-	/// <summary>
-	/// キャラクターの脊椎ボーンの初期化処理
-	/// </summary> 
-	void InitBoneSpine03()
-	{
-		//キャラクターの脊椎ボーンの初期値を取得する（真正面に戻す際に必要なため）
-		spine_03_InitEulerAnglesX = spine_03.eulerAngles.x;
-	}
-
-	/// <summary>
 	/// 移動アニメーションをリセットする
 	/// </summary>
 	public void ResetMoveAnimation()
@@ -271,49 +246,28 @@ public class PlayerCharacterView : MonoBehaviour
 
 	/// <summary>
 	/// キャラクターの首ボーンを曲げる
+	/// ※構えている割合に合わせて、アニメーションどおりの向きから曲げた向きへ混ぜる（構えた瞬間・構えをやめた瞬間に、首が一気に回らないようにする）
 	/// </summary>
-	public void RotateBoneNeck01(bool isAim)
+	public void RotateBoneNeck01()
 	{
-		if (isAim == true)
-		{
-			const float aimAnimationRotY = -20.0f;
-			//腰のボーンの角度をカメラの向きにする
-			neck_01.rotation = Quaternion.Euler(neck_01.eulerAngles.x, neck_01.eulerAngles.y + aimAnimationRotY, neck_01.eulerAngles.z);
-			isNeck01AnimationRotInit = true;
-		}
-		else if (isAim == false)
-		{
-			if (isNeck01AnimationRotInit == true)
-			{
-				//腰のボーンの角度を真正面（初期値）にする
-				neck_01.rotation = Quaternion.Euler(neck_01.eulerAngles.x, neck_01_InitEulerAnglesY, neck_01.eulerAngles.z);
-				isNeck01AnimationRotInit = false;
-			}
-		}
+		const float aimAnimationRotY = -20.0f;
+		//首のボーンの角度を、構えている時の角度にする
+		Quaternion aimRotation = Quaternion.Euler(neck_01.eulerAngles.x, neck_01.eulerAngles.y + aimAnimationRotY, neck_01.eulerAngles.z);
+		neck_01.rotation = Quaternion.Slerp(neck_01.rotation, aimRotation, animator.GetFloat(AimParameterName));
 	}
 
 	/// <summary>
 	/// キャラクターの脊椎ボーンを曲げる
-	/// </summary> 
-	public void RotateBoneSpine03(bool isAim, Transform cameraTransform)
+	/// ※構えている割合に合わせて、アニメーションどおりの向きからカメラの向きへ混ぜる
+	///   （ダッシュなどで前に倒れている上半身が、構えた瞬間に一気に起き上がって、両手と銃が飛ばないようにする。構えをやめた時も同じように戻す）
+	/// </summary>
+	public void RotateBoneSpine03(Transform cameraTransform)
 	{
-		if (isAim == true)
-		{
-			const float aimAnimationRotX = 12.5f;
-			const float aimAnimationRotY = 12.5f;
-			//腰のボーンの角度をカメラの向きにする
-			spine_03.rotation = Quaternion.Euler(cameraTransform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
-			isSpine03AnimationRotInit = true;
-		}
-		else if (isAim == false)
-		{
-			if (isSpine03AnimationRotInit == true)
-			{
-				//腰のボーンの角度を真正面（初期値）にする
-				spine_03.rotation = Quaternion.Euler(spine_03_InitEulerAnglesX, spine_03.eulerAngles.y, spine_03.eulerAngles.z);
-				isSpine03AnimationRotInit = false;
-			}
-		}
+		const float aimAnimationRotX = 12.5f;
+		const float aimAnimationRotY = 12.5f;
+		//腰のボーンの角度をカメラの向きにする
+		Quaternion aimRotation = Quaternion.Euler(cameraTransform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
+		spine_03.rotation = Quaternion.Slerp(spine_03.rotation, aimRotation, animator.GetFloat(AimParameterName));
 	}
 
 	/// <summary>
