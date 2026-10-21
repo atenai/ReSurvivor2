@@ -89,6 +89,19 @@ public class HandIK : MonoBehaviour
 	float upperBodyTwistAngle = NoTwistAngle;
 	[Tooltip("今のフレームで、ひねる前の背骨の骨の位置（ひねりの中心）")]
 	Vector3[] twistSpinePositions;
+	//↓ハンドガンを構えて狙っている敵が近い時に、近距離の構え（C.A.R.システムのような構え）にするのに使う↓//
+	[Tooltip("ハンドガンを近距離の構えにしている割合のパラメーター名（1で近距離の構え、0で普通の構え。狙っている敵が近いかに合わせて、PlayerManagerPresenterが変える）")]
+	const string CloseQuarterAimParameterName = "f_closeQuarterAim";
+	[Tooltip("今のフレームで、ハンドガンを近距離の構えにしている割合")]
+	float closeQuarterAimWeight = NoIKWeight;
+	[Tooltip("近距離の構えの時に、両手で構えるアニメーションの銃の位置からずらす量（m。キャラクターから見た向きで、xが右、yが上、zが前）（銃を顔の前の近くへ引き寄せて、両肘を曲げて構える）")]
+	static readonly Vector3 CloseQuarterAimGunOffset = new Vector3(0.05f, 0.07f, -0.22f);
+	[Tooltip("近距離の構えの時に、銃を内側（左）へ傾ける角度（度。銃の上側を、まっすぐ上から左へ倒す角度）")]
+	const float CloseQuarterAimCantAngle = 45.0f;
+	[Tooltip("近距離の構えの時に、右肘を向ける位置（m。右肩からのずれで、キャラクターから見た向き）（右肘は体の外側の少し下へ張り出す）")]
+	static readonly Vector3 CloseQuarterAimRightElbowHintOffset = new Vector3(0.30f, -0.15f, -0.05f);
+	[Tooltip("近距離の構えの時に、左肘を向ける位置（m。左肩からのずれで、キャラクターから見た向き）（左肘は横へ張り出して、左腕が胸の前を横切るようにする）")]
+	static readonly Vector3 CloseQuarterAimLeftElbowHintOffset = new Vector3(-0.30f, -0.05f, 0.05f);
 
 	/// <summary>
 	/// IK用のUnity標準の関数
@@ -100,6 +113,8 @@ public class HandIK : MonoBehaviour
 
 		UpdateHoldStyle(gunModel);
 		SetRightHandIK();
+		SetElbowHint(AvatarIKHint.RightElbow, HumanBodyBones.RightUpperArm, CloseQuarterAimRightElbowHintOffset);
+		SetElbowHint(AvatarIKHint.LeftElbow, HumanBodyBones.LeftUpperArm, CloseQuarterAimLeftElbowHintOffset);
 
 		if (gunFacade.GetGunBase.IsReloadTimeActive == true)
 		{
@@ -141,8 +156,13 @@ public class HandIK : MonoBehaviour
 		//ハンドガンを構えていない時は、片手（右手）だけで持つ
 		//（立ち止まっている時・歩いている時は「ハンドガンの構えていない時の移動のステート」、リロード中は「ハンドガンのリロードの構えていない時の動き」が混ざっている割合）
 		float oneHandLocomotionWeight = GetStateWeight(LocomotionLayerIndex, handGunNormalIdleAndWalkStateHash) * noReloadWeight;
+		//ハンドガンを構えて狙っている敵が近い時は、近距離の構えにする
+		float handGunAimWeight = GetStateWeight(LocomotionLayerIndex, handGunAimIdleAndWalkStateHash) * noReloadWeight;
+		float closeQuarterAim = animator.GetFloat(CloseQuarterAimParameterName);
+		closeQuarterAimWeight = closeQuarterAim * handGunAimWeight;
 		//ハンドガンを構え始めた時は、少しの間だけ片手（右手）で狙う（左腕は、専用のレイヤーで下ろしておく）
-		oneHandAimWeight = animator.GetFloat(OneHandAimParameterName) * GetStateWeight(LocomotionLayerIndex, handGunAimIdleAndWalkStateHash) * noReloadWeight;
+		//（近距離の構えの時は、片手で狙わずに、すぐに両手で構える）
+		oneHandAimWeight = animator.GetFloat(OneHandAimParameterName) * handGunAimWeight * (FullIKWeight - closeQuarterAim);
 		animator.SetLayerWeight(HandGunOneHandAimLeftArmLayerIndex, oneHandAimWeight);
 		oneHandWeight = oneHandLocomotionWeight + oneHandAimWeight + GetStateWeight(UpperBodyReloadLayerIndex, handGunReloadStateHash) * relaxedReloadWeight;
 
@@ -170,6 +190,45 @@ public class HandIK : MonoBehaviour
 			relaxedRotation = aimRotation * GetTwistRotation() * relaxedRotation;
 			relaxedOffset = relaxedOffset + handPosition - rightHandAnimationPos.position;
 		}
+
+		//近距離の構えの時は、銃を顔の前の近くへ引き寄せて、内側（左）へ傾ける（両手で持ったまま、両肘を曲げて構える）
+		if (NoIKWeight < closeQuarterAimWeight)
+		{
+			Quaternion closeQuarterAimRotation = GetCloseQuarterAimRotation(handGunModel.GetHandGunModel.transform);
+			Vector3 handPosition = GetCloseQuarterAimHandPosition(handGunModel.GetHandGunModel.transform, closeQuarterAimRotation);
+			relaxedRotation = Quaternion.Slerp(relaxedRotation, closeQuarterAimRotation, closeQuarterAimWeight);
+			relaxedOffset = Vector3.Lerp(relaxedOffset, handPosition - rightHandAnimationPos.position, closeQuarterAimWeight);
+		}
+	}
+
+	/// <summary>
+	/// 近距離の構えの時に、右手（と銃）を右手の位置を中心に回す回転を求める
+	/// （銃身の左右の向きをキャラクターの前向きに合わせてから、銃身を軸にして、銃の上側を決めた角度まで左へ倒す）
+	/// ※両手で構えるアニメーションの銃の向きから回すので、アニメーションの上下の揺れは残る
+	/// </summary>
+	/// <param name="gunTransform">ハンドガンのモデル（前向きが銃身、上向きが銃の上側）</param>
+	/// <returns>右手（と銃）を回す回転</returns>
+	Quaternion GetCloseQuarterAimRotation(Transform gunTransform)
+	{
+		Quaternion aimRotation = GetOneHandAimRotation(gunTransform.forward);
+		Vector3 barrelDirection = aimRotation * gunTransform.forward;
+		Vector3 uprightDirection = Vector3.ProjectOnPlane(animator.transform.up, barrelDirection);
+		float cantAngle = Vector3.SignedAngle(uprightDirection, aimRotation * gunTransform.up, barrelDirection);
+		return Quaternion.AngleAxis(CloseQuarterAimCantAngle - cantAngle, barrelDirection) * aimRotation;
+	}
+
+	/// <summary>
+	/// 近距離の構えの時の右手の位置を求める
+	/// （銃が、両手で構えるアニメーションの銃の位置から決めた量だけずれた位置に来るようにする）
+	/// </summary>
+	/// <param name="gunTransform">ハンドガンのモデル</param>
+	/// <param name="closeQuarterAimRotation">近距離の構えの時に、右手（と銃）を右手の位置を中心に回す回転</param>
+	/// <returns>右手の位置</returns>
+	Vector3 GetCloseQuarterAimHandPosition(Transform gunTransform, Quaternion closeQuarterAimRotation)
+	{
+		Vector3 gunPosition = gunTransform.position + animator.transform.rotation * CloseQuarterAimGunOffset;
+		//右手を中心に回した後の、銃から右手までの位置関係のまま、銃をずらした位置へ右手を動かす
+		return gunPosition + closeQuarterAimRotation * (rightHandAnimationPos.position - gunTransform.position);
 	}
 
 	/// <summary>
@@ -276,7 +335,7 @@ public class HandIK : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 片手で狙う時に、銃口の左右の向きをキャラクターの前向きに合わせる回転を求める
+	/// 片手で狙う時と近距離の構えの時に、銃口の左右の向きをキャラクターの前向きに合わせる回転を求める
 	/// （両手で構えるアニメーションでは、銃が体の真ん中に寄っていて、銃口が少し内側を向いているため）
 	/// </summary>
 	/// <param name="muzzleDirection">今の銃口の向き</param>
@@ -334,6 +393,24 @@ public class HandIK : MonoBehaviour
 		animator.SetIKRotationWeight(AvatarIKGoal.RightHand, FullIKWeight);
 		animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandAnimationPos.position + relaxedOffset);
 		animator.SetIKRotation(AvatarIKGoal.RightHand, relaxedRotation * rightHandAnimationPos.rotation);
+	}
+
+	/// <summary>
+	/// 近距離の構えの時に、肘を曲げる向きを決める（肘を、肩から決めた量だけずれた位置の方へ曲げる）
+	/// ※IKで手を体に引き寄せると、そのままでは肘が下に垂れて、二の腕が体にめり込むため
+	/// </summary>
+	/// <param name="elbowHint">肘</param>
+	/// <param name="upperArmBone">肘と同じ側の肩（二の腕の付け根）の骨</param>
+	/// <param name="offset">肘を向ける位置の、肩からのずれ（キャラクターから見た向き）</param>
+	void SetElbowHint(AvatarIKHint elbowHint, HumanBodyBones upperArmBone, Vector3 offset)
+	{
+		animator.SetIKHintPositionWeight(elbowHint, closeQuarterAimWeight);
+		if (closeQuarterAimWeight <= NoIKWeight)
+		{
+			return;
+		}
+
+		animator.SetIKHintPosition(elbowHint, animator.GetBoneTransform(upperArmBone).position + animator.transform.rotation * offset);
 	}
 
 	/// <summary>

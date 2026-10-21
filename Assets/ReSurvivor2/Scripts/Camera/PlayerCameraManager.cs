@@ -97,6 +97,23 @@ public class PlayerCameraManager : MonoBehaviour
 	[Tooltip("スフィアレイキャストの半径")]
 	[Range(0.5f, 1.0f)] float sphereRayCastRadius = 1.0f;
 
+	[Header("近距離の構え（C.A.R.システムのような構え）")]
+	[Tooltip("狙っている敵がこの距離（m）以内に入ったら、近距離の構えにする（プレイヤーから、スフィアキャストが敵に当たった位置までの水平の距離）")]
+	const float CloseQuarterEnterDistance = 3.0f;
+	[Tooltip("近距離の構えをやめる距離（m）（入る距離より少し遠くして、境目で構えが行ったり来たりしないようにする）")]
+	const float CloseQuarterExitDistance = 3.5f;
+	[Tooltip("狙っている方向に近い敵がいるかを調べる、スフィアキャストの半径（m）（細いレイだと、敵の腕と体のすき間などを通り抜けて、構えが行ったり来たりするため）")]
+	const float CloseQuarterCheckRadius = 0.3f;
+	[Tooltip("近い敵を調べるスフィアキャストの当たりを入れておく配列の大きさ（足りない時は、全部の当たりを取り直す）")]
+	const int CloseQuarterHitBufferSize = 16;
+	[Tooltip("近い敵を調べるスフィアキャストの当たりを入れておく配列（毎回新しい配列を作らないように使い回す）")]
+	readonly RaycastHit[] closeQuarterHitBuffer = new RaycastHit[CloseQuarterHitBufferSize];
+	[Tooltip("スフィアキャストを始めた時から球に重なっていたコライダーの、当たった距離（当たった位置がわからないので数えない）")]
+	const float OverlapAtStartDistance = 0.0f;
+	[Tooltip("狙っている方向の一番手前に、近い敵がいるか？（近い時は、ハンドガンを構えると近距離の構えにする）")]
+	bool isEnemyClose = false;
+	public bool IsEnemyClose => isEnemyClose;
+
 #if UNITY_EDITOR//Unityエディター上での処理
 	[Tooltip("ヒットしたオブジェクトの名前")]
 	string hitName = "";
@@ -187,6 +204,7 @@ public class PlayerCameraManager : MonoBehaviour
 	public void AfterFixedUpdate()
 	{
 		CameraRot();
+		UpdateIsEnemyClose();
 	}
 
 	/// <summary>
@@ -362,6 +380,71 @@ public class PlayerCameraManager : MonoBehaviour
 		}
 
 		childMainShortDistanceVirtualCamera.Priority = shortDistanceCameraNormalPriority;
+	}
+
+	/// <summary>
+	/// 狙っている方向（カメラの正面）の一番手前にある物が近い敵かを調べて、ハンドガンを近距離の構え（C.A.R.システムのような構え）にするかを決める
+	/// ※構えていない時も調べておく（構え始める前から近い敵に気づいておき、構えるのと一緒に近距離の構えにするため。
+	///   構えてから気づくと、構え始めの片手で狙う構えが少し見えてから、近距離の構えに切り替わってしまう）
+	/// ※構えていない時のカメラはプレイヤーの後ろにあるので、プレイヤー自身には当たらないことにする
+	/// </summary>
+	void UpdateIsEnemyClose()
+	{
+		int count = Physics.SphereCastNonAlloc(this.transform.position, CloseQuarterCheckRadius, this.transform.forward, closeQuarterHitBuffer, raycastRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+		RaycastHit[] hits = closeQuarterHitBuffer;
+		//配列がいっぱいの時は一番手前の当たりが入っていない可能性があるので、全部取り直す
+		if (CloseQuarterHitBufferSize <= count)
+		{
+			hits = Physics.SphereCastAll(this.transform.position, CloseQuarterCheckRadius, this.transform.forward, raycastRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+			count = hits.Length;
+		}
+
+		//一番手前の当たりを探す（プレイヤー自身と、弾道エフェクトと、始めから球に重なっていたコライダーは数えない）
+		bool isHit = false;
+		RaycastHit nearestHit = new RaycastHit();
+		for (int i = 0; i < count; i++)
+		{
+			if (hits[i].distance <= OverlapAtStartDistance || IsPlayerCollider(hits[i].collider) == true || EnemyBullet.IsIgnoredCollider(hits[i].collider) == true)
+			{
+				continue;
+			}
+
+			if (isHit == false || hits[i].distance < nearestHit.distance)
+			{
+				nearestHit = hits[i];
+				isHit = true;
+			}
+		}
+
+		//一番手前が敵でない時（何にも当たらない時や、壁などにさえぎられている時）は、近くないことにする
+		if (isHit == false || IsEnemyCollider(nearestHit.collider) == false)
+		{
+			isEnemyClose = false;
+			return;
+		}
+
+		//今近い時は、やめる距離までは近いままにする（境目で構えが行ったり来たりしないようにする）
+		isEnemyClose = GetHorizontalDistanceFromPlayer(nearestHit.point) <= (isEnemyClose == true ? CloseQuarterExitDistance : CloseQuarterEnterDistance);
+	}
+
+	/// <summary>
+	/// 敵のコライダーか？
+	/// </summary>
+	/// <param name="collider">コライダー</param>
+	/// <returns>敵のコライダーならtrue</returns>
+	bool IsEnemyCollider(Collider collider)
+	{
+		return collider.CompareTag("Enemy") || collider.CompareTag("FlyingEnemy") || collider.CompareTag("GroundEnemy");
+	}
+
+	/// <summary>
+	/// プレイヤーから、指定した位置までの水平の距離を求める（高さの違いは数えない）
+	/// </summary>
+	/// <param name="position">位置</param>
+	/// <returns>水平の距離（m）</returns>
+	float GetHorizontalDistanceFromPlayer(Vector3 position)
+	{
+		return Vector3.ProjectOnPlane(position - PlayerManagerPresenter.SingletonInstance.transform.position, Vector3.up).magnitude;
 	}
 
 	bool IsPlayerCollider(Collider collider)
