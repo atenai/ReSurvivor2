@@ -25,6 +25,11 @@ public class HandGun : GunBase
 	readonly float handGunReloadTimeDefine = 1.5f;
 
 	/// <summary>
+	/// リロードにかかる時間（秒）
+	/// </summary>
+	protected override float ReloadTime => handGunReloadTimeDefine;
+
+	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	public HandGun()
@@ -86,15 +91,11 @@ public class HandGun : GunBase
 
 		if (reloadCountTimer == 0)
 		{
-			//ハンドガンのリロードアニメーションをオン
-			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isHandGunReload", true);
-
 			HandGunReloadSE();
 		}
 
 		//リロード中画像
 		reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
-		UpdateReloadAnimationTime(handGunReloadTimeDefine);
 
 		if (handGunReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
 		{
@@ -125,9 +126,6 @@ public class HandGun : GunBase
 
 			reloadCountTimer = 0.0f;//リロードタイムをリセット
 			isReloadTimeActive = false;//リロードのオフ
-
-			//ハンドガンのリロードアニメーションをオフ
-			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isHandGunReload", false);
 		}
 	}
 

@@ -1294,8 +1294,58 @@ MonoBehaviour:
     handGunModel: {fileID: 3099343492085402758}
     assaultRifleModel: {fileID: 3029799190864042039}
     shotGunModel: {fileID: 7140144329826878951}
-  assaultRifleDashRightHandOffset: {x: 0.04, y: 0.08, z: 0.2}
-  shotGunDashRightHandOffset: {x: 0.04, y: 0.08, z: 0.2}
+  handGunAnimation:
+    magazineModels:
+    - {fileID: 6764241680255446785}
+    - {fileID: 6764241680255446799}
+    - {fileID: 6764241680255446797}
+    isMagazineShownOnlyInHand: 0
+    magazineLeftHandPos: {fileID: 0}
+    magazineOutTime: 0.13
+    magazineInTime: 0.5
+    leftHandIKReleaseTime: 0.06
+    leftHandIKReturnTime: 0.86
+    magazineLeftHandGripPos: {fileID: 7811666717480800781}
+    relaxedRightHandOffset: {x: 0, y: 0, z: 0}
+    relaxedRightHandAngle: {x: 0, y: 0, z: 0}
+    relaxedReloadRightHandOffset: {x: 0, y: 0, z: 0}
+    relaxedReloadRightHandAngle: {x: 0, y: 0, z: 0}
+    dashRightHandOffset: {x: 0, y: 0, z: 0}
+  assaultRifleAnimation:
+    magazineModels:
+    - {fileID: 2121356204759452830}
+    - {fileID: 2121356204759452806}
+    - {fileID: 2121356204759452804}
+    - {fileID: 2121356204759452802}
+    - {fileID: 2121356204759452800}
+    isMagazineShownOnlyInHand: 0
+    magazineLeftHandPos: {fileID: 0}
+    magazineOutTime: 0.18
+    magazineInTime: 0.55
+    leftHandIKReleaseTime: 0.12
+    leftHandIKReturnTime: 0.88
+    magazineLeftHandGripPos: {fileID: 6645514676076217043}
+    relaxedRightHandOffset: {x: 0, y: 0.06, z: 0.14}
+    relaxedRightHandAngle: {x: 0, y: 0, z: 0}
+    relaxedReloadRightHandOffset: {x: 0, y: 0.06, z: 0.14}
+    relaxedReloadRightHandAngle: {x: 0, y: 0, z: 0}
+    dashRightHandOffset: {x: 0.04, y: 0.08, z: 0.2}
+  shotGunAnimation:
+    magazineModels:
+    - {fileID: 5094681170906548818}
+    isMagazineShownOnlyInHand: 1
+    magazineLeftHandPos: {fileID: 6374573946837195531}
+    magazineOutTime: 0.38
+    magazineInTime: 0.55
+    leftHandIKReleaseTime: 0.12
+    leftHandIKReturnTime: 0.88
+    magazineLeftHandGripPos: {fileID: 7302808114578617003}
+    relaxedRightHandOffset: {x: 0, y: 0.03, z: 0.14}
+    relaxedRightHandAngle: {x: 0, y: 0, z: 0}
+    relaxedReloadRightHandOffset: {x: 0, y: 0.03, z: 0.18}
+    relaxedReloadRightHandAngle: {x: 0, y: -25, z: 0}
+    dashRightHandOffset: {x: 0.04, y: 0.08, z: 0.2}
+  shotGunShellPickTime: 0.45
   minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
 --- !u!114 &8735078247964254621
 MonoBehaviour:
@@ -1327,22 +1377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2226b589759abba4daa413b0167cf7f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand_l: {fileID: 7574616317202727057}
-  magazineModels:
-  - {fileID: 6764241680255446785}
-  - {fileID: 6764241680255446799}
-  - {fileID: 6764241680255446797}
-  isMagazineShownOnlyInHand: 0
-  magazineLeftHandPos: {fileID: 0}
-  magazineOutTime: 0.13
-  magazineInTime: 0.5
-  leftHandIKReleaseTime: 0.06
-  leftHandIKReturnTime: 0.86
-  magazineLeftHandGripPos: {fileID: 7811666717480800781}
-  relaxedRightHandOffset: {x: 0, y: 0, z: 0}
-  relaxedRightHandAngle: {x: 0, y: 0, z: 0}
-  relaxedReloadRightHandOffset: {x: 0, y: 0, z: 0}
-  relaxedReloadRightHandAngle: {x: 0, y: 0, z: 0}
   handGunModel: {fileID: 6764241680255415079}
   handGunModelBodyDecoration: {fileID: 1497371602190276774}
   handGunMuzzleTransform: {fileID: 8500022065186085956}
@@ -1364,24 +1398,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96fb0bfde15b2f5449613326a8d00c10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand_l: {fileID: 7574616317202727057}
-  magazineModels:
-  - {fileID: 2121356204759452830}
-  - {fileID: 2121356204759452806}
-  - {fileID: 2121356204759452804}
-  - {fileID: 2121356204759452802}
-  - {fileID: 2121356204759452800}
-  isMagazineShownOnlyInHand: 0
-  magazineLeftHandPos: {fileID: 0}
-  magazineOutTime: 0.18
-  magazineInTime: 0.55
-  leftHandIKReleaseTime: 0.12
-  leftHandIKReturnTime: 0.88
-  magazineLeftHandGripPos: {fileID: 6645514676076217043}
-  relaxedRightHandOffset: {x: 0, y: 0.06, z: 0.14}
-  relaxedRightHandAngle: {x: 0, y: 0, z: 0}
-  relaxedReloadRightHandOffset: {x: 0, y: 0.06, z: 0.14}
-  relaxedReloadRightHandAngle: {x: 0, y: 0, z: 0}
   assaultRifleModel: {fileID: 2121356204759683240}
   assaultRifleModelBodyDecoration: {fileID: 8140437183782221505}
   assaultRifleMuzzleTransform: {fileID: 260376051217261587}
@@ -1403,21 +1419,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4054367b82bd9a84484daf202422695a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hand_l: {fileID: 7574616317202727057}
-  magazineModels:
-  - {fileID: 5094681170906548818}
-  isMagazineShownOnlyInHand: 1
-  magazineLeftHandPos: {fileID: 6374573946837195531}
-  magazineOutTime: 0.38
-  magazineInTime: 0.55
-  leftHandIKReleaseTime: 0.12
-  leftHandIKReturnTime: 0.88
-  magazineLeftHandGripPos: {fileID: 7302808114578617003}
-  relaxedRightHandOffset: {x: 0, y: 0.03, z: 0.14}
-  relaxedRightHandAngle: {x: 0, y: 0, z: 0}
-  relaxedReloadRightHandOffset: {x: 0, y: 0.03, z: 0.18}
-  relaxedReloadRightHandAngle: {x: 0, y: -25, z: 0}
-  shellPickTime: 0.45
   shotGunModel: {fileID: 5094681170906846836}
   shotGunModelBodyDecoration: {fileID: 1718891682958531544}
   shotGunMuzzleTransform: {fileID: 1511341926666868225}

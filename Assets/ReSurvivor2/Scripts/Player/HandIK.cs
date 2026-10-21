@@ -112,9 +112,9 @@ public class HandIK : MonoBehaviour
 	{
 		GunFacade gunFacade = PlayerCameraManager.SingletonInstance.GetGunFacade;
 		PlayerCharacterView playerCharacterView = PlayerManagerPresenter.SingletonInstance.PlayerCharacterView;
-		GunModelBase gunModel = playerCharacterView.GunModelFacade.FindGunModel(gunFacade.GetGunTYPE);
+		GunAnimation gunAnimation = playerCharacterView.FindGunAnimation(gunFacade.GetGunTYPE);
 
-		UpdateHoldStyle(gunModel, playerCharacterView.GetDashRightHandOffset(gunFacade.GetGunTYPE));
+		UpdateHoldStyle(gunAnimation, gunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun ? playerCharacterView.GunModelFacade.HandGunModel : null);
 		SetRightHandIK();
 		SetElbowHint(AvatarIKHint.RightElbow, HumanBodyBones.RightUpperArm, CloseQuarterAimRightElbowHintOffset);
 		SetElbowHint(AvatarIKHint.LeftElbow, HumanBodyBones.LeftUpperArm, CloseQuarterAimLeftElbowHintOffset);
@@ -123,8 +123,8 @@ public class HandIK : MonoBehaviour
 		{
 			//リロード中は、左手でマガジンを交換するために、アニメーションどおりの位置へなめらかに移す
 			//（マガジンを抜き取る瞬間と差し込む瞬間の前後だけ、マガジンを持つ目印に合わせる）
-			leftHandWeight = gunModel.GetReloadLeftHandIKWeight(gunFacade.GetGunBase.ReloadAnimationTime);
-			magazineGripWeight = gunModel.GetReloadMagazineGripWeight(gunFacade.GetGunBase.ReloadAnimationTime);
+			leftHandWeight = gunAnimation.GetReloadLeftHandIKWeight(playerCharacterView.ReloadAnimationTime);
+			magazineGripWeight = gunAnimation.GetReloadMagazineGripWeight(playerCharacterView.ReloadAnimationTime);
 		}
 		else
 		{
@@ -134,7 +134,7 @@ public class HandIK : MonoBehaviour
 			magazineGripWeight = Mathf.MoveTowards(magazineGripWeight, NoIKWeight, Time.deltaTime / ReloadCancelBlendTime);
 		}
 
-		SetLeftHandIK(gunModel, FindLeftHandPos(gunFacade.GetGunTYPE));
+		SetLeftHandIK(gunAnimation, FindLeftHandPos(gunFacade.GetGunTYPE));
 	}
 
 	/// <summary>
@@ -144,20 +144,20 @@ public class HandIK : MonoBehaviour
 	/// ※それぞれの動きがどれだけ混ざっているかに合わせて効かせるので、構えた時や構えをやめた時は、アニメーションと一緒になめらかに切り替わる
 	///   （立ち止まっている時・歩いている時は「移動のレイヤーのステート」、リロード中は「リロードのアニメーションの構えていない時の動き（1 - f_aim）」が混ざっている割合）
 	/// </summary>
-	/// <param name="gunModel">今持っている銃のモデル（銃ごとに体から離す量が違う）</param>
-	/// <param name="dashRightHandOffset">ダッシュしている時に、右手（と銃）をずらす量（キャラクターから見た向き）</param>
-	void UpdateHoldStyle(GunModelBase gunModel, Vector3 dashRightHandOffset)
+	/// <param name="gunAnimation">今持っている銃のアニメーションの設定（銃ごとに体から離す量が違う）</param>
+	/// <param name="handGunModel">ハンドガンを持っている時は、ハンドガンのモデル（ほかの銃の時はnull）</param>
+	void UpdateHoldStyle(GunAnimation gunAnimation, HandGunModel handGunModel)
 	{
 		float relaxedLocomotionWeight = GetStateWeight(LocomotionLayerIndex, normalIdleAndWalkStateHash);
 		float relaxedReloadWeight = FullIKWeight - animator.GetFloat(AimParameterName);
 		float noReloadWeight = GetStateWeight(UpperBodyReloadLayerIndex, noReloadStateHash);
 		//ダッシュしている時は、ダッシュのアニメーション用のずらし量にする（走りのアニメーションとダッシュのアニメーションが混ざっている割合に合わせて混ぜる）
-		Vector3 relaxedLocomotionOffset = Vector3.Lerp(gunModel.RelaxedRightHandOffset, dashRightHandOffset, animator.GetFloat(DashParameterName));
+		Vector3 relaxedLocomotionOffset = Vector3.Lerp(gunAnimation.RelaxedRightHandOffset, gunAnimation.DashRightHandOffset, animator.GetFloat(DashParameterName));
 		Quaternion characterRotation = animator.transform.rotation;
-		Quaternion relaxedLocomotionRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(gunModel.RelaxedRightHandAngle) * Quaternion.Inverse(characterRotation), relaxedLocomotionWeight);
-		Quaternion relaxedReloadRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(gunModel.RelaxedReloadRightHandAngle) * Quaternion.Inverse(characterRotation), relaxedReloadWeight);
+		Quaternion relaxedLocomotionRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(gunAnimation.RelaxedRightHandAngle) * Quaternion.Inverse(characterRotation), relaxedLocomotionWeight);
+		Quaternion relaxedReloadRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(gunAnimation.RelaxedReloadRightHandAngle) * Quaternion.Inverse(characterRotation), relaxedReloadWeight);
 		relaxedRotation = Quaternion.Slerp(relaxedReloadRotation, relaxedLocomotionRotation, noReloadWeight);
-		relaxedOffset = characterRotation * Vector3.Lerp(gunModel.RelaxedReloadRightHandOffset * relaxedReloadWeight, relaxedLocomotionOffset * relaxedLocomotionWeight, noReloadWeight);
+		relaxedOffset = characterRotation * Vector3.Lerp(gunAnimation.RelaxedReloadRightHandOffset * relaxedReloadWeight, relaxedLocomotionOffset * relaxedLocomotionWeight, noReloadWeight);
 
 		//ハンドガンを構えていない時は、片手（右手）だけで持つ
 		//（立ち止まっている時・歩いている時は「ハンドガンの構えていない時の移動のステート」、リロード中は「ハンドガンのリロードの構えていない時の動き」が混ざっている割合）
@@ -173,7 +173,6 @@ public class HandIK : MonoBehaviour
 		oneHandWeight = oneHandLocomotionWeight + oneHandAimWeight + GetStateWeight(UpperBodyReloadLayerIndex, handGunReloadStateHash) * relaxedReloadWeight;
 
 		upperBodyTwistAngle = NoTwistAngle;
-		HandGunModel handGunModel = gunModel as HandGunModel;
 		if (handGunModel == null)
 		{
 			return;
@@ -426,9 +425,9 @@ public class HandIK : MonoBehaviour
 	/// ※銃の子にある目印は、右手を体から離す前の銃の位置にあるので、右手と同じだけ動かしてから使う
 	/// ※片手で持つ時（ハンドガンを構えていない時）は、左手で銃の前側を握らない（マガジンを持つ目印には、リロード中は合わせる）
 	/// </summary>
-	/// <param name="gunModel">今持っている銃のモデル</param>
+	/// <param name="gunAnimation">今持っている銃のアニメーションの設定</param>
 	/// <param name="leftHandPos">左手で銃の前側を握る目印</param>
-	void SetLeftHandIK(GunModelBase gunModel, Transform leftHandPos)
+	void SetLeftHandIK(GunAnimation gunAnimation, Transform leftHandPos)
 	{
 		float gripWeight = leftHandWeight * (FullIKWeight - oneHandWeight);
 		if (gripWeight <= NoIKWeight && magazineGripWeight <= NoIKWeight && oneHandAimWeight <= NoIKWeight)
@@ -441,8 +440,8 @@ public class HandIK : MonoBehaviour
 		//※上半身をひねっている時は、アニメーションどおりの左手も、ひねった分だけ動いた後の位置・向きにする
 		//※片手で狙っている時は、下ろした左手を体の外側へ少し離す（ひねった上半身に、左腕がめり込まないようにする）
 		Vector3 animationPosition = TwistPoint(leftHandAnimationPos.position) + GetTwistRotation() * (animator.transform.rotation * OneHandAimLeftHandOffset) * oneHandAimWeight;
-		Vector3 position = Vector3.Lerp(animationPosition, MoveAwayFromBody(gunModel.MagazineLeftHandGripPos.position), magazineGripWeight);
-		Quaternion rotation = Quaternion.Slerp(GetTwistRotation() * leftHandAnimationPos.rotation, relaxedRotation * gunModel.MagazineLeftHandGripPos.rotation, magazineGripWeight);
+		Vector3 position = Vector3.Lerp(animationPosition, MoveAwayFromBody(gunAnimation.MagazineLeftHandGripPos.position), magazineGripWeight);
+		Quaternion rotation = Quaternion.Slerp(GetTwistRotation() * leftHandAnimationPos.rotation, relaxedRotation * gunAnimation.MagazineLeftHandGripPos.rotation, magazineGripWeight);
 		animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, FullIKWeight);
 		animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, FullIKWeight);
 		animator.SetIKPosition(AvatarIKGoal.LeftHand, Vector3.Lerp(position, MoveAwayFromBody(leftHandPos.position), gripWeight));

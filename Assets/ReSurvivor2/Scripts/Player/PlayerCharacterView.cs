@@ -42,13 +42,37 @@ public class PlayerCharacterView : MonoBehaviour
 	[SerializeField] GunModelFacade gunModelFacade = new GunModelFacade();
 	public GunModelFacade GunModelFacade => gunModelFacade;
 
-	[Header("ダッシュの時の銃の持ち方")]
-	//※ダッシュのアニメーションは銃床を右肩に抱え込むので、そのままだと銃が防弾ベストにめり込む。
-	//  そのため、ダッシュしている時は、右手をIKで体から離す（銃は右手の子なので一緒に動き、左手も銃を握ったままついていく）
-	[Tooltip("アサルトライフルを持ってダッシュしている時に、右手（と銃）をずらす量（m。キャラクターから見た向きで、xが右、yが上、zが前）")]
-	[SerializeField] Vector3 assaultRifleDashRightHandOffset;
-	[Tooltip("ショットガンを持ってダッシュしている時に、右手（と銃）をずらす量（m。キャラクターから見た向きで、xが右、yが上、zが前）")]
-	[SerializeField] Vector3 shotGunDashRightHandOffset;
+	[Header("銃ごとのアニメーション")]
+	//※銃の状態（リロード中か・リロードの進み具合など）を見て、プレイヤーのアニメーションを動かす（銃のクラスからはこのクラスを使わない）
+	[Tooltip("ハンドガンを持っている時のアニメーションの設定")]
+	[SerializeField] GunAnimation handGunAnimation = new GunAnimation();
+	[Tooltip("アサルトライフルを持っている時のアニメーションの設定")]
+	[SerializeField] GunAnimation assaultRifleAnimation = new GunAnimation();
+	[Tooltip("ショットガンを持っている時のアニメーションの設定")]
+	[SerializeField] GunAnimation shotGunAnimation = new GunAnimation();
+	//※ショットガンは弾を1発ずつ込めるため、リロードアニメーションの「ポーチから弾を取る → 装填口に込める」の区間を、
+	//  込める弾の数だけ行ったり来たりさせる（2発目以降は、装填口から少しだけ巻き戻した所で次の弾を取る）
+	[Tooltip("ショットガンの2発目以降の弾を取るタイミング（リロードアニメーションの再生位置）。装填口に込めるタイミングから、ここまで巻き戻して次の弾を取る")]
+	[SerializeField] float shotGunShellPickTime;
+
+	[Header("リロードのアニメーション")]
+	[Tooltip("アニメーターのリロードアニメーションの再生位置のパラメーターの名前")]
+	const string ReloadAnimationTimeParameterName = "f_reloadAnimationTime";
+	[Tooltip("アニメーターのハンドガンのリロードアニメーションをオンにするパラメーターの名前")]
+	const string HandGunReloadParameterName = "b_isHandGunReload";
+	[Tooltip("アニメーターのアサルトライフルのリロードアニメーションをオンにするパラメーターの名前")]
+	const string AssaultRifleReloadParameterName = "b_isAssaultRifleReload";
+	[Tooltip("アニメーターのショットガンのリロードアニメーションをオンにするパラメーターの名前")]
+	const string ShotGunReloadParameterName = "b_isShotGunReload";
+	[Tooltip("リロードアニメーションの始まりの再生位置")]
+	const float ReloadAnimationStartTime = 0.0f;
+	[Tooltip("リロードアニメーションの終わりの再生位置")]
+	const float ReloadAnimationEndTime = 1.0f;
+	[Tooltip("リロードアニメーションの再生位置（0がアニメーションの始まり、1が終わり）")]
+	float reloadAnimationTime = ReloadAnimationStartTime;
+	public float ReloadAnimationTime => reloadAnimationTime;
+	[Tooltip("リロードアニメーションを前へ進めているか？（ショットガンは弾を1発込めるたびに少し巻き戻して次の弾を取りに行くので、巻き戻している間はfalseになる）")]
+	bool isReloadAnimationForward = true;
 
 	[Tooltip("地雷のプレファブ")]
 	[SerializeField] GameObject minePrefab;
@@ -59,6 +83,112 @@ public class PlayerCharacterView : MonoBehaviour
 		InitBoneNeck01();
 		InitBoneSpine03();
 		ResetMoveAnimation();
+		handGunAnimation.Initialize();
+		assaultRifleAnimation.Initialize();
+		shotGunAnimation.Initialize();
+	}
+
+	void LateUpdate()
+	{
+		UpdateReloadMagazines();
+	}
+
+	/// <summary>
+	/// 銃の種類から、その銃を持っている時のアニメーションの設定を探す
+	/// </summary>
+	/// <param name="gunTYPE">銃の種類</param>
+	/// <returns>アニメーションの設定（見つからなかった場合はnull）</returns>
+	public GunAnimation FindGunAnimation(EnumManager.GunTYPE gunTYPE)
+	{
+		switch (gunTYPE)
+		{
+			case EnumManager.GunTYPE.HandGun:
+				return handGunAnimation;
+			case EnumManager.GunTYPE.AssaultRifle:
+				return assaultRifleAnimation;
+			case EnumManager.GunTYPE.ShotGun:
+				return shotGunAnimation;
+		}
+		return null;
+	}
+
+	/// <summary>
+	/// 銃の状態に合わせて、リロードのアニメーションを動かす（銃の更新処理の後に呼ぶ）
+	/// ・リロード中の銃のリロードアニメーションをオンにする
+	/// ・リロードアニメーションの再生位置を、リロードの進み具合に合わせる（こうすると、リロード時間が変わっても、アニメーションがちょうどリロードの終わりで終わる）
+	/// ※リロードしていない時は再生位置を変えない（リロードが終わってアニメーションを抜ける間に、手が急に動かないようにする）
+	/// </summary>
+	/// <param name="gunFacade">銃</param>
+	public void UpdateReloadAnimation(GunFacade gunFacade)
+	{
+		animator.SetBool(HandGunReloadParameterName, gunFacade.FindGunBase(EnumManager.GunTYPE.HandGun).IsReloadTimeActive);
+		animator.SetBool(AssaultRifleReloadParameterName, gunFacade.FindGunBase(EnumManager.GunTYPE.AssaultRifle).IsReloadTimeActive);
+		animator.SetBool(ShotGunReloadParameterName, gunFacade.FindGunBase(EnumManager.GunTYPE.ShotGun).IsReloadTimeActive);
+
+		GunBase gunBase = gunFacade.GetGunBase;
+		if (gunBase.IsReloadTimeActive == false)
+		{
+			return;
+		}
+
+		if (gunFacade.GetGunTYPE == EnumManager.GunTYPE.ShotGun)
+		{
+			UpdateShotGunReloadAnimationTime((ShotGun)gunBase);
+		}
+		else
+		{
+			reloadAnimationTime = gunBase.ReloadProgress;
+			isReloadAnimationForward = true;
+		}
+		animator.SetFloat(ReloadAnimationTimeParameterName, reloadAnimationTime);
+	}
+
+	/// <summary>
+	/// ショットガンのリロードアニメーションの再生位置を、今込めている弾に合わせて決める
+	/// （最初 → 込める弾の数だけ「ポーチ → 装填口」を繰り返す → 最後、の順に進める。装填口から次の弾を取りに戻る間は巻き戻す）
+	/// </summary>
+	/// <param name="shotGun">ショットガン</param>
+	void UpdateShotGunReloadAnimationTime(ShotGun shotGun)
+	{
+		float phaseProgress;
+		EnumManager.ShotGunReloadPhaseTYPE phase = shotGun.GetReloadPhase(out phaseProgress);
+		isReloadAnimationForward = phase != EnumManager.ShotGunReloadPhaseTYPE.ShellReturn;
+		switch (phase)
+		{
+			case EnumManager.ShotGunReloadPhaseTYPE.Start:
+				//銃を弾を込める姿勢にして、左手がポーチまで弾を取りに行く
+				reloadAnimationTime = Mathf.SmoothStep(ReloadAnimationStartTime, shotGunAnimation.MagazineOutTime, phaseProgress);
+				break;
+			case EnumManager.ShotGunReloadPhaseTYPE.FirstShellInsert:
+				//最初にポーチに着いた所から、装填口まで進めて込める
+				reloadAnimationTime = Mathf.SmoothStep(shotGunAnimation.MagazineOutTime, shotGunAnimation.MagazineInTime, phaseProgress);
+				break;
+			case EnumManager.ShotGunReloadPhaseTYPE.ShellReturn:
+				//次の弾を取る所まで巻き戻す
+				reloadAnimationTime = Mathf.SmoothStep(shotGunAnimation.MagazineInTime, shotGunShellPickTime, phaseProgress);
+				break;
+			case EnumManager.ShotGunReloadPhaseTYPE.ShellInsert:
+				//次の弾を取った所から、装填口まで進めて込める
+				reloadAnimationTime = Mathf.SmoothStep(shotGunShellPickTime, shotGunAnimation.MagazineInTime, phaseProgress);
+				break;
+			case EnumManager.ShotGunReloadPhaseTYPE.End:
+				//最後の弾を込めた所から、元の構えに戻す
+				reloadAnimationTime = Mathf.SmoothStep(shotGunAnimation.MagazineInTime, ReloadAnimationEndTime, phaseProgress);
+				break;
+		}
+	}
+
+	/// <summary>
+	/// 銃ごとに、リロード中のマガジンを動かす（抜き取る → 左手で持つ → 差し込む）
+	/// ※アニメーションで手が動いた後に動かす
+	/// </summary>
+	void UpdateReloadMagazines()
+	{
+		GunFacade gunFacade = PlayerCameraManager.SingletonInstance.GetGunFacade;
+		Transform hand_l = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+		handGunAnimation.UpdateReloadMagazine(gunFacade.FindGunBase(EnumManager.GunTYPE.HandGun).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, hand_l);
+		assaultRifleAnimation.UpdateReloadMagazine(gunFacade.FindGunBase(EnumManager.GunTYPE.AssaultRifle).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, hand_l);
+		shotGunAnimation.UpdateReloadMagazine(gunFacade.FindGunBase(EnumManager.GunTYPE.ShotGun).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, hand_l);
 	}
 
 	/// <summary>
@@ -87,24 +217,6 @@ public class PlayerCharacterView : MonoBehaviour
 		animator.SetFloat("f_moveSpeedX", 0.0f);
 		animator.SetFloat("f_moveSpeedY", 0.0f);
 		animator.SetBool("b_isAim", false);
-	}
-
-	/// <summary>
-	/// ダッシュしている時に、右手（と銃）をずらす量を求める
-	/// </summary>
-	/// <param name="gunTYPE">持っている銃の種類</param>
-	/// <returns>右手（と銃）をずらす量（m。キャラクターから見た向き）</returns>
-	public Vector3 GetDashRightHandOffset(EnumManager.GunTYPE gunTYPE)
-	{
-		switch (gunTYPE)
-		{
-			case EnumManager.GunTYPE.AssaultRifle:
-				return assaultRifleDashRightHandOffset;
-			case EnumManager.GunTYPE.ShotGun:
-				return shotGunDashRightHandOffset;
-		}
-		//ハンドガンは片手で持ち、ダッシュのアニメーションでも体にめり込まないので、ずらさない
-		return Vector3.zero;
 	}
 
 	/// <summary>
