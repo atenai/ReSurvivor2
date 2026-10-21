@@ -47,6 +47,8 @@ public class HandIK : MonoBehaviour
 	readonly int noReloadStateHash = Animator.StringToHash("NoReload");
 	[Tooltip("リロードのアニメーションで「構えていない時の動き」と「構えている時の動き」を混ぜる割合のパラメーター名（0で構えていない時の動き、1で構えている時の動き）")]
 	const string AimParameterName = "f_aim";
+	[Tooltip("構えていない時の移動で、走りのアニメーションとダッシュのアニメーションを混ぜる割合のパラメーター名（0で走り、1でダッシュ）")]
+	const string DashParameterName = "f_dash";
 	[Tooltip("今のフレームで、右手（と銃）を右手の位置を中心に回す回転")]
 	Quaternion relaxedRotation = Quaternion.identity;
 	[Tooltip("今のフレームで、右手（と銃）をずらす量")]
@@ -147,11 +149,15 @@ public class HandIK : MonoBehaviour
 		float relaxedLocomotionWeight = GetStateWeight(LocomotionLayerIndex, normalIdleAndWalkStateHash);
 		float relaxedReloadWeight = FullIKWeight - animator.GetFloat(AimParameterName);
 		float noReloadWeight = GetStateWeight(UpperBodyReloadLayerIndex, noReloadStateHash);
+		//ダッシュしている時は、ダッシュのアニメーション用のずらし方にする（走りのアニメーションとダッシュのアニメーションが混ざっている割合に合わせて混ぜる）
+		float dashWeight = animator.GetFloat(DashParameterName);
+		Vector3 relaxedLocomotionAngle = Vector3.Lerp(gunModel.RelaxedRightHandAngle, gunModel.RelaxedDashRightHandAngle, dashWeight);
+		Vector3 relaxedLocomotionOffset = Vector3.Lerp(gunModel.RelaxedRightHandOffset, gunModel.RelaxedDashRightHandOffset, dashWeight);
 		Quaternion characterRotation = animator.transform.rotation;
-		Quaternion relaxedLocomotionRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(gunModel.RelaxedRightHandAngle) * Quaternion.Inverse(characterRotation), relaxedLocomotionWeight);
+		Quaternion relaxedLocomotionRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(relaxedLocomotionAngle) * Quaternion.Inverse(characterRotation), relaxedLocomotionWeight);
 		Quaternion relaxedReloadRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(gunModel.RelaxedReloadRightHandAngle) * Quaternion.Inverse(characterRotation), relaxedReloadWeight);
 		relaxedRotation = Quaternion.Slerp(relaxedReloadRotation, relaxedLocomotionRotation, noReloadWeight);
-		relaxedOffset = characterRotation * Vector3.Lerp(gunModel.RelaxedReloadRightHandOffset * relaxedReloadWeight, gunModel.RelaxedRightHandOffset * relaxedLocomotionWeight, noReloadWeight);
+		relaxedOffset = characterRotation * Vector3.Lerp(gunModel.RelaxedReloadRightHandOffset * relaxedReloadWeight, relaxedLocomotionOffset * relaxedLocomotionWeight, noReloadWeight);
 
 		//ハンドガンを構えていない時は、片手（右手）だけで持つ
 		//（立ち止まっている時・歩いている時は「ハンドガンの構えていない時の移動のステート」、リロード中は「ハンドガンのリロードの構えていない時の動き」が混ざっている割合）

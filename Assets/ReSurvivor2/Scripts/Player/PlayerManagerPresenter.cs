@@ -51,6 +51,12 @@ public class PlayerManagerPresenter : MonoBehaviour
 	const float AimValueDampTime = 0.25f;
 	[Tooltip("アニメーターに渡す移動の値が、移動の入力に追いつくまでのおおよその時間（秒）（移動の入力はキーを押した瞬間に0から1に変わるので、立ち止まる・歩き出す時にアニメーションが一瞬で切り替わらないようにする）")]
 	const float MoveSpeedDampTime = 0.1f;
+	[Tooltip("アニメーターに渡すダッシュの割合（ダッシュしている時）")]
+	const float DashValue = 1.0f;
+	[Tooltip("アニメーターに渡すダッシュの割合（ダッシュしていない時）")]
+	const float NotDashValue = 0.0f;
+	[Tooltip("アニメーターに渡すダッシュの割合が、ダッシュの切り替えに追いつくまでのおおよその時間（秒）")]
+	const float DashDampTime = 0.2f;
 	[Tooltip("ハンドガンを構え始めてから、片手で狙う時間（秒）（この後、左手を添えて両手で狙う）")]
 	const float OneHandAimTime = 1.0f;
 	[Tooltip("片手で狙う構えから、両手で狙う構えに移るのにかける時間（秒）")]
@@ -199,6 +205,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 	{
 		playerCharacterView.Animator.SetFloat("f_moveSpeedX", playerModel.InputHorizontal, MoveSpeedDampTime, Time.deltaTime);
 		playerCharacterView.Animator.SetFloat("f_moveSpeedY", playerModel.InputVertical, MoveSpeedDampTime, Time.deltaTime);
+		//ダッシュしている時は、構えていない時の走りを、急いで走るダッシュのアニメーションに変える
+		playerCharacterView.Animator.SetFloat("f_dash", playerModel.IsDash == true ? DashValue : NotDashValue, DashDampTime, Time.deltaTime);
 		playerCharacterView.Animator.SetBool("b_isAim", playerModel.IsAim);
 		//リロードアニメーションの「構えていない時の動き」と「構えている時の動き」を混ぜる割合（0〜1）
 		//※SetFloatの3つ目の引数（dampTime）を渡すと、値が一瞬で切り替わらず、その時間をかけてなめらかに近づく
