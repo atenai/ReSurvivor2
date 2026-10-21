@@ -42,6 +42,14 @@ public class PlayerCharacterView : MonoBehaviour
 	[SerializeField] GunModelFacade gunModelFacade = new GunModelFacade();
 	public GunModelFacade GunModelFacade => gunModelFacade;
 
+	[Header("ダッシュの時の銃の持ち方")]
+	//※ダッシュのアニメーションは銃床を右肩に抱え込むので、そのままだと銃が防弾ベストにめり込む。
+	//  そのため、ダッシュしている時は、右手をIKで体から離す（銃は右手の子なので一緒に動き、左手も銃を握ったままついていく）
+	[Tooltip("アサルトライフルを持ってダッシュしている時に、右手（と銃）をずらす量（m。キャラクターから見た向きで、xが右、yが上、zが前）")]
+	[SerializeField] Vector3 assaultRifleDashRightHandOffset;
+	[Tooltip("ショットガンを持ってダッシュしている時に、右手（と銃）をずらす量（m。キャラクターから見た向きで、xが右、yが上、zが前）")]
+	[SerializeField] Vector3 shotGunDashRightHandOffset;
+
 	[Tooltip("地雷のプレファブ")]
 	[SerializeField] GameObject minePrefab;
 	public GameObject MinePrefab => minePrefab;
@@ -82,8 +90,26 @@ public class PlayerCharacterView : MonoBehaviour
 	}
 
 	/// <summary>
+	/// ダッシュしている時に、右手（と銃）をずらす量を求める
+	/// </summary>
+	/// <param name="gunTYPE">持っている銃の種類</param>
+	/// <returns>右手（と銃）をずらす量（m。キャラクターから見た向き）</returns>
+	public Vector3 GetDashRightHandOffset(EnumManager.GunTYPE gunTYPE)
+	{
+		switch (gunTYPE)
+		{
+			case EnumManager.GunTYPE.AssaultRifle:
+				return assaultRifleDashRightHandOffset;
+			case EnumManager.GunTYPE.ShotGun:
+				return shotGunDashRightHandOffset;
+		}
+		//ハンドガンは片手で持ち、ダッシュのアニメーションでも体にめり込まないので、ずらさない
+		return Vector3.zero;
+	}
+
+	/// <summary>
 	/// キャラクターの首ボーンを曲げる
-	/// </summary> 
+	/// </summary>
 	public void RotateBoneNeck01(bool isAim)
 	{
 		if (isAim == true)

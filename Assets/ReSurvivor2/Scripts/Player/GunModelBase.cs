@@ -74,12 +74,6 @@ public abstract class GunModelBase : MonoBehaviour
 	[Tooltip("構えずにリロードしている時に、右手（と銃）を右手の位置を中心に回す角度（度。キャラクターから見た向き）")]
 	[SerializeField] Vector3 relaxedReloadRightHandAngle;
 	public Vector3 RelaxedReloadRightHandAngle => relaxedReloadRightHandAngle;
-	[Tooltip("ダッシュしている時に、右手（と銃）をずらす量（m。キャラクターから見た向きで、xが右、yが上、zが前）（ダッシュのアニメーションは銃を胸に抱え込むので、走っている時とは別の量にする）")]
-	[SerializeField] Vector3 relaxedDashRightHandOffset;
-	public Vector3 RelaxedDashRightHandOffset => relaxedDashRightHandOffset;
-	[Tooltip("ダッシュしている時に、右手（と銃）を右手の位置を中心に回す角度（度。キャラクターから見た向きで、xが前後の傾き、yが左右の向き、zがひねり）")]
-	[SerializeField] Vector3 relaxedDashRightHandAngle;
-	public Vector3 RelaxedDashRightHandAngle => relaxedDashRightHandAngle;
 
 	/// <summary>
 	/// この銃の種類（どの銃のリロード中かを調べるのに使う）

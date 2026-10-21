@@ -111,9 +111,10 @@ public class HandIK : MonoBehaviour
 	void OnAnimatorIK()
 	{
 		GunFacade gunFacade = PlayerCameraManager.SingletonInstance.GetGunFacade;
-		GunModelBase gunModel = PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.FindGunModel(gunFacade.GetGunTYPE);
+		PlayerCharacterView playerCharacterView = PlayerManagerPresenter.SingletonInstance.PlayerCharacterView;
+		GunModelBase gunModel = playerCharacterView.GunModelFacade.FindGunModel(gunFacade.GetGunTYPE);
 
-		UpdateHoldStyle(gunModel);
+		UpdateHoldStyle(gunModel, playerCharacterView.GetDashRightHandOffset(gunFacade.GetGunTYPE));
 		SetRightHandIK();
 		SetElbowHint(AvatarIKHint.RightElbow, HumanBodyBones.RightUpperArm, CloseQuarterAimRightElbowHintOffset);
 		SetElbowHint(AvatarIKHint.LeftElbow, HumanBodyBones.LeftUpperArm, CloseQuarterAimLeftElbowHintOffset);
@@ -144,17 +145,16 @@ public class HandIK : MonoBehaviour
 	///   （立ち止まっている時・歩いている時は「移動のレイヤーのステート」、リロード中は「リロードのアニメーションの構えていない時の動き（1 - f_aim）」が混ざっている割合）
 	/// </summary>
 	/// <param name="gunModel">今持っている銃のモデル（銃ごとに体から離す量が違う）</param>
-	void UpdateHoldStyle(GunModelBase gunModel)
+	/// <param name="dashRightHandOffset">ダッシュしている時に、右手（と銃）をずらす量（キャラクターから見た向き）</param>
+	void UpdateHoldStyle(GunModelBase gunModel, Vector3 dashRightHandOffset)
 	{
 		float relaxedLocomotionWeight = GetStateWeight(LocomotionLayerIndex, normalIdleAndWalkStateHash);
 		float relaxedReloadWeight = FullIKWeight - animator.GetFloat(AimParameterName);
 		float noReloadWeight = GetStateWeight(UpperBodyReloadLayerIndex, noReloadStateHash);
-		//ダッシュしている時は、ダッシュのアニメーション用のずらし方にする（走りのアニメーションとダッシュのアニメーションが混ざっている割合に合わせて混ぜる）
-		float dashWeight = animator.GetFloat(DashParameterName);
-		Vector3 relaxedLocomotionAngle = Vector3.Lerp(gunModel.RelaxedRightHandAngle, gunModel.RelaxedDashRightHandAngle, dashWeight);
-		Vector3 relaxedLocomotionOffset = Vector3.Lerp(gunModel.RelaxedRightHandOffset, gunModel.RelaxedDashRightHandOffset, dashWeight);
+		//ダッシュしている時は、ダッシュのアニメーション用のずらし量にする（走りのアニメーションとダッシュのアニメーションが混ざっている割合に合わせて混ぜる）
+		Vector3 relaxedLocomotionOffset = Vector3.Lerp(gunModel.RelaxedRightHandOffset, dashRightHandOffset, animator.GetFloat(DashParameterName));
 		Quaternion characterRotation = animator.transform.rotation;
-		Quaternion relaxedLocomotionRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(relaxedLocomotionAngle) * Quaternion.Inverse(characterRotation), relaxedLocomotionWeight);
+		Quaternion relaxedLocomotionRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(gunModel.RelaxedRightHandAngle) * Quaternion.Inverse(characterRotation), relaxedLocomotionWeight);
 		Quaternion relaxedReloadRotation = Quaternion.Slerp(Quaternion.identity, characterRotation * Quaternion.Euler(gunModel.RelaxedReloadRightHandAngle) * Quaternion.Inverse(characterRotation), relaxedReloadWeight);
 		relaxedRotation = Quaternion.Slerp(relaxedReloadRotation, relaxedLocomotionRotation, noReloadWeight);
 		relaxedOffset = characterRotation * Vector3.Lerp(gunModel.RelaxedReloadRightHandOffset * relaxedReloadWeight, relaxedLocomotionOffset * relaxedLocomotionWeight, noReloadWeight);
