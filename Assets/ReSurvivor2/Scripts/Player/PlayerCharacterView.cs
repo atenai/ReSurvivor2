@@ -89,6 +89,40 @@ public class PlayerCharacterView : MonoBehaviour
 	[SerializeField] GameObject minePrefab;
 	public GameObject MinePrefab => minePrefab;
 
+	[Header("地雷を置くアニメーション")]
+	//※銃を持ったまま地面の物を拾うアニメーション（右手で銃を持ったまましゃがみ、左手を地面へ下ろして、立ち上がる）を、
+	//  ・地雷を置くボタンを押している間：しゃがみ始めから、左手が地面に着くまで（長押しの時間と同じ0.5秒）
+	//  ・地雷を置いた後：左手が地面に着いた所から、立ち上がるまで
+	//  の2つに分けて使う
+	[Tooltip("アニメーターの、地雷を置くアニメーションのレイヤーの番号（全身）")]
+	const int PlaceMineLayerIndex = 3;
+	[Tooltip("アニメーターの、地雷を置くアニメーションの再生位置のパラメーターの名前")]
+	const string PlaceMineTimeParameterName = "f_placeMineTime";
+	[Tooltip("地雷を置くアニメーションの、しゃがみ始める再生位置（0がアニメーションの始まり、1が終わり）")]
+	const float PlaceMineCrouchStartTime = 0.2f;
+	[Tooltip("地雷を置くアニメーションの、左手が地面に着く再生位置")]
+	const float PlaceMineGroundTime = 0.45f;
+	[Tooltip("地雷を置くアニメーションの、立ち上がり終わる再生位置")]
+	const float PlaceMineStandUpEndTime = 0.85f;
+	[Tooltip("しゃがむ動きのうち、今の立ち姿から地雷を置くアニメーションに切り替え終わるまでの割合（0〜1）")]
+	const float PlaceMineBlendInRate = 0.5f;
+	[Tooltip("立ち上がる動きのうち、地雷を置くアニメーションから元の立ち姿へ戻し始める割合（0〜1）")]
+	const float PlaceMineBlendOutStartRate = 0.6f;
+	[Tooltip("立ち上がり終わった時の、立ち上がった割合")]
+	const float PlaceMineStandUpEndRate = 1.0f;
+	[Tooltip("立ち上がる動きのうち、左手を地面から銃の前側へ戻し終わる割合（0〜1）（アニメーションのまま戻すと、厚い防弾ベストの中を通るため、地面から銃へまっすぐ戻す）")]
+	const float PlaceMineLeftHandReturnEndRate = 0.5f;
+	[Tooltip("地雷を置くアニメーションを混ぜない時のレイヤーの重み")]
+	const float NoPlaceMineWeight = 0.0f;
+	[Tooltip("地雷を置くアニメーションだけにする時のレイヤーの重み")]
+	const float FullPlaceMineWeight = 1.0f;
+	[Tooltip("地雷を置いている間に、左手を銃から離している割合（1でアニメーションどおりに地面へ下ろす、0で銃の前側を握る）")]
+	float placeMineLeftHandFreeWeight = FullPlaceMineWeight;
+	public float PlaceMineLeftHandFreeWeight => placeMineLeftHandFreeWeight;
+	[Tooltip("地雷を置いて立ち上がる間に、地面から戻す左手を体の外側へ離す割合（立ち上がりの真ん中で一番離す。アニメーションのままだと、左手が腰のポーチを通るため）")]
+	float placeMineLeftHandOutWeight = NoPlaceMineWeight;
+	public float PlaceMineLeftHandOutWeight => placeMineLeftHandOutWeight;
+
 	void Start()
 	{
 		ResetMoveAnimation();
@@ -242,6 +276,44 @@ public class PlayerCharacterView : MonoBehaviour
 		animator.SetFloat("f_moveSpeedX", 0.0f);
 		animator.SetFloat("f_moveSpeedY", 0.0f);
 		animator.SetBool("b_isAim", false);
+		animator.SetLayerWeight(PlaceMineLayerIndex, NoPlaceMineWeight);
+	}
+
+	/// <summary>
+	/// 地雷を置く動きの段階に合わせて、地雷を置くアニメーションを動かす
+	/// ・しゃがんでいる間：長押しした時間に合わせて、しゃがみ始めから左手が地面に着くまでを進める（やめた時は同じように戻す）
+	/// ・立ち上がる間：立ち上がり始めてからの時間に合わせて、左手が地面に着いた所から立ち上がるまでを進める
+	/// ※しゃがみ始めと立ち上がりの終わりは、今の立ち姿となめらかに混ぜる
+	/// ※左手は、しゃがんでいる間は銃から離し、立ち上がる時は銃の前側へ戻す（HandIK が使う）
+	/// </summary>
+	/// <param name="minePlacePhase">地雷を置く動きの段階</param>
+	/// <param name="crouchRate">しゃがんだ割合（長押しした時間 ÷ 長押しと判定する時間。1以上は、左手が地面に着いたまま）</param>
+	/// <param name="standUpRate">立ち上がった割合（立ち上がり始めてからの時間 ÷ 立ち上がるのにかける時間）</param>
+	public void UpdatePlaceMineAnimation(EnumManager.MinePlacePhaseTYPE minePlacePhase, float crouchRate, float standUpRate)
+	{
+		float weight = NoPlaceMineWeight;
+		float time = PlaceMineCrouchStartTime;
+		placeMineLeftHandFreeWeight = FullPlaceMineWeight;
+		placeMineLeftHandOutWeight = NoPlaceMineWeight;
+		switch (minePlacePhase)
+		{
+			case EnumManager.MinePlacePhaseTYPE.Crouch:
+			case EnumManager.MinePlacePhaseTYPE.Cancel:
+				time = Mathf.Lerp(PlaceMineCrouchStartTime, PlaceMineGroundTime, crouchRate);
+				weight = Mathf.SmoothStep(NoPlaceMineWeight, FullPlaceMineWeight, crouchRate / PlaceMineBlendInRate);
+				break;
+			case EnumManager.MinePlacePhaseTYPE.StandUp:
+				time = Mathf.Lerp(PlaceMineGroundTime, PlaceMineStandUpEndTime, standUpRate);
+				weight = Mathf.SmoothStep(FullPlaceMineWeight, NoPlaceMineWeight, Mathf.InverseLerp(PlaceMineBlendOutStartRate, PlaceMineStandUpEndRate, standUpRate));
+				placeMineLeftHandFreeWeight = Mathf.SmoothStep(FullPlaceMineWeight, NoPlaceMineWeight, standUpRate / PlaceMineLeftHandReturnEndRate);
+				//立ち上がり始めと終わりは0、真ん中で1になるように、なめらかに増やして減らす（Sinの半周期）
+				placeMineLeftHandOutWeight = Mathf.Sin(Mathf.Clamp01(standUpRate) * Mathf.PI);
+				break;
+			case EnumManager.MinePlacePhaseTYPE.None:
+				break;
+		}
+		animator.SetLayerWeight(PlaceMineLayerIndex, weight);
+		animator.SetFloat(PlaceMineTimeParameterName, time);
 	}
 
 	/// <summary>

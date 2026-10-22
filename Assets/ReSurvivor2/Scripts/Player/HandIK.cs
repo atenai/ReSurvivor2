@@ -41,8 +41,10 @@ public class HandIK : MonoBehaviour
 	const int HandGunOneHandAimLeftArmLayerIndex = 1;
 	[Tooltip("アニメーターの、ダッシュしている間だけ右腕と右手の指を走りのアニメーション（銃を持つ腕）にしておくレイヤーの番号")]
 	const int DashRightArmLayerIndex = 2;
+	[Tooltip("アニメーターの、地雷を置くアニメーションのレイヤーの番号（全身）")]
+	const int PlaceMineLayerIndex = 3;
 	[Tooltip("アニメーターの上半身のリロードのレイヤーの番号")]
-	const int UpperBodyReloadLayerIndex = 3;
+	const int UpperBodyReloadLayerIndex = 4;
 	[Tooltip("構えていない時の移動のステート（アニメーターのステート名から作った番号）")]
 	readonly int normalIdleAndWalkStateHash = Animator.StringToHash("NormalIdleAndWalk");
 	[Tooltip("リロードしていない時のステート（アニメーターのステート名から作った番号）")]
@@ -113,6 +115,13 @@ public class HandIK : MonoBehaviour
 	static readonly Vector3 DashRaiseRightElbowHintOffset = new Vector3(0.35f, -0.15f, -0.05f);
 	[Tooltip("右腕を走りのアニメーションにしておくレイヤーを、ダッシュの割合の何倍で効かせるか（ダッシュのアニメーションの右腕が混ざり始めるより早く、走りの右腕にしておく）")]
 	const float DashRightArmWeightScale = 2.0f;
+	//↓地雷を置く時に、左手を太ももや腰のポーチから離すのに使う↓//
+	[Tooltip("今のフレームで、地雷を置く時にアニメーションどおりの左手をずらす量（ワールドの向き）")]
+	Vector3 placeMineLeftHandOffset = Vector3.zero;
+	[Tooltip("地雷を置くためにしゃがんでいる時に、地面へ下ろす左手をずらす量（m。キャラクターから見た向きで、xが右、yが上、zが前）（アニメーションのままだと、左の前腕が左の太ももを貫通するため、両足の間の前へ下ろす）")]
+	static readonly Vector3 PlaceMineCrouchLeftHandOffset = new Vector3(0.12f, 0.0f, 0.25f);
+	[Tooltip("地雷を置いて立ち上がる時に、地面から戻す左手をずらす量（m。キャラクターから見た向き）（アニメーションのままだと、左手が腰の左後ろのポーチを通るため、体の外側の前へ離す）")]
+	static readonly Vector3 PlaceMineStandUpLeftHandOffset = new Vector3(-0.15f, 0.0f, 0.10f);
 
 	/// <summary>
 	/// IK用のUnity標準の関数
@@ -124,6 +133,7 @@ public class HandIK : MonoBehaviour
 		GunAnimation gunAnimation = playerCharacterView.FindGunAnimation(gunFacade.GetGunTYPE);
 
 		UpdateHoldStyle(gunAnimation, FindGunModelTransform(playerCharacterView.GunModelFacade, gunFacade.GetGunTYPE), gunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun ? playerCharacterView.GunModelFacade.HandGunModel : null);
+		UpdateHoldStyleForPlaceMine(gunAnimation, playerCharacterView.PlaceMineLeftHandFreeWeight, playerCharacterView.PlaceMineLeftHandOutWeight);
 		SetRightHandIK();
 		//※近距離の構え（ハンドガン）と、銃を縦に持ち上げるダッシュ（アサルトライフル・ショットガン）は、同時には起きない
 		if (NoIKWeight < dashRaiseWeight)
@@ -238,6 +248,31 @@ public class HandIK : MonoBehaviour
 			relaxedRotation = Quaternion.Slerp(relaxedRotation, closeQuarterAimRotation, closeQuarterAimWeight);
 			relaxedOffset = Vector3.Lerp(relaxedOffset, handPosition - rightHandAnimationPos.position, closeQuarterAimWeight);
 		}
+	}
+
+	/// <summary>
+	/// 地雷を置いている間の銃の持ち方を求める（地雷を置くアニメーションが混ざっている割合だけ、ほかの持ち方から切り替える）
+	/// ・右手（と銃）は、地雷を置いている時のずらし量で体から離す（銃を縦に持ち上げるダッシュの持ち方はやめる）
+	/// ・左手は銃から離して、地面へ下ろす（左の太ももを避けて、両足の間の前へ下ろす）
+	///   立ち上がる時は、地面から銃の前側へ戻す（ハンドガンは片手で持つので、体の外側を通して下ろした位置へ戻す）
+	/// </summary>
+	/// <param name="gunAnimation">今持っている銃のアニメーションの設定（銃ごとに体から離す量が違う）</param>
+	/// <param name="leftHandFreeWeight">左手を銃から離している割合（1で地面へ下ろす、0で銃の前側を握る）</param>
+	/// <param name="leftHandOutWeight">地面から戻す左手を、体の外側へ離す割合</param>
+	void UpdateHoldStyleForPlaceMine(GunAnimation gunAnimation, float leftHandFreeWeight, float leftHandOutWeight)
+	{
+		float placeMineWeight = animator.GetLayerWeight(PlaceMineLayerIndex);
+		//しゃがんでいる間は両足の間の前へ、立ち上がる時は体の外側へ、左手をずらす（しゃがんでいる時のずらし量は、左手を銃へ戻すのに合わせて0へ戻す）
+		placeMineLeftHandOffset = animator.transform.rotation * (PlaceMineCrouchLeftHandOffset * leftHandFreeWeight + PlaceMineStandUpLeftHandOffset * leftHandOutWeight) * placeMineWeight;
+		if (placeMineWeight <= NoIKWeight)
+		{
+			return;
+		}
+
+		relaxedRotation = Quaternion.Slerp(relaxedRotation, Quaternion.identity, placeMineWeight);
+		relaxedOffset = Vector3.Lerp(relaxedOffset, animator.transform.rotation * gunAnimation.PlaceMineRightHandOffset, placeMineWeight);
+		dashRaiseWeight = Mathf.Lerp(dashRaiseWeight, NoIKWeight, placeMineWeight);
+		oneHandWeight = Mathf.Lerp(oneHandWeight, FullIKWeight, placeMineWeight * leftHandFreeWeight);
 	}
 
 	/// <summary>
@@ -481,7 +516,7 @@ public class HandIK : MonoBehaviour
 	void SetLeftHandIK(GunAnimation gunAnimation, Transform leftHandPos)
 	{
 		float gripWeight = leftHandWeight * (FullIKWeight - oneHandWeight);
-		if (gripWeight <= NoIKWeight && magazineGripWeight <= NoIKWeight && oneHandAimWeight <= NoIKWeight)
+		if (gripWeight <= NoIKWeight && magazineGripWeight <= NoIKWeight && oneHandAimWeight <= NoIKWeight && placeMineLeftHandOffset == Vector3.zero)
 		{
 			animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, NoIKWeight);
 			animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, NoIKWeight);
@@ -490,7 +525,8 @@ public class HandIK : MonoBehaviour
 
 		//※上半身をひねっている時は、アニメーションどおりの左手も、ひねった分だけ動いた後の位置・向きにする
 		//※片手で狙っている時は、下ろした左手を体の外側へ少し離す（ひねった上半身に、左腕がめり込まないようにする）
-		Vector3 animationPosition = TwistPoint(leftHandAnimationPos.position) + GetTwistRotation() * (animator.transform.rotation * OneHandAimLeftHandOffset) * oneHandAimWeight;
+		//※地雷を置く時は、左手を太ももや腰のポーチから離す
+		Vector3 animationPosition = TwistPoint(leftHandAnimationPos.position) + GetTwistRotation() * (animator.transform.rotation * OneHandAimLeftHandOffset) * oneHandAimWeight + placeMineLeftHandOffset;
 		Vector3 position = Vector3.Lerp(animationPosition, MoveAwayFromBody(gunAnimation.MagazineLeftHandGripPos.position), magazineGripWeight);
 		Quaternion rotation = Quaternion.Slerp(GetTwistRotation() * leftHandAnimationPos.rotation, relaxedRotation * gunAnimation.MagazineLeftHandGripPos.rotation, magazineGripWeight);
 		animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, FullIKWeight);

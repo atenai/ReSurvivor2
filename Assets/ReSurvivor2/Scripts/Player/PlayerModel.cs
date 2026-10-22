@@ -138,6 +138,24 @@ public class PlayerModel
 	[Tooltip("地雷の所持できる最大数")]
 	int maxMine = 3;
 	public int MaxMine => maxMine;
+	/// <summary>地雷を置いた後、立ち上がるのにかける時間（秒）</summary>
+	public static readonly float Mine_Stand_Up_Time = 0.8f;
+	[Tooltip("地雷を置く動きの今の段階")]
+	EnumManager.MinePlacePhaseTYPE minePlacePhase = EnumManager.MinePlacePhaseTYPE.None;
+	public EnumManager.MinePlacePhaseTYPE MinePlacePhase
+	{
+		get { return minePlacePhase; }
+		set { minePlacePhase = value; }
+	}
+	[Tooltip("地雷を置いた後、立ち上がり始めてからの時間（秒）")]
+	float mineStandUpCount = 0.0f;
+	public float MineStandUpCount
+	{
+		get { return mineStandUpCount; }
+		set { mineStandUpCount = value; }
+	}
+	/// <summary>地雷を置いているか？（しゃがんでいる間と立ち上がっている間は、移動・構え・ダッシュができない）</summary>
+	public bool IsPlacingMine => minePlacePhase != EnumManager.MinePlacePhaseTYPE.None;
 
 	/// <summary>
 	/// コンストラクタ
@@ -160,6 +178,10 @@ public class PlayerModel
 		moveForward = Vector3.zero;
 		isAim = false;
 		isDash = false;
+		//地雷を置いている途中でも、置くのをやめて立ち姿に戻す
+		minePlacePhase = EnumManager.MinePlacePhaseTYPE.None;
+		mineSpawnCount = 0.0f;
+		mineStandUpCount = 0.0f;
 	}
 
 	/// <summary>
@@ -254,8 +276,8 @@ public class PlayerModel
 		inputHorizontal = Input.GetAxisRaw("Horizontal");
 		inputVertical = Input.GetAxisRaw("Vertical");
 
-		//右ボタンまたはレフトシフトが押されていたら中身を実行
-		if (Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftControl) || XInputManager.SingletonInstance.XInputTriggerHandler.IsPressedLT)
+		//右ボタンまたはレフトシフトが押されていたら中身を実行（地雷を置いている間は構えない）
+		if ((Input.GetMouseButton(1) || Input.GetKey(KeyCode.LeftControl) || XInputManager.SingletonInstance.XInputTriggerHandler.IsPressedLT) && IsPlacingMine == false)
 		{
 			isAim = true;
 		}
@@ -281,6 +303,11 @@ public class PlayerModel
 		}
 
 		if (stamina.IsTired == true)
+		{
+			isDash = false;
+		}
+
+		if (IsPlacingMine == true)
 		{
 			isDash = false;
 		}
