@@ -75,6 +75,13 @@ public class GunAnimation
 	[Tooltip("構えずにリロードしている時に、右手（と銃）を右手の位置を中心に回す角度（度。キャラクターから見た向き）")]
 	[SerializeField] Vector3 relaxedReloadRightHandAngle;
 	public Vector3 RelaxedReloadRightHandAngle => relaxedReloadRightHandAngle;
+	[Header("地雷を置いている時の銃の位置")]
+	//※地雷を置くアニメーションも体の細いキャラクター用に作られたもので、しゃがんでいる間、右手で立てて持った銃がヘルメットや胸にめり込む。
+	//  そのため、地雷を置いている間は、右手をIKで体から離す
+	[Tooltip("地雷を置いている時に、右手（と銃）をずらす量（m。キャラクターから見た向きで、xが右、yが上、zが前）")]
+	[SerializeField] Vector3 placeMineRightHandOffset;
+	public Vector3 PlaceMineRightHandOffset => placeMineRightHandOffset;
+
 	[Header("ダッシュしている時の銃の持ち方（アサルトライフル・ショットガン）")]
 	//※ダッシュしている時は、右手だけで銃を縦に持ち上げて走る（ゴーストリコン フューチャーソルジャーのダッシュのような持ち方）。
 	//  左手は銃から離して、ダッシュのアニメーションどおりに振る。ハンドガンは片手で持つ別のアニメーションなので使わない

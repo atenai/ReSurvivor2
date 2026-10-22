@@ -51,6 +51,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 	const float AimValueDampTime = 0.25f;
 	[Tooltip("アニメーターに渡す移動の値が、移動の入力に追いつくまでのおおよその時間（秒）（移動の入力はキーを押した瞬間に0から1に変わるので、立ち止まる・歩き出す時にアニメーションが一瞬で切り替わらないようにする）")]
 	const float MoveSpeedDampTime = 0.1f;
+	[Tooltip("アニメーターに渡す移動の値（移動していない時）")]
+	const float NotMoveValue = 0.0f;
 	[Tooltip("アニメーターに渡すダッシュの割合（ダッシュしている時）")]
 	const float DashValue = 1.0f;
 	[Tooltip("アニメーターに渡すダッシュの割合（ダッシュしていない時）")]
@@ -125,6 +127,7 @@ public class PlayerManagerPresenter : MonoBehaviour
 		rb.velocity = Vector3.zero;
 		playerModel.ResetMove();
 		playerCharacterView.ResetMoveAnimation();
+		playerUIView.SetMinePlacingFillAmount(0.0f);
 	}
 
 	/// <summary>
@@ -193,8 +196,9 @@ public class PlayerManagerPresenter : MonoBehaviour
 	/// </summary>
 	void NormalMoveAnimation()
 	{
-		playerCharacterView.Animator.SetFloat("f_moveSpeedX", playerModel.InputHorizontal, MoveSpeedDampTime, Time.deltaTime);
-		playerCharacterView.Animator.SetFloat("f_moveSpeedY", playerModel.InputVertical, MoveSpeedDampTime, Time.deltaTime);
+		//地雷を置いている間は、その場で止まっているので、移動のアニメーションも止まっている時のアニメーションにする
+		playerCharacterView.Animator.SetFloat("f_moveSpeedX", playerModel.IsPlacingMine == true ? NotMoveValue : playerModel.InputHorizontal, MoveSpeedDampTime, Time.deltaTime);
+		playerCharacterView.Animator.SetFloat("f_moveSpeedY", playerModel.IsPlacingMine == true ? NotMoveValue : playerModel.InputVertical, MoveSpeedDampTime, Time.deltaTime);
 		//ダッシュしている時は、構えていない時の走りを、急いで走るダッシュのアニメーションに変える
 		playerCharacterView.Animator.SetFloat("f_dash", playerModel.IsDash == true ? DashValue : NotDashValue, DashDampTime, Time.deltaTime);
 		playerCharacterView.Animator.SetBool("b_isAim", playerModel.IsAim);
@@ -210,6 +214,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 		//狙っている方向に近い敵がいる時は、ハンドガンを近距離の構え（C.A.R.システムのような構え）にする
 		//（構えていない時も変えておき、構え始めた時には、もう近距離の構えの割合になっているようにする）
 		playerCharacterView.Animator.SetFloat("f_closeQuarterAim", PlayerCameraManager.SingletonInstance.IsEnemyClose == true ? CloseQuarterAimValue : NotCloseQuarterAimValue, CloseQuarterAimDampTime, Time.deltaTime);
+		//地雷を置く時は、ボタンを押している間しゃがんで左手を地面へ下ろし、置いた後（置くのをやめた後）に立ち上がる
+		playerCharacterView.UpdatePlaceMineAnimation(playerModel.MinePlacePhase, playerModel.MineSpawnCount / PlayerModel.Mine_Hold_Time, playerModel.MineStandUpCount / PlayerModel.Mine_Stand_Up_Time);
 	}
 
 	/// <summary>
@@ -228,32 +234,98 @@ public class PlayerManagerPresenter : MonoBehaviour
 		{
 			PlacedMine();
 		}
+
+		StandUpFromMine();
 	}
 
 	/// <summary>
-	/// 地雷を設置中
+	/// 地雷を設置中（ボタンを押している間、しゃがんで左手を地面へ下ろしていく）
 	/// </summary>
 	void PlacingMine()
 	{
+		//地雷を置いた後（置くのをやめた後）に立ち上がっている間は、次の地雷を置き始めない
+		if (playerModel.MinePlacePhase == EnumManager.MinePlacePhaseTYPE.StandUp || playerModel.MinePlacePhase == EnumManager.MinePlacePhaseTYPE.Cancel)
+		{
+			return;
+		}
+
+		//地雷を持っていない時と、リロード中は、地雷を置き始めない（リロードの上半身の動きと、しゃがむ動きが重ならないようにする）
+		if (playerModel.MinePlacePhase == EnumManager.MinePlacePhaseTYPE.None)
+		{
+			if (playerModel.CurrentMine <= 0 || PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
+			{
+				return;
+			}
+		}
+
+		playerModel.MinePlacePhase = EnumManager.MinePlacePhaseTYPE.Crouch;
 		playerModel.MineSpawnCount = playerModel.MineSpawnCount + Time.deltaTime;
 		playerUIView.SetMinePlacingFillAmount(playerModel.MineSpawnCount / PlayerModel.Mine_Hold_Time);
 		Debug.Log("押しているフレーム数 : " + playerModel.MineSpawnCount);
 	}
 
 	/// <summary>
-	/// 地雷を設置した
+	/// 地雷を設置した（ボタンを離した）
 	/// </summary>
 	void PlacedMine()
 	{
+		if (playerModel.MinePlacePhase != EnumManager.MinePlacePhaseTYPE.Crouch)
+		{
+			return;
+		}
+
 		//長押しを判定
 		if (PlayerModel.Mine_Hold_Time <= playerModel.MineSpawnCount)
 		{
 			Debug.Log("長押し");
 			CreateMine();
+			//地雷を置いたので、立ち上がる
+			playerModel.MineSpawnCount = 0.0f;
+			playerModel.MineStandUpCount = 0.0f;
+			playerModel.MinePlacePhase = EnumManager.MinePlacePhaseTYPE.StandUp;
+		}
+		else
+		{
+			//長押しの途中で離したので、地雷を置くのをやめて、しゃがんだ分だけ戻す（長押しした時間を、同じ速さで0まで戻す）
+			playerModel.MinePlacePhase = EnumManager.MinePlacePhaseTYPE.Cancel;
 		}
 
-		playerModel.MineSpawnCount = 0.0f;
 		playerUIView.SetMinePlacingFillAmount(0.0f);
+	}
+
+	/// <summary>
+	/// 地雷を置いた後（置くのをやめた後）に立ち上がる
+	/// </summary>
+	void StandUpFromMine()
+	{
+		switch (playerModel.MinePlacePhase)
+		{
+			case EnumManager.MinePlacePhaseTYPE.Crouch:
+				//しゃがんでいる途中でリロードが始まった時は、地雷を置くのをやめる
+				//（長押しを続けて手が地面に着いた後なら、手が地面に着くまでの時間だけかけて戻す）
+				if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
+				{
+					playerModel.MineSpawnCount = Mathf.Min(playerModel.MineSpawnCount, PlayerModel.Mine_Hold_Time);
+					playerModel.MinePlacePhase = EnumManager.MinePlacePhaseTYPE.Cancel;
+					playerUIView.SetMinePlacingFillAmount(0.0f);
+				}
+				break;
+			case EnumManager.MinePlacePhaseTYPE.StandUp:
+				playerModel.MineStandUpCount = playerModel.MineStandUpCount + Time.deltaTime;
+				if (PlayerModel.Mine_Stand_Up_Time <= playerModel.MineStandUpCount)
+				{
+					playerModel.MinePlacePhase = EnumManager.MinePlacePhaseTYPE.None;
+				}
+				break;
+			case EnumManager.MinePlacePhaseTYPE.Cancel:
+				playerModel.MineSpawnCount = playerModel.MineSpawnCount - Time.deltaTime;
+				if (playerModel.MineSpawnCount <= 0.0f)
+				{
+					playerModel.MineSpawnCount = 0.0f;
+					playerModel.MinePlacePhase = EnumManager.MinePlacePhaseTYPE.None;
+				}
+				break;
+		}
 	}
 
 	/// <summary>
@@ -301,6 +373,13 @@ public class PlayerManagerPresenter : MonoBehaviour
 	/// </summary>
 	void NormalMove()
 	{
+		//地雷を置いている間は、その場で止まる
+		if (playerModel.IsPlacingMine == true)
+		{
+			rb.velocity = new Vector3(0, rb.velocity.y, 0);
+			return;
+		}
+
 		if (playerModel.IsAim == true)
 		{
 			return;
