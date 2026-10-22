@@ -128,11 +128,10 @@ public class HandIK : MonoBehaviour
 	/// </summary>
 	void OnAnimatorIK()
 	{
-		GunFacade gunFacade = PlayerCameraManager.SingletonInstance.GetGunFacade;
 		PlayerCharacterView playerCharacterView = PlayerManagerPresenter.SingletonInstance.PlayerCharacterView;
-		GunAnimation gunAnimation = playerCharacterView.FindGunAnimation(gunFacade.GetGunTYPE);
+		GunAnimation gunAnimation = playerCharacterView.FindGunAnimation(PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunTYPE);
 
-		UpdateHoldStyle(gunAnimation, FindGunModelTransform(playerCharacterView.GunViewFacade, gunFacade.GetGunTYPE), gunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun ? playerCharacterView.GunViewFacade.HandGunView : null);
+		UpdateHoldStyle(gunAnimation, FindGunModelTransform(playerCharacterView.GunViewFacade, PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunTYPE), PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun ? playerCharacterView.GunViewFacade.HandGunView : null);
 		UpdateHoldStyleForPlaceMine(gunAnimation, playerCharacterView.PlaceMineLeftHandFreeWeight, playerCharacterView.PlaceMineLeftHandOutWeight);
 		SetRightHandIK();
 		//※近距離の構え（ハンドガン）と、銃を縦に持ち上げるダッシュ（アサルトライフル・ショットガン）は、同時には起きない
@@ -146,7 +145,7 @@ public class HandIK : MonoBehaviour
 		}
 		SetElbowHint(AvatarIKHint.LeftElbow, HumanBodyBones.LeftUpperArm, closeQuarterAimWeight, CloseQuarterAimLeftElbowHintOffset);
 
-		if (gunFacade.GetGunBase.IsReloadTimeActive == true)
+		if (PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase.IsReloadTimeActive == true)
 		{
 			//リロード中は、左手でマガジンを交換するために、アニメーションどおりの位置へなめらかに移す
 			//（マガジンを抜き取る瞬間と差し込む瞬間の前後だけ、マガジンを持つ目印に合わせる）
@@ -161,7 +160,7 @@ public class HandIK : MonoBehaviour
 			magazineGripWeight = Mathf.MoveTowards(magazineGripWeight, NoIKWeight, Time.deltaTime / ReloadCancelBlendTime);
 		}
 
-		SetLeftHandIK(gunAnimation, FindLeftHandPos(gunFacade.GetGunTYPE));
+		SetLeftHandIK(gunAnimation, FindLeftHandPos(PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunTYPE));
 	}
 
 	/// <summary>

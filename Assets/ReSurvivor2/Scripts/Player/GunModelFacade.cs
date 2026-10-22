@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// ガンファサード
+/// ガンモデルファサード
+/// MVPパターンのModel担当
 /// </summary>
 [System.Serializable]
-public class GunFacade
+public class GunModelFacade
 {
 	[Tooltip("ハンドガン")]
 	[SerializeField] HandGun handGun = new HandGun();
@@ -29,7 +30,7 @@ public class GunFacade
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	public GunFacade()
+	public GunModelFacade()
 	{
 		gunBaseList.Add(handGun);
 		gunBaseList.Add(assaultRifle);

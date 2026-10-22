@@ -97,7 +97,7 @@ public partial class SROptions
 	[Sort(4)]
 	public void AcquireHandGunAmmo()
 	{
-		PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.HandGun);
+		PlayerCameraManager.SingletonInstance.GunModelFacade.AcquireAmmo(EnumManager.GunTYPE.HandGun, 10, () => { });
 	}
 
 	[Category("Player")]
@@ -105,7 +105,7 @@ public partial class SROptions
 	[Sort(5)]
 	public void AcquireAssaultRifleAmmo()
 	{
-		PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.AssaultRifle);
+		PlayerCameraManager.SingletonInstance.GunModelFacade.AcquireAmmo(EnumManager.GunTYPE.AssaultRifle, 10, () => { });
 	}
 
 	[Category("Player")]
@@ -113,7 +113,7 @@ public partial class SROptions
 	[Sort(6)]
 	public void AcquireShotGunAmmo()
 	{
-		PlayerCameraManager.SingletonInstance.GetGunFacade.AcquireAmmo(EnumManager.GunTYPE.ShotGun);
+		PlayerCameraManager.SingletonInstance.GunModelFacade.AcquireAmmo(EnumManager.GunTYPE.ShotGun, 10, () => { });
 	}
 
 	[Category("Player")]

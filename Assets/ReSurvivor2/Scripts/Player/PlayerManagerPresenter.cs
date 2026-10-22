@@ -117,8 +117,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 		playerUIView.InitStamina(playerModel.Stamina.CurrentStamina);
 		playerUIView.StartTextArmorPlate(playerModel.CurrentArmorPlate);
 		playerUIView.StartTextFood(playerModel.CurrentFood);
-		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine);
-		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo);
+		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase.CurrentMagazine);
+		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase.CurrentAmmo);
 		playerUIView.UpdateUITransform(playerModel.IsAim);
 	}
 
@@ -185,9 +185,9 @@ public class PlayerManagerPresenter : MonoBehaviour
 
 		NormalMoveAnimation();
 		playerUIView.UpdateUITransform(playerModel.IsAim);
-		playerUIView.UpdateImageReload(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive);
-		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentMagazine);
-		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.CurrentAmmo);
+		playerUIView.UpdateImageReload(PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase.IsReloadTimeActive);
+		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase.CurrentMagazine);
+		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase.CurrentAmmo);
 	}
 
 
@@ -206,7 +206,7 @@ public class PlayerManagerPresenter : MonoBehaviour
 		//※SetFloatの3つ目の引数（dampTime）を渡すと、値が一瞬で切り替わらず、その時間をかけてなめらかに近づく
 		playerCharacterView.Animator.SetFloat("f_aim", playerModel.IsAim ? AimValue : NotAimValue, AimValueDampTime, Time.deltaTime);
 		//ハンドガンは、構えていない時に片手で持つので、構えていない時の移動のアニメーションをライフル・ショットガンと分ける
-		playerCharacterView.Animator.SetBool("b_isHandGun", PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun);
+		playerCharacterView.Animator.SetBool("b_isHandGun", PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun);
 		//ハンドガンを構え始めた時は、まず片手で狙い、少ししてから左手を添えて両手で狙う（敵が警戒体制の時は、最初から両手で狙う）
 		//※敵のマネージャーがないシーンでは、警戒体制の敵はいないことにする
 		bool isEnemyAlert = EnemyManager.SingletonInstance != null && EnemyManager.SingletonInstance.IsAnyEnemyAlert() == true;
@@ -252,7 +252,7 @@ public class PlayerManagerPresenter : MonoBehaviour
 		//地雷を持っていない時と、リロード中は、地雷を置き始めない（リロードの上半身の動きと、しゃがむ動きが重ならないようにする）
 		if (playerModel.MinePlacePhase == EnumManager.MinePlacePhaseTYPE.None)
 		{
-			if (playerModel.CurrentMine <= 0 || PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
+			if (playerModel.CurrentMine <= 0 || PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase.IsReloadTimeActive == true)
 			{
 				return;
 			}
@@ -303,7 +303,7 @@ public class PlayerManagerPresenter : MonoBehaviour
 			case EnumManager.MinePlacePhaseTYPE.Crouch:
 				//しゃがんでいる途中でリロードが始まった時は、地雷を置くのをやめる
 				//（長押しを続けて手が地面に着いた後なら、手が地面に着くまでの時間だけかけて戻す）
-				if (PlayerCameraManager.SingletonInstance.GetGunFacade.GetGunBase.IsReloadTimeActive == true)
+				if (PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase.IsReloadTimeActive == true)
 				{
 					playerModel.MineSpawnCount = Mathf.Min(playerModel.MineSpawnCount, PlayerModel.Mine_Hold_Time);
 					playerModel.MinePlacePhase = EnumManager.MinePlacePhaseTYPE.Cancel;

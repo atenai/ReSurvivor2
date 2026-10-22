@@ -161,20 +161,19 @@ public class PlayerCharacterView : MonoBehaviour
 	/// ・リロードアニメーションの再生位置を、リロードの進み具合に合わせる（こうすると、リロード時間が変わっても、アニメーションがちょうどリロードの終わりで終わる）
 	/// ※リロードしていない時は再生位置を変えない（リロードが終わってアニメーションを抜ける間に、手が急に動かないようにする）
 	/// </summary>
-	/// <param name="gunFacade">銃</param>
-	public void UpdateReloadAnimation(GunFacade gunFacade)
+	public void UpdateReloadAnimation()
 	{
-		animator.SetBool(HandGunReloadParameterName, gunFacade.FindGunBase(EnumManager.GunTYPE.HandGun).IsReloadTimeActive);
-		animator.SetBool(AssaultRifleReloadParameterName, gunFacade.FindGunBase(EnumManager.GunTYPE.AssaultRifle).IsReloadTimeActive);
-		animator.SetBool(ShotGunReloadParameterName, gunFacade.FindGunBase(EnumManager.GunTYPE.ShotGun).IsReloadTimeActive);
+		animator.SetBool(HandGunReloadParameterName, PlayerCameraManager.SingletonInstance.GunModelFacade.FindGunBase(EnumManager.GunTYPE.HandGun).IsReloadTimeActive);
+		animator.SetBool(AssaultRifleReloadParameterName, PlayerCameraManager.SingletonInstance.GunModelFacade.FindGunBase(EnumManager.GunTYPE.AssaultRifle).IsReloadTimeActive);
+		animator.SetBool(ShotGunReloadParameterName, PlayerCameraManager.SingletonInstance.GunModelFacade.FindGunBase(EnumManager.GunTYPE.ShotGun).IsReloadTimeActive);
 
-		GunBase gunBase = gunFacade.GetGunBase;
+		GunBase gunBase = PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase;
 		if (gunBase.IsReloadTimeActive == false)
 		{
 			return;
 		}
 
-		if (gunFacade.GetGunTYPE == EnumManager.GunTYPE.ShotGun)
+		if (PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunTYPE == EnumManager.GunTYPE.ShotGun)
 		{
 			UpdateShotGunReloadAnimationTime((ShotGun)gunBase);
 		}
@@ -227,11 +226,10 @@ public class PlayerCharacterView : MonoBehaviour
 	/// </summary>
 	void UpdateReloadMagazines()
 	{
-		GunFacade gunFacade = PlayerCameraManager.SingletonInstance.GetGunFacade;
-		Transform hand_l = animator.GetBoneTransform(HumanBodyBones.LeftHand);
-		handGunAnimation.UpdateReloadMagazine(gunFacade.FindGunBase(EnumManager.GunTYPE.HandGun).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, hand_l);
-		assaultRifleAnimation.UpdateReloadMagazine(gunFacade.FindGunBase(EnumManager.GunTYPE.AssaultRifle).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, hand_l);
-		shotGunAnimation.UpdateReloadMagazine(gunFacade.FindGunBase(EnumManager.GunTYPE.ShotGun).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, hand_l);
+		Transform leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
+		handGunAnimation.UpdateReloadMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.FindGunBase(EnumManager.GunTYPE.HandGun).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, leftHand);
+		assaultRifleAnimation.UpdateReloadMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.FindGunBase(EnumManager.GunTYPE.AssaultRifle).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, leftHand);
+		shotGunAnimation.UpdateReloadMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.FindGunBase(EnumManager.GunTYPE.ShotGun).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, leftHand);
 	}
 
 	/// <summary>

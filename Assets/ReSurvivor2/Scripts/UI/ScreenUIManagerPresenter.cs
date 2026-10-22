@@ -383,10 +383,9 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 		}
 
 		//銃のスロット：今持っている銃を選択中にして、弾数を表示する
-		GunFacade gunFacade = PlayerCameraManager.SingletonInstance.GetGunFacade;
-		UpdateWeaponQuickSelectGunSlot(screenUIView.HandGunSlot, gunFacade, EnumManager.GunTYPE.HandGun);
-		UpdateWeaponQuickSelectGunSlot(screenUIView.AssaultRifleSlot, gunFacade, EnumManager.GunTYPE.AssaultRifle);
-		UpdateWeaponQuickSelectGunSlot(screenUIView.ShotGunSlot, gunFacade, EnumManager.GunTYPE.ShotGun);
+		UpdateWeaponQuickSelectGunSlot(screenUIView.HandGunSlot, PlayerCameraManager.SingletonInstance.GunModelFacade, EnumManager.GunTYPE.HandGun);
+		UpdateWeaponQuickSelectGunSlot(screenUIView.AssaultRifleSlot, PlayerCameraManager.SingletonInstance.GunModelFacade, EnumManager.GunTYPE.AssaultRifle);
+		UpdateWeaponQuickSelectGunSlot(screenUIView.ShotGunSlot, PlayerCameraManager.SingletonInstance.GunModelFacade, EnumManager.GunTYPE.ShotGun);
 
 		//地雷のスロット：選択する物ではないので、所持数だけを表示する
 		screenUIView.MineSlot.SetSelected(false);
@@ -397,12 +396,12 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 	/// 武器クイックセレクトUIの銃のスロット1つ分を更新する
 	/// </summary>
 	/// <param name="slot">更新するスロット</param>
-	/// <param name="gunFacade">ガンファサード</param>
+	/// <param name="gunModelFacade">ガンモデルファサード</param>
 	/// <param name="gunTYPE">このスロットの銃のタイプ</param>
-	void UpdateWeaponQuickSelectGunSlot(WeaponQuickSelectSlot slot, GunFacade gunFacade, EnumManager.GunTYPE gunTYPE)
+	void UpdateWeaponQuickSelectGunSlot(WeaponQuickSelectSlot slot, GunModelFacade gunModelFacade, EnumManager.GunTYPE gunTYPE)
 	{
-		GunBase gun = gunFacade.FindGunBase(gunTYPE);
-		slot.SetSelected(gunFacade.GetGunTYPE == gunTYPE);
+		GunBase gun = gunModelFacade.FindGunBase(gunTYPE);
+		slot.SetSelected(gunModelFacade.GetGunTYPE == gunTYPE);
 		slot.SetAmmoText(gun.CurrentMagazine, gun.CurrentAmmo);
 	}
 

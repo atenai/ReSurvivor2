@@ -124,8 +124,8 @@ public class PlayerCameraManager : MonoBehaviour
 	}
 #endif //終了  
 
-	[SerializeField] GunFacade gunFacade = new GunFacade();
-	public GunFacade GetGunFacade => gunFacade;
+	[SerializeField] GunModelFacade gunModelFacade = new GunModelFacade();
+	public GunModelFacade GunModelFacade => gunModelFacade;
 
 	void Awake()
 	{
@@ -149,7 +149,7 @@ public class PlayerCameraManager : MonoBehaviour
 	public void Save()
 	{
 		Debug.Log("<color=cyan>プレイヤーカメラセーブ</color>");
-		gunFacade.Save();
+		gunModelFacade.Save();
 	}
 
 	/// <summary>
@@ -164,7 +164,7 @@ public class PlayerCameraManager : MonoBehaviour
 		isFirstLoad = false;
 
 		//Debug.Log("<color=purple>プレイヤーカメラロード</color>");
-		gunFacade.Load();
+		gunModelFacade.Load();
 	}
 
 	public void AfterUpdate()
@@ -175,9 +175,9 @@ public class PlayerCameraManager : MonoBehaviour
 			return;
 		}
 
-		gunFacade.UpdateGun(PlayerManagerPresenter.SingletonInstance.PlayerModel.IsAim);
+		gunModelFacade.UpdateGun(PlayerManagerPresenter.SingletonInstance.PlayerModel.IsAim);
 		//銃の状態に合わせて、プレイヤーのリロードのアニメーションを動かす（銃のクラスはプレイヤーのアニメーションを知らないので、銃を更新した後にここで呼ぶ）
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.UpdateReloadAnimation(gunFacade);
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.UpdateReloadAnimation();
 	}
 
 	public void AlwaysFixedUpdate()

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ガンモデルファサード
+/// ガンビューファサード
+/// MVPパターンのView担当
 /// </summary>
 [System.Serializable]
 public class GunViewFacade
