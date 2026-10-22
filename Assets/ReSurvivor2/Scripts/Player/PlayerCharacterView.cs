@@ -167,19 +167,19 @@ public class PlayerCharacterView : MonoBehaviour
 		animator.SetBool(AssaultRifleReloadParameterName, PlayerCameraManager.SingletonInstance.GunModelFacade.FindGunBase(EnumManager.GunTYPE.AssaultRifle).IsReloadTimeActive);
 		animator.SetBool(ShotGunReloadParameterName, PlayerCameraManager.SingletonInstance.GunModelFacade.FindGunBase(EnumManager.GunTYPE.ShotGun).IsReloadTimeActive);
 
-		GunBase gunBase = PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase;
-		if (gunBase.IsReloadTimeActive == false)
+		GunModelBase gunModelBase = PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase;
+		if (gunModelBase.IsReloadTimeActive == false)
 		{
 			return;
 		}
 
 		if (PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunTYPE == EnumManager.GunTYPE.ShotGun)
 		{
-			UpdateShotGunReloadAnimationTime((ShotGun)gunBase);
+			UpdateShotGunReloadAnimationTime((ShotGunModel)gunModelBase);
 		}
 		else
 		{
-			reloadAnimationTime = gunBase.ReloadProgress;
+			reloadAnimationTime = gunModelBase.ReloadProgress;
 			isReloadAnimationForward = true;
 		}
 		animator.SetFloat(ReloadAnimationTimeParameterName, reloadAnimationTime);
@@ -189,11 +189,11 @@ public class PlayerCharacterView : MonoBehaviour
 	/// ショットガンのリロードアニメーションの再生位置を、今込めている弾に合わせて決める
 	/// （最初 → 込める弾の数だけ「ポーチ → 装填口」を繰り返す → 最後、の順に進める。装填口から次の弾を取りに戻る間は巻き戻す）
 	/// </summary>
-	/// <param name="shotGun">ショットガン</param>
-	void UpdateShotGunReloadAnimationTime(ShotGun shotGun)
+	/// <param name="shotGunModel">ショットガン</param>
+	void UpdateShotGunReloadAnimationTime(ShotGunModel shotGunModel)
 	{
 		float phaseProgress;
-		EnumManager.ShotGunReloadPhaseTYPE phase = shotGun.GetReloadPhase(out phaseProgress);
+		EnumManager.ShotGunReloadPhaseTYPE phase = shotGunModel.GetReloadPhase(out phaseProgress);
 		isReloadAnimationForward = phase != EnumManager.ShotGunReloadPhaseTYPE.ShellReturn;
 		switch (phase)
 		{

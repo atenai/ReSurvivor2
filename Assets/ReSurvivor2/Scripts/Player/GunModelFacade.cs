@@ -11,18 +11,18 @@ using UnityEngine.Events;
 public class GunModelFacade
 {
 	[Tooltip("ハンドガン")]
-	[SerializeField] HandGun handGun = new HandGun();
+	[SerializeField] HandGunModel handGunModel = new HandGunModel();
 
 	[Tooltip("アサルトライフル")]
-	[SerializeField] AssaultRifle assaultRifle = new AssaultRifle();
+	[SerializeField] AssaultRifleModel assaultRifleModel = new AssaultRifleModel();
 
 	[Tooltip("ショットガン")]
-	[SerializeField] ShotGun shotGun = new ShotGun();
+	[SerializeField] ShotGunModel shotGunModel = new ShotGunModel();
 
-	GunBase gunBase;
-	public GunBase GetGunBase => gunBase;
+	GunModelBase gunModelBase;
+	public GunModelBase GunModelBase => gunModelBase;
 
-	List<GunBase> gunBaseList = new List<GunBase>();
+	List<GunModelBase> gunModelBaseList = new List<GunModelBase>();
 
 	EnumManager.GunTYPE gunTYPE;
 	public EnumManager.GunTYPE GetGunTYPE => gunTYPE;
@@ -32,9 +32,9 @@ public class GunModelFacade
 	/// </summary>
 	public GunModelFacade()
 	{
-		gunBaseList.Add(handGun);
-		gunBaseList.Add(assaultRifle);
-		gunBaseList.Add(shotGun);
+		gunModelBaseList.Add(handGunModel);
+		gunModelBaseList.Add(assaultRifleModel);
+		gunModelBaseList.Add(shotGunModel);
 	}
 
 	/// <summary>
@@ -43,7 +43,7 @@ public class GunModelFacade
 	public void Save()
 	{
 		UnityEngine.Debug.Log("<color=cyan>ガンファサードセーブ</color>");
-		foreach (var gun in gunBaseList)
+		foreach (var gun in gunModelBaseList)
 		{
 			gun.Save();
 		}
@@ -56,7 +56,7 @@ public class GunModelFacade
 	public void Load()
 	{
 		//UnityEngine.Debug.Log("<color=purple>ガンファサードロード</color>");
-		foreach (var gun in gunBaseList)
+		foreach (var gun in gunModelBaseList)
 		{
 			gun.Load();
 		}
@@ -71,7 +71,7 @@ public class GunModelFacade
 	public void UpdateGun(bool isAim)
 	{
 		SwitchWeaponTrigger();
-		gunBase.AllSystem(isAim);
+		gunModelBase.AllSystem(isAim);
 	}
 
 	/// <summary>
@@ -79,7 +79,7 @@ public class GunModelFacade
 	/// </summary> 
 	void SwitchWeaponTrigger()
 	{
-		if (gunBase.IsReloadTimeActive == true)
+		if (gunModelBase.IsReloadTimeActive == true)
 		{
 			return;
 		}
@@ -118,11 +118,11 @@ public class GunModelFacade
 	/// </summary> 
 	void SwitchWeapon(EnumManager.GunTYPE gunTYPE)
 	{
-		foreach (var gun in gunBaseList)
+		foreach (GunModelBase gun in gunModelBaseList)
 		{
 			if (gun.GetGunType == gunTYPE)
 			{
-				gunBase = gun;
+				gunModelBase = gun;
 			}
 		}
 	}
@@ -132,9 +132,9 @@ public class GunModelFacade
 	/// </summary>
 	/// <param name="gunTYPE">銃のタイプ</param>
 	/// <returns>見つかった銃（見つからなかった場合はnull）</returns>
-	public GunBase FindGunBase(EnumManager.GunTYPE gunTYPE)
+	public GunModelBase FindGunBase(EnumManager.GunTYPE gunTYPE)
 	{
-		foreach (GunBase gun in gunBaseList)
+		foreach (GunModelBase gun in gunModelBaseList)
 		{
 			if (gun.GetGunType == gunTYPE)
 			{
@@ -152,7 +152,7 @@ public class GunModelFacade
 	/// <param name="unityAction">イベント</param>
 	public void AcquireAmmo(EnumManager.GunTYPE gunTYPE, int amount = 10, UnityAction unityAction = null)
 	{
-		foreach (var gun in gunBaseList)
+		foreach (var gun in gunModelBaseList)
 		{
 			if (gun.GetGunType == gunTYPE)
 			{

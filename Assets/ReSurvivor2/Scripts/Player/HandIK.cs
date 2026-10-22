@@ -145,7 +145,7 @@ public class HandIK : MonoBehaviour
 		}
 		SetElbowHint(AvatarIKHint.LeftElbow, HumanBodyBones.LeftUpperArm, closeQuarterAimWeight, CloseQuarterAimLeftElbowHintOffset);
 
-		if (PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunBase.IsReloadTimeActive == true)
+		if (PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsReloadTimeActive == true)
 		{
 			//リロード中は、左手でマガジンを交換するために、アニメーションどおりの位置へなめらかに移す
 			//（マガジンを抜き取る瞬間と差し込む瞬間の前後だけ、マガジンを持つ目印に合わせる）

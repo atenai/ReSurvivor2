@@ -5,10 +5,11 @@ using System;
 using UnityEngine.Events;
 
 /// <summary>
-/// ハンドガン
+/// ハンドガンモデル
+/// MVPパターンのModel担当
 /// </summary>
 [Serializable]
-public class HandGun : GunBase
+public class HandGunModel : GunModelBase
 {
 	[Header("ハンドガン")]
 
@@ -32,7 +33,7 @@ public class HandGun : GunBase
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	public HandGun()
+	public HandGunModel()
 	{
 		this.gunType = EnumManager.GunTYPE.HandGun;
 	}

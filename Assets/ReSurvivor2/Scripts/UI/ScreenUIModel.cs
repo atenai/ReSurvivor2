@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 /// <summary>
 /// スクリーンUIモデル
 /// MVPパターンのModel担当
@@ -84,8 +83,5 @@ public class ScreenUIModel
     {
         get { return currentYesNoDialogSelectedIndex; }
         set { currentYesNoDialogSelectedIndex = value; }
-    }
-    public ScreenUIModel()
-    {
     }
 }

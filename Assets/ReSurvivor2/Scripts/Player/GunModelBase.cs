@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// 銃のベース
+/// 銃のモデルベース
+/// MVPパターンのModel担当
 /// </summary>
-public abstract class GunBase
+public abstract class GunModelBase
 {
-	[Header("銃のベース")]
+	[Header("銃のモデルベース")]
 	protected EnumManager.GunTYPE gunType;
 	public EnumManager.GunTYPE GetGunType => gunType;
 

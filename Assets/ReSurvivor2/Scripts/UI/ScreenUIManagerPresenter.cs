@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEditor;
 using DG.Tweening;
 
@@ -19,7 +18,7 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 	[SerializeField] ScreenUIView screenUIView;
 	public ScreenUIView ScreenUIView => screenUIView;
 
-	ScreenUIModel screenUIModel;
+	ScreenUIModel screenUIModel = new ScreenUIModel();
 	public ScreenUIModel ScreenUIModel => screenUIModel;
 
 	void Awake()
@@ -38,7 +37,6 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 
 	void Start()
 	{
-		screenUIModel = new ScreenUIModel();
 		HideYesNoDialog();
 		FadeOut();
 	}
@@ -400,9 +398,9 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 	/// <param name="gunTYPE">このスロットの銃のタイプ</param>
 	void UpdateWeaponQuickSelectGunSlot(WeaponQuickSelectSlot slot, GunModelFacade gunModelFacade, EnumManager.GunTYPE gunTYPE)
 	{
-		GunBase gun = gunModelFacade.FindGunBase(gunTYPE);
+		GunModelBase gunModelBase = gunModelFacade.FindGunBase(gunTYPE);
 		slot.SetSelected(gunModelFacade.GetGunTYPE == gunTYPE);
-		slot.SetAmmoText(gun.CurrentMagazine, gun.CurrentAmmo);
+		slot.SetAmmoText(gunModelBase.CurrentMagazine, gunModelBase.CurrentAmmo);
 	}
 
 	/// <summary>

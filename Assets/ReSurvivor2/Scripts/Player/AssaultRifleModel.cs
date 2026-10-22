@@ -5,10 +5,11 @@ using System;
 using UnityEngine.Events;
 
 /// <summary>
-/// アサルトライフル
+/// アサルトライフルモデル
+/// MVPパターンのModel担当
 /// </summary>
 [Serializable]
-public class AssaultRifle : GunBase
+public class AssaultRifleModel : GunModelBase
 {
 	[Header("アサルトライフル")]
 
@@ -35,7 +36,7 @@ public class AssaultRifle : GunBase
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	public AssaultRifle()
+	public AssaultRifleModel()
 	{
 		this.gunType = EnumManager.GunTYPE.AssaultRifle;
 	}
