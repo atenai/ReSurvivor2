@@ -8,10 +8,10 @@ using UnityEngine;
 [System.Serializable]
 public class GunModelFacade
 {
-	[Header("ハンドガンモデル")]
-	[Tooltip("ハンドガンのモデル")]
-	[SerializeField] HandGunModel handGunModel;
-	public HandGunModel HandGunModel => handGunModel;
+	[Header("ハンドガン")]
+	[Tooltip("ハンドガンビュー")]
+	[SerializeField] HandGunView handGunView;
+	public HandGunView HandGunView => handGunView;
 
 	[Header("アサルトライフルモデル")]
 	[Tooltip("アサルトライフルのモデル")]
@@ -28,8 +28,8 @@ public class GunModelFacade
 	/// </summary>
 	public void SwitchWeaponModel(EnumManager.GunTYPE gunTYPE)
 	{
-		handGunModel.GetHandGunModel.SetActive(false);
-		handGunModel.GetHandGunModelBodyDecoration.SetActive(false);
+		handGunView.GetHandGunModel.SetActive(false);
+		handGunView.GetHandGunModelBodyDecoration.SetActive(false);
 		assaultRifleModel.GetAssaultRifleModel.SetActive(false);
 		assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(false);
 		shotGunModel.GetShotGunModel.SetActive(false);
@@ -38,17 +38,17 @@ public class GunModelFacade
 		switch (gunTYPE)
 		{
 			case EnumManager.GunTYPE.HandGun:
-				handGunModel.GetHandGunModel.SetActive(true);
+				handGunView.GetHandGunModel.SetActive(true);
 				assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(true);
 				shotGunModel.GetShotGunModelBodyDecoration.SetActive(true);
 				break;
 			case EnumManager.GunTYPE.AssaultRifle:
-				handGunModel.GetHandGunModelBodyDecoration.SetActive(true);
+				handGunView.GetHandGunModelBodyDecoration.SetActive(true);
 				assaultRifleModel.GetAssaultRifleModel.SetActive(true);
 				shotGunModel.GetShotGunModelBodyDecoration.SetActive(true);
 				break;
 			case EnumManager.GunTYPE.ShotGun:
-				handGunModel.GetHandGunModelBodyDecoration.SetActive(true);
+				handGunView.GetHandGunModelBodyDecoration.SetActive(true);
 				assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(true);
 				shotGunModel.GetShotGunModel.SetActive(true);
 				break;

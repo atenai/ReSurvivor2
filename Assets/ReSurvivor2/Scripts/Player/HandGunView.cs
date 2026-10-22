@@ -4,9 +4,10 @@ using UnityEngine;
 using Knife.Effects;
 
 /// <summary>
-/// ハンドガンモデル
+/// ハンドガンビュー
+/// MVPパターンのView担当
 /// </summary>
-public class HandGunModel : GunModelBase
+public class HandGunView : GunModelBase
 {
 	[Header("ハンドガンモデル")]
 	[Tooltip("キャラクターの手に持っているハンドガンのモデル")]

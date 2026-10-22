@@ -132,7 +132,7 @@ public class HandIK : MonoBehaviour
 		PlayerCharacterView playerCharacterView = PlayerManagerPresenter.SingletonInstance.PlayerCharacterView;
 		GunAnimation gunAnimation = playerCharacterView.FindGunAnimation(gunFacade.GetGunTYPE);
 
-		UpdateHoldStyle(gunAnimation, FindGunModelTransform(playerCharacterView.GunModelFacade, gunFacade.GetGunTYPE), gunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun ? playerCharacterView.GunModelFacade.HandGunModel : null);
+		UpdateHoldStyle(gunAnimation, FindGunModelTransform(playerCharacterView.GunModelFacade, gunFacade.GetGunTYPE), gunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun ? playerCharacterView.GunModelFacade.HandGunView : null);
 		UpdateHoldStyleForPlaceMine(gunAnimation, playerCharacterView.PlaceMineLeftHandFreeWeight, playerCharacterView.PlaceMineLeftHandOutWeight);
 		SetRightHandIK();
 		//※近距離の構え（ハンドガン）と、銃を縦に持ち上げるダッシュ（アサルトライフル・ショットガン）は、同時には起きない
@@ -174,8 +174,8 @@ public class HandIK : MonoBehaviour
 	/// </summary>
 	/// <param name="gunAnimation">今持っている銃のアニメーションの設定（銃ごとに体から離す量が違う）</param>
 	/// <param name="gunModelTransform">今持っている銃のモデル（前向きが銃身、上向きが銃の上側）</param>
-	/// <param name="handGunModel">ハンドガンを持っている時は、ハンドガンのモデル（ほかの銃の時はnull）</param>
-	void UpdateHoldStyle(GunAnimation gunAnimation, Transform gunModelTransform, HandGunModel handGunModel)
+	/// <param name="handGunView">ハンドガンを持っている時は、ハンドガンのビュー（ほかの銃の時はnull）</param>
+	void UpdateHoldStyle(GunAnimation gunAnimation, Transform gunModelTransform, HandGunView handGunView)
 	{
 		float relaxedLocomotionWeight = GetStateWeight(LocomotionLayerIndex, normalIdleAndWalkStateHash);
 		float relaxedReloadWeight = FullIKWeight - animator.GetFloat(AimParameterName);
@@ -217,7 +217,7 @@ public class HandIK : MonoBehaviour
 		oneHandWeight = oneHandLocomotionWeight + oneHandAimWeight + GetStateWeight(UpperBodyReloadLayerIndex, handGunReloadStateHash) * relaxedReloadWeight + dashRaiseWeight;
 
 		upperBodyTwistAngle = NoTwistAngle;
-		if (handGunModel == null)
+		if (handGunView == null)
 		{
 			return;
 		}
@@ -225,7 +225,7 @@ public class HandIK : MonoBehaviour
 		//片手で持って走っている時は、腕を前に振っても銃口が上を向かないように、右手首を回す
 		if (NoIKWeight < oneHandLocomotionWeight)
 		{
-			relaxedRotation = Quaternion.Slerp(Quaternion.identity, GetMuzzleDownRotation(handGunModel), oneHandLocomotionWeight) * relaxedRotation;
+			relaxedRotation = Quaternion.Slerp(Quaternion.identity, GetMuzzleDownRotation(handGunView), oneHandLocomotionWeight) * relaxedRotation;
 		}
 
 		//片手で狙う時は、上半身を左にひねって右肩を前に出し、右腕を右肩の正面へまっすぐ伸ばして、銃口を正面に向ける
@@ -235,7 +235,7 @@ public class HandIK : MonoBehaviour
 			//※右手（と銃）は背骨の子なので、ひねった分だけ動いた後の位置・向きから、腕を伸ばした位置・向きへ移す
 			Vector3 twistedHandPosition = TwistPoint(rightHandAnimationPos.position);
 			Vector3 handPosition = Vector3.Lerp(twistedHandPosition, GetOneHandAimHandPosition(twistedHandPosition), oneHandAimWeight);
-			Quaternion aimRotation = Quaternion.Slerp(Quaternion.identity, GetOneHandAimRotation(GetTwistRotation() * GetMuzzleDirection(handGunModel)), oneHandAimWeight);
+			Quaternion aimRotation = Quaternion.Slerp(Quaternion.identity, GetOneHandAimRotation(GetTwistRotation() * GetMuzzleDirection(handGunView)), oneHandAimWeight);
 			relaxedRotation = aimRotation * GetTwistRotation() * relaxedRotation;
 			relaxedOffset = relaxedOffset + handPosition - rightHandAnimationPos.position;
 		}
@@ -243,8 +243,8 @@ public class HandIK : MonoBehaviour
 		//近距離の構えの時は、銃を顔の前の近くへ引き寄せて、内側（左）へ傾ける（両手で持ったまま、両肘を曲げて構える）
 		if (NoIKWeight < closeQuarterAimWeight)
 		{
-			Quaternion closeQuarterAimRotation = GetCloseQuarterAimRotation(handGunModel.GetHandGunModel.transform);
-			Vector3 handPosition = GetCloseQuarterAimHandPosition(handGunModel.GetHandGunModel.transform, closeQuarterAimRotation);
+			Quaternion closeQuarterAimRotation = GetCloseQuarterAimRotation(handGunView.GetHandGunModel.transform);
+			Vector3 handPosition = GetCloseQuarterAimHandPosition(handGunView.GetHandGunModel.transform, closeQuarterAimRotation);
 			relaxedRotation = Quaternion.Slerp(relaxedRotation, closeQuarterAimRotation, closeQuarterAimWeight);
 			relaxedOffset = Vector3.Lerp(relaxedOffset, handPosition - rightHandAnimationPos.position, closeQuarterAimWeight);
 		}
@@ -440,9 +440,9 @@ public class HandIK : MonoBehaviour
 	/// </summary>
 	/// <param name="handGunModel">ハンドガンのモデル</param>
 	/// <returns>銃口の向き（長さ1）</returns>
-	Vector3 GetMuzzleDirection(HandGunModel handGunModel)
+	Vector3 GetMuzzleDirection(HandGunView handGunView)
 	{
-		return (handGunModel.HandGunMuzzleTransform.position - handGunModel.GetHandGunModel.transform.position).normalized;
+		return (handGunView.HandGunMuzzleTransform.position - handGunView.GetHandGunModel.transform.position).normalized;
 	}
 
 	/// <summary>
@@ -451,9 +451,9 @@ public class HandIK : MonoBehaviour
 	/// </summary>
 	/// <param name="handGunModel">ハンドガンのモデル</param>
 	/// <returns>銃口を下げる回転</returns>
-	Quaternion GetMuzzleDownRotation(HandGunModel handGunModel)
+	Quaternion GetMuzzleDownRotation(HandGunView handGunView)
 	{
-		Vector3 muzzleDirection = GetMuzzleDirection(handGunModel);
+		Vector3 muzzleDirection = GetMuzzleDirection(handGunView);
 		float elevation = Mathf.Asin(muzzleDirection.y) * Mathf.Rad2Deg;
 		float softLimitStartElevation = MaxMuzzleElevation - MuzzleElevationSoftRange;
 		if (elevation <= softLimitStartElevation)
@@ -577,7 +577,7 @@ public class HandIK : MonoBehaviour
 		switch (gunTYPE)
 		{
 			case EnumManager.GunTYPE.HandGun:
-				return gunModelFacade.HandGunModel.GetHandGunModel.transform;
+				return gunModelFacade.HandGunView.GetHandGunModel.transform;
 			case EnumManager.GunTYPE.AssaultRifle:
 				return gunModelFacade.AssaultRifleModel.GetAssaultRifleModel.transform;
 			case EnumManager.GunTYPE.ShotGun:
