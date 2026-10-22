@@ -579,9 +579,9 @@ public class HandIK : MonoBehaviour
 			case EnumManager.GunTYPE.HandGun:
 				return gunModelFacade.HandGunView.GetHandGunModel.transform;
 			case EnumManager.GunTYPE.AssaultRifle:
-				return gunModelFacade.AssaultRifleModel.GetAssaultRifleModel.transform;
+				return gunModelFacade.AssaultRifleView.GetAssaultRifleModel.transform;
 			case EnumManager.GunTYPE.ShotGun:
-				return gunModelFacade.ShotGunModel.GetShotGunModel.transform;
+				return gunModelFacade.ShotGunView.GetShotGunModel.transform;
 		}
 		return null;
 	}

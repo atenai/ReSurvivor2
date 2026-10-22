@@ -138,8 +138,8 @@ public class AssaultRifle : GunBase
 	protected override void Fire()
 	{
 		AssaultRifleBulletCasingSE();
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleFlashAndShell();
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleModel.AssaultRifleSmoke();
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleView.AssaultRifleMuzzleFlashAndShell();
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleView.AssaultRifleSmoke();
 
 		AssaultRifleFireSE();
 
@@ -206,7 +206,7 @@ public class AssaultRifle : GunBase
 	/// </summary> 
 	void AssaultRifleFireSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleModel.AssaultRifleMuzzleTransform);
+		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleView.AssaultRifleMuzzleTransform);
 	}
 
 	/// <summary>
@@ -214,7 +214,7 @@ public class AssaultRifle : GunBase
 	/// </summary> 
 	void AssaultRifleReloadSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
+		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleView.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -222,7 +222,7 @@ public class AssaultRifle : GunBase
 	/// </summary>
 	void AssaultRifleBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleModel.AssaultRifleBulletCasingTransform);
+		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.AssaultRifleView.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>

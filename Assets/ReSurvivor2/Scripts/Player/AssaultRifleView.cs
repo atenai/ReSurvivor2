@@ -4,9 +4,10 @@ using UnityEngine;
 using Knife.Effects;
 
 /// <summary>
-/// アサルトライフルモデル
+/// アサルトライフルビュー
+/// MVPパターンのView担当
 /// </summary>
-public class AssaultRifleModel : GunModelBase
+public class AssaultRifleView : GunModelBase
 {
 	[Header("アサルトライフルモデル")]
 	[Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]

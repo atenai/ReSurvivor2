@@ -13,15 +13,15 @@ public class GunModelFacade
 	[SerializeField] HandGunView handGunView;
 	public HandGunView HandGunView => handGunView;
 
-	[Header("アサルトライフルモデル")]
-	[Tooltip("アサルトライフルのモデル")]
-	[SerializeField] AssaultRifleModel assaultRifleModel;
-	public AssaultRifleModel AssaultRifleModel => assaultRifleModel;
+	[Header("アサルトライフル")]
+	[Tooltip("アサルトライフルのビュー")]
+	[SerializeField] AssaultRifleView assaultRifleView;
+	public AssaultRifleView AssaultRifleView => assaultRifleView;
 
-	[Header("ショットガンモデル")]
-	[Tooltip("ショットガンのモデル")]
-	[SerializeField] ShotGunModel shotGunModel;
-	public ShotGunModel ShotGunModel => shotGunModel;
+	[Header("ショットガンビュー")]
+	[Tooltip("ショットガンのビュー")]
+	[SerializeField] ShotGunView shotGunView;
+	public ShotGunView ShotGunView => shotGunView;
 
 	/// <summary>
 	/// 銃のモデルを切り替え
@@ -30,27 +30,27 @@ public class GunModelFacade
 	{
 		handGunView.GetHandGunModel.SetActive(false);
 		handGunView.GetHandGunModelBodyDecoration.SetActive(false);
-		assaultRifleModel.GetAssaultRifleModel.SetActive(false);
-		assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(false);
-		shotGunModel.GetShotGunModel.SetActive(false);
-		shotGunModel.GetShotGunModelBodyDecoration.SetActive(false);
+		assaultRifleView.GetAssaultRifleModel.SetActive(false);
+		assaultRifleView.GetAssaultRifleModelBodyDecoration.SetActive(false);
+		shotGunView.GetShotGunModel.SetActive(false);
+		shotGunView.GetShotGunModelBodyDecoration.SetActive(false);
 
 		switch (gunTYPE)
 		{
 			case EnumManager.GunTYPE.HandGun:
 				handGunView.GetHandGunModel.SetActive(true);
-				assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(true);
-				shotGunModel.GetShotGunModelBodyDecoration.SetActive(true);
+				assaultRifleView.GetAssaultRifleModelBodyDecoration.SetActive(true);
+				shotGunView.GetShotGunModelBodyDecoration.SetActive(true);
 				break;
 			case EnumManager.GunTYPE.AssaultRifle:
 				handGunView.GetHandGunModelBodyDecoration.SetActive(true);
-				assaultRifleModel.GetAssaultRifleModel.SetActive(true);
-				shotGunModel.GetShotGunModelBodyDecoration.SetActive(true);
+				assaultRifleView.GetAssaultRifleModel.SetActive(true);
+				shotGunView.GetShotGunModelBodyDecoration.SetActive(true);
 				break;
 			case EnumManager.GunTYPE.ShotGun:
 				handGunView.GetHandGunModelBodyDecoration.SetActive(true);
-				assaultRifleModel.GetAssaultRifleModelBodyDecoration.SetActive(true);
-				shotGunModel.GetShotGunModel.SetActive(true);
+				assaultRifleView.GetAssaultRifleModelBodyDecoration.SetActive(true);
+				shotGunView.GetShotGunModel.SetActive(true);
 				break;
 		}
 	}
