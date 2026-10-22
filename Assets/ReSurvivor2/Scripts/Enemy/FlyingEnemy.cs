@@ -85,6 +85,8 @@ public class FlyingEnemy : MonoBehaviour, IEnemy
 		get { return isChase; }
 		set { isChase = value; }
 	}
+	/// <summary>警戒体制か？（プレイヤーを追跡中で、倒されていない。追跡中か？のアラートイメージが出ている状態）</summary>
+	public bool IsAlert => isChase == true && hp.IsDead == false;
 	[Tooltip("エネミー追跡範囲の中心点")]
 	[SerializeField] GameObject centerPos;
 	public GameObject CenterPos => centerPos;

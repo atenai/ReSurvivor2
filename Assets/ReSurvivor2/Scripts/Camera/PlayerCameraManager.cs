@@ -176,6 +176,8 @@ public class PlayerCameraManager : MonoBehaviour
 		}
 
 		gunFacade.UpdateGun(PlayerManagerPresenter.SingletonInstance.PlayerModel.IsAim);
+		//銃の状態に合わせて、プレイヤーのリロードのアニメーションを動かす（銃のクラスはプレイヤーのアニメーションを知らないので、銃を更新した後にここで呼ぶ）
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.UpdateReloadAnimation(gunFacade);
 	}
 
 	public void AlwaysFixedUpdate()

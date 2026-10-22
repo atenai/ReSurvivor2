@@ -28,6 +28,11 @@ public class AssaultRifle : GunBase
 	readonly float assaultRifleReloadTimeDefine = 1.5f;
 
 	/// <summary>
+	/// リロードにかかる時間（秒）
+	/// </summary>
+	protected override float ReloadTime => assaultRifleReloadTimeDefine;
+
+	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	public AssaultRifle()
@@ -89,15 +94,11 @@ public class AssaultRifle : GunBase
 
 		if (reloadCountTimer == 0)
 		{
-			//アサルトライフルのリロードアニメーションをオン
-			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isAssaultRifleReload", true);
-
 			AssaultRifleReloadSE();
 		}
 
 		//リロード中画像
 		reloadCountTimer += Time.deltaTime;//リロードタイムをプラス
-		UpdateReloadAnimationTime(assaultRifleReloadTimeDefine);
 
 		if (assaultRifleReloadTimeDefine <= reloadCountTimer)//リロードタイムが10以上になったら
 		{
@@ -128,9 +129,6 @@ public class AssaultRifle : GunBase
 
 			reloadCountTimer = 0.0f;//リロードタイムをリセット
 			isReloadTimeActive = false;//リロードのオフ
-
-			//アサルトライフルのリロードアニメーションをオフ
-			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isAssaultRifleReload", false);
 		}
 	}
 

@@ -14,6 +14,23 @@ public static class EnumManager
 	}
 
 	/// <summary>
+	/// ショットガンのリロードの段階（弾を1発ずつ込める）
+	/// </summary>
+	public enum ShotGunReloadPhaseTYPE
+	{
+		//銃を弾を込める姿勢にして、左手が腰の後ろのポーチまで弾を取りに行く
+		Start = 0,
+		//1発目の弾を、ポーチから装填口まで持っていって込める
+		FirstShellInsert = 1,
+		//弾を込めた後、次の弾を取りに腰のベルトへ戻る
+		ShellReturn = 2,
+		//2発目以降の弾を、腰のベルトから装填口まで持っていって込める
+		ShellInsert = 3,
+		//最後の弾を込めてから、元の構えに戻る
+		End = 4,
+	}
+
+	/// <summary>
 	/// ステージのタイプ
 	/// </summary>
 	public enum StageTYPE

@@ -41,6 +41,34 @@ public class EnemyManager : MonoBehaviour
 	}
 
 	/// <summary>
+	/// 警戒体制の敵がいるか？（プレイヤーを追跡中で、頭の上にアラートのマークが出ている敵がいるか？）
+	/// </summary>
+	public bool IsAnyEnemyAlert()
+	{
+		foreach (GameObject enemy in enemies)
+		{
+			//飛行する敵・的は、倒されると消えるので数えない
+			if (enemy == null)
+			{
+				continue;
+			}
+
+			GroundEnemyPresenter groundEnemy = enemy.GetComponentInChildren<GroundEnemyPresenter>();
+			if (groundEnemy != null && groundEnemy.GroundEnemyModel.IsAlert == true)
+			{
+				return true;
+			}
+
+			FlyingEnemy flyingEnemy = enemy.GetComponentInChildren<FlyingEnemy>();
+			if (flyingEnemy != null && flyingEnemy.IsAlert == true)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/// <summary>
 	/// カバーポイントをセット
 	/// </summary>
 	void SetCoverPoint()

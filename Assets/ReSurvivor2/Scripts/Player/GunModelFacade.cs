@@ -54,23 +54,4 @@ public class GunModelFacade
 				break;
 		}
 	}
-
-	/// <summary>
-	/// 銃のタイプから銃のモデルを探す
-	/// </summary>
-	/// <param name="gunTYPE">銃のタイプ</param>
-	/// <returns>見つかった銃のモデル（見つからなかった場合はnull）</returns>
-	public GunModelBase FindGunModel(EnumManager.GunTYPE gunTYPE)
-	{
-		switch (gunTYPE)
-		{
-			case EnumManager.GunTYPE.HandGun:
-				return handGunModel;
-			case EnumManager.GunTYPE.AssaultRifle:
-				return assaultRifleModel;
-			case EnumManager.GunTYPE.ShotGun:
-				return shotGunModel;
-		}
-		return null;
-	}
 }

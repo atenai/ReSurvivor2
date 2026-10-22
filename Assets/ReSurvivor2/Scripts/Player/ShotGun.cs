@@ -59,11 +59,10 @@ public class ShotGun : GunBase
 	[Tooltip("弾が1発も入っていない時のマガジンの弾数")]
 	const int EmptyMagazineCount = 0;
 
-	[Tooltip("リロードアニメーションの始まりの再生位置")]
-	const float ReloadAnimationStartTime = 0.0f;
-
-	[Tooltip("リロードアニメーションの終わりの再生位置")]
-	const float ReloadAnimationEndTime = 1.0f;
+	/// <summary>
+	/// リロードにかかる時間（秒）（込める弾の数で変わる）
+	/// </summary>
+	protected override float ReloadTime => GetReloadEndTime();
 
 	/// <summary>
 	/// コンストラクタ
@@ -128,9 +127,6 @@ public class ShotGun : GunBase
 
 		if (reloadCountTimer == 0)
 		{
-			//ショットガンのリロードアニメーションをオン
-			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isShotGunReload", true);
-
 			//今回込める弾の数（マガジンの空き数と残弾数の少ない方）
 			shellCountToLoad = Mathf.Min(shotGunMagazineCapacity - currentMagazine, currentAmmo);
 			loadedShellCount = 0;
@@ -144,8 +140,6 @@ public class ShotGun : GunBase
 		{
 			LoadShell();
 		}
-
-		UpdateShotGunReloadAnimationTime();
 
 		if (GetReloadEndTime() <= reloadCountTimer)
 		{
@@ -200,29 +194,29 @@ public class ShotGun : GunBase
 	}
 
 	/// <summary>
-	/// リロードアニメーションの再生位置を、今込めている弾に合わせて決める
-	/// （最初 → 込める弾の数だけ「ポーチ → 装填口」を繰り返す → 最後、の順に進める。装填口から次の弾を取りに戻る間は巻き戻す）
+	/// 今のリロードの段階と、その段階の進み具合を求める
+	/// （最初 → 1発目を込める →「次の弾を取りに戻る → 込める」を残りの弾の数だけ繰り返す → 最後、の順に進む）
 	/// </summary>
-	void UpdateShotGunReloadAnimationTime()
+	/// <param name="phaseProgress">今の段階の進み具合（0が段階の始まり、1が終わり）</param>
+	/// <returns>今のリロードの段階</returns>
+	public EnumManager.ShotGunReloadPhaseTYPE GetReloadPhase(out float phaseProgress)
 	{
-		ShotGunModel shotGunModel = PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.ShotGunModel;
-
 		//最初：銃を弾を込める姿勢にして、左手がポーチまで弾を取りに行く
 		if (reloadCountTimer < shotGunReloadStartTime)
 		{
-			SetReloadAnimationTime(Mathf.SmoothStep(ReloadAnimationStartTime, shotGunModel.MagazineOutTime, reloadCountTimer / shotGunReloadStartTime), true);
-			return;
+			phaseProgress = reloadCountTimer / shotGunReloadStartTime;
+			return EnumManager.ShotGunReloadPhaseTYPE.Start;
 		}
 
-		//1発目：最初にポーチに着いた所から、装填口まで進めて込める
+		//1発目：最初にポーチに着いた所から、装填口まで持っていって込める
 		float firstShellTime = reloadCountTimer - shotGunReloadStartTime;
 		if (firstShellTime < shotGunFirstShellInsertTime)
 		{
-			SetReloadAnimationTime(Mathf.SmoothStep(shotGunModel.MagazineOutTime, shotGunModel.MagazineInTime, firstShellTime / shotGunFirstShellInsertTime), true);
-			return;
+			phaseProgress = firstShellTime / shotGunFirstShellInsertTime;
+			return EnumManager.ShotGunReloadPhaseTYPE.FirstShellInsert;
 		}
 
-		//2発目以降：「次の弾を取る所まで巻き戻す → 装填口まで進めて込める」を、残りの弾の数だけ繰り返す
+		//2発目以降：「次の弾を取りに戻る → 装填口まで持っていって込める」を、残りの弾の数だけ繰り返す
 		float nextShellsTime = firstShellTime - shotGunFirstShellInsertTime;
 		float shellCycleTime = shotGunShellReturnTime + shotGunShellInsertTime;
 		int cycleIndex = Mathf.FloorToInt(nextShellsTime / shellCycleTime);
@@ -231,17 +225,17 @@ public class ShotGun : GunBase
 			float timeInCycle = nextShellsTime - shellCycleTime * cycleIndex;
 			if (timeInCycle < shotGunShellReturnTime)
 			{
-				SetReloadAnimationTime(Mathf.SmoothStep(shotGunModel.MagazineInTime, shotGunModel.ShellPickTime, timeInCycle / shotGunShellReturnTime), false);
-				return;
+				phaseProgress = timeInCycle / shotGunShellReturnTime;
+				return EnumManager.ShotGunReloadPhaseTYPE.ShellReturn;
 			}
 
-			SetReloadAnimationTime(Mathf.SmoothStep(shotGunModel.ShellPickTime, shotGunModel.MagazineInTime, (timeInCycle - shotGunShellReturnTime) / shotGunShellInsertTime), true);
-			return;
+			phaseProgress = (timeInCycle - shotGunShellReturnTime) / shotGunShellInsertTime;
+			return EnumManager.ShotGunReloadPhaseTYPE.ShellInsert;
 		}
 
-		//最後：最後の弾を込めた所から、元の構えに戻す
-		float endTime = reloadCountTimer - GetShellInsertedTime(GetLastShellIndex());
-		SetReloadAnimationTime(Mathf.SmoothStep(shotGunModel.MagazineInTime, ReloadAnimationEndTime, endTime / shotGunReloadEndTime), true);
+		//最後：最後の弾を込めてから、元の構えに戻る
+		phaseProgress = (reloadCountTimer - GetShellInsertedTime(GetLastShellIndex())) / shotGunReloadEndTime;
+		return EnumManager.ShotGunReloadPhaseTYPE.End;
 	}
 
 	/// <summary>
@@ -271,9 +265,6 @@ public class ShotGun : GunBase
 	{
 		reloadCountTimer = 0.0f;//リロードタイムをリセット
 		isReloadTimeActive = false;//リロードのオフ
-
-		//ショットガンのリロードアニメーションをオフ
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.Animator.SetBool("b_isShotGunReload", false);
 	}
 
 	/// <summary>

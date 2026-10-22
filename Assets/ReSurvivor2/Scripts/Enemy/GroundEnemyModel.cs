@@ -32,6 +32,8 @@ public class GroundEnemyModel
 		get { return isChase; }
 		set { isChase = value; }
 	}
+	/// <summary>警戒体制か？（プレイヤーを追跡中で、倒されていない。頭の上にアラートのマークが出ている状態）</summary>
+	public bool IsAlert => isChase == true && hp.IsDead == false;
 
 	[Header("レイキャスト")]
 	/// <summary>視界な長さ</summary>
