@@ -132,7 +132,7 @@ public class HandIK : MonoBehaviour
 		PlayerCharacterView playerCharacterView = PlayerManagerPresenter.SingletonInstance.PlayerCharacterView;
 		GunAnimation gunAnimation = playerCharacterView.FindGunAnimation(gunFacade.GetGunTYPE);
 
-		UpdateHoldStyle(gunAnimation, FindGunModelTransform(playerCharacterView.GunModelFacade, gunFacade.GetGunTYPE), gunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun ? playerCharacterView.GunModelFacade.HandGunView : null);
+		UpdateHoldStyle(gunAnimation, FindGunModelTransform(playerCharacterView.GunViewFacade, gunFacade.GetGunTYPE), gunFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun ? playerCharacterView.GunViewFacade.HandGunView : null);
 		UpdateHoldStyleForPlaceMine(gunAnimation, playerCharacterView.PlaceMineLeftHandFreeWeight, playerCharacterView.PlaceMineLeftHandOutWeight);
 		SetRightHandIK();
 		//※近距離の構え（ハンドガン）と、銃を縦に持ち上げるダッシュ（アサルトライフル・ショットガン）は、同時には起きない
@@ -572,7 +572,7 @@ public class HandIK : MonoBehaviour
 	/// <param name="gunModelFacade">銃のモデル</param>
 	/// <param name="gunTYPE">銃の種類</param>
 	/// <returns>銃のモデル（前向きが銃身、上向きが銃の上側）</returns>
-	Transform FindGunModelTransform(GunModelFacade gunModelFacade, EnumManager.GunTYPE gunTYPE)
+	Transform FindGunModelTransform(GunViewFacade gunModelFacade, EnumManager.GunTYPE gunTYPE)
 	{
 		switch (gunTYPE)
 		{

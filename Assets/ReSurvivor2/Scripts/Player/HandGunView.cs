@@ -7,7 +7,7 @@ using Knife.Effects;
 /// ハンドガンビュー
 /// MVPパターンのView担当
 /// </summary>
-public class HandGunView : GunModelBase
+public class HandGunView : MonoBehaviour
 {
 	[Header("ハンドガンモデル")]
 	[Tooltip("キャラクターの手に持っているハンドガンのモデル")]

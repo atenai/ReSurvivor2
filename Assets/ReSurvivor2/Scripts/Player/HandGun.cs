@@ -135,8 +135,8 @@ public class HandGun : GunBase
 	protected override void Fire()
 	{
 		HandGunBulletCasingSE();
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.HandGunView.HandGunMuzzleFlashAndShell();
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.HandGunView.HandGunSmoke();
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.HandGunView.HandGunMuzzleFlashAndShell();
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.HandGunView.HandGunSmoke();
 
 		HandGunFireSE();
 
@@ -199,7 +199,7 @@ public class HandGun : GunBase
 	/// </summary> 
 	void HandGunFireSE()
 	{
-		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.HandGunView.HandGunMuzzleTransform);
+		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.HandGunView.HandGunMuzzleTransform);
 	}
 
 	/// <summary>
@@ -207,7 +207,7 @@ public class HandGun : GunBase
 	/// </summary> 
 	void HandGunReloadSE()
 	{
-		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.HandGunView.HandGunBulletCasingTransform);
+		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.HandGunView.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>
@@ -215,7 +215,7 @@ public class HandGun : GunBase
 	/// </summary>
 	void HandGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.HandGunView.HandGunBulletCasingTransform);
+		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.HandGunView.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>

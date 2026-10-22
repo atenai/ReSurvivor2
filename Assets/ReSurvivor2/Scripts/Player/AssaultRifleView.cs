@@ -7,7 +7,7 @@ using Knife.Effects;
 /// アサルトライフルビュー
 /// MVPパターンのView担当
 /// </summary>
-public class AssaultRifleView : GunModelBase
+public class AssaultRifleView : MonoBehaviour
 {
 	[Header("アサルトライフルモデル")]
 	[Tooltip("キャラクターの手に持っているアサルトライフルのモデル")]

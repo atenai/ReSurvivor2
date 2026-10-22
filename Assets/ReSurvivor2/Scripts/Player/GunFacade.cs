@@ -61,7 +61,7 @@ public class GunFacade
 		}
 		this.gunTYPE = ES3.Load<EnumManager.GunTYPE>("CurrentGunType", EnumManager.GunTYPE.HandGun);
 		SwitchWeapon(this.gunTYPE);
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(this.gunTYPE);
 	}
 
 	/// <summary>
@@ -88,7 +88,7 @@ public class GunFacade
 			//Debug.Log("ハンドガン");
 			this.gunTYPE = EnumManager.GunTYPE.HandGun;
 			SwitchWeapon(this.gunTYPE);
-			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(this.gunTYPE);
 			//十字キーの武器アイコンと弾数を一時的に表示する
 			ScreenUIManagerPresenter.SingletonInstance.ShowWeaponQuickSelect();
 		}
@@ -97,7 +97,7 @@ public class GunFacade
 			//Debug.Log("アサルトライフル");
 			this.gunTYPE = EnumManager.GunTYPE.AssaultRifle;
 			SwitchWeapon(this.gunTYPE);
-			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(this.gunTYPE);
 			//十字キーの武器アイコンと弾数を一時的に表示する
 			ScreenUIManagerPresenter.SingletonInstance.ShowWeaponQuickSelect();
 		}
@@ -106,7 +106,7 @@ public class GunFacade
 			//Debug.Log("ショットガン");
 			this.gunTYPE = EnumManager.GunTYPE.ShotGun;
 			SwitchWeapon(this.gunTYPE);
-			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunModelFacade.SwitchWeaponModel(this.gunTYPE);
+			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(this.gunTYPE);
 			//十字キーの武器アイコンと弾数を一時的に表示する
 			ScreenUIManagerPresenter.SingletonInstance.ShowWeaponQuickSelect();
 		}

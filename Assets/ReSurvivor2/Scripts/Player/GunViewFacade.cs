@@ -6,7 +6,7 @@ using UnityEngine;
 /// ガンモデルファサード
 /// </summary>
 [System.Serializable]
-public class GunModelFacade
+public class GunViewFacade
 {
 	[Header("ハンドガン")]
 	[Tooltip("ハンドガンビュー")]
