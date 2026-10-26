@@ -43,29 +43,6 @@ public class PlayerManagerPresenter : MonoBehaviour
 	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
 	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
 
-	[Tooltip("アニメーターに渡す構えの値（構えていない時）")]
-	const float NotAimValue = 0.0f;
-	[Tooltip("アニメーターに渡す構えの値（構えている時）")]
-	const float AimValue = 1.0f;
-	[Tooltip("アニメーターに渡す構えの値が、構えの切り替えに追いつくまでのおおよその時間（秒）（待機・移動の構えの切り替えの遷移時間と同じにする）")]
-	const float AimValueDampTime = 0.25f;
-	[Tooltip("アニメーターに渡す移動の値が、移動の入力に追いつくまでのおおよその時間（秒）（移動の入力はキーを押した瞬間に0から1に変わるので、立ち止まる・歩き出す時にアニメーションが一瞬で切り替わらないようにする）")]
-	const float MoveSpeedDampTime = 0.1f;
-	[Tooltip("アニメーターに渡す移動の値（移動していない時）")]
-	const float NotMoveValue = 0.0f;
-	[Tooltip("アニメーターに渡すダッシュの割合（ダッシュしている時）")]
-	const float DashValue = 1.0f;
-	[Tooltip("アニメーターに渡すダッシュの割合（ダッシュしていない時）")]
-	const float NotDashValue = 0.0f;
-	[Tooltip("アニメーターに渡すダッシュの割合が、ダッシュの切り替えに追いつくまでのおおよその時間（秒）")]
-	const float DashDampTime = 0.2f;
-	[Tooltip("アニメーターに渡す、近距離の構え（C.A.R.システムのような構え）の割合（狙っている敵が近い時）")]
-	const float CloseQuarterAimValue = 1.0f;
-	[Tooltip("アニメーターに渡す、近距離の構えの割合（狙っている敵が近くない時）")]
-	const float NotCloseQuarterAimValue = 0.0f;
-	[Tooltip("アニメーターに渡す近距離の構えの割合が、切り替えに追いつくまでのおおよその時間（秒）")]
-	const float CloseQuarterAimDampTime = 0.1f;
-
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -108,6 +85,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 
 	void Start()
 	{
+		//プレイヤーのアニメーションは、銃の状態を見て動かすので、銃を渡しておく
+		playerCharacterView.Initialize(PlayerCameraManager.SingletonInstance.GunModelFacade);
 		InitHP();
 		InitStamina();
 		InitMine();
@@ -192,30 +171,25 @@ public class PlayerManagerPresenter : MonoBehaviour
 
 
 	/// <summary>
-	/// 移動アニメーション
+	/// 移動アニメーション（プレイヤーの状態を、プレイヤーキャラクタービューに渡す）
 	/// </summary>
 	void NormalMoveAnimation()
 	{
-		//地雷を置いている間は、その場で止まっているので、移動のアニメーションも止まっている時のアニメーションにする
-		playerCharacterView.Animator.SetFloat("f_moveSpeedX", playerModel.IsPlacingMine == true ? NotMoveValue : playerModel.InputHorizontal, MoveSpeedDampTime, Time.deltaTime);
-		playerCharacterView.Animator.SetFloat("f_moveSpeedY", playerModel.IsPlacingMine == true ? NotMoveValue : playerModel.InputVertical, MoveSpeedDampTime, Time.deltaTime);
-		//ダッシュしている時は、構えていない時の走りを、急いで走るダッシュのアニメーションに変える
-		playerCharacterView.Animator.SetFloat("f_dash", playerModel.IsDash == true ? DashValue : NotDashValue, DashDampTime, Time.deltaTime);
-		playerCharacterView.Animator.SetBool("b_isAim", playerModel.IsAim);
-		//リロードアニメーションの「構えていない時の動き」と「構えている時の動き」を混ぜる割合（0〜1）
-		//※SetFloatの3つ目の引数（dampTime）を渡すと、値が一瞬で切り替わらず、その時間をかけてなめらかに近づく
-		playerCharacterView.Animator.SetFloat("f_aim", playerModel.IsAim ? AimValue : NotAimValue, AimValueDampTime, Time.deltaTime);
-		//ハンドガンは、構えていない時に片手で持つので、構えていない時の移動のアニメーションをライフル・ショットガンと分ける
-		playerCharacterView.Animator.SetBool("b_isHandGun", PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun);
-		//ハンドガンを構え始めた時は、まず片手で狙い、少ししてから左手を添えて両手で狙う（敵が警戒体制の時は、最初から両手で狙う）
+		playerCharacterView.UpdateMoveAnimation(playerModel.InputHorizontal, playerModel.InputVertical, playerModel.IsDash, playerModel.IsPlacingMine);
 		//※敵のマネージャーがないシーンでは、警戒体制の敵はいないことにする
 		bool isEnemyAlert = EnemyManager.SingletonInstance != null && EnemyManager.SingletonInstance.IsAnyEnemyAlert() == true;
-		playerCharacterView.UpdateOneHandAimAnimation(playerModel.IsAim, isEnemyAlert);
-		//狙っている方向に近い敵がいる時は、ハンドガンを近距離の構え（C.A.R.システムのような構え）にする
-		//（構えていない時も変えておき、構え始めた時には、もう近距離の構えの割合になっているようにする）
-		playerCharacterView.Animator.SetFloat("f_closeQuarterAim", PlayerCameraManager.SingletonInstance.IsEnemyClose == true ? CloseQuarterAimValue : NotCloseQuarterAimValue, CloseQuarterAimDampTime, Time.deltaTime);
+		playerCharacterView.UpdateAimAnimation(playerModel.IsAim, isEnemyAlert, PlayerCameraManager.SingletonInstance.IsEnemyClose);
 		//地雷を置く時は、ボタンを押している間しゃがんで左手を地面へ下ろし、置いた後（置くのをやめた後）に立ち上がる
 		playerCharacterView.UpdatePlaceMineAnimation(playerModel.MinePlacePhase, playerModel.MineSpawnCount / PlayerModel.Mine_Hold_Time, playerModel.MineStandUpCount / PlayerModel.Mine_Stand_Up_Time);
+	}
+
+	/// <summary>
+	/// 銃を更新した後の処理（銃の状態に合わせて、プレイヤーのリロードのアニメーションを動かす）
+	/// ※InGameManagerが、銃の更新（PlayerCameraManager.AfterUpdate）の後に呼ぶ
+	/// </summary>
+	public void AfterGunUpdate()
+	{
+		playerCharacterView.UpdateReloadAnimation();
 	}
 
 	/// <summary>
@@ -466,10 +440,7 @@ public class PlayerManagerPresenter : MonoBehaviour
 	void LateUpdate()
 	{
 		//ボーンを曲げる際は必ずLateUpdateに書く必要がある！（これいつかメモする！）
-		playerCharacterView.RotateBoneNeck01();
-		playerCharacterView.RotateBoneSpine03(PlayerCameraManager.SingletonInstance.transform);
-		playerCharacterView.RotateBoneUpperArmR(playerModel.IsAim);
-		playerCharacterView.RotateBoneUpperArmL(playerModel.IsAim);
+		playerCharacterView.UpdateAimBones(PlayerCameraManager.SingletonInstance.transform, playerModel.IsAim);
 	}
 
 	void OnCollisionEnter(Collision collision)

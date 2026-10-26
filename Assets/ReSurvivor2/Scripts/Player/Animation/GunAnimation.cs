@@ -4,12 +4,17 @@ using UnityEngine;
 
 /// <summary>
 /// 銃ごとの、プレイヤーのアニメーションの設定
-/// （リロード中のマガジンの動き・リロード中の左手のIK・構えていない時やダッシュの時の銃の持ち方）
-/// ※PlayerCharacterViewが銃ごとに持ち、銃の状態を見て動かす（銃のクラスからは使わない）
+/// （左手で銃を握る位置・リロード中のマガジンの動き・リロード中の左手のIK・構えていない時やダッシュの時の銃の持ち方）
+/// ※GunAnimationFacadeが銃ごとに持ち、PlayerCharacterViewとHandIKが銃の状態を見て使う（銃のクラスからは使わない）
 /// </summary>
 [System.Serializable]
 public class GunAnimation
 {
+	[Header("左手で銃を握る位置")]
+	[Tooltip("左手で銃の前側を握る位置・向き（銃の子に置いた目印。向きはIK用の手の向き）")]
+	[SerializeField] Transform leftHandGripPos;
+	public Transform LeftHandGripPos => leftHandGripPos;
+
 	[Header("リロード")]
 	//※リロードのアニメーションは、左手で銃からマガジンを抜いて腰のポーチへ持っていき、また銃に差し込む動きになっているため、
 	//  その間はマガジンを左手の子にして、左手と一緒に動かす

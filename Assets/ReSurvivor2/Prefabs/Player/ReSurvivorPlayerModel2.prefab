@@ -1224,7 +1224,6 @@ GameObject:
   - component: {fileID: 4451839722221229035}
   - component: {fileID: 7721474850707310993}
   - component: {fileID: 1349254599881634047}
-  - component: {fileID: 8735078247964254621}
   - component: {fileID: 3099343492085402758}
   - component: {fileID: 3029799190864042039}
   - component: {fileID: 7140144329826878951}
@@ -1294,82 +1293,72 @@ MonoBehaviour:
     handGunView: {fileID: 3099343492085402758}
     assaultRifleView: {fileID: 3029799190864042039}
     shotGunView: {fileID: 7140144329826878951}
-  handGunAnimation:
-    magazineModels:
-    - {fileID: 6764241680255446785}
-    - {fileID: 6764241680255446799}
-    - {fileID: 6764241680255446797}
-    isMagazineShownOnlyInHand: 0
-    magazineLeftHandPos: {fileID: 0}
-    magazineOutTime: 0.13
-    magazineInTime: 0.5
-    leftHandIKReleaseTime: 0.06
-    leftHandIKReturnTime: 0.86
-    magazineLeftHandGripPos: {fileID: 7811666717480800781}
-    relaxedRightHandOffset: {x: 0, y: 0, z: 0}
-    relaxedRightHandAngle: {x: 0, y: 0, z: 0}
-    relaxedReloadRightHandOffset: {x: 0, y: 0, z: 0}
-    relaxedReloadRightHandAngle: {x: 0, y: 0, z: 0}
-    dashRightHandPosition: {x: 0, y: 0, z: 0}
-    dashGunAngle: {x: 0, y: 0, z: 0}
-  assaultRifleAnimation:
-    magazineModels:
-    - {fileID: 2121356204759452830}
-    - {fileID: 2121356204759452806}
-    - {fileID: 2121356204759452804}
-    - {fileID: 2121356204759452802}
-    - {fileID: 2121356204759452800}
-    isMagazineShownOnlyInHand: 0
-    magazineLeftHandPos: {fileID: 0}
-    magazineOutTime: 0.18
-    magazineInTime: 0.55
-    leftHandIKReleaseTime: 0.12
-    leftHandIKReturnTime: 0.88
-    magazineLeftHandGripPos: {fileID: 6645514676076217043}
-    relaxedRightHandOffset: {x: 0, y: 0.06, z: 0.14}
-    relaxedRightHandAngle: {x: 0, y: 0, z: 0}
-    relaxedReloadRightHandOffset: {x: 0, y: 0.06, z: 0.14}
-    relaxedReloadRightHandAngle: {x: 0, y: 0, z: 0}
-    dashRightHandPosition: {x: 0.12, y: -0.04, z: 0.25}
-    dashGunAngle: {x: 10, y: 0, z: 10}
-  shotGunAnimation:
-    magazineModels:
-    - {fileID: 5094681170906548818}
-    isMagazineShownOnlyInHand: 1
-    magazineLeftHandPos: {fileID: 6374573946837195531}
-    magazineOutTime: 0.38
-    magazineInTime: 0.55
-    leftHandIKReleaseTime: 0.12
-    leftHandIKReturnTime: 0.88
-    magazineLeftHandGripPos: {fileID: 7302808114578617003}
-    relaxedRightHandOffset: {x: 0, y: 0.03, z: 0.14}
-    relaxedRightHandAngle: {x: 0, y: 0, z: 0}
-    relaxedReloadRightHandOffset: {x: 0, y: 0.03, z: 0.18}
-    relaxedReloadRightHandAngle: {x: 0, y: -25, z: 0}
-    dashRightHandPosition: {x: 0.12, y: -0.04, z: 0.25}
-    dashGunAngle: {x: 10, y: 0, z: 10}
-  shotGunShellPickTime: 0.45
+  gunAnimationFacade:
+    handGunAnimation:
+      leftHandGripPos: {fileID: 8742357782916467534}
+      magazineModels:
+      - {fileID: 6764241680255446785}
+      - {fileID: 6764241680255446799}
+      - {fileID: 6764241680255446797}
+      isMagazineShownOnlyInHand: 0
+      magazineLeftHandPos: {fileID: 0}
+      magazineOutTime: 0.13
+      magazineInTime: 0.5
+      leftHandIKReleaseTime: 0.06
+      leftHandIKReturnTime: 0.86
+      magazineLeftHandGripPos: {fileID: 7811666717480800781}
+      relaxedRightHandOffset: {x: 0, y: 0, z: 0}
+      relaxedRightHandAngle: {x: 0, y: 0, z: 0}
+      relaxedReloadRightHandOffset: {x: 0, y: 0, z: 0}
+      relaxedReloadRightHandAngle: {x: 0, y: 0, z: 0}
+      dashRightHandPosition: {x: 0, y: 0, z: 0}
+      dashGunAngle: {x: 0, y: 0, z: 0}
+    assaultRifleAnimation:
+      leftHandGripPos: {fileID: 9144816094143031579}
+      magazineModels:
+      - {fileID: 2121356204759452830}
+      - {fileID: 2121356204759452806}
+      - {fileID: 2121356204759452804}
+      - {fileID: 2121356204759452802}
+      - {fileID: 2121356204759452800}
+      isMagazineShownOnlyInHand: 0
+      magazineLeftHandPos: {fileID: 0}
+      magazineOutTime: 0.18
+      magazineInTime: 0.55
+      leftHandIKReleaseTime: 0.12
+      leftHandIKReturnTime: 0.88
+      magazineLeftHandGripPos: {fileID: 6645514676076217043}
+      relaxedRightHandOffset: {x: 0, y: 0.06, z: 0.14}
+      relaxedRightHandAngle: {x: 0, y: 0, z: 0}
+      relaxedReloadRightHandOffset: {x: 0, y: 0.06, z: 0.14}
+      relaxedReloadRightHandAngle: {x: 0, y: 0, z: 0}
+      dashRightHandPosition: {x: 0.12, y: -0.04, z: 0.25}
+      dashGunAngle: {x: 10, y: 0, z: 10}
+    shotGunAnimation:
+      leftHandGripPos: {fileID: 8914865205819662291}
+      magazineModels:
+      - {fileID: 5094681170906548818}
+      isMagazineShownOnlyInHand: 1
+      magazineLeftHandPos: {fileID: 6374573946837195531}
+      magazineOutTime: 0.38
+      magazineInTime: 0.55
+      leftHandIKReleaseTime: 0.12
+      leftHandIKReturnTime: 0.88
+      magazineLeftHandGripPos: {fileID: 7302808114578617003}
+      relaxedRightHandOffset: {x: 0, y: 0.03, z: 0.14}
+      relaxedRightHandAngle: {x: 0, y: 0, z: 0}
+      relaxedReloadRightHandOffset: {x: 0, y: 0.03, z: 0.18}
+      relaxedReloadRightHandAngle: {x: 0, y: -25, z: 0}
+      dashRightHandPosition: {x: 0.12, y: -0.04, z: 0.25}
+      dashGunAngle: {x: 10, y: 0, z: 10}
   minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
+  reloadAnimation:
+    shotGunShellPickTime: 0.45
   mineAnimation:
     rightHandOffset: {x: 0.18, y: 0, z: 0.1}
---- !u!114 &8735078247964254621
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3928207666627217745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e39cf57453741345a3e8a55ced0a06e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 7721474850707310993}
-  handGunLeftHandPos: {fileID: 8742357782916467534}
-  assaultRifleLeftHandPos: {fileID: 9144816094143031579}
-  shotGunLeftHandPos: {fileID: 8914865205819662291}
-  leftHandAnimationPos: {fileID: 3998525445562687975}
-  rightHandAnimationPos: {fileID: 1252442480723866175}
+  handIK:
+    leftHandAnimationPos: {fileID: 3998525445562687975}
+    rightHandAnimationPos: {fileID: 1252442480723866175}
 --- !u!114 &3099343492085402758
 MonoBehaviour:
   m_ObjectHideFlags: 0
