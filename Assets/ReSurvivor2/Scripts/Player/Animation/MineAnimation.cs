@@ -15,10 +15,6 @@ public class MineAnimation
 	//  ・地雷を置くボタンを押している間：しゃがみ始めから、左手が地面に着くまで（長押しの時間と同じ0.5秒）
 	//  ・地雷を置いた後：左手が地面に着いた所から、立ち上がるまで
 	//  の2つに分けて使う
-	[Tooltip("アニメーターの、地雷を置くアニメーションのレイヤーの番号（全身）")]
-	const int LayerIndex = 3;
-	[Tooltip("アニメーターの、地雷を置くアニメーションの再生位置のパラメーターの名前")]
-	const string TimeParameterName = "f_placeMineTime";
 	[Tooltip("地雷を置くアニメーションの、しゃがみ始める再生位置（0がアニメーションの始まり、1が終わり）")]
 	const float CrouchStartTime = 0.2f;
 	[Tooltip("地雷を置くアニメーションの、左手が地面に着く再生位置")]
@@ -91,8 +87,8 @@ public class MineAnimation
 			case EnumManager.MinePlacePhaseTYPE.None:
 				break;
 		}
-		animator.SetLayerWeight(LayerIndex, weight);
-		animator.SetFloat(TimeParameterName, time);
+		animator.SetLayerWeight(PlayerAnimatorParameter.PlaceMineLayerIndex, weight);
+		animator.SetFloat(PlayerAnimatorParameter.PlaceMineTime, time);
 	}
 
 	/// <summary>
@@ -102,7 +98,7 @@ public class MineAnimation
 	public void ResetAnimation(Animator animator)
 	{
 		weight = NoWeight;
-		animator.SetLayerWeight(LayerIndex, weight);
+		animator.SetLayerWeight(PlayerAnimatorParameter.PlaceMineLayerIndex, weight);
 	}
 
 	/// <summary>

@@ -134,6 +134,8 @@ public class InGameManager : MonoBehaviour
 
 		PlayerManagerPresenter.SingletonInstance.AfterUpdate();
 		PlayerCameraManager.SingletonInstance.AfterUpdate();
+		//銃の状態に合わせて、プレイヤーのリロードのアニメーションを動かす（銃はPlayerCameraManagerが更新するので、その後に呼ぶ）
+		PlayerManagerPresenter.SingletonInstance.AfterGunUpdate();
 		TimerManager.SingletonInstance.AfterUpdate();
 		ScreenUIManagerPresenter.SingletonInstance.AfterUpdate();
 	}

@@ -25,6 +25,25 @@ public class GunViewFacade
 	public ShotGunView ShotGunView => shotGunView;
 
 	/// <summary>
+	/// 銃の種類から、右手に持っている銃のモデルを探す
+	/// </summary>
+	/// <param name="gunTYPE">銃の種類</param>
+	/// <returns>銃のモデル（前向きが銃身、上向きが銃の上側。見つからなかった場合はnull）</returns>
+	public Transform FindGunModelTransform(EnumManager.GunTYPE gunTYPE)
+	{
+		switch (gunTYPE)
+		{
+			case EnumManager.GunTYPE.HandGun:
+				return handGunView.GetHandGunModel.transform;
+			case EnumManager.GunTYPE.AssaultRifle:
+				return assaultRifleView.GetAssaultRifleModel.transform;
+			case EnumManager.GunTYPE.ShotGun:
+				return shotGunView.GetShotGunModel.transform;
+		}
+		return null;
+	}
+
+	/// <summary>
 	/// 銃のモデルを切り替え
 	/// </summary>
 	public void SwitchWeaponModel(EnumManager.GunTYPE gunTYPE)
