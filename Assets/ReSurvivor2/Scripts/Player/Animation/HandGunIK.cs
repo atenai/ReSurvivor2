@@ -7,7 +7,7 @@ using UnityEngine;
 /// ・構えていない時：片手（右手）だけで持って走る時に、銃口が上を向きすぎないように右手首を回す
 /// ・構え始めの少しの間：片手（右手）で狙う（上半身を左にひねって、右腕を正面へまっすぐ伸ばす）
 /// ・狙っている敵が近い時：近距離の構え（C.A.R.システムのような構え）にする
-/// ・両手で構えている時：銃口を少し上げる
+/// ・両手で構えている時：銃口を少し上げる。両腕を伸ばして、銃を少し上げる
 /// </summary>
 public class HandGunIK
 {
@@ -45,6 +45,10 @@ public class HandGunIK
 	const float OneHandAimTwistAngle = 80.0f;
 	[Tooltip("両手で構えている時に、銃口を上げる角度（度）（両手で構えるアニメーションのままだと、銃口が弾の飛ぶ向き（カメラの正面）より3.5°ほど下を向くため）")]
 	const float TwoHandAimRaiseAngle = 3.5f;
+	[Tooltip("両手で構えている時の、右腕の伸ばし具合（肩から手までの距離が、腕の長さのどれだけになるか。1でまっすぐ伸ばしきった腕）（両手で構えるアニメーションのままだと、0.87ほどで肘が曲がっているため）")]
+	const float TwoHandAimArmStretch = 0.96f;
+	[Tooltip("両手で構えている時に、右肩を中心にして右腕を上へ回す角度（度）（両手で構えるアニメーションのままだと、銃が胸の高さにあるため、顔の高さへ近づける）")]
+	const float TwoHandAimArmRaiseAngle = 8.0f;
 
 	//↓狙っている敵が近い時に、近距離の構え（C.A.R.システムのような構え）にするのに使う↓//
 	[Tooltip("今のフレームで、近距離の構えにしている割合")]
@@ -134,6 +138,14 @@ public class HandGunIK
 		{
 			relaxedRotation = Quaternion.AngleAxis(-TwoHandAimRaiseAngle * twoHandAimWeight, animator.transform.right) * relaxedRotation;
 		}
+
+		//両手で構えている時は、両腕を伸ばして、銃を少し上げる（銃の向きは変えずに、右手の位置だけを動かす。左手は銃の前側を握る目印に合わせるので、銃と一緒に動く）
+		//（近距離の構えは銃を顔の前へ引き寄せる構えなので、近距離の構えの割合の分は動かさない）
+		float twoHandAimArmWeight = twoHandAimWeight - closeQuarterAimWeight;
+		if (NoIKWeight < twoHandAimArmWeight)
+		{
+			relaxedOffset = relaxedOffset + (GetTwoHandAimHandPosition() - rightHandAnimationPos.position) * twoHandAimArmWeight;
+		}
 	}
 
 	/// <summary>
@@ -184,11 +196,33 @@ public class HandGunIK
 	Vector3 GetOneHandAimHandPosition(Vector3 twistedHandPosition)
 	{
 		Vector3 shoulderPosition = animator.GetBoneTransform(HumanBodyBones.RightUpperArm).position;
-		Vector3 elbowPosition = animator.GetBoneTransform(HumanBodyBones.RightLowerArm).position;
-		float armLength = Vector3.Distance(shoulderPosition, elbowPosition) + Vector3.Distance(elbowPosition, rightHandAnimationPos.position);
+		float armLength = GetRightArmLength();
 		Vector3 twistedShoulderPosition = upperBodyTwist.TwistPoint(shoulderPosition);
 		Vector3 armDirection = (animator.transform.forward * armLength + Vector3.up * (twistedHandPosition.y - twistedShoulderPosition.y)).normalized;
 		return twistedShoulderPosition + armDirection * armLength * OneHandAimArmStretch;
+	}
+
+	/// <summary>
+	/// 両手で構えている時の右手の位置を求める
+	/// （アニメーションどおりの右手を、右肩を中心にしてキャラクターの右向きの軸で上へ回し、腕の長さ近くまで伸ばした位置）
+	/// </summary>
+	/// <returns>右手の位置</returns>
+	Vector3 GetTwoHandAimHandPosition()
+	{
+		Vector3 shoulderPosition = animator.GetBoneTransform(HumanBodyBones.RightUpperArm).position;
+		Vector3 armDirection = (Quaternion.AngleAxis(-TwoHandAimArmRaiseAngle, animator.transform.right) * (rightHandAnimationPos.position - shoulderPosition)).normalized;
+		return shoulderPosition + armDirection * GetRightArmLength() * TwoHandAimArmStretch;
+	}
+
+	/// <summary>
+	/// 右腕の長さ（肩から肘まで ＋ 肘から手まで）を求める
+	/// </summary>
+	/// <returns>右腕の長さ（m）</returns>
+	float GetRightArmLength()
+	{
+		Vector3 shoulderPosition = animator.GetBoneTransform(HumanBodyBones.RightUpperArm).position;
+		Vector3 elbowPosition = animator.GetBoneTransform(HumanBodyBones.RightLowerArm).position;
+		return Vector3.Distance(shoulderPosition, elbowPosition) + Vector3.Distance(elbowPosition, rightHandAnimationPos.position);
 	}
 
 	/// <summary>
