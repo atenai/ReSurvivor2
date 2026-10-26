@@ -20,6 +20,8 @@ public class PlayerCharacterView : MonoBehaviour
 	[SerializeField] Transform spine_03;
 	[Tooltip("アニメーターの、構えている割合のパラメーターの名前（0で構えていない、1で構えている。構えの切り替えに合わせて、なめらかに変わる）")]
 	const string AimParameterName = "f_aim";
+	[Tooltip("アニメーターの、ダッシュの割合のパラメーターの名前（0で走り、1でダッシュ）")]
+	const string DashParameterName = "f_dash";
 	//※型のボーンを曲げると銃の持つ位置がずれておかしくなる為、首と背骨のボーンを曲げる事によって型のボーンを曲げずに済むようにする必要がある
 	[Tooltip("キャラクターの右肩ボーン")]
 	[SerializeField] Transform upperarm_r;
@@ -267,13 +269,17 @@ public class PlayerCharacterView : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 移動アニメーションをリセットする
+	/// 移動アニメーションをリセットする（立ち姿に戻す）
+	/// ※ステージを移る時（ロード中・次のステージのフェードイン中）は、毎フレーム呼ばれる
+	///   ダッシュの割合・構えている割合も戻さないと、ダッシュや構えのまま移った時に、銃を持ち上げた右手や曲げた背骨が残ってしまう
 	/// </summary>
 	public void ResetMoveAnimation()
 	{
 		animator.SetFloat("f_moveSpeedX", 0.0f);
 		animator.SetFloat("f_moveSpeedY", 0.0f);
+		animator.SetFloat(DashParameterName, 0.0f);
 		animator.SetBool("b_isAim", false);
+		animator.SetFloat(AimParameterName, 0.0f);
 		animator.SetLayerWeight(PlaceMineLayerIndex, NoPlaceMineWeight);
 	}
 

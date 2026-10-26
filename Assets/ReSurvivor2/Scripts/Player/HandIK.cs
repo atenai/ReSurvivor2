@@ -79,6 +79,8 @@ public class HandIK : MonoBehaviour
 	static readonly Vector3 OneHandAimLeftHandOffset = new Vector3(-0.16f, 0.0f, 0.03f);
 	[Tooltip("片手で狙う時の、右腕の伸ばし具合（肩から手までの距離が、腕の長さのどれだけになるか。1でまっすぐ伸ばしきった腕）")]
 	const float OneHandAimArmStretch = 0.95f;
+	[Tooltip("ハンドガンを両手で構えている時に、銃口を上げる角度（度）（両手で構えるアニメーションのままだと、銃口が弾の飛ぶ向き（カメラの正面）より3.5°ほど下を向くため）")]
+	const float HandGunTwoHandAimRaiseAngle = 3.5f;
 	[Tooltip("片手で狙う時に、上半身を左にひねる角度（度）（右肩を狙う方向へ出して、伸ばした右腕と背中の向きをそろえる）")]
 	const float OneHandAimTwistAngle = 80.0f;
 	[Tooltip("上半身をひねる時に回す背骨の骨（下から順）")]
@@ -246,6 +248,14 @@ public class HandIK : MonoBehaviour
 			Vector3 handPosition = GetCloseQuarterAimHandPosition(handGunView.GetHandGunModel.transform, closeQuarterAimRotation);
 			relaxedRotation = Quaternion.Slerp(relaxedRotation, closeQuarterAimRotation, closeQuarterAimWeight);
 			relaxedOffset = Vector3.Lerp(relaxedOffset, handPosition - rightHandAnimationPos.position, closeQuarterAimWeight);
+		}
+
+		//両手で構えている時は（近距離の構えも含む）、銃口を少し上げる（両手で構えるアニメーションのままだと、銃口が弾の飛ぶ向きより少し下を向くため）
+		//（片手で狙っている割合の分は上げない。右手の位置を中心に、キャラクターの右向きの軸で回す）
+		float twoHandAimWeight = handGunAimWeight - oneHandAimWeight;
+		if (NoIKWeight < twoHandAimWeight)
+		{
+			relaxedRotation = Quaternion.AngleAxis(-HandGunTwoHandAimRaiseAngle * twoHandAimWeight, animator.transform.right) * relaxedRotation;
 		}
 	}
 
