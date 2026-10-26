@@ -64,7 +64,7 @@ public class PlayerManagerPresenter : MonoBehaviour
 	[Tooltip("アニメーターに渡す、近距離の構えの割合（狙っている敵が近くない時）")]
 	const float NotCloseQuarterAimValue = 0.0f;
 	[Tooltip("アニメーターに渡す近距離の構えの割合が、切り替えに追いつくまでのおおよその時間（秒）")]
-	const float CloseQuarterAimDampTime = 0.2f;
+	const float CloseQuarterAimDampTime = 0.1f;
 
 	void Awake()
 	{
