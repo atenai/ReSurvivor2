@@ -45,6 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 4140305823283585234, guid: 371d458cfe18eac4eb0019b02416ba56, type: 3}
+  playerSpatialSetting:
+    minDistance: 5
+    maxDistance: 50
 --- !u!1 &809196244923827479
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,6 +93,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: dbd4f5156bb04524d85bf1495ef0c0b3, type: 3}
+  playerSpatialSetting:
+    minDistance: 5
+    maxDistance: 50
 --- !u!1 &883107049439849633
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,6 +141,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: 68cc809be992e804294b6426ed9b36b6, type: 3}
+  playerSpatialSetting:
+    minDistance: 5
+    maxDistance: 50
   enemySpatialSetting:
     minDistance: 1.5
     maxDistance: 50
@@ -229,6 +238,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: e0f7e3a31646cc846ad9350fd73aa2e4, type: 3}
+  playerSpatialSetting:
+    minDistance: 5
+    maxDistance: 50
   enemySpatialSetting:
     minDistance: 1.5
     maxDistance: 50
@@ -277,6 +289,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: d51869a4ed188164f8c7cc336eab7c02, type: 3}
+  playerSpatialSetting:
+    minDistance: 5
+    maxDistance: 50
   enemySpatialSetting:
     minDistance: 1.5
     maxDistance: 50
@@ -325,6 +340,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: 066a5374d881d7b49b73fd1c8a018a3a, type: 3}
+  playerSpatialSetting:
+    minDistance: 5
+    maxDistance: 100
   enemySpatialSetting:
     minDistance: 5
     maxDistance: 100
@@ -373,6 +391,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: 2ca2fcb005ddc55439c81d9f05e2b0bd, type: 3}
+  playerSpatialSetting:
+    minDistance: 5
+    maxDistance: 100
 --- !u!1 &4668493361397398883
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,6 +530,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: 73acd60308d57854b89edef180dc2a7e, type: 3}
+  playerSpatialSetting:
+    minDistance: 5
+    maxDistance: 100
   enemySpatialSetting:
     minDistance: 5
     maxDistance: 100
@@ -557,6 +581,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: 905e6cd8f31a47e4192ff0852eec3724, type: 3}
+  playerSpatialSetting:
+    minDistance: 5
+    maxDistance: 50
 --- !u!1 &7975821016618174891
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,6 +629,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: b110fe9e06522124d9a80a594f699591, type: 3}
+  playerSpatialSetting:
+    minDistance: 5
+    maxDistance: 50
   enemySpatialSetting:
     minDistance: 1.5
     maxDistance: 50

@@ -13,6 +13,13 @@ public class AssaultRifleReloadSEPool : MonoBehaviour
 	int defalutCapacity = 30;
 	int maxCount = 300;
 
+	[Tooltip("プレイヤーのリロード音が、この距離（m）までは音量が下がらない（カメラはプレイヤーの3〜4m後ろにあるので、自分の銃の音は今まで通りの大きさで聞こえる）")]
+	const float PlayerMinDistance = 5.0f;
+	[Tooltip("プレイヤーのリロード音が、この距離（m）より遠くでは、音量がそれ以上下がらない")]
+	const float PlayerMaxDistance = 50.0f;
+	[Tooltip("プレイヤーが鳴らす時の3Dの設定（鳴った位置から聞こえる）")]
+	[SerializeField] SpatialSoundSetting playerSpatialSetting = new SpatialSoundSetting(PlayerMinDistance, PlayerMaxDistance);
+
 	[Tooltip("エネミーのリロード音が、この距離（m）までは音量が下がらない")]
 	const float EnemyMinDistance = 1.5f;
 	[Tooltip("エネミーのリロード音が、この距離（m）より遠くでは、音量がそれ以上下がらない")]
@@ -96,14 +103,14 @@ public class AssaultRifleReloadSEPool : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 外部から呼ぶObj取得関数（プレイヤーが鳴らす時：2Dで鳴らす）
+	/// 外部から呼ぶObj取得関数（プレイヤーが鳴らす時：3Dで鳴らす）
 	/// </summary>
 	public void GetGameObject(Transform transform)
 	{
 		GameObject gameObject = objectPool.Get();
 		gameObject.transform.position = transform.position;
-		SpatialSoundSetting.Apply2D(gameObject.GetComponent<AudioSource>());
-		gameObject.GetComponent<AudioPlayAssaultRifleReloadSEPool>().PlaySound();
+		playerSpatialSetting.Apply3D(gameObject.GetComponent<AudioSource>());
+		gameObject.GetComponent<AudioPlayAssaultRifleReloadSEPool>().PlaySound(transform);
 	}
 
 	/// <summary>
@@ -114,7 +121,7 @@ public class AssaultRifleReloadSEPool : MonoBehaviour
 		GameObject gameObject = objectPool.Get();
 		gameObject.transform.position = transform.position;
 		enemySpatialSetting.Apply3D(gameObject.GetComponent<AudioSource>());
-		gameObject.GetComponent<AudioPlayAssaultRifleReloadSEPool>().PlaySound();
+		gameObject.GetComponent<AudioPlayAssaultRifleReloadSEPool>().PlaySound(transform);
 	}
 
 	/// <summary>
