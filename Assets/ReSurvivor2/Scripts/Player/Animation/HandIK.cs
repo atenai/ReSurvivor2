@@ -15,6 +15,7 @@ public class HandIK
 	//  アニメーションどおりの手の位置・向きをIKで使うには、骨の向きをIK用の向きに直した目印を使う
 	[Tooltip("アニメーションどおりの左手の位置・向きをIK用の向きで取り出すための目印（左手の骨の子に置いた目印。位置は骨と同じで、向きだけIK用の手の向きにしてある）")]
 	[SerializeField] Transform leftHandAnimationPos;
+	public Transform LeftHandAnimationPos => leftHandAnimationPos;
 	[Tooltip("アニメーションどおりの右手の位置・向きをIK用の向きで取り出すための目印（右手の骨の子に置いた目印。位置は骨と同じで、向きだけIK用の手の向きにしてある）")]
 	[SerializeField] Transform rightHandAnimationPos;
 	[Tooltip("プレイヤーのアニメーター")]
@@ -52,6 +53,11 @@ public class HandIK
 	UpperBodyTwist upperBodyTwist;
 	[Tooltip("ハンドガンの持ち方のIK")]
 	HandGunIK handGunIK;
+	//↓ハンドガンに持ち替える時に、左手を持ち替える前の位置から動かし始めるのに使う↓//
+	[Tooltip("前のフレームまでの左手のIKの位置（キャラクターから見た位置）。ハンドガンを抜いている間は、抜き始める前の位置のまま変えない")]
+	Vector3 drawStartLeftHandLocalPosition = Vector3.zero;
+	[Tooltip("前のフレームまでの左手のIKの向きを、左の前腕から見た向き。ハンドガンを抜いている間は、抜き始める前の向きのまま変えない")]
+	Quaternion drawStartLeftHandToForearmRotation = Quaternion.identity;
 
 	/// <summary>
 	/// 初期化
@@ -71,12 +77,14 @@ public class HandIK
 	/// <param name="gunModelTransform">今持っている銃のモデル（前向きが銃身、上向きが銃の上側）</param>
 	/// <param name="handGunView">ハンドガンを持っている時は、ハンドガンのビュー（ほかの銃の時はnull）</param>
 	/// <param name="mineAnimation">地雷を置く時のアニメーションの設定</param>
+	/// <param name="sideArmAnimation">ハンドガンへの持ち替えのアニメーション</param>
 	/// <param name="isReloadTimeActive">今持っている銃がリロード中か？</param>
 	/// <param name="reloadAnimationTime">リロードアニメーションの再生位置</param>
-	public void UpdateIK(GunAnimation gunAnimation, Transform gunModelTransform, HandGunView handGunView, MineAnimation mineAnimation, bool isReloadTimeActive, float reloadAnimationTime)
+	public void UpdateIK(GunAnimation gunAnimation, Transform gunModelTransform, HandGunView handGunView, MineAnimation mineAnimation, SideArmAnimation sideArmAnimation, bool isReloadTimeActive, float reloadAnimationTime)
 	{
 		UpdateHoldStyle(gunAnimation, gunModelTransform, handGunView);
 		UpdateHoldStyleForPlaceMine(mineAnimation);
+		UpdateHoldStyleForSideArm(sideArmAnimation);
 		SetRightHandIK();
 		//※近距離の構え（ハンドガン）と、銃を縦に持ち上げるダッシュ（アサルトライフル・ショットガン）は、同時には起きない
 		if (NoIKWeight < dashRaiseWeight)
@@ -104,7 +112,8 @@ public class HandIK
 			magazineGripWeight = Mathf.MoveTowards(magazineGripWeight, NoIKWeight, Time.deltaTime / ReloadCancelBlendTime);
 		}
 
-		SetLeftHandIK(gunAnimation);
+		SetLeftHandIK(gunAnimation, sideArmAnimation);
+		sideArmAnimation.OpenLeftHandFingers(animator);
 	}
 
 	/// <summary>
@@ -184,6 +193,25 @@ public class HandIK
 	}
 
 	/// <summary>
+	/// ハンドガンを抜く時・しまう時に、右手を太もものホルスターへ動かす
+	/// （ホルスターに着いた時に、右手のハンドガンがホルスターのハンドガンとぴったり重なるようにする。そこで、見せるハンドガンを入れ替える）
+	/// </summary>
+	/// <param name="sideArmAnimation">ハンドガンへの持ち替えのアニメーション</param>
+	void UpdateHoldStyleForSideArm(SideArmAnimation sideArmAnimation)
+	{
+		float holsterWeight = sideArmAnimation.RightHandHolsterWeight;
+		if (holsterWeight <= NoIKWeight)
+		{
+			return;
+		}
+
+		Quaternion holsterRotation = sideArmAnimation.GetRightHandHolsterRotation();
+		Vector3 handPosition = sideArmAnimation.GetRightHandHolsterPosition(holsterRotation, rightHandAnimationPos.position);
+		relaxedRotation = Quaternion.Slerp(relaxedRotation, holsterRotation, holsterWeight);
+		relaxedOffset = Vector3.Lerp(relaxedOffset, handPosition - rightHandAnimationPos.position, holsterWeight);
+	}
+
+	/// <summary>
 	/// ダッシュしている時に、銃を縦に持ち上げるように、右手（と銃）を右手の位置を中心に回す回転を求める
 	/// （銃口をまっすぐ上に向けて銃の上側を後ろに向けた向きから、決めた角度だけ傾けた向きにする）
 	/// </summary>
@@ -242,12 +270,15 @@ public class HandIK
 	///   重みは1のままにして、合わせる位置・角度の方を「アニメーションどおりの左手 → マガジンを持つ目印 → 銃の前側を握る目印」の順に混ぜる
 	/// ※銃の子にある目印は、右手を体から離す前の銃の位置にあるので、右手と同じだけ動かしてから使う
 	/// ※片手で持つ時（ハンドガンを構えていない時）は、左手で銃の前側を握らない（マガジンを持つ目印には、リロード中は合わせる）
+	/// ※ハンドガンに持ち替えている時は、左手でメインの銃を持つ（抜いている間は、持ち替える前の左手から、メインの銃を持つ左手へ動かす）
 	/// </summary>
 	/// <param name="gunAnimation">今持っている銃のアニメーションの設定（左手で銃の前側を握る目印・マガジンを持つ目印を使う）</param>
-	void SetLeftHandIK(GunAnimation gunAnimation)
+	/// <param name="sideArmAnimation">ハンドガンへの持ち替えのアニメーション</param>
+	void SetLeftHandIK(GunAnimation gunAnimation, SideArmAnimation sideArmAnimation)
 	{
 		float gripWeight = leftHandWeight * (FullIKWeight - oneHandWeight);
-		if (gripWeight <= NoIKWeight && magazineGripWeight <= NoIKWeight && handGunIK.OneHandAimWeight <= NoIKWeight && placeMineLeftHandOffset == Vector3.zero)
+		float carryWeight = sideArmAnimation.LeftHandCarryWeight;
+		if (gripWeight <= NoIKWeight && magazineGripWeight <= NoIKWeight && handGunIK.OneHandAimWeight <= NoIKWeight && placeMineLeftHandOffset == Vector3.zero && carryWeight <= NoIKWeight && sideArmAnimation.IsDrawing == false)
 		{
 			animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, NoIKWeight);
 			animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, NoIKWeight);
@@ -261,10 +292,42 @@ public class HandIK
 		Vector3 animationPosition = upperBodyTwist.TwistPoint(leftHandAnimationPos.position) + handGunIK.GetOneHandAimLeftHandOffset() + placeMineLeftHandOffset;
 		Vector3 position = Vector3.Lerp(animationPosition, MoveAwayFromBody(gunAnimation.MagazineLeftHandGripPos.position), magazineGripWeight);
 		Quaternion rotation = Quaternion.Slerp(upperBodyTwist.GetTwistRotation() * leftHandAnimationPos.rotation, relaxedRotation * gunAnimation.MagazineLeftHandGripPos.rotation, magazineGripWeight);
+		Vector3 targetPosition = Vector3.Lerp(position, MoveAwayFromBody(leftHandGripPos.position), gripWeight);
+		Quaternion targetRotation = Quaternion.Slerp(rotation, relaxedRotation * leftHandGripPos.rotation, gripWeight);
+
+		//ハンドガンを抜いている間は、抜き始める前の左手（メインの銃の前側を握った手）の位置から動かし、
+		//左手の向きは、抜き始める前の手首の曲げ方のまま、左の前腕（上半身をひねった分も含む、アニメーションどおりの向き）と一緒に回す
+		//（メインの銃は、抜き始めた時に左手の子にしたので、左手と一緒に動く）
+		Quaternion characterRotation = animator.transform.rotation;
+		Vector3 characterPosition = animator.transform.position;
+		Quaternion forearmRotation = upperBodyTwist.GetTwistRotation() * animator.GetBoneTransform(HumanBodyBones.LeftLowerArm).rotation;
+		if (sideArmAnimation.IsDrawing == true)
+		{
+			targetPosition = characterPosition + characterRotation * drawStartLeftHandLocalPosition;
+			targetRotation = forearmRotation * drawStartLeftHandToForearmRotation;
+		}
+		else
+		{
+			drawStartLeftHandLocalPosition = Quaternion.Inverse(characterRotation) * (targetPosition - characterPosition);
+			drawStartLeftHandToForearmRotation = Quaternion.Inverse(forearmRotation) * targetRotation;
+		}
+
+		//メインの銃を左手で持っている時は、下ろした左手で、銃口を前に向けて斜め（銃口が下、ストックが上）にした銃の上側をつかんで持つ
+		//（銃は左手の子なので、左手と一緒に動く）
+		//※向きは、左の前腕から見た向き（手首の曲げ方）で混ぜて、前腕と一緒に回す（そのまま混ぜると、腕を下ろす途中で手首が大きく折れるため）
+		if (NoIKWeight < carryWeight)
+		{
+			Vector3 carryPosition = animationPosition + sideArmAnimation.GetLeftHandCarryOffset(characterRotation);
+			Quaternion carryRotation = sideArmAnimation.GetLeftHandCarryRotation(characterRotation);
+			Quaternion inverseForearmRotation = Quaternion.Inverse(forearmRotation);
+			targetPosition = Vector3.Lerp(targetPosition, carryPosition, carryWeight);
+			targetRotation = forearmRotation * Quaternion.Slerp(inverseForearmRotation * targetRotation, inverseForearmRotation * carryRotation, carryWeight);
+		}
+
 		animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, FullIKWeight);
 		animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, FullIKWeight);
-		animator.SetIKPosition(AvatarIKGoal.LeftHand, Vector3.Lerp(position, MoveAwayFromBody(leftHandGripPos.position), gripWeight));
-		animator.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.Slerp(rotation, relaxedRotation * leftHandGripPos.rotation, gripWeight));
+		animator.SetIKPosition(AvatarIKGoal.LeftHand, targetPosition);
+		animator.SetIKRotation(AvatarIKGoal.LeftHand, targetRotation);
 	}
 
 	/// <summary>

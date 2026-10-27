@@ -46,6 +46,21 @@ public static class EnumManager
 	}
 
 	/// <summary>
+	/// アサルトライフル・ショットガンの弾が切れた時に、ハンドガンに持ち替える動きの段階
+	/// </summary>
+	public enum SideArmPhaseTYPE
+	{
+		//ハンドガンに持ち替えていない
+		None = 0,
+		//メインの銃（アサルトライフル・ショットガン）を左手に持ち替えて、右手で太もものホルスターからハンドガンを抜く
+		Draw = 1,
+		//右手のハンドガンだけで狙って撃つ（左手はメインの銃を持ったまま）
+		Aim = 2,
+		//ハンドガンをホルスターにしまって、メインの銃を右手に持ち直す
+		Holster = 3,
+	}
+
+	/// <summary>
 	/// ステージのタイプ
 	/// </summary>
 	public enum StageTYPE

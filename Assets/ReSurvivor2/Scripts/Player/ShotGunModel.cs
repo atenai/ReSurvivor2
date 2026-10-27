@@ -45,6 +45,9 @@ public class ShotGunModel : GunModelBase
 	[Tooltip("ショットガンの最後の弾を込めてから、元の構えに戻るまでの時間（秒）")]
 	readonly float shotGunReloadEndTime = 0.7f;
 
+	[Tooltip("ショットガンのマガジンが空になってから、オートリロードを始めるまでの待ち時間（秒）（この間に撃つボタンを押し直すと、ハンドガンに持ち替えて撃てる）")]
+	readonly float shotGunAutoReloadWaitTimeDefine = 0.5f;
+
 	[Tooltip("今回のリロードで込める弾の数")]
 	int shellCountToLoad = 0;
 
@@ -64,6 +67,11 @@ public class ShotGunModel : GunModelBase
 	/// リロードにかかる時間（秒）（込める弾の数で変わる）
 	/// </summary>
 	protected override float ReloadTime => GetReloadEndTime();
+
+	/// <summary>
+	/// マガジンが空になってから、オートリロードを始めるまでの待ち時間（秒）
+	/// </summary>
+	protected override float AutoReloadWaitTime => shotGunAutoReloadWaitTimeDefine;
 
 	/// <summary>
 	/// コンストラクタ
@@ -102,14 +110,14 @@ public class ShotGunModel : GunModelBase
 	/// </summary>
 	public override void AllSystem(bool isAim)
 	{
-		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.DownRT)//左クリックまたはEnterを押している場合に中身を実行する
+		if (IsFireButtonDown() == true)//左クリックまたはEnterを押した場合に中身を実行する
 		{
 			InterruptReload(isAim);
 			Shoot(isAim);
 		}
 		ResetFireCountTimer();
 		AutoReloadTrigger();
-		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("XInput X"))
+		if (IsReloadButtonPressed() == true)
 		{
 			ManualReloadTrigger(shotGunMagazineCapacity);
 		}

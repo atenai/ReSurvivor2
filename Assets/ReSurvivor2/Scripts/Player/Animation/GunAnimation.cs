@@ -91,6 +91,23 @@ public class GunAnimation
 	[SerializeField] Vector3 dashGunAngle;
 	public Vector3 DashGunAngle => dashGunAngle;
 
+	[Header("ハンドガンに持ち替えた時の、左手での持ち方（アサルトライフル・ショットガン）")]
+	//※弾が切れてハンドガンに持ち替えた時は、この銃を左手に持ち替えて、マックス・ペイン3のように、腰の高さで銃口を前に向け、
+	//  銃を斜め（銃口が下、ストックが上）にして、銃の上側を、カバンの取っ手のように左手で上からつかんで持つ
+	[Tooltip("左手で銃の上側をつかむ位置・向き（銃の子に置いた目印。向きはIK用の手の向き。手のひらを銃の左側に当て、指を銃の上から右側へ回し、人差し指を銃口側に向けた手。銃を斜めに持つ分だけ、手を銃に対して傾けておく）")]
+	[SerializeField] Transform sideArmLeftHandGripPos;
+	public Transform SideArmLeftHandGripPos => sideArmLeftHandGripPos;
+	[Tooltip("左手で持っている時に、下ろした左手をずらす量（m。キャラクターから見た向きで、xが右、yが上、zが前）（銃が体や、体に付けたほかの銃（左の腰のアサルトライフル）に当たらないように離す）")]
+	[SerializeField] Vector3 sideArmCarryLeftHandOffset;
+	public Vector3 SideArmCarryLeftHandOffset => sideArmCarryLeftHandOffset;
+	[Tooltip("左手で持っている時の銃の向き（度。キャラクターから見た向きで、銃口を正面に向けて水平にした向きから、xが銃口を下へ向ける角度（プラスで銃口が下、ストックが上の斜めの持ち方）、yが銃口を右へ向ける角度、zが銃身を軸に銃の上側を右へ倒す角度）")]
+	[SerializeField] Vector3 sideArmCarryGunAngle;
+	public Vector3 SideArmCarryGunAngle => sideArmCarryGunAngle;
+	[Tooltip("左手で持っている時の、左手の指の曲げ具合（1でアニメーションどおりの握りこぶし、0でまっすぐ伸ばした指）（握りこぶしのままだと、太い銃に指がめり込むため、銃の太さに合わせて指を開く）")]
+	[Range(0.0f, 1.0f)]
+	[SerializeField] float sideArmCarryFingerCurl = 1.0f;
+	public float SideArmCarryFingerCurl => sideArmCarryFingerCurl;
+
 	/// <summary>
 	/// マガジンを銃に付けている時の親・位置・向きを覚えておく（差し込む時に元に戻すため）
 	/// </summary>

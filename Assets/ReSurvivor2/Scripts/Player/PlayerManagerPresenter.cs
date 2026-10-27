@@ -105,6 +105,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 	{
 		rb.velocity = Vector3.zero;
 		playerModel.ResetMove();
+		//ハンドガンに持ち替えている時は、メインの銃を持っている状態に戻す（持ち替えたまま次のステージに移らないようにする）
+		PlayerCameraManager.SingletonInstance.GunModelFacade.CancelSideArm();
 		playerCharacterView.ResetMoveAnimation();
 		playerUIView.SetMinePlacingFillAmount(0.0f);
 	}
@@ -223,10 +225,12 @@ public class PlayerManagerPresenter : MonoBehaviour
 			return;
 		}
 
-		//地雷を持っていない時と、リロード中は、地雷を置き始めない（リロードの上半身の動きと、しゃがむ動きが重ならないようにする）
+		//地雷を持っていない時と、リロード中と、ハンドガンに持ち替えている間は、地雷を置き始めない
+		//（リロードやハンドガンの持ち替えの上半身の動きと、しゃがむ動きが重ならないようにする）
 		if (playerModel.MinePlacePhase == EnumManager.MinePlacePhaseTYPE.None)
 		{
-			if (playerModel.CurrentMine <= 0 || PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsReloadTimeActive == true)
+			GunModelFacade gunModelFacade = PlayerCameraManager.SingletonInstance.GunModelFacade;
+			if (playerModel.CurrentMine <= 0 || gunModelFacade.GunModelBase.IsReloadTimeActive == true || gunModelFacade.IsSideArmActive == true)
 			{
 				return;
 			}

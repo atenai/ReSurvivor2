@@ -35,10 +35,19 @@ public abstract class GunModelBase
 	[Tooltip("リロード時間用のカウントタイマー")]
 	protected float reloadCountTimer = 0.0f;
 
+	[Tooltip("マガジンが空になってから経った時間（秒）（オートリロードを始めるまでの待ち時間を数える）")]
+	protected float emptyMagazineTimer = 0.0f;
+
 	/// <summary>
 	/// リロードにかかる時間（秒）
 	/// </summary>
 	protected abstract float ReloadTime { get; }
+
+	/// <summary>
+	/// マガジンが空になってから、オートリロードを始めるまでの待ち時間（秒）
+	/// （アサルトライフル・ショットガンは、この間に撃つボタンを押し直すと、ハンドガンに持ち替えて撃てる）
+	/// </summary>
+	protected abstract float AutoReloadWaitTime { get; }
 
 	/// <summary>
 	/// リロードの進み具合（0がリロードの始まり、1が終わり）
@@ -102,8 +111,8 @@ public abstract class GunModelBase
 	}
 
 	/// <summary>
-	/// オートリロード
-	/// </summary> 
+	/// オートリロード（マガジンが空になってから、待ち時間が経ったらリロードを始める）
+	/// </summary>
 	protected void AutoReloadTrigger()
 	{
 		//弾が0以下なら切り上げ
@@ -112,11 +121,43 @@ public abstract class GunModelBase
 			return;
 		}
 
-		//残弾数が0以下なら
-		if (currentMagazine <= 0)
+		//マガジンに弾が残っている間は、待ち時間を数えない
+		if (0 < currentMagazine)
 		{
+			emptyMagazineTimer = 0.0f;
+			return;
+		}
+
+		emptyMagazineTimer = emptyMagazineTimer + Time.deltaTime;
+		if (AutoReloadWaitTime <= emptyMagazineTimer)
+		{
+			emptyMagazineTimer = 0.0f;
 			isReloadTimeActive = true;//リロードのオン
 		}
+	}
+
+	/// <summary>
+	/// オートリロードの待ち時間を飛ばす（ハンドガンからメインの銃に持ち直した時は、すぐにリロードを始める）
+	/// </summary>
+	public void SkipAutoReloadWait()
+	{
+		emptyMagazineTimer = AutoReloadWaitTime;
+	}
+
+	/// <summary>
+	/// 撃つボタンを押した瞬間か？（左クリック・Enter・コントローラーのRT）
+	/// </summary>
+	public static bool IsFireButtonDown()
+	{
+		return Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.DownRT;
+	}
+
+	/// <summary>
+	/// リロードボタンを押しているか？（Rキー・コントローラーのX）
+	/// </summary>
+	public static bool IsReloadButtonPressed()
+	{
+		return Input.GetKey(KeyCode.R) || Input.GetButtonDown("XInput X");
 	}
 
 	/// <summary>
