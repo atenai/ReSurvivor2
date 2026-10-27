@@ -456,51 +456,64 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	}
 
 	/// <summary>
-	/// アサルトライフルの射撃SE
-	/// </summary> 
+	/// アサルトライフルの射撃SE（3Dで銃の位置から鳴らす）
+	/// </summary>
 	public void AssaultRifleFireSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObjectForEnemy(GetGunSoundTransform());
 	}
 
 	/// <summary>
-	/// アサルトライフルのリロードSE
-	/// </summary> 
+	/// アサルトライフルのリロードSE（3Dで銃の位置から鳴らす）
+	/// </summary>
 	public void AssaultRifleReloadSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObjectForEnemy(GetGunSoundTransform());
 	}
 
 	/// <summary>
-	/// アサルトライフルの薬莢SE
+	/// アサルトライフルの薬莢SE（3Dで銃の位置から鳴らす）
 	/// </summary>
 	public void AssaultRifleBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObjectForEnemy(GetGunSoundTransform());
 	}
 
 	/// <summary>
-	/// ショットガンの射撃SE
-	/// </summary> 
+	/// ショットガンの射撃SE（3Dで銃の位置から鳴らす）
+	/// </summary>
 	public void ShotGunFireSE()
 	{
-		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObjectForEnemy(GetGunSoundTransform());
 	}
 
 	/// <summary>
-	/// ショットガンのリロードSE
-	/// </summary> 
+	/// ショットガンのリロードSE（3Dで銃の位置から鳴らす）
+	/// </summary>
 	public void ShotGunReloadSE()
 	{
-		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObjectForEnemy(GetGunSoundTransform());
 	}
 
 	/// <summary>
-	/// ショットガンの薬莢SE
+	/// ショットガンの薬莢SE（3Dで銃の位置から鳴らす）
 	/// </summary>
 	public void ShotGunBulletCasingSE()
 	{
-		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(this.transform);
+		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObjectForEnemy(GetGunSoundTransform());
+	}
+
+	/// <summary>
+	/// 銃の効果音を鳴らす位置（銃口。銃口が設定されていない時はエネミーの足元）
+	/// </summary>
+	Transform GetGunSoundTransform()
+	{
+		if (muzzle == null)
+		{
+			return this.transform;
+		}
+
+		return muzzle;
 	}
 
 	/// <summary>

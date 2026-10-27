@@ -13,6 +13,13 @@ public class HandGunReloadSEPool : MonoBehaviour
 	int defalutCapacity = 7;
 	int maxCount = 70;
 
+	[Tooltip("プレイヤーのリロード音が、この距離（m）までは音量が下がらない（カメラはプレイヤーの3〜4m後ろにあるので、自分の銃の音は今まで通りの大きさで聞こえる）")]
+	const float PlayerMinDistance = 5.0f;
+	[Tooltip("プレイヤーのリロード音が、この距離（m）より遠くでは、音量がそれ以上下がらない")]
+	const float PlayerMaxDistance = 50.0f;
+	[Tooltip("プレイヤーが鳴らす時の3Dの設定（鳴った位置から聞こえる）")]
+	[SerializeField] SpatialSoundSetting playerSpatialSetting = new SpatialSoundSetting(PlayerMinDistance, PlayerMaxDistance);
+
 	/// <summary>
 	/// オブジェクトプールの初期化処理
 	/// </summary>
@@ -89,13 +96,14 @@ public class HandGunReloadSEPool : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 外部から呼ぶObj取得関数
+	/// 外部から呼ぶObj取得関数（プレイヤーが鳴らす時：3Dで鳴らす）
 	/// </summary>
 	public void GetGameObject(Transform transform)
 	{
 		GameObject gameObject = objectPool.Get();
 		gameObject.transform.position = transform.position;
-		gameObject.GetComponent<AudioPlayHandGunReloadSEPool>().PlaySound();
+		playerSpatialSetting.Apply3D(gameObject.GetComponent<AudioSource>());
+		gameObject.GetComponent<AudioPlayHandGunReloadSEPool>().PlaySound(transform);
 	}
 
 	/// <summary>

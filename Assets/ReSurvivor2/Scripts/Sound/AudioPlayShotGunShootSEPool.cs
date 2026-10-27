@@ -11,11 +11,27 @@ public class AudioPlayShotGunShootSEPool : MonoBehaviour
 	[SerializeField] AudioSource audioSource;
 
 	private bool isReturned = false;
+	[Tooltip("鳴っている間についていく位置（銃。動きながら撃ったりリロードしても、音がその場に置いていかれないようにする）")]
+	Transform followTarget = null;
 
 	private void OnEnable()
 	{
 		isReturned = false;
+		followTarget = null;
 		CancelInvoke();
+	}
+
+	/// <summary>
+	/// 鳴っている間、ついていく位置（銃）に合わせて動かす
+	/// </summary>
+	private void LateUpdate()
+	{
+		if (followTarget == null)
+		{
+			return;
+		}
+
+		transform.position = followTarget.position;
 	}
 
 	/// <summary>
@@ -34,7 +50,8 @@ public class AudioPlayShotGunShootSEPool : MonoBehaviour
 	/// ReturnToPool() ← ちょうど鳴り終わった後に1回だけ呼ばれる
 	/// 
 	/// </remarks>
-	public void PlaySound()
+	/// <param name="followTarget">鳴っている間についていく位置（銃）</param>
+	public void PlaySound(Transform followTarget)
 	{
 		if (audioSource == null || audioClip == null)
 		{
@@ -42,6 +59,7 @@ public class AudioPlayShotGunShootSEPool : MonoBehaviour
 		}
 
 		isReturned = false;
+		this.followTarget = followTarget;
 
 		audioSource.PlayOneShot(audioClip);
 

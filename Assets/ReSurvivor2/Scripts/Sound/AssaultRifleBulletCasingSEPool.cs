@@ -13,6 +13,20 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 	int defalutCapacity = 30 * 5;
 	int maxCount = 300;
 
+	[Tooltip("プレイヤーの薬莢の音が、この距離（m）までは音量が下がらない（カメラはプレイヤーの3〜4m後ろにあるので、自分の銃の音は今まで通りの大きさで聞こえる）")]
+	const float PlayerMinDistance = 5.0f;
+	[Tooltip("プレイヤーの薬莢の音が、この距離（m）より遠くでは、音量がそれ以上下がらない")]
+	const float PlayerMaxDistance = 50.0f;
+	[Tooltip("プレイヤーが鳴らす時の3Dの設定（鳴った位置から聞こえる）")]
+	[SerializeField] SpatialSoundSetting playerSpatialSetting = new SpatialSoundSetting(PlayerMinDistance, PlayerMaxDistance);
+
+	[Tooltip("エネミーの薬莢の音が、この距離（m）までは音量が下がらない")]
+	const float EnemyMinDistance = 1.5f;
+	[Tooltip("エネミーの薬莢の音が、この距離（m）より遠くでは、音量がそれ以上下がらない")]
+	const float EnemyMaxDistance = 50.0f;
+	[Tooltip("エネミーが鳴らす時の3Dの設定（鳴った位置から聞こえて、遠いほど小さくなる）")]
+	[SerializeField] SpatialSoundSetting enemySpatialSetting = new SpatialSoundSetting(EnemyMinDistance, EnemyMaxDistance);
+
 	/// <summary>
 	/// オブジェクトプールの初期化処理
 	/// </summary>
@@ -114,7 +128,7 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 外部から呼ぶObj取得関数
+	/// 外部から呼ぶObj取得関数（プレイヤーが鳴らす時：3Dで鳴らす）
 	/// </summary>
 	public void GetGameObject(Transform transform)
 	{
@@ -130,6 +144,32 @@ public class AssaultRifleBulletCasingSEPool : MonoBehaviour
 		}
 
 		gameObject.transform.position = transform.position;
+		playerSpatialSetting.Apply3D(gameObject.GetComponent<AudioSource>());
+		AudioPlayAssaultRifleBulletCasingSEPool audioPlayer = gameObject.GetComponent<AudioPlayAssaultRifleBulletCasingSEPool>();
+		if (audioPlayer != null)
+		{
+			audioPlayer.PlaySound();
+		}
+	}
+
+	/// <summary>
+	/// エネミーから呼ぶObj取得関数（3Dで鳴らす：鳴った位置から聞こえて、遠いほど小さくなる）
+	/// </summary>
+	public void GetGameObjectForEnemy(Transform transform)
+	{
+		if (objectPool == null || transform == null)
+		{
+			return;
+		}
+
+		GameObject gameObject = objectPool.Get();
+		if (gameObject == null)
+		{
+			return;
+		}
+
+		gameObject.transform.position = transform.position;
+		enemySpatialSetting.Apply3D(gameObject.GetComponent<AudioSource>());
 		AudioPlayAssaultRifleBulletCasingSEPool audioPlayer = gameObject.GetComponent<AudioPlayAssaultRifleBulletCasingSEPool>();
 		if (audioPlayer != null)
 		{
