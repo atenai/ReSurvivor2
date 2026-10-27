@@ -135,6 +135,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: 68cc809be992e804294b6426ed9b36b6, type: 3}
+  enemySpatialSetting:
+    minDistance: 1.5
+    maxDistance: 50
 --- !u!1 &993996277412685684
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,6 +229,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: e0f7e3a31646cc846ad9350fd73aa2e4, type: 3}
+  enemySpatialSetting:
+    minDistance: 1.5
+    maxDistance: 50
 --- !u!1 &1952852369258355914
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,6 +277,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: d51869a4ed188164f8c7cc336eab7c02, type: 3}
+  enemySpatialSetting:
+    minDistance: 1.5
+    maxDistance: 50
 --- !u!1 &3397379584237891835
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,6 +325,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: 066a5374d881d7b49b73fd1c8a018a3a, type: 3}
+  enemySpatialSetting:
+    minDistance: 5
+    maxDistance: 100
 --- !u!1 &4499171584263175379
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,6 +509,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: 73acd60308d57854b89edef180dc2a7e, type: 3}
+  enemySpatialSetting:
+    minDistance: 5
+    maxDistance: 100
 --- !u!1 &6954369503239023723
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,6 +602,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8217214238848448886, guid: b110fe9e06522124d9a80a594f699591, type: 3}
+  enemySpatialSetting:
+    minDistance: 1.5
+    maxDistance: 50
 --- !u!1 &8037639117145374931
 GameObject:
   m_ObjectHideFlags: 0
