@@ -29,7 +29,7 @@ public class ShotGunModel : GunModelBase
 	readonly int maxShotGunAmmo = 80;//将来的には拡張マガジンポーチを取得すると増える的なものを入れるかも
 
 	//※ショットガンは弾を1発ずつ込める。込める弾の数（マガジンの空き数と残弾数の少ない方）だけ「ポーチから弾を取る → 装填口に込める」を繰り返し、
-	//  込めるたびにマガジンの弾が1発増える。リロード中でも構えて撃てば、そこでリロードをやめて撃てる（込め終わった弾はそのまま）
+	//  込めるたびにマガジンの弾が1発増える。ハンドガン・アサルトライフルと同じく、リロードが終わるまで撃てない
 	[Tooltip("ショットガンのリロードの最初に、銃を弾を込める姿勢にして、左手が腰の後ろのポーチまで弾を取りに行くまでの時間（秒）")]
 	readonly float shotGunReloadStartTime = 0.6f;
 
@@ -112,7 +112,6 @@ public class ShotGunModel : GunModelBase
 	{
 		if (IsFireButtonDown() == true)//左クリックまたはEnterを押した場合に中身を実行する
 		{
-			InterruptReload(isAim);
 			Shoot(isAim);
 		}
 		ResetFireCountTimer();
@@ -152,7 +151,8 @@ public class ShotGunModel : GunModelBase
 
 		if (GetReloadEndTime() <= reloadCountTimer)
 		{
-			FinishReload();
+			reloadCountTimer = 0.0f;//リロードタイムをリセット
+			isReloadTimeActive = false;//リロードのオフ
 		}
 	}
 
@@ -245,35 +245,6 @@ public class ShotGunModel : GunModelBase
 		//最後：最後の弾を込めてから、元の構えに戻る
 		phaseProgress = (reloadCountTimer - GetShellInsertedTime(GetLastShellIndex())) / shotGunReloadEndTime;
 		return EnumManager.ShotGunReloadPhaseTYPE.End;
-	}
-
-	/// <summary>
-	/// リロード中に撃とうとした時は、そこでリロードをやめる（込め終わった弾はそのまま）
-	/// </summary>
-	/// <param name="isAim">構えているか？</param>
-	void InterruptReload(bool isAim)
-	{
-		if (isReloadTimeActive == false)
-		{
-			return;
-		}
-
-		//構えていない時と、まだ1発も入っていない時は撃てないので、リロードを続ける
-		if (isAim == false || currentMagazine <= EmptyMagazineCount)
-		{
-			return;
-		}
-
-		FinishReload();
-	}
-
-	/// <summary>
-	/// リロードを終える
-	/// </summary>
-	void FinishReload()
-	{
-		reloadCountTimer = 0.0f;//リロードタイムをリセット
-		isReloadTimeActive = false;//リロードのオフ
 	}
 
 	/// <summary>
