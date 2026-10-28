@@ -414,11 +414,16 @@ public class PlayerManagerPresenter : MonoBehaviour
 			return;
 		}
 
+		//※カメラの向きは、描画するカメラ（Camera.main）ではなく、カメラを回している土台（PlayerCameraManager）から取る
+		//  （描画するカメラは、Cinemachineがフレームの最後に土台の向きを写すので、ここではまだ回す前の向きのまま。
+		//    それに合わせると、カメラを回している間、プレイヤーが描画するカメラより遅れたり追いついたりして、ガクガクする）
+		Transform cameraTransform = PlayerCameraManager.SingletonInstance.transform;
+
 		//カメラの方向から、XとZのベクトルを取得 0,0,1 * 1,0,1 = 1,0,1;
-		playerModel.CameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+		playerModel.CameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
 
 		//方向キーの入力値とカメラの向きから、移動方向のベクトルを算出する
-		playerModel.MoveForward = playerModel.CameraForward * playerModel.InputVertical + Camera.main.transform.right * playerModel.InputHorizontal;
+		playerModel.MoveForward = playerModel.CameraForward * playerModel.InputVertical + cameraTransform.right * playerModel.InputHorizontal;
 		//移動方向のベクトルを正規化
 		playerModel.MoveForward.Normalize();
 
