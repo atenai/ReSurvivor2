@@ -6,7 +6,8 @@ using UnityEngine;
 /// プレイヤーキャラクタービュー
 /// MVPパターンのView担当
 /// ※プレイヤーのアニメーションの窓口。Presenterからプレイヤーの状態を受け取り、アニメーションごとのクラスに渡して動かす
-///   （移動：MoveAnimation、構え：AimAnimation、リロード：ReloadAnimation、地雷：MineAnimation、手のIK：HandIK、銃ごとの設定：GunAnimationFacade）
+///   （移動：MoveAnimation、構え：AimAnimation、リロード：ReloadAnimation、地雷：MineAnimation、ハンドガンへの持ち替え：SideArmAnimation、
+///     手のIK：HandIK、銃ごとの設定：GunAnimationFacade）
 /// ※銃の状態は、初期化の時に受け取った銃（GunModelFacade）から読む（銃のクラスからはこのクラスを使わない）
 /// </summary>
 public class PlayerCharacterView : MonoBehaviour
@@ -55,8 +56,14 @@ public class PlayerCharacterView : MonoBehaviour
 	readonly MoveAnimation moveAnimation = new MoveAnimation();
 	[Tooltip("構えのアニメーション")]
 	readonly AimAnimation aimAnimation = new AimAnimation();
+	[Tooltip("ハンドガンへの持ち替えのアニメーション")]
+	readonly SideArmAnimation sideArmAnimation = new SideArmAnimation();
 	[Tooltip("銃（銃の状態を見て、リロードのアニメーション・リロード中のマガジン・手のIKを動かす）。初期化される前はnull")]
 	GunModelFacade gunModelFacade;
+	[Tooltip("前のフレームで、構えに合わせて脊椎ボーンを曲げた回転（キャラクターから見た向き）")]
+	Quaternion spineAimLocalRotation = Quaternion.identity;
+	[Tooltip("前のフレームで、構えに合わせて曲げた脊椎ボーンの位置（キャラクターから見た位置）")]
+	Vector3 spineAimLocalPosition = Vector3.zero;
 
 	/// <summary>
 	/// 初期化（Presenterが最初に呼ぶ）
@@ -68,6 +75,7 @@ public class PlayerCharacterView : MonoBehaviour
 		ResetMoveAnimation();
 		gunAnimationFacade.Initialize();
 		handIK.Initialize(animator);
+		sideArmAnimation.Initialize(gunViewFacade.HandGunView, handIK.LeftHandAnimationPos, animator);
 	}
 
 	void LateUpdate()
@@ -80,6 +88,8 @@ public class PlayerCharacterView : MonoBehaviour
 
 		//リロード中のマガジンを動かす（アニメーションで手が動いた後に動かす）
 		gunAnimationFacade.UpdateReloadMagazines(gunModelFacade, reloadAnimation.ReloadAnimationTime, reloadAnimation.IsReloadAnimationForward, animator.GetBoneTransform(HumanBodyBones.LeftHand));
+		//ハンドガンに持ち替える時の、銃のモデルを持ち替える（アニメーションで手が動いた後に動かす）
+		sideArmAnimation.UpdateModels(gunModelFacade, gunViewFacade, animator.GetBoneTransform(HumanBodyBones.LeftHand));
 	}
 
 	/// <summary>
@@ -94,8 +104,16 @@ public class PlayerCharacterView : MonoBehaviour
 		}
 
 		EnumManager.GunTYPE gunTYPE = gunModelFacade.GetGunTYPE;
-		HandGunView handGunView = gunTYPE == EnumManager.GunTYPE.HandGun ? gunViewFacade.HandGunView : null;
-		handIK.UpdateIK(gunAnimationFacade.FindGunAnimation(gunTYPE), gunViewFacade.FindGunModelTransform(gunTYPE), handGunView, mineAnimation, gunModelFacade.GunModelBase.IsReloadTimeActive, reloadAnimation.ReloadAnimationTime);
+		//※ハンドガンに持ち替えている間は、しまう途中でメインの銃に戻した後も、ハンドガンの持ち方を使う
+		//  （ハンドガンの持ち方は、ハンドガンのアニメーションが混ざっている割合で効くので、アニメーションと一緒になめらかに0へ戻る）
+		HandGunView handGunView = gunTYPE == EnumManager.GunTYPE.HandGun || gunModelFacade.IsSideArmActive == true ? gunViewFacade.HandGunView : null;
+		//※背骨は、IKの後（LateUpdate）で構えに合わせて曲げるので、前のフレームで曲げた回転と位置を渡す
+		Quaternion characterRotation = animator.transform.rotation;
+		Quaternion spineAimRotation = characterRotation * spineAimLocalRotation * Quaternion.Inverse(characterRotation);
+		Vector3 spinePosition = animator.transform.position + characterRotation * spineAimLocalPosition;
+		GunAnimation sideArmMainGunAnimation = gunModelFacade.IsSideArmActive == true ? gunAnimationFacade.FindGunAnimation(gunModelFacade.SideArmMainGunTYPE) : null;
+		sideArmAnimation.UpdateWeights(gunModelFacade.SideArmPhase, gunModelFacade.SideArmPhaseProgress, spineAimRotation, spinePosition, sideArmMainGunAnimation);
+		handIK.UpdateIK(gunAnimationFacade.FindGunAnimation(gunTYPE), gunViewFacade.FindGunModelTransform(gunTYPE), handGunView, mineAnimation, sideArmAnimation, gunModelFacade.GunModelBase.IsReloadTimeActive, reloadAnimation.ReloadAnimationTime);
 	}
 
 	/// <summary>
@@ -118,7 +136,7 @@ public class PlayerCharacterView : MonoBehaviour
 	/// <param name="isEnemyClose">狙っている方向に近い敵がいるか？（いる時は、ハンドガンを近距離の構えにする）</param>
 	public void UpdateAimAnimation(bool isAim, bool isEnemyAlert, bool isEnemyClose)
 	{
-		aimAnimation.UpdateAnimation(animator, isAim, isEnemyAlert, isEnemyClose);
+		aimAnimation.UpdateAnimation(animator, isAim, isEnemyAlert, isEnemyClose, gunModelFacade.IsSideArmActive);
 	}
 
 	/// <summary>
@@ -160,10 +178,17 @@ public class PlayerCharacterView : MonoBehaviour
 	/// <param name="isAim">構えているか？</param>
 	public void UpdateAimBones(Transform cameraTransform, bool isAim)
 	{
+		Quaternion spineRotationBeforeAim = spine_03.rotation;
 		RotateBoneNeck01();
 		RotateBoneSpine03(cameraTransform);
 		RotateBoneUpperArmR(isAim);
 		RotateBoneUpperArmL(isAim);
+
+		//次のフレームのIKで、曲げた後の手の位置を合わせるのに使うため、脊椎ボーンを曲げた回転と、脊椎ボーンの位置を覚えておく（キャラクターから見た向き・位置）
+		//（IKの中では、この後に曲げる量はまだ分からないので、前のフレームで曲げた量を使う。構えの割合やカメラの向きは少しずつしか変わらないので、ほとんど同じになる）
+		Quaternion characterRotation = animator.transform.rotation;
+		spineAimLocalRotation = Quaternion.Inverse(characterRotation) * spine_03.rotation * Quaternion.Inverse(spineRotationBeforeAim) * characterRotation;
+		spineAimLocalPosition = Quaternion.Inverse(characterRotation) * (spine_03.position - animator.transform.position);
 	}
 
 	/// <summary>

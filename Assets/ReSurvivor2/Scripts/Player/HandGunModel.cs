@@ -25,10 +25,18 @@ public class HandGunModel : GunModelBase
 	[Tooltip("ハンドガンのリロード時間")]
 	readonly float handGunReloadTimeDefine = 1.5f;
 
+	[Tooltip("ハンドガンのマガジンが空になってから、オートリロードを始めるまでの待ち時間（秒）（ハンドガンは持ち替える銃がないので、すぐにリロードする）")]
+	readonly float handGunAutoReloadWaitTimeDefine = 0.0f;
+
 	/// <summary>
 	/// リロードにかかる時間（秒）
 	/// </summary>
 	protected override float ReloadTime => handGunReloadTimeDefine;
+
+	/// <summary>
+	/// マガジンが空になってから、オートリロードを始めるまでの待ち時間（秒）
+	/// </summary>
+	protected override float AutoReloadWaitTime => handGunAutoReloadWaitTimeDefine;
 
 	/// <summary>
 	/// コンストラクタ
@@ -67,17 +75,32 @@ public class HandGunModel : GunModelBase
 	/// </summary>
 	public override void AllSystem(bool isAim)
 	{
-		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) || XInputManager.SingletonInstance.XInputTriggerHandler.DownRT)//左クリックまたはEnterを押している場合に中身を実行する
+		if (IsFireButtonDown() == true)//左クリックまたはEnterを押した場合に中身を実行する
 		{
 			Shoot(isAim);
 		}
 		ResetFireCountTimer();
 		AutoReloadTrigger();
-		if (Input.GetKey(KeyCode.R) || Input.GetButtonDown("XInput X"))
+		if (IsReloadButtonPressed() == true)
 		{
 			ManualReloadTrigger(handGunMagazineCapacity);
 		}
 		ReloadSystem();
+	}
+
+	/// <summary>
+	/// アサルトライフル・ショットガンの弾が切れて、ハンドガンに持ち替えている間の処理
+	/// （撃つだけ。左手でメインの銃を持っていて、マガジンを交換できないので、リロードはしない）
+	/// </summary>
+	/// <param name="isAim">構えているか？</param>
+	/// <param name="isFirstShot">ハンドガンを抜き終わった時の1発目か？（持ち替えるきっかけになった、撃つボタンの分を撃つ）</param>
+	public void SideArmSystem(bool isAim, bool isFirstShot)
+	{
+		if (isFirstShot == true || IsFireButtonDown() == true)
+		{
+			Shoot(isAim);
+		}
+		ResetFireCountTimer();
 	}
 
 	/// <summary>
