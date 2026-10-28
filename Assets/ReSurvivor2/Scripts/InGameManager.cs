@@ -163,7 +163,9 @@ public class InGameManager : MonoBehaviour
 		}
 		//↓ロード中に動かせない処理
 
-		PlayerManagerPresenter.SingletonInstance.AfterFixedUpdate();
+		//※構えている時は、プレイヤーをカメラの向きに合わせるので、先にカメラを回してから、プレイヤーを動かす
+		//  （プレイヤーを先に動かすと、回す前のカメラの向きに合わせることになり、カメラを回している間、プレイヤーが1ステップ遅れて付いてきてガクガクする）
 		PlayerCameraManager.SingletonInstance.AfterFixedUpdate();
+		PlayerManagerPresenter.SingletonInstance.AfterFixedUpdate();
 	}
 }
