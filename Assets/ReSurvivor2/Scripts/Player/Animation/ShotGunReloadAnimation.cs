@@ -15,12 +15,16 @@ using UnityEngine;
 public class ShotGunReloadAnimation
 {
 	[Header("弾を込める時の銃の持ち方")]
-	[Tooltip("弾を込める間、左手で銃を握る位置・向き（銃の子に置いた目印。向きはIK用の手の向き）（右手で弾を込める装填口を空けるため、普段より銃口側を握る）")]
+	[Tooltip("弾を込める間、左手で銃を握る位置・向き（銃の子に置いた目印。向きはIK用の手の向き）（右手で弾を込める装填口を空けるため、普段より銃口側を握る。銃口が左下を向くので、銃の横から手の甲を外へ向け、親指をストック側にして握る）")]
 	[SerializeField] Transform leftHandHoldGripPos;
 	[Tooltip("弾を込める時の左手の位置（m。胸の骨からのずれで、キャラクターから見た向き。xが右、yが上、zが前）")]
 	[SerializeField] Vector3 holdLeftHandPosition;
 	[Tooltip("弾を込める時の銃の向き（度。キャラクターから見た向きで、銃口を正面に向けて水平にした向きから、zが銃身を軸に銃の上側を右へ倒す角度、xが銃口を下へ向ける角度、yが銃口を右へ向ける角度。z → x → y の順に回す）")]
 	[SerializeField] Vector3 holdGunAngle;
+	[Tooltip("銃を普通の持ち方と弾を込める持ち方の間で動かす途中で、銃をずらす量（m。キャラクターから見た向き。xが右、yが上、zが前）（構えたままそのまま回すと、右肩に当てていたストックが体の中を通るため、途中だけ体の外側へずらす。動かす途中の真ん中で一番大きくなる）")]
+	[SerializeField] Vector3 gunSwingOffset;
+	[Tooltip("左手で銃を持ち直す途中で、銃を手から離す量（m）（持ち直し終わる手前で、回ってくる銃身が手のひらに入らないようにする。持ち直す割合が大きいところで一番大きくなる）")]
+	[SerializeField] float regripClearance;
 	[Tooltip("弾を込めている間に、左肘を向ける位置（m。左肩からのずれで、キャラクターから見た向き。xが右、yが上、zが前）（左手を体の前に持ってくると、肘が体の内側に入って前腕が体にめり込むため、肘を体の外側へ張り出す）")]
 	[SerializeField] Vector3 leftElbowHintOffset;
 	public Vector3 LeftElbowHintOffset => leftElbowHintOffset;
@@ -28,10 +32,10 @@ public class ShotGunReloadAnimation
 	[Header("右手で弾を込める動き")]
 	[Tooltip("右手で弾を取る位置・向き（右腰のポーチ。腰の骨の子に置いた目印。向きはIK用の手の向き）")]
 	[SerializeField] Transform rightHandShellPouchPos;
-	//※弾は、指先でつまんで運び（以前のリロードのアニメーションの左手と同じ持ち方）、弾の先を装填口に当ててから、親指で銃身に沿って押し込む
+	//※弾は、親指と人差し指で根元をつまんで、指先より前へ出して運び、弾の先を装填口に当ててから、指先が装填口に着くまで手ごと押し込む
 	[Tooltip("右手で弾の先を装填口に当てる位置・向き（銃の子に置いた目印。向きはIK用の手の向き。右手に持った弾の先が、装填口の入り口に来る位置）")]
 	[SerializeField] Transform rightHandShellInsertPos;
-	[Tooltip("右手で弾を装填口に押し込み終わる位置・向き（銃の子に置いた目印。向きはIK用の手の向き。弾を装填口の入り口から、銃身に沿って銃口の方へ押し込んだ位置）")]
+	[Tooltip("右手で弾を装填口に押し込み終わる位置・向き（銃の子に置いた目印。向きはIK用の手の向き。弾を装填口の入り口から弾の向きに押し込み、つまんでいる指先が装填口に着いた位置）")]
 	[SerializeField] Transform rightHandShellPushPos;
 	[Tooltip("右手をグリップ・ポーチ・装填口の間で動かす時に、体や銃に当たらないように、前へふくらませる量（m）")]
 	[SerializeField] float rightHandPathBulge;
@@ -65,6 +69,12 @@ public class ShotGunReloadAnimation
 	const float HeadLookAtClampWeight = 0.5f;
 	[Tooltip("リロードが終わった後に、右手に戻した銃を元の位置・向きへ動かすのにかける時間（秒）")]
 	const float GunReturnBlendTime = 0.1f;
+	[Tooltip("1回転の角度（度）")]
+	const float FullTurnAngle = 360.0f;
+	[Tooltip("2つの向きが逆向き（90度より開いている）かを見る、内積の境目")]
+	const float OppositeDirectionDot = 0.0f;
+	[Tooltip("左手で銃を持ち直す途中で銃を手から離す量を、持ち直す割合の何乗で山にするか（大きいほど、持ち直し終わる手前に山が寄る）")]
+	const float RegripClearanceCurvePower = 3.0f;
 
 	[Tooltip("ショットガンのモデル")]
 	Transform gunModel;
@@ -232,12 +242,13 @@ public class ShotGunReloadAnimation
 		Quaternion leftHandRotationInGun = inverseGunLocalRotation * leftHandAnimationPos.localRotation;
 		Vector3 leftHandPositionInGun = inverseGunLocalRotation * (leftHandAnimationPos.localPosition - gunLocalPosition);
 
-		//銃は、左手を中心に回しながら、普通の持ち方から弾を込める持ち方へ動かす（ストックが頭の右側を通って、右肩の上へ上がる）
+		//銃は、左手を中心に回しながら、普通の持ち方から弾を込める持ち方へ動かす（ストックが頭の右側を通って、右肩の上へ上がる。途中は、ストックが体の中を通らないように、体の外側へずらす）
 		Transform chest = animator.GetBoneTransform(HumanBodyBones.UpperChest);
 		Quaternion holdGunRotation = characterRotation * Quaternion.Euler(holdGunAngle.x, holdGunAngle.y, -holdGunAngle.z);
 		Vector3 holdLeftHandWorldPosition = chest.position + characterRotation * holdLeftHandPosition;
 		Quaternion gunRotation = Quaternion.Slerp(normalGunRotation, holdGunRotation, holdWeight);
-		leftHandPosition = Vector3.Lerp(normalGunPosition + normalGunRotation * leftHandPositionInGun, holdLeftHandWorldPosition, holdWeight);
+		Vector3 swingOffset = characterRotation * gunSwingOffset * Mathf.Sin(holdWeight * Mathf.PI);
+		leftHandPosition = Vector3.Lerp(normalGunPosition + normalGunRotation * leftHandPositionInGun, holdLeftHandWorldPosition, holdWeight) + swingOffset;
 		leftHandRotation = gunRotation * leftHandRotationInGun;
 		Vector3 gunPosition = leftHandPosition - gunRotation * leftHandPositionInGun;
 
@@ -272,7 +283,7 @@ public class ShotGunReloadAnimation
 		}
 		else if (animationTime <= insertTime)
 		{
-			//拳ごと銃身に沿って、弾を装填口に押し込む（押し込み終わったら、弾は手から離れて銃の中に入る）
+			//弾を手ごと装填口に押し込む（押し込み終わったら、弾は手から離れて、残りの少しだけ銃の中に入る）
 			BlendRightHand(insertPosition, insertRotation, pushPosition, pushRotation, Vector3.zero, (animationTime - rightHandPushTime) / (insertTime - rightHandPushTime));
 		}
 		else if (animationTime <= rightHandRegripTime)
@@ -361,8 +372,32 @@ public class ShotGunReloadAnimation
 			gripRotation = gunForeEndLocalRotation;
 		}
 
-		position = Vector3.Lerp(gripPosition, gunHoldLocalPosition, holdWeight);
-		rotation = Quaternion.Slerp(gripRotation, gunHoldLocalRotation, holdWeight);
+		//※持ち直し終わる手前では、回ってくる銃身が手のひらに入るため、その間だけ銃を手から離す（手から銃へ向かう向きにずらす）
+		float regripAngle;
+		Vector3 regripAxis;
+		GetRegripTurn(gripRotation, out regripAngle, out regripAxis);
+		float clearanceRate = Mathf.Sin(Mathf.Pow(holdWeight, RegripClearanceCurvePower) * Mathf.PI);
+		position = Vector3.Lerp(gripPosition, gunHoldLocalPosition, holdWeight) + gunHoldLocalPosition.normalized * regripClearance * clearanceRate;
+		rotation = Quaternion.AngleAxis(regripAngle * holdWeight, regripAxis) * gripRotation;
+	}
+
+	/// <summary>
+	/// 左手の骨から見た銃を、普段の握り方から弾を込める間の握り方へ持ち直すために回す角度と軸を求める
+	/// （2つの握り方は前腕の周りにほぼ半回転違うため、Slerpだと近い方の向きに回って、左手首が外側へひねり切れてしまう。
+	///   そのため、前腕の周りでは必ず、左手を内側へひねる向き（左手の骨から見て、銃を前腕の周りに＋の向き）に回す）
+	/// </summary>
+	/// <param name="gripRotation">普段の握り方の、左手の骨から見た銃の向き</param>
+	/// <param name="angle">回す角度（度）</param>
+	/// <param name="axis">回す軸（左手の骨から見た向き）</param>
+	void GetRegripTurn(Quaternion gripRotation, out float angle, out Vector3 axis)
+	{
+		(gunHoldLocalRotation * Quaternion.Inverse(gripRotation)).ToAngleAxis(out angle, out axis);
+		Vector3 forearmAxis = leftHandAnimationPos.localRotation * Vector3.forward;
+		if (Vector3.Dot(axis, forearmAxis) < OppositeDirectionDot)
+		{
+			angle = FullTurnAngle - angle;
+			axis = -axis;
+		}
 	}
 
 	/// <summary>

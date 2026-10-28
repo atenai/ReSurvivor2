@@ -49,7 +49,7 @@ public static class PlayerAnimatorParameter
 	public const int PlaceMineLayerIndex = 3;
 	[Tooltip("上半身のリロードのレイヤーの番号")]
 	public const int UpperBodyReloadLayerIndex = 4;
-	[Tooltip("ショットガンの弾を右手で持っている間だけ、右手の指を弾をつまむ形（以前のリロードのアニメーションの左手を、左右反転したもの）にしておくレイヤーの番号")]
+	[Tooltip("ショットガンの弾を右手で持っている間だけ、右手の指を弾をつまむ形（親指と人差し指で弾の根元をつまむ、指だけのアニメーション）にしておくレイヤーの番号")]
 	public const int ShotGunShellRightFingersLayerIndex = 5;
 
 	//↓ステートの番号（ステート名から作った番号）↓//

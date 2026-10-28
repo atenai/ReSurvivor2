@@ -212,8 +212,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 882537145128178292}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.051171847, y: -0.006128596, z: -0.9453626, w: -0.32192147}
-  m_LocalPosition: {x: -0.072569236, y: -0.029693576, z: -0.35000002}
+  m_LocalRotation: {x: -0.50785506, y: -0.008915757, z: -0.3382573, w: 0.7922031}
+  m_LocalPosition: {x: 0.0616487, y: -0.058293357, z: -0.31347373}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -566,8 +566,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887459473279355684}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4029668, y: -0.43665946, z: 0.60180855, w: 0.53364104}
-  m_LocalPosition: {x: -0.06836951, y: 0.12089154, z: 0.1}
+  m_LocalRotation: {x: 0.1232848, y: 0.6851393, z: -0.07678004, w: 0.7137856}
+  m_LocalPosition: {x: -0.082981504, y: 0.14676814, z: 0.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -957,8 +957,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3016063105227743681}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.051171847, y: -0.006128596, z: -0.9453626, w: -0.32192147}
-  m_LocalPosition: {x: -0.072569236, y: -0.059693575, z: -0.4}
+  m_LocalRotation: {x: -0.50785506, y: -0.008915757, z: -0.3382573, w: 0.7922031}
+  m_LocalPosition: {x: 0.0616487, y: -0.095575035, z: -0.35790431}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1461,14 +1461,16 @@ MonoBehaviour:
   minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
   shotGunReloadAnimation:
     leftHandHoldGripPos: {fileID: 5346429223549302403}
-    holdLeftHandPosition: {x: -0.1407603, y: -0.18381703, z: 0.26115105}
-    holdGunAngle: {x: 42.029568, y: -55.713123, z: -75}
+    holdLeftHandPosition: {x: -0.24969378, y: -0.025412008, z: 0.3279703}
+    holdGunAngle: {x: 27.999279, y: -55.70825, z: -20}
+    gunSwingOffset: {x: 0.1, y: 0, z: 0.2}
+    regripClearance: 0.06
     leftElbowHintOffset: {x: -0.4, y: -0.2, z: -0.05}
     rightHandShellPouchPos: {fileID: 8747705449965996136}
     rightHandShellInsertPos: {fileID: 4376169942655925315}
     rightHandShellPushPos: {fileID: 7680050088618434728}
     rightHandPathBulge: 0.08
-    rightElbowHintOffset: {x: 0.4, y: 0.1, z: 0.05}
+    rightElbowHintOffset: {x: 0.45, y: -0.4, z: 0.05}
     gunHoldTime: 0.2
     rightHandReleaseTime: 0.1
     rightHandPushTime: 0.53
@@ -1787,8 +1789,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5194943474210868636}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.062, y: 0.15, z: 0.048}
+  m_LocalRotation: {x: 0.7004752, y: -0.15760079, z: -0.15278752, w: 0.6790821}
+  m_LocalPosition: {x: 0.1114, y: 0.1316, z: 0.0508}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3721,23 +3723,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8912993347114468270, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.045
+      value: 0.04942593
       objectReference: {fileID: 0}
     - target: {fileID: 8912993347114468270, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.17
+      value: -0.16089031
       objectReference: {fileID: 0}
     - target: {fileID: 8912993347114468270, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1.9106855e-15
+      value: 0.17101006
+      objectReference: {fileID: 0}
+    - target: {fileID: 8912993347114468270, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.46984628
       objectReference: {fileID: 0}
     - target: {fileID: 8912993347114468270, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000004371139
+      value: -0.8137977
       objectReference: {fileID: 0}
     - target: {fileID: 8912993347114468270, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000004371139
+      value: 0.29619816
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
