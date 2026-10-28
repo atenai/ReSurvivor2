@@ -18,14 +18,15 @@ public class GunAnimation
 	[Header("リロード")]
 	//※リロードのアニメーションは、左手で銃からマガジンを抜いて腰のポーチへ持っていき、また銃に差し込む動きになっているため、
 	//  その間はマガジンを左手の子にして、左手と一緒に動かす
+	//  （ショットガンは、右手で腰のポーチから弾を取って装填口に込めるので、その間は弾を右手の子にする。手の動きはShotGunReloadAnimationが作る）
 	//※タイミングはどれもリロードアニメーションの再生位置（0がアニメーションの始まり、1が終わり）で決める
-	[Tooltip("リロード中に左手で抜き取って差し込むマガジンのモデル（マガジンと一緒に動かす弾も入れる）")]
+	[Tooltip("リロード中に手で抜き取って差し込むマガジンのモデル（マガジンと一緒に動かす弾も入れる。ショットガンは込める弾）")]
 	[SerializeField] Transform[] magazineModels;
-	[Tooltip("左手に持っている間だけ見せるか？（ショットガンの弾のように、銃に入っている時は見えない物はオンにする）")]
+	[Tooltip("手に持っている間だけ見せるか？（ショットガンの弾のように、銃に入っている時は見えない物はオンにする）")]
 	[SerializeField] bool isMagazineShownOnlyInHand;
-	[Tooltip("マガジンを左手に持たせる位置・向き（左手の骨の子に置いた目印）。空の場合は、抜き取った時の位置・向きのまま左手に持たせる")]
-	[SerializeField] Transform magazineLeftHandPos;
-	[Tooltip("左手でマガジンを抜き取るタイミング（リロードアニメーションの再生位置）。ショットガンは左手が最初にポーチに着いて弾を取るタイミング")]
+	[Tooltip("マガジンを手に持たせる位置・向き（手の骨の子に置いた目印。ショットガンの弾は右手）。空の場合は、抜き取った時の位置・向きのまま左手に持たせる")]
+	[SerializeField] Transform magazineHandPos;
+	[Tooltip("左手でマガジンを抜き取るタイミング（リロードアニメーションの再生位置）。ショットガンは右手がポーチに着いて弾を取るタイミング")]
 	[SerializeField] float magazineOutTime;
 	public float MagazineOutTime => magazineOutTime;
 	[Tooltip("マガジンを銃に差し込むタイミング（リロードアニメーションの再生位置）")]
@@ -41,19 +42,20 @@ public class GunAnimation
 	Vector3[] magazineLocalPositions;
 	[Tooltip("マガジンを銃に付けている時の向き（親から見た向き）")]
 	Quaternion[] magazineLocalRotations;
-	[Tooltip("マガジンを左手に持っているか？")]
-	bool isMagazineInLeftHand = false;
+	[Tooltip("マガジンを手に持っているか？")]
+	bool isMagazineInHand = false;
 
-	[Header("リロード中の左手のIK")]
+	[Header("リロード中の左手のIK（ハンドガン・アサルトライフル）")]
 	//※リロードの始まりと終わりは、左手を銃の前側を握る目印（IK）とアニメーションどおりの位置の間でなめらかに移す
 	//  （一瞬で切り替えると、左手が20cmほどワープして見えるため）
+	//※ショットガンのリロードは、左手で銃を握ったまま右手で弾を込めるので、ここは使わない（手の動きはShotGunReloadAnimationが作る）
 	[Tooltip("左手を目印からアニメーションどおりの位置へ移し終わるタイミング（リロードアニメーションの再生位置）。アニメーションの始まりからここまでで移す")]
 	[SerializeField] float leftHandIKReleaseTime;
 	[Tooltip("左手をアニメーションどおりの位置から目印へ戻し始めるタイミング（リロードアニメーションの再生位置）。ここからアニメーションの終わりまでで戻す")]
 	[SerializeField] float leftHandIKReturnTime;
 	//※リロードのアニメーションは体の形が違うキャラクター用に作られたもので、マガジンを抜く瞬間と差し込む瞬間の左手が、マガジンから数cmずれている。
 	//  そのため、その2つの瞬間の前後だけ、左手をIKでマガジンを持つ位置に合わせる（マガジンが手から浮いたり、差し込む時にずれて見えたりしないようにする）
-	[Tooltip("マガジンを銃に付けたまま左手で持つ時の左手の位置・向き（銃の子に置いた目印。向きはIK用の手の向き）")]
+	[Tooltip("マガジンを銃に付けたまま左手で持つ時の左手の位置・向き（銃の子に置いた目印。向きはIK用の手の向き）。ショットガンは空")]
 	[SerializeField] Transform magazineLeftHandGripPos;
 	public Transform MagazineLeftHandGripPos => magazineLeftHandGripPos;
 	[Tooltip("マガジンを抜き取る瞬間・差し込む瞬間の前後で、左手をマガジンを持つ位置に合わせる長さ（リロードアニメーションの再生位置。この分だけ前からなめらかに合わせ始め、この分だけ後までなめらかに戻す）")]
@@ -125,7 +127,7 @@ public class GunAnimation
 	}
 
 	/// <summary>
-	/// リロード中のマガジンの動き（抜き取る → 左手で持つ → 差し込む）
+	/// リロード中のマガジンの動き（抜き取る → 手で持つ → 差し込む。ショットガンは、ポーチから取った弾を右手で持って込める）
 	/// </summary>
 	/// <param name="isReloadTimeActive">この銃がリロード中か？</param>
 	/// <param name="reloadAnimationTime">リロードアニメーションの再生位置（0がアニメーションの始まり、1が終わり）</param>
@@ -135,39 +137,31 @@ public class GunAnimation
 	{
 		//アニメーションを巻き戻している間（ショットガンが次の弾を取りにポーチへ戻る間）は、手に何も持たない
 		bool isMagazineOut = isReloadTimeActive == true && isReloadAnimationForward == true && magazineOutTime <= reloadAnimationTime && reloadAnimationTime < magazineInTime;
-		if (isMagazineOut == true && isMagazineInLeftHand == false)
+		if (isMagazineOut == true && isMagazineInHand == false)
 		{
 			TakeOutMagazine(hand_l);
 		}
-		else if (isMagazineOut == false && isMagazineInLeftHand == true)
+		else if (isMagazineOut == false && isMagazineInHand == true)
 		{
-			if (isReloadTimeActive == true)
-			{
-				PutInMagazine();
-			}
-			else
-			{
-				//差し込む前にリロードが止まった（ショットガンのリロード中に撃った）時は、持っていた弾はポーチに戻したことにする
-				CancelMagazine();
-			}
+			PutInMagazine();
 		}
 
 		MoveMagazineToGun();
 	}
 
 	/// <summary>
-	/// マガジンを銃から抜き取って左手に持たせる
+	/// マガジンを銃から抜き取って手に持たせる（ショットガンの弾は、ポーチから取って右手に持たせる）
 	/// </summary>
 	/// <param name="hand_l">左手の骨</param>
 	void TakeOutMagazine(Transform hand_l)
 	{
-		isMagazineInLeftHand = true;
+		isMagazineInHand = true;
 		foreach (Transform magazineModel in magazineModels)
 		{
-			if (magazineLeftHandPos != null)
+			if (magazineHandPos != null)
 			{
-				//左手に持たせる目印の位置・向きで持たせる
-				magazineModel.SetParent(magazineLeftHandPos, false);
+				//手に持たせる目印の位置・向きで持たせる
+				magazineModel.SetParent(magazineHandPos, false);
 				magazineModel.localPosition = Vector3.zero;
 				magazineModel.localRotation = Quaternion.identity;
 			}
@@ -181,11 +175,11 @@ public class GunAnimation
 	}
 
 	/// <summary>
-	/// 左手に持っているマガジンを銃に差し込む（銃の子に戻す。元の位置へはMoveMagazineToGunで少しずつ動かす）
+	/// 手に持っているマガジンを銃に差し込む（銃の子に戻す。元の位置へはMoveMagazineToGunで少しずつ動かす）
 	/// </summary>
 	void PutInMagazine()
 	{
-		isMagazineInLeftHand = false;
+		isMagazineInHand = false;
 		for (int i = 0; i < magazineModels.Length; i++)
 		{
 			magazineModels[i].SetParent(magazineParents[i], true);
@@ -193,29 +187,11 @@ public class GunAnimation
 	}
 
 	/// <summary>
-	/// 左手に持っているマガジンを、すぐに銃の元の位置・向きに戻す（銃に入っている時は見えない物は隠す）
-	/// </summary>
-	void CancelMagazine()
-	{
-		isMagazineInLeftHand = false;
-		for (int i = 0; i < magazineModels.Length; i++)
-		{
-			magazineModels[i].SetParent(magazineParents[i], false);
-			magazineModels[i].localPosition = magazineLocalPositions[i];
-			magazineModels[i].localRotation = magazineLocalRotations[i];
-			if (isMagazineShownOnlyInHand == true)
-			{
-				magazineModels[i].gameObject.SetActive(false);
-			}
-		}
-	}
-
-	/// <summary>
-	/// 差し込んだマガジンを銃の元の位置・向きまで動かす（左手の位置と元の位置のずれを、差し込む動きに見せる）
+	/// 差し込んだマガジンを銃の元の位置・向きまで動かす（手の位置と元の位置のずれを、差し込む動きに見せる）
 	/// </summary>
 	void MoveMagazineToGun()
 	{
-		if (isMagazineInLeftHand == true)
+		if (isMagazineInHand == true)
 		{
 			return;
 		}
@@ -261,14 +237,7 @@ public class GunAnimation
 	/// <returns>左手のIKの効き具合</returns>
 	public float GetReloadMagazineGripWeight(float reloadAnimationTime)
 	{
-		float inWeight = GetMagazineGripWeight(reloadAnimationTime, magazineInTime);
-		//手に持っている間だけ見せる物（ショットガンの弾）は、銃から抜き取らずにポーチから出てくるので、抜き取る瞬間は合わせない
-		if (isMagazineShownOnlyInHand == true)
-		{
-			return inWeight;
-		}
-
-		return Mathf.Max(GetMagazineGripWeight(reloadAnimationTime, magazineOutTime), inWeight);
+		return Mathf.Max(GetMagazineGripWeight(reloadAnimationTime, magazineOutTime), GetMagazineGripWeight(reloadAnimationTime, magazineInTime));
 	}
 
 	/// <summary>

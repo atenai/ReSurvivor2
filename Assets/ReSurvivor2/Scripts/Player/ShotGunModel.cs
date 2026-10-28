@@ -30,17 +30,17 @@ public class ShotGunModel : GunModelBase
 
 	//※ショットガンは弾を1発ずつ込める。込める弾の数（マガジンの空き数と残弾数の少ない方）だけ「ポーチから弾を取る → 装填口に込める」を繰り返し、
 	//  込めるたびにマガジンの弾が1発増える。ハンドガン・アサルトライフルと同じく、リロードが終わるまで撃てない
-	[Tooltip("ショットガンのリロードの最初に、銃を弾を込める姿勢にして、左手が腰の後ろのポーチまで弾を取りに行くまでの時間（秒）")]
+	[Tooltip("ショットガンのリロードの最初に、左手で銃を弾を込める持ち方に持ち上げ、右手が右腰のポーチまで弾を取りに行くまでの時間（秒）")]
 	readonly float shotGunReloadStartTime = 0.6f;
 
-	[Tooltip("ショットガンの1発目の弾を、腰の後ろのポーチから装填口まで持っていって込めるまでの時間（秒）（2発目以降より手の動く距離が長いので、長めにする）")]
+	[Tooltip("ショットガンの1発目の弾を、右腰のポーチから装填口まで持っていって押し込むまでの時間（秒）")]
 	readonly float shotGunFirstShellInsertTime = 0.4f;
 
-	[Tooltip("ショットガンの弾を込めた後、次の弾を取りに腰のベルトへ戻るまでの時間（秒）")]
-	readonly float shotGunShellReturnTime = 0.2f;
+	[Tooltip("ショットガンの弾を込めた後、次の弾を取りに右腰のポーチへ戻るまでの時間（秒）")]
+	readonly float shotGunShellReturnTime = 0.25f;
 
-	[Tooltip("ショットガンの2発目以降の弾を、腰のベルトから装填口まで持っていって込めるまでの時間（秒）")]
-	readonly float shotGunShellInsertTime = 0.25f;
+	[Tooltip("ショットガンの2発目以降の弾を、右腰のポーチから装填口まで持っていって押し込むまでの時間（秒）")]
+	readonly float shotGunShellInsertTime = 0.35f;
 
 	[Tooltip("ショットガンの最後の弾を込めてから、元の構えに戻るまでの時間（秒）")]
 	readonly float shotGunReloadEndTime = 0.7f;
