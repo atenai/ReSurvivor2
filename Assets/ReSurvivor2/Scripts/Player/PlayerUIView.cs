@@ -50,10 +50,6 @@ public class PlayerUIView : MonoBehaviour
 	[SerializeField] TextMeshProUGUI textMagazine;
 	[Tooltip("弾薬数テキスト")]
 	[SerializeField] TextMeshProUGUI textAmmo;
-	[Tooltip("マガジン弾数テキスト・弾薬数テキストの、弾が十分ある時の色")]
-	[SerializeField] Color bulletCountTextNormalColor = Color.white;
-	[Tooltip("マガジン弾数テキスト・弾薬数テキストの、弾が少ない時の色")]
-	[SerializeField] Color bulletCountTextLowColor = Color.red;
 	[Tooltip("ハンドガンに持ち替えられることを表すアイコン（ハンドガンのアイコンと矢印のアイコン）を、まとめて表示・非表示にするキャンバスグループ")]
 	[SerializeField] CanvasGroup canvasGroupSideArm;
 	[Tooltip("ハンドガンに持ち替えられることを表す、ハンドガンのアイコンを指す矢印のアイコン")]
@@ -76,6 +72,10 @@ public class PlayerUIView : MonoBehaviour
 		get { return textTimer; }
 		set { textTimer = value; }
 	}
+	[Tooltip("マガジン弾数テキスト・弾薬数テキスト・タイマーテキストの、弾・残り時間が十分ある時の色")]
+	[SerializeField] Color textNormalColor = Color.white;
+	[Tooltip("マガジン弾数テキスト・弾薬数テキスト・タイマーテキストの、弾・残り時間が少ない時の色")]
+	[SerializeField] Color textLowColor = Color.red;
 
 	void Start()
 	{
@@ -144,7 +144,7 @@ public class PlayerUIView : MonoBehaviour
 	public void SetTextMagazine(int currentMagazine, bool isMagazineLow)
 	{
 		textMagazine.text = currentMagazine.ToString();
-		textMagazine.color = isMagazineLow == true ? bulletCountTextLowColor : bulletCountTextNormalColor;
+		textMagazine.color = isMagazineLow == true ? textLowColor : textNormalColor;
 	}
 
 	/// <summary>
@@ -155,7 +155,7 @@ public class PlayerUIView : MonoBehaviour
 	public void SetTextAmmo(int currentAmmo, bool isAmmoLow)
 	{
 		textAmmo.text = currentAmmo.ToString();
-		textAmmo.color = isAmmoLow == true ? bulletCountTextLowColor : bulletCountTextNormalColor;
+		textAmmo.color = isAmmoLow == true ? textLowColor : textNormalColor;
 	}
 
 	/// <summary>
@@ -164,6 +164,15 @@ public class PlayerUIView : MonoBehaviour
 	void StartTextTimer()
 	{
 		textTimer.text = "--" + ":" + "--"; ;
+	}
+
+	/// <summary>
+	/// タイマーテキストの色の処理
+	/// </summary>
+	/// <param name="isTimeLow">ミッションの残り時間が少ないか？（少ない時は赤くする）</param>
+	public void SetTextTimerColor(bool isTimeLow)
+	{
+		textTimer.color = isTimeLow == true ? textLowColor : textNormalColor;
 	}
 
 	/// <summary>

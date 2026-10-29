@@ -30,6 +30,9 @@ public class TimerManager : MonoBehaviour
 		set { seconds = value; }
 	}
 
+	[Tooltip("ミッションの残り時間が少ないとみなす秒数（この秒数以下になると、プレイヤーUIのタイマーの文字を赤くする）")]
+	const float LowTimeSeconds = 60.0f;
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -57,6 +60,7 @@ public class TimerManager : MonoBehaviour
 		if (MissionManager.SingletonInstance.IsMissionActive == false)
 		{
 			PlayerManagerPresenter.SingletonInstance.PlayerUIView.TextTimer.text = "--" + ":" + "--";
+			PlayerManagerPresenter.SingletonInstance.PlayerUIView.SetTextTimerColor(false);
 			return;
 		}
 
@@ -65,6 +69,9 @@ public class TimerManager : MonoBehaviour
 
 		minute = (int)totalTime / 60;
 		seconds = totalTime - (minute * 60);
+
+		//残り時間が少なくなったら、タイマーの文字を赤くする
+		PlayerManagerPresenter.SingletonInstance.PlayerUIView.SetTextTimerColor(totalTime <= LowTimeSeconds);
 
 		if (minute <= 0 && seconds <= 0.0f)
 		{
