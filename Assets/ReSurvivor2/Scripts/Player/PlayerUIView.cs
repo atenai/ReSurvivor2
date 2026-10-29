@@ -50,6 +50,10 @@ public class PlayerUIView : MonoBehaviour
 	[SerializeField] TextMeshProUGUI textMagazine;
 	[Tooltip("弾薬数テキスト")]
 	[SerializeField] TextMeshProUGUI textAmmo;
+	[Tooltip("マガジン弾数テキスト・弾薬数テキストの、弾が十分ある時の色")]
+	[SerializeField] Color bulletCountTextNormalColor = Color.white;
+	[Tooltip("マガジン弾数テキスト・弾薬数テキストの、弾が少ない時の色")]
+	[SerializeField] Color bulletCountTextLowColor = Color.red;
 	[Tooltip("ハンドガンに持ち替えられることを表すアイコン（ハンドガンのアイコンと矢印のアイコン）を、まとめて表示・非表示にするキャンバスグループ")]
 	[SerializeField] CanvasGroup canvasGroupSideArm;
 	[Tooltip("ハンドガンに持ち替えられることを表す、ハンドガンのアイコンを指す矢印のアイコン")]
@@ -135,18 +139,23 @@ public class PlayerUIView : MonoBehaviour
 	/// <summary>
 	/// 残弾テキストの初期化処理
 	/// </summary>
-	public void SetTextMagazine(int currentMagazine)
+	/// <param name="currentMagazine">マガジンの弾数</param>
+	/// <param name="isMagazineLow">マガジンの弾が少ないか？（少ない時は赤くする）</param>
+	public void SetTextMagazine(int currentMagazine, bool isMagazineLow)
 	{
 		textMagazine.text = currentMagazine.ToString();
+		textMagazine.color = isMagazineLow == true ? bulletCountTextLowColor : bulletCountTextNormalColor;
 	}
 
 	/// <summary>
 	/// 弾薬数テキストの初期化処理
 	/// </summary>
-	/// <param name="currentAmmo"></param>
-	public void SetTextAmmo(int currentAmmo)
+	/// <param name="currentAmmo">予備の弾数</param>
+	/// <param name="isAmmoLow">予備の弾が少ないか？（少ない時は赤くする）</param>
+	public void SetTextAmmo(int currentAmmo, bool isAmmoLow)
 	{
 		textAmmo.text = currentAmmo.ToString();
+		textAmmo.color = isAmmoLow == true ? bulletCountTextLowColor : bulletCountTextNormalColor;
 	}
 
 	/// <summary>

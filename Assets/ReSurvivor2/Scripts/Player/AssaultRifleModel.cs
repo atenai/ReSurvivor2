@@ -42,6 +42,11 @@ public class AssaultRifleModel : GunModelBase
 	protected override float AutoReloadWaitTime => assaultRifleAutoReloadWaitTimeDefine;
 
 	/// <summary>
+	/// マガジンに入る弾の数
+	/// </summary>
+	protected override int MagazineCapacity => assaultRifleMagazineCapacity;
+
+	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	public AssaultRifleModel()

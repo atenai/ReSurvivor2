@@ -96,8 +96,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 		playerUIView.InitStamina(playerModel.Stamina.CurrentStamina);
 		playerUIView.StartTextArmorPlate(playerModel.CurrentArmorPlate);
 		playerUIView.StartTextFood(playerModel.CurrentFood);
-		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentMagazine);
-		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentAmmo);
+		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentMagazine, PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsMagazineLow);
+		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentAmmo, PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsAmmoLow);
 		playerUIView.UpdateUITransform(playerModel.IsAim);
 	}
 
@@ -168,8 +168,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 		playerUIView.UpdateUITransform(playerModel.IsAim);
 		playerUIView.UpdateImageReload(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsReloadTimeActive);
 		playerUIView.UpdateImageSideArm(PlayerCameraManager.SingletonInstance.GunModelFacade.IsSideArmDrawWindowOpen);
-		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentMagazine);
-		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentAmmo);
+		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentMagazine, PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsMagazineLow);
+		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentAmmo, PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsAmmoLow);
 	}
 
 
