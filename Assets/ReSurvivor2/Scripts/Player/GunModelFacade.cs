@@ -187,25 +187,43 @@ public class GunModelFacade
 	}
 
 	/// <summary>
-	/// ハンドガンに持ち替えられるか？
-	/// （アサルトライフル・ショットガンのマガジンが空で、オートリロードが始まる前に、構えたまま撃つボタンを押し直した時）
+	/// ハンドガンに持ち替えられる間か？（構えて撃つボタンを押し直すと持ち替える）
+	/// （アサルトライフル・ショットガンのマガジンが空で、オートリロードが始まる前）
 	/// ※予備の弾が0の時はオートリロードが始まらないので、いつでも持ち替えられる
+	/// ※プレイヤーUIの、ハンドガンに持ち替えられることを表すアイコンにも使う
+	/// </summary>
+	public bool IsSideArmDrawWindowOpen
+	{
+		get
+		{
+			if (gunTYPE == EnumManager.GunTYPE.HandGun)
+			{
+				return false;
+			}
+
+			if (0 < gunModelBase.CurrentMagazine || gunModelBase.IsReloadTimeActive == true)
+			{
+				return false;
+			}
+
+			//ハンドガンのマガジンも空の時は、持ち替えても撃てない（持ち替えている間はリロードできない）ので持ち替えない
+			if (handGunModel.CurrentMagazine <= 0)
+			{
+				return false;
+			}
+
+			return true;
+		}
+	}
+
+	/// <summary>
+	/// ハンドガンに持ち替えられるか？
+	/// （ハンドガンに持ち替えられる間に、構えたまま撃つボタンを押し直した時）
 	/// </summary>
 	/// <param name="isAim">構えているか？</param>
 	bool CanDrawSideArm(bool isAim)
 	{
-		if (gunTYPE == EnumManager.GunTYPE.HandGun || isAim == false)
-		{
-			return false;
-		}
-
-		if (0 < gunModelBase.CurrentMagazine || gunModelBase.IsReloadTimeActive == true)
-		{
-			return false;
-		}
-
-		//ハンドガンのマガジンも空の時は、持ち替えても撃てない（持ち替えている間はリロードできない）ので持ち替えない
-		if (handGunModel.CurrentMagazine <= 0)
+		if (isAim == false || IsSideArmDrawWindowOpen == false)
 		{
 			return false;
 		}

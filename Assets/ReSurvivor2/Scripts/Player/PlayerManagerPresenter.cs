@@ -167,6 +167,7 @@ public class PlayerManagerPresenter : MonoBehaviour
 		NormalMoveAnimation();
 		playerUIView.UpdateUITransform(playerModel.IsAim);
 		playerUIView.UpdateImageReload(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsReloadTimeActive);
+		playerUIView.UpdateImageSideArm(PlayerCameraManager.SingletonInstance.GunModelFacade.IsSideArmDrawWindowOpen);
 		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentMagazine);
 		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentAmmo);
 	}
