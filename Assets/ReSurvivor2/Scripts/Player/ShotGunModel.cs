@@ -74,6 +74,11 @@ public class ShotGunModel : GunModelBase
 	protected override float AutoReloadWaitTime => shotGunAutoReloadWaitTimeDefine;
 
 	/// <summary>
+	/// マガジンに入る弾の数
+	/// </summary>
+	protected override int MagazineCapacity => shotGunMagazineCapacity;
+
+	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	public ShotGunModel()

@@ -28,8 +28,8 @@ public class AssaultRifleModel : GunModelBase
 	[Tooltip("アサルトライフルのリロード時間")]
 	readonly float assaultRifleReloadTimeDefine = 1.5f;
 
-	[Tooltip("アサルトライフルのマガジンが空になってから、オートリロードを始めるまでの待ち時間（秒）（この間に撃つボタンを押し直すと、ハンドガンに持ち替えて撃てる）")]
-	readonly float assaultRifleAutoReloadWaitTimeDefine = 0.5f;
+	[Tooltip("アサルトライフルのマガジンが空になってから、オートリロードを始めるまでの待ち時間（秒）（この間に撃つボタンを押し直すと、ハンドガンに持ち替えて撃てる）（フルオートで撃ち続けてマガジンが空になった時は、撃つボタンを一度離してから押し直すので、ショットガンより長くする）")]
+	readonly float assaultRifleAutoReloadWaitTimeDefine = 1.0f;
 
 	/// <summary>
 	/// リロードにかかる時間（秒）
@@ -40,6 +40,11 @@ public class AssaultRifleModel : GunModelBase
 	/// マガジンが空になってから、オートリロードを始めるまでの待ち時間（秒）
 	/// </summary>
 	protected override float AutoReloadWaitTime => assaultRifleAutoReloadWaitTimeDefine;
+
+	/// <summary>
+	/// マガジンに入る弾の数
+	/// </summary>
+	protected override int MagazineCapacity => assaultRifleMagazineCapacity;
 
 	/// <summary>
 	/// コンストラクタ

@@ -55,6 +55,24 @@ public abstract class GunModelBase
 	public float ReloadProgress => Mathf.Clamp01(reloadCountTimer / ReloadTime);
 
 	/// <summary>
+	/// マガジンに入る弾の数
+	/// </summary>
+	protected abstract int MagazineCapacity { get; }
+
+	[Tooltip("マガジンの弾が少ないとみなす、マガジンに入る弾の数に対する割合（この割合以下になると、プレイヤーUIのマガジンの弾数を赤くする）")]
+	const float LowMagazineRate = 0.3f;
+
+	/// <summary>
+	/// マガジンの弾が少ないか？（マガジンに入る弾の数の3割以下）
+	/// </summary>
+	public bool IsMagazineLow => currentMagazine <= MagazineCapacity * LowMagazineRate;
+
+	/// <summary>
+	/// 予備の弾が少ないか？（マガジン1本分以下）
+	/// </summary>
+	public bool IsAmmoLow => currentAmmo <= MagazineCapacity;
+
+	/// <summary>
 	/// セーブ
 	/// </summary>
 	public abstract void Save();
