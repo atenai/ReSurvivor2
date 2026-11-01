@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyRandomMoveAction1 : Action
 {
-    FlyingEnemy flyingEnemy;
+    FlyingEnemyPresenter flyingEnemy;
 
     //ターゲット座標位置の変数
     Vector3 targetPos;
@@ -38,7 +38,7 @@ public class FlyingEnemyRandomMoveAction1 : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemy = this.GetComponent<FlyingEnemy>();
+        flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
 
         TargetPos();
         InitRotateToDirectionTarget();

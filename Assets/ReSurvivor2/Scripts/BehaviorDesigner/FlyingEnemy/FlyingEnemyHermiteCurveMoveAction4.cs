@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyHermiteCurveMoveAction4 : Action
 {
-	FlyingEnemy flyingEnemy;
+	FlyingEnemyPresenter flyingEnemy;
 	GameObject target;
 
 	[UnityEngine.Tooltip("スタート地点")]
@@ -78,7 +78,7 @@ public class FlyingEnemyHermiteCurveMoveAction4 : Action
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		flyingEnemy = this.GetComponent<FlyingEnemy>();
+		flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
 
 		target = flyingEnemy.TargetPlayer;
 

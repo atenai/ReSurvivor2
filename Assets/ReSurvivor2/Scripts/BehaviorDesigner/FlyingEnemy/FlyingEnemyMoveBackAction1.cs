@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyMoveBackAction1 : Action
 {
-	FlyingEnemy flyingEnemy;
+	FlyingEnemyPresenter flyingEnemy;
 
 	[UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
 	[SerializeField] float stopPos = 0.1f;
@@ -23,7 +23,7 @@ public class FlyingEnemyMoveBackAction1 : Action
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		flyingEnemy = this.GetComponent<FlyingEnemy>();
+		flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
 
 		TargetPos();
 		InitMove();

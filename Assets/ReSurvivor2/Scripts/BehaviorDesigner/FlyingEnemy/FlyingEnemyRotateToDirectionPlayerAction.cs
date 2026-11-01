@@ -9,14 +9,14 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyRotateToDirectionPlayerAction : Action
 {
-	FlyingEnemy flyingEnemy;
+	FlyingEnemyPresenter flyingEnemy;
 	float t = 0.0f;
 	Quaternion lookRotation;
 
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		flyingEnemy = this.GetComponent<FlyingEnemy>();
+		flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
 
 		// TargetPlayer が破棄されている可能性があるためチェックする
 		if (flyingEnemy.TargetPlayer == null)

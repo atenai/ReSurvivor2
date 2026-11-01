@@ -59,7 +59,7 @@ public class EnemyManager : MonoBehaviour
 				return true;
 			}
 
-			FlyingEnemy flyingEnemy = enemy.GetComponentInChildren<FlyingEnemy>();
+			FlyingEnemyPresenter flyingEnemy = enemy.GetComponentInChildren<FlyingEnemyPresenter>();
 			if (flyingEnemy != null && flyingEnemy.IsAlert == true)
 			{
 				return true;

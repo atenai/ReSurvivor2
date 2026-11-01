@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyStraightLineTrackingAction1 : Action
 {
-	FlyingEnemy flyingEnemy;
+	FlyingEnemyPresenter flyingEnemy;
 
 	[UnityEngine.Tooltip("ターゲットの座標位置")]
 	Vector3 targetPos;
@@ -34,7 +34,7 @@ public class FlyingEnemyStraightLineTrackingAction1 : Action
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		flyingEnemy = this.GetComponent<FlyingEnemy>();
+		flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
 
 		//ゲームクリアーおよびゲームオーバーシーンに遷移した際に必要となる処理
 		if (flyingEnemy.TargetPlayer == null)

@@ -10,7 +10,7 @@ using UnityEngine.Events;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemySwayWaitAction1 : Action
 {
-    FlyingEnemy flyingEnemy;
+    FlyingEnemyPresenter flyingEnemy;
 
     //ターゲット座標位置の変数系
     Vector3 targetPos;
@@ -36,7 +36,7 @@ public class FlyingEnemySwayWaitAction1 : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemy = this.GetComponent<FlyingEnemy>();
+        flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
 
         TargetPos();
         InitMove();

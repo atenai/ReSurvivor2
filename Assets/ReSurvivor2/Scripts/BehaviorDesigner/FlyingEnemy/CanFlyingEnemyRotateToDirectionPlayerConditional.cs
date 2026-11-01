@@ -7,7 +7,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class CanFlyingEnemyRotateToDirectionPlayerConditional : Conditional
 {
-    FlyingEnemy flyingEnemy;
+    FlyingEnemyPresenter flyingEnemy;
 
     [UnityEngine.Tooltip("配列に設定したコライダーのどの番数目を当たり判定に使うか？を指定する数値")]
     [SerializeField] int checkCollisionIndex = default;
@@ -15,7 +15,7 @@ public class CanFlyingEnemyRotateToDirectionPlayerConditional : Conditional
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemy = this.GetComponent<FlyingEnemy>();
+        flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
     }
 
     // 更新時に呼ばれる

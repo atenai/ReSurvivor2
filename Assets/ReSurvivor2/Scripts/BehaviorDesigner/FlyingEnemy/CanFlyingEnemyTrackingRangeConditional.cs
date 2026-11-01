@@ -8,7 +8,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class CanFlyingEnemyTrackingRangeConditional : Conditional
 {
-    FlyingEnemy flyingEnemy;
+    FlyingEnemyPresenter flyingEnemy;
 
     [UnityEngine.Tooltip("エネミーの追跡範囲")]
     [SerializeField] float range = 40.0f;
@@ -16,7 +16,7 @@ public class CanFlyingEnemyTrackingRangeConditional : Conditional
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemy = this.GetComponent<FlyingEnemy>();
+        flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
     }
 
     // 更新時に呼ばれる

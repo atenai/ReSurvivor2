@@ -9,7 +9,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyDynamicTrackingAction2 : Action
 {
-	FlyingEnemy flyingEnemy;
+	FlyingEnemyPresenter flyingEnemy;
 
 	//ターゲット座標位置の変数
 	Vector3 targetPos;
@@ -39,7 +39,7 @@ public class FlyingEnemyDynamicTrackingAction2 : Action
 	// Taskが処理される直前に呼ばれる
 	public override void OnStart()
 	{
-		flyingEnemy = this.GetComponent<FlyingEnemy>();
+		flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
 
 		InitMove();
 		TargetPos();

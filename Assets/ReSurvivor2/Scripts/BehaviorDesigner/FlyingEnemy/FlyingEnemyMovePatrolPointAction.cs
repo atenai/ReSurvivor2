@@ -8,7 +8,7 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class FlyingEnemyMovePatrolPointAction : Action
 {
-    FlyingEnemy flyingEnemy;
+    FlyingEnemyPresenter flyingEnemy;
     bool isEnd = false;
 
     [UnityEngine.Tooltip("エネミーが止まってほしい座標位置の範囲")]
@@ -27,7 +27,7 @@ public class FlyingEnemyMovePatrolPointAction : Action
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemy = this.GetComponent<FlyingEnemy>();
+        flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
 
         InitMove();
         SetPatrolPoint();

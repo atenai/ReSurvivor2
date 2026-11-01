@@ -8,8 +8,9 @@ using UnityEngine.AI;
 
 /// <summary>
 /// 空中敵
+/// MVPパターンのPresenter担当
 /// </summary>
-public class FlyingEnemy : MonoBehaviour, IEnemy
+public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 {
 	[UnityEngine.Tooltip("HP")]
 	[SerializeField] HitPoint hp;

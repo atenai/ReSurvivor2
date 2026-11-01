@@ -7,12 +7,12 @@ using UnityEngine;
 [TaskCategory("FlyingEnemy")]
 public class CanFlyingEnemyChaseConditional : Conditional
 {
-    FlyingEnemy flyingEnemy;
+    FlyingEnemyPresenter flyingEnemy;
 
     // Taskが処理される直前に呼ばれる
     public override void OnStart()
     {
-        flyingEnemy = this.GetComponent<FlyingEnemy>();
+        flyingEnemy = this.GetComponent<FlyingEnemyPresenter>();
     }
 
     // 更新時に呼ばれる
