@@ -29,7 +29,7 @@ public class CanFlyingEnemyTrackingRangeConditional : Conditional
         //↑の値が特定の範囲以上だとfalse、範囲以内だとtrue
         if (range * range < sqrCurrentDistance)
         {
-            flyingEnemy.IsChase = false;
+            flyingEnemy.FlyingEnemyModel.IsChase = false;
             //範囲以上
             return TaskStatus.Failure;
         }

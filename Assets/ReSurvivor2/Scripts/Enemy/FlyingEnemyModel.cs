@@ -14,6 +14,26 @@ public class FlyingEnemyModel
     [SerializeField] HitPoint hp;
     public HitPoint HP => hp;
 
+    [Header("追跡")]
+    /// <summary>追跡時間</summary>
+    float chaseTime = 25.0f;
+    public float ChaseTime => chaseTime;
+    /// <summary>追跡カウントタイマー</summary>
+    float chaseCountTime;
+    public float ChaseCountTime
+    {
+        get { return chaseCountTime; }
+        set { chaseCountTime = value; }
+    }
+    /// <summary>追跡中か？</summary>
+    bool isChase = false;
+    public bool IsChase
+    {
+        get { return isChase; }
+        set { isChase = value; }
+    }
+    /// <summary>警戒体制か？（プレイヤーを追跡中で、倒されていない。追跡中か？のアラートイメージが出ている状態）</summary>
+    public bool IsAlert => isChase == true && hp.IsDead == false;
 
     [Header("レイキャスト")]
     /// <summary>視界な長さ</summary>
@@ -35,6 +55,33 @@ public class FlyingEnemyModel
     public void Initialize()
     {
         hp = new HitPoint(HitPoint.Max_Hp);
+    }
+
+
+    /// <summary>
+    /// 追跡開始
+    /// </summary>
+    public void ChaseOn()
+    {
+        //Debug.Log("<color=red>FlyingEnemyのChaseOn()</color>");
+        isChase = true;
+        chaseCountTime = chaseTime;
+    }
+
+    /// <summary>
+    /// プレイヤーを追跡中の処理
+    /// </summary>
+    public void ChasePlayer()
+    {
+        if (isChase == true)
+        {
+            chaseCountTime -= Time.deltaTime;
+            const float minTimer = 0.0f;
+            if (chaseCountTime <= minTimer)
+            {
+                isChase = false;
+            }
+        }
     }
 
     /// <summary>

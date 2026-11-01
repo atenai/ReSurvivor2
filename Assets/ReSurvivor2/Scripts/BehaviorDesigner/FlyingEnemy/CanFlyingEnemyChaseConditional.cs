@@ -18,7 +18,7 @@ public class CanFlyingEnemyChaseConditional : Conditional
     // 更新時に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (flyingEnemy.IsChase == true)
+        if (flyingEnemy.FlyingEnemyModel.IsChase == true)
         {
             //プレイヤーを発見した
             return TaskStatus.Success;

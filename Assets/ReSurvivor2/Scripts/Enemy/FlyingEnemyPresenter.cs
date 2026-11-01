@@ -25,6 +25,13 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	[SerializeField] FlyingEnemyUIView flyingEnemyUIView;
 	public FlyingEnemyUIView FlyingEnemyUIView => flyingEnemyUIView;
 
+	/// <summary>エネミーのゲームオブジェクトを取得する</summary>
+	public GameObject GetEnemyGameObject()
+	{
+		return this.gameObject;
+	}
+
+	/// <summary>HPを取得する</summary>
 	public HitPoint GetHitPoint()
 	{
 		return flyingEnemyModel.HP;
@@ -63,30 +70,11 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	Collider hitCollider = null;
 	public Collider HitCollider => hitCollider;
 
+	[Header("レイキャスト")]
 	[Tooltip("視界用の頭ゲームオブジェクト")]
 	[SerializeField] GameObject head;
 
-
 	[Header("追跡")]
-	/// <summary>追跡時間</summary>
-	float chaseTime = 25.0f;
-	public float ChaseTime => chaseTime;
-	/// <summary>追跡カウントタイマー</summary>
-	float chaseCountTime;
-	public float ChaseCountTime
-	{
-		get { return chaseCountTime; }
-		set { chaseCountTime = value; }
-	}
-	/// <summary>追跡中か？</summary>
-	bool isChase = false;
-	public bool IsChase
-	{
-		get { return isChase; }
-		set { isChase = value; }
-	}
-	/// <summary>警戒体制か？（プレイヤーを追跡中で、倒されていない。追跡中か？のアラートイメージが出ている状態）</summary>
-	public bool IsAlert => isChase == true && flyingEnemyModel.HP.IsDead == false;
 	[Tooltip("エネミー追跡範囲の中心点")]
 	[SerializeField] GameObject centerPos;
 	public GameObject CenterPos => centerPos;
@@ -205,7 +193,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 		sliderHp.value = 1;
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
-		EnemyManager.SingletonInstance.ChaseEvent.AddListener(ChaseOn);
+		EnemyManager.SingletonInstance.ChaseEvent.AddListener(flyingEnemyModel.ChaseOn);
 
 		if (targetPlayer == null)
 		{
@@ -252,7 +240,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 			EnemyManager.SingletonInstance.ChaseEvent.Invoke();
 		}
 		Alert();
-		ChasePlayer();
+		flyingEnemyModel.ChasePlayer();
 
 #if UNITY_EDITOR
 		//デバッグ関連の処理
@@ -268,18 +256,6 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 		canvas.transform.rotation = Camera.main.transform.rotation;
 	}
 
-
-
-	/// <summary>
-	/// 追跡開始
-	/// </summary>
-	public void ChaseOn()
-	{
-		//Debug.Log("<color=red>FlyingEnemyのChaseOn()</color>");
-		isChase = true;
-		chaseCountTime = chaseTime;
-	}
-
 	/// <summary>
 	/// アラートイメージの表示・非表示
 	/// </summary>
@@ -287,27 +263,11 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	{
 		if (flyingEnemyModel.HP.IsDead == false)
 		{
-			alert.gameObject.SetActive(isChase);
+			alert.gameObject.SetActive(flyingEnemyModel.IsChase);
 		}
 		else
 		{
 			alert.gameObject.SetActive(false);
-		}
-	}
-
-	/// <summary>
-	/// プレイヤーを追跡中の処理
-	/// </summary>
-	void ChasePlayer()
-	{
-		if (isChase == true)
-		{
-			chaseCountTime -= Time.deltaTime;
-			const float minTimer = 0.0f;
-			if (chaseCountTime <= minTimer)
-			{
-				isChase = false;
-			}
 		}
 	}
 
@@ -318,8 +278,8 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	{
 		string[] debugTexts = new string[8];
 
-		debugTexts[7] = "chaseCountTime : " + chaseCountTime.ToString();
-		debugTexts[6] = "isChase : " + isChase.ToString();
+		debugTexts[7] = "chaseCountTime : " + flyingEnemyModel.ChaseCountTime.ToString();
+		debugTexts[6] = "isChase : " + flyingEnemyModel.IsChase.ToString();
 
 		debugTexts[5] = "patrolPointNumber : " + patrolPointNumber.ToString();
 
@@ -403,7 +363,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	{
 		// 	Debug.Log("<color=red>当たった！ : " + collision.gameObject.name + "</color>");
 
-		if (isChase == true)
+		if (flyingEnemyModel.IsChase == true)
 		{
 			flyingEnemyModel.HP.Damage(HitPoint.Max_Hp);
 		}
@@ -464,7 +424,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	/// </summary>
 	public void Dead()
 	{
-		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(ChaseOn);
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(flyingEnemyModel.ChaseOn);
 		//敵マーカー削除
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
 		Explosion();
@@ -476,17 +436,8 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	/// </summary>
 	void OnDisable()
 	{
-		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(ChaseOn);
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(flyingEnemyModel.ChaseOn);
 		//敵マーカー削除
 		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
-	}
-
-	/// <summary>
-	/// エネミーのゲームオブジェクトを取得する
-	/// </summary>
-	/// <returns></returns>
-	public GameObject GetEnemyGameObject()
-	{
-		return this.gameObject;
 	}
 }

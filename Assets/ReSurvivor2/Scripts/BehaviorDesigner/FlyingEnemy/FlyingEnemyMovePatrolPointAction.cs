@@ -72,7 +72,7 @@ public class FlyingEnemyMovePatrolPointAction : Action
     // Tick毎に呼ばれる
     public override TaskStatus OnUpdate()
     {
-        if (flyingEnemy.IsChase == true)
+        if (flyingEnemy.FlyingEnemyModel.IsChase == true)
         {
             //プレイヤーを発見した
             return TaskStatus.Success;
