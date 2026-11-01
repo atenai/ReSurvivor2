@@ -33,14 +33,6 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	[SerializeField] Rigidbody enemyRigidbody;
 	public Rigidbody Rigidbody => enemyRigidbody;
 
-	[Tooltip("カバーポイント")]
-	CoverPoint[] coverPoints;
-	public CoverPoint[] GetCoverPoints => coverPoints;
-	public void SetCoverPoints(CoverPoint[] coverPoints)
-	{
-		this.coverPoints = coverPoints;
-	}
-
 	[Tooltip("プレイヤー")]
 	GameObject targetPlayer;
 	public GameObject TargetPlayer => targetPlayer;
@@ -62,6 +54,7 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	Collider hitCollider = null;
 	public Collider HitCollider => hitCollider;
 
+	[Header("追跡")]
 	[Tooltip("エネミー追跡範囲の中心点")]
 	[SerializeField] GameObject centerPos;
 	public GameObject CenterPos => centerPos;
@@ -78,6 +71,12 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 		set { patrolPointNumber = value; }
 	}
 
+	[Tooltip("シネマシーンインパルス")]
+	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
+
+	[Tooltip("デバッグ")]
+	[SerializeField] DebugEnemy debugEnemy;
+
 	[Header("地面")]
 	[Tooltip("地面の中心点")]
 	[SerializeField] Transform groundCheckCenter;
@@ -88,6 +87,14 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	[Tooltip("地面と接地しているか？")]
 	bool isGrounded = false;
 	public bool IsGrounded => isGrounded;
+
+	[Tooltip("カバーポイント")]
+	CoverPoint[] coverPoints;
+	public CoverPoint[] GetCoverPoints => coverPoints;
+	public void SetCoverPoints(CoverPoint[] coverPoints)
+	{
+		this.coverPoints = coverPoints;
+	}
 
 	//↓アセットストアのプログラム↓//
 	[Tooltip("マズルフラッシュと薬莢")]
@@ -111,13 +118,6 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 	const float MinMuzzleDistance = 0.001f;
 	[Tooltip("プレイヤーとの水平距離がこれより近ければ、正面に撃つ")]
 	const float MinAimDistance = 0.01f;
-
-	[Tooltip("シネマシーンインパルス")]
-	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
-
-	[Tooltip("デバッグ")]
-	[SerializeField] DebugEnemy debugEnemy;
-	public DebugEnemy DebugEnemy => debugEnemy;
 
 	/// <summary>エネミーのゲームオブジェクトを取得する</summary>
 	public GameObject GetEnemyGameObject()
@@ -236,8 +236,6 @@ public class GroundEnemyPresenter : MonoBehaviour, IEnemy
 		}
 		hitCollider = null;
 	}
-
-
 
 	/// <summary>
 	/// 地面に接触しているか？をチェックする関数

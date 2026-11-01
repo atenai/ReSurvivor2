@@ -800,6 +800,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a528afa59b351f4fa77941e08ee2c3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 9057571287036808216}
+  sliderHp: {fileID: 7647867411961735123}
+  alert: {fileID: 7126498337926300050}
 --- !u!1 &5689710315107651538
 GameObject:
   m_ObjectHideFlags: 0
@@ -1355,7 +1358,6 @@ MonoBehaviour:
   - {fileID: 803509467399215777}
   - {fileID: 3756318823859515203}
   - {fileID: 6950496178653579162}
-  head: {fileID: 6387315135914368463}
   centerPos: {fileID: 5792520165616775691}
   alert: {fileID: 7126498337926300050}
   patrolPoints:
@@ -1876,11 +1878,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a67d939dd84baa48a4f6662e0ababe7, type: 3}
---- !u!1 &6387315135914368463 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 94406995309345984, guid: 5a67d939dd84baa48a4f6662e0ababe7, type: 3}
-  m_PrefabInstance: {fileID: 6479320795123245327}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8359324356843669899 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3308284088262027396, guid: 5a67d939dd84baa48a4f6662e0ababe7, type: 3}

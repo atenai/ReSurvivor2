@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
-using UnityEngine.UI;
 using UnityEngine.AI;
 
 /// <summary>
@@ -24,30 +23,6 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	[Tooltip("空中敵UIビュー")]
 	[SerializeField] FlyingEnemyUIView flyingEnemyUIView;
 	public FlyingEnemyUIView FlyingEnemyUIView => flyingEnemyUIView;
-
-	/// <summary>エネミーのゲームオブジェクトを取得する</summary>
-	public GameObject GetEnemyGameObject()
-	{
-		return this.gameObject;
-	}
-
-	/// <summary>HPを取得する</summary>
-	public HitPoint GetHitPoint()
-	{
-		return flyingEnemyModel.HP;
-	}
-
-	[UnityEngine.Tooltip("HPバー")]
-	[SerializeField] Slider sliderHp;
-	public Slider SliderHp
-	{
-		get { return sliderHp; }
-		set { sliderHp = value; }
-	}
-
-	[UnityEngine.Tooltip("キャンバス")]
-	[SerializeField] Canvas canvas;
-	public Canvas Canvas => canvas;
 
 	[Tooltip("ナビメッシュ")]
 	[SerializeField] NavMeshAgent navMeshAgent;
@@ -70,16 +45,10 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	Collider hitCollider = null;
 	public Collider HitCollider => hitCollider;
 
-	[Header("レイキャスト")]
-	[Tooltip("視界用の頭ゲームオブジェクト")]
-	[SerializeField] GameObject head;
-
 	[Header("追跡")]
 	[Tooltip("エネミー追跡範囲の中心点")]
 	[SerializeField] GameObject centerPos;
 	public GameObject CenterPos => centerPos;
-	[Tooltip("追跡中か？のアラートイメージ")]
-	[SerializeField] GameObject alert;
 
 	[Header("パトロール")]
 	[Tooltip("パトロールポイントの位置")]
@@ -92,6 +61,12 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 		get { return patrolPointNumber; }
 		set { patrolPointNumber = value; }
 	}
+
+	[Tooltip("シネマシーンインパルス")]
+	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
+
+	[Tooltip("デバッグ")]
+	[SerializeField] DebugEnemy debugEnemy;
 
 	[Header("爆発")]
 	[Tooltip("爆発エフェクトのプレファブ")]
@@ -107,16 +82,6 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	[Tooltip("爆発のあたり判定オブジェクトを生成")]
 	[SerializeField] GameObject mineExplosionColliderPrefab = null;
 	float mineExplosionColliderDestroyTime = 1.0f;
-
-	[Tooltip("ダメージ")]
-	[SerializeField] int damage = 50;
-
-	[Tooltip("シネマシーンインパルス")]
-	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
-
-	[Tooltip("デバッグ")]
-	[SerializeField] DebugEnemy debugEnemy;
-	public DebugEnemy DebugEnemy => debugEnemy;
 
 	[Header("ビヘイビアデザイナー用変数")]
 	bool isRotateToDirectionPlayer = false;
@@ -138,6 +103,18 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	{
 		get { return isMoveBack; }
 		set { isMoveBack = value; }
+	}
+
+	/// <summary>エネミーのゲームオブジェクトを取得する</summary>
+	public GameObject GetEnemyGameObject()
+	{
+		return this.gameObject;
+	}
+
+	/// <summary>HPを取得する</summary>
+	public HitPoint GetHitPoint()
+	{
+		return flyingEnemyModel.HP;
 	}
 
 	void Awake()
@@ -190,7 +167,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	{
 		flyingEnemyModel.Initialize();
 		flyingEnemyModel.HP.Initialize(DamageEffect, Dead);
-		sliderHp.value = 1;
+		flyingEnemyUIView.InitHP(flyingEnemyModel.HP.CurrentHp);
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
 		EnemyManager.SingletonInstance.ChaseEvent.AddListener(flyingEnemyModel.ChaseOn);
@@ -200,14 +177,29 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 			targetPlayer = PlayerManagerPresenter.SingletonInstance.gameObject;
 		}
 
-		if (enemyRigidbody == null)
-		{
-			enemyRigidbody = this.GetComponent<Rigidbody>();
-		}
-
 		ResetSensorCollider();
 
 		//各種パラメーターを初期化
+	}
+
+	/// <summary>
+	/// ダメージエフェクト
+	/// </summary>
+	public void DamageEffect()
+	{
+		flyingEnemyUIView.SliderHp.value = (float)flyingEnemyModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
+	}
+
+	/// <summary>
+	/// 死んだ際の処理
+	/// </summary>
+	public void Dead()
+	{
+		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(flyingEnemyModel.ChaseOn);
+		//敵マーカー削除
+		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
+		Explosion();
+		Destroy(this.transform.parent.gameObject);
 	}
 
 	/// <summary>
@@ -231,10 +223,10 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	/// </summary>
 	void Update()
 	{
-		RotCanvas();
+		flyingEnemyUIView.RotCanvas();
 
 		//-head.transform.forwardをマイナスにしているのはなぜかドローンのモデル目の前方が反対になっていた為
-		if (flyingEnemyModel.Eyesight(head.transform.position, -head.transform.forward, head.transform.right) == true)
+		if (flyingEnemyModel.Eyesight(flyingEnemyCharacterView.Head.transform.position, -flyingEnemyCharacterView.Head.transform.forward, flyingEnemyCharacterView.Head.transform.right) == true)
 		{
 			//Debug.Log("<color=red>プレイヤーを発見!</color>");
 			EnemyManager.SingletonInstance.ChaseEvent.Invoke();
@@ -249,25 +241,17 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	}
 
 	/// <summary>
-	/// 常にキャンバスをメインカメラの方を向かせる
-	/// </summary>
-	void RotCanvas()
-	{
-		canvas.transform.rotation = Camera.main.transform.rotation;
-	}
-
-	/// <summary>
 	/// アラートイメージの表示・非表示
 	/// </summary>
 	void Alert()
 	{
 		if (flyingEnemyModel.HP.IsDead == false)
 		{
-			alert.gameObject.SetActive(flyingEnemyModel.IsChase);
+			flyingEnemyUIView.Alert.SetActive(flyingEnemyModel.IsChase);
 		}
 		else
 		{
-			alert.gameObject.SetActive(false);
+			flyingEnemyUIView.Alert.SetActive(false);
 		}
 	}
 
@@ -296,7 +280,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 		debugTexts[1] = "hits[1]Under : " + hits[1].ToString();
 		debugTexts[0] = "hits[0]Front : " + hits[0].ToString();
 
-		debugEnemy.DebugSystem(debugEnemy.IsDebugMode, Canvas, debugTexts.Length);
+		debugEnemy.DebugSystem(debugEnemy.IsDebugMode, flyingEnemyUIView.Canvas, debugTexts.Length);
 		debugEnemy.SetDebugText(debugTexts);
 	}
 
@@ -409,26 +393,6 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 			var mineExplosionCollider = Instantiate(mineExplosionColliderPrefab, this.gameObject.transform.position, Quaternion.identity);
 			Destroy(mineExplosionCollider, mineExplosionColliderDestroyTime);
 		}
-	}
-
-	/// <summary>
-	/// ダメージエフェクト
-	/// </summary>
-	public void DamageEffect()
-	{
-		SliderHp.value = (float)flyingEnemyModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
-	}
-
-	/// <summary>
-	/// 死んだ際の処理
-	/// </summary>
-	public void Dead()
-	{
-		EnemyManager.SingletonInstance.ChaseEvent.RemoveListener(flyingEnemyModel.ChaseOn);
-		//敵マーカー削除
-		EnemyIndicatorManager.SingletonInstance.DeleteIndicator(this);
-		Explosion();
-		Destroy(this.transform.parent.gameObject);
 	}
 
 	/// <summary>

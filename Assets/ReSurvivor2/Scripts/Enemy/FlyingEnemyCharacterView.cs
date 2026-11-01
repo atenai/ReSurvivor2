@@ -8,7 +8,11 @@ using UnityEngine;
 /// </summary>
 public class FlyingEnemyCharacterView : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [Header("レイキャスト")]
+    [Tooltip("視界用の頭ゲームオブジェクト")]
+    [SerializeField] GameObject head;
+    public GameObject Head => head;
+
     void Start()
     {
 
