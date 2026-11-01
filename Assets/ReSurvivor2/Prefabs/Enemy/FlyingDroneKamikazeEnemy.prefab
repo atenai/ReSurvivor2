@@ -696,6 +696,7 @@ GameObject:
   - component: {fileID: 9057571287036808216}
   - component: {fileID: 400530944353548178}
   - component: {fileID: 8741076518653719157}
+  - component: {fileID: 3494662564651661452}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -787,6 +788,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &3494662564651661452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5663895734935120359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a528afa59b351f4fa77941e08ee2c3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5689710315107651538
 GameObject:
   m_ObjectHideFlags: 0
@@ -1331,6 +1344,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d7754e0f3451b14ba0fa1e0f5e36f0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flyingEnemyCharacterView: {fileID: 8359324356843669899}
+  flyingEnemyUIView: {fileID: 3494662564651661452}
   sliderHp: {fileID: 7647867411961735123}
   canvas: {fileID: 9057571287036808216}
   navMeshAgent: {fileID: 5514666497858788686}
@@ -1866,6 +1881,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 94406995309345984, guid: 5a67d939dd84baa48a4f6662e0ababe7, type: 3}
   m_PrefabInstance: {fileID: 6479320795123245327}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8359324356843669899 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3308284088262027396, guid: 5a67d939dd84baa48a4f6662e0ababe7, type: 3}
+  m_PrefabInstance: {fileID: 6479320795123245327}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4803cd56c47524742b0600273255631b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &9060188366097244304 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2618679080337605023, guid: 5a67d939dd84baa48a4f6662e0ababe7, type: 3}

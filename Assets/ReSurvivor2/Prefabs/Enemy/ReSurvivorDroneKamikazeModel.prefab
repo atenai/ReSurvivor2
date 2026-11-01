@@ -1166,6 +1166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2618679080337605023}
   - component: {fileID: 8487174994391002660}
+  - component: {fileID: 3308284088262027396}
   m_Layer: 0
   m_Name: ReSurvivorDroneKamikazeModel
   m_TagString: Untagged
@@ -1254,6 +1255,18 @@ LODGroup:
     renderers:
     - renderer: {fileID: 313306003076466587}
   m_Enabled: 1
+--- !u!114 &3308284088262027396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4679712783752392648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4803cd56c47524742b0600273255631b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4742082716213285983
 GameObject:
   m_ObjectHideFlags: 0

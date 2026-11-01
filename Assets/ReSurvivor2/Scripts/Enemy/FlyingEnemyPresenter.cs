@@ -12,11 +12,22 @@ using UnityEngine.AI;
 /// </summary>
 public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 {
-	[UnityEngine.Tooltip("HP")]
-	[SerializeField] HitPoint hp;
+	[Header("空中敵MVPパターン")]
+	/// <summary>空中敵モデル</summary>
+	FlyingEnemyModel flyingEnemyModel = new FlyingEnemyModel();
+	public FlyingEnemyModel FlyingEnemyModel => flyingEnemyModel;
+
+	[Tooltip("空中敵キャラクタービュー")]
+	[SerializeField] FlyingEnemyCharacterView flyingEnemyCharacterView;
+	public FlyingEnemyCharacterView FlyingEnemyCharacterView => flyingEnemyCharacterView;
+
+	[Tooltip("空中敵UIビュー")]
+	[SerializeField] FlyingEnemyUIView flyingEnemyUIView;
+	public FlyingEnemyUIView FlyingEnemyUIView => flyingEnemyUIView;
+
 	public HitPoint GetHitPoint()
 	{
-		return hp;
+		return flyingEnemyModel.HP;
 	}
 
 	[UnityEngine.Tooltip("HPバー")]
@@ -52,21 +63,9 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	Collider hitCollider = null;
 	public Collider HitCollider => hitCollider;
 
-	[Header("レイキャスト")]
 	[Tooltip("視界用の頭ゲームオブジェクト")]
 	[SerializeField] GameObject head;
-	/// <summary>視界な長さ</summary>
-	float rayDistance = 20.0f;
-	/// <summary>スフィアレイキャストの半径</summary>
-	float sphereRayCastRadius = 2.0f;
-	/// <summary>左右の最大角</summary>
-	float halfAngle = 60f;
-	/// <summary>度/秒（例：90なら1秒で90度回る）</summary>
-	float sweepSpeed = 180f;
-	/// <summary>現在の角度</summary>
-	float currentAngle = 0f;
-	/// <summary>角度の回転方向（+1で右へ、-1で左へ）</summary>
-	float angleDir = 1f;
+
 
 	[Header("追跡")]
 	/// <summary>追跡時間</summary>
@@ -87,7 +86,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 		set { isChase = value; }
 	}
 	/// <summary>警戒体制か？（プレイヤーを追跡中で、倒されていない。追跡中か？のアラートイメージが出ている状態）</summary>
-	public bool IsAlert => isChase == true && hp.IsDead == false;
+	public bool IsAlert => isChase == true && flyingEnemyModel.HP.IsDead == false;
 	[Tooltip("エネミー追跡範囲の中心点")]
 	[SerializeField] GameObject centerPos;
 	public GameObject CenterPos => centerPos;
@@ -201,8 +200,8 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	/// </summary>
 	void Initialize()
 	{
-		hp = new HitPoint(HitPoint.Max_Hp);
-		hp.Initialize(DamageEffect, Dead);
+		flyingEnemyModel.Initialize();
+		flyingEnemyModel.HP.Initialize(DamageEffect, Dead);
 		sliderHp.value = 1;
 		//敵マーカー作成
 		EnemyIndicatorManager.SingletonInstance.InstanceIndicator(this);
@@ -246,7 +245,8 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	{
 		RotCanvas();
 
-		if (Eyesight() == true)
+		//-head.transform.forwardをマイナスにしているのはなぜかドローンのモデル目の前方が反対になっていた為
+		if (flyingEnemyModel.Eyesight(head.transform.position, -head.transform.forward, head.transform.right) == true)
 		{
 			//Debug.Log("<color=red>プレイヤーを発見!</color>");
 			EnemyManager.SingletonInstance.ChaseEvent.Invoke();
@@ -268,59 +268,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 		canvas.transform.rotation = Camera.main.transform.rotation;
 	}
 
-	/// <summary>
-	/// レイキャストによる視界
-	/// </summary>
-	bool Eyesight()
-	{
-		if (hp.IsDead == true)
-		{
-			return false;
-		}
-		// 角度を進める
-		currentAngle = currentAngle + angleDir * sweepSpeed * Time.deltaTime;
 
-		// 端で反転（往復）
-		if (halfAngle < currentAngle)
-		{
-			currentAngle = halfAngle;
-			angleDir = -1f;
-		}
-		else if (currentAngle < -halfAngle)
-		{
-			currentAngle = -halfAngle;
-			angleDir = 1f;
-		}
-
-		// レイの原点と基準方向はheadの向きに合わせる
-		Vector3 pos = head.transform.position;
-		//-head.transform.forwardをマイナスにしているのはなぜかドローンのモデル目の前方が反対になっていた為
-		Vector3 forward = -head.transform.forward;
-		Vector3 right = head.transform.right;
-
-		if (forward.sqrMagnitude < 0.0001f)
-		{
-			forward = Vector3.forward;
-		}
-		forward.Normalize();
-
-		// ローカルの右方向（head.transform.right）を回転軸にして上下にスイープ
-		Vector3 dir = Quaternion.AngleAxis(currentAngle, right) * forward;
-
-		Debug.DrawRay(pos, dir * rayDistance, Color.yellow);
-
-		RaycastHit hit;
-		if (Physics.SphereCast(pos, sphereRayCastRadius, dir, out hit, rayDistance))
-		{
-			// ヒット時の処理（例：プレイヤー検知など）
-			if (hit.collider.CompareTag("Player"))
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
 
 	/// <summary>
 	/// 追跡開始
@@ -337,7 +285,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	/// </summary>
 	void Alert()
 	{
-		if (hp.IsDead == false)
+		if (flyingEnemyModel.HP.IsDead == false)
 		{
 			alert.gameObject.SetActive(isChase);
 		}
@@ -457,7 +405,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 
 		if (isChase == true)
 		{
-			hp.Damage(HitPoint.Max_Hp);
+			flyingEnemyModel.HP.Damage(HitPoint.Max_Hp);
 		}
 
 		// Note : 爆発コライダーの方で行っている
@@ -508,7 +456,7 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 	/// </summary>
 	public void DamageEffect()
 	{
-		SliderHp.value = (float)hp.CurrentHp / (float)HitPoint.Max_Hp;
+		SliderHp.value = (float)flyingEnemyModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
 	}
 
 	/// <summary>
