@@ -136,13 +136,13 @@ public class PlayerCharacterView : MonoBehaviour
 	/// <summary>
 	/// 移動のアニメーションを動かす
 	/// </summary>
-	/// <param name="inputHorizontal">移動の左右の入力</param>
-	/// <param name="inputVertical">移動の前後の入力</param>
+	/// <param name="moveX">移動の左右の値（移動の向き × 移動速度の割合。長さ1で走り、移動スティックを少しだけ倒した時は歩く速さの割合）</param>
+	/// <param name="moveY">移動の前後の値（移動の向き × 移動速度の割合）</param>
 	/// <param name="isDash">ダッシュしているか？</param>
 	/// <param name="isPlacingMine">地雷を置いている間か？（その場で止まっているアニメーションにする）</param>
-	public void UpdateMoveAnimation(float inputHorizontal, float inputVertical, bool isDash, bool isPlacingMine)
+	public void UpdateMoveAnimation(float moveX, float moveY, bool isDash, bool isPlacingMine)
 	{
-		moveAnimation.UpdateAnimation(animator, inputHorizontal, inputVertical, isDash, isPlacingMine, gunModelFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun);
+		moveAnimation.UpdateAnimation(animator, moveX, moveY, isDash, isPlacingMine, gunModelFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun);
 	}
 
 	/// <summary>

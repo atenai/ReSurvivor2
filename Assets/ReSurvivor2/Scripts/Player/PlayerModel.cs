@@ -58,6 +58,51 @@ public class PlayerModel
 	float weaponMoveSpeed = 3.0f;
 	public float WeaponMoveSpeed => weaponMoveSpeed;
 
+	//※コントローラーの移動スティックを少しだけ倒した時は、歩く（キーボードは、いつも倒しきった時と同じ入力になるので、走る）
+	[Tooltip("移動スティックを少しだけ倒した時（歩き）の、通常移動速度（m/s）（構えていない時の歩くアニメーションの速さ。アニメーターの歩きの位置は、この速さ ÷ 通常移動速度にしてある）")]
+	const float NormalWalkMoveSpeed = 1.3f;
+	[Tooltip("移動スティックを少しだけ倒した時（歩き）の、エイム中移動速度（m/s）（構えている時の歩くアニメーションの速さ。アニメーターの歩きの位置は、この速さ ÷ エイム中移動速度にしてある）")]
+	const float WeaponWalkMoveSpeed = 1.0f;
+	[Tooltip("移動スティックをこの倒し具合（0〜1）までは、歩く")]
+	const float WalkInputMax = 0.5f;
+	[Tooltip("移動スティックをこの倒し具合（0〜1）から先は、走る（歩きとの間は、倒し具合に合わせてなめらかに速くする）")]
+	const float RunInputMin = 0.9f;
+	[Tooltip("移動の入力がない時の、入力の大きさ")]
+	const float NoMoveInput = 0.0f;
+	[Tooltip("止まっている時の、移動速度の割合")]
+	const float StopMoveRate = 0.0f;
+	[Tooltip("走っている時（移動スティックを倒しきった時・キーボードの時）の、移動速度の割合")]
+	const float RunMoveRate = 1.0f;
+
+	/// <summary>
+	/// 移動の入力の向き（長さ1。入力がない時は長さ0）
+	/// </summary>
+	public Vector2 MoveInputDirection => new Vector2(inputHorizontal, inputVertical).normalized;
+
+	/// <summary>
+	/// 移動速度の割合（0で止まる、1で走る。移動スティックを少しだけ倒した時は、歩く速さの割合）
+	/// ※ダッシュしている時は、いつも走る
+	/// </summary>
+	public float MoveRate
+	{
+		get
+		{
+			float inputMagnitude = Mathf.Clamp01(new Vector2(inputHorizontal, inputVertical).magnitude);
+			if (inputMagnitude <= NoMoveInput)
+			{
+				return StopMoveRate;
+			}
+
+			if (isDash == true)
+			{
+				return RunMoveRate;
+			}
+
+			float walkMoveRate = isAim == true ? WeaponWalkMoveSpeed / weaponMoveSpeed : NormalWalkMoveSpeed / normalMoveSpeed;
+			return Mathf.Lerp(walkMoveRate, RunMoveRate, Mathf.InverseLerp(WalkInputMax, RunInputMin, inputMagnitude));
+		}
+	}
+
 	[Tooltip("HP")]
 	[SerializeField] HitPoint hp;
 	public HitPoint HP => hp;
