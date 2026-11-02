@@ -86,7 +86,7 @@ public class PlayerManagerPresenter : MonoBehaviour
 	void Start()
 	{
 		//プレイヤーのアニメーションは、銃の状態を見て動かすので、銃を渡しておく
-		playerCharacterView.Initialize(PlayerCameraManager.SingletonInstance.GunModelFacade);
+		playerCharacterView.Initialize(PlayerCameraManager.SingletonInstance.GunModelFacade, PlayerCameraManager.SingletonInstance.transform);
 		InitHP();
 		InitStamina();
 		InitMine();
@@ -450,7 +450,7 @@ public class PlayerManagerPresenter : MonoBehaviour
 	void LateUpdate()
 	{
 		//ボーンを曲げる際は必ずLateUpdateに書く必要がある！（これいつかメモする！）
-		playerCharacterView.UpdateAimBones(PlayerCameraManager.SingletonInstance.transform, playerModel.IsAim);
+		playerCharacterView.UpdateAimBones(playerModel.IsAim);
 	}
 
 	void OnCollisionEnter(Collision collision)
