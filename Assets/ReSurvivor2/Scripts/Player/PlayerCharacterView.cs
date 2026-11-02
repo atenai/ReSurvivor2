@@ -62,6 +62,8 @@ public class PlayerCharacterView : MonoBehaviour
 	readonly SideArmAnimation sideArmAnimation = new SideArmAnimation();
 	[Tooltip("銃（銃の状態を見て、リロードのアニメーション・リロード中のマガジン・手のIKを動かす）。初期化される前はnull")]
 	GunModelFacade gunModelFacade;
+	[Tooltip("狙う向き（カメラ。弾はこの位置から正面へ飛ぶ）（構えた時に、背骨をこの上下の向きに曲げ、ハンドガンを片手で狙う時は、右腕と銃口をこの正面の先へ向ける）")]
+	Transform aimTransform;
 	[Tooltip("前のフレームで、構えに合わせて脊椎ボーンを曲げた回転（キャラクターから見た向き）")]
 	Quaternion spineAimLocalRotation = Quaternion.identity;
 	[Tooltip("前のフレームで、構えに合わせて曲げた脊椎ボーンの位置（キャラクターから見た位置）")]
@@ -71,9 +73,11 @@ public class PlayerCharacterView : MonoBehaviour
 	/// 初期化（Presenterが最初に呼ぶ）
 	/// </summary>
 	/// <param name="gunModelFacade">銃</param>
-	public void Initialize(GunModelFacade gunModelFacade)
+	/// <param name="aimTransform">狙う向き（カメラ）</param>
+	public void Initialize(GunModelFacade gunModelFacade, Transform aimTransform)
 	{
 		this.gunModelFacade = gunModelFacade;
+		this.aimTransform = aimTransform;
 		ResetMoveAnimation();
 		gunAnimationFacade.Initialize();
 		handIK.Initialize(animator);
@@ -124,7 +128,9 @@ public class PlayerCharacterView : MonoBehaviour
 		GunAnimation sideArmMainGunAnimation = gunModelFacade.IsSideArmActive == true ? gunAnimationFacade.FindGunAnimation(gunModelFacade.SideArmMainGunTYPE) : null;
 		sideArmAnimation.UpdateWeights(gunModelFacade.SideArmPhase, gunModelFacade.SideArmPhaseProgress, spineAimRotation, spinePosition, sideArmMainGunAnimation);
 		shotGunReloadAnimation.UpdateWeights(IsShotGunReloading, reloadAnimation.ReloadAnimationTime, spineAimRotation, spinePosition);
-		handIK.UpdateIK(gunAnimationFacade.FindGunAnimation(gunTYPE), gunViewFacade.FindGunModelTransform(gunTYPE), handGunView, mineAnimation, sideArmAnimation, shotGunReloadAnimation, gunModelFacade.GunModelBase.IsReloadTimeActive, reloadAnimation.ReloadAnimationTime);
+		//※ハンドガンを片手で狙う時は、右腕と銃口を、弾の飛ぶ線（カメラの正面）の先へ向ける
+		Ray aimRay = new Ray(aimTransform.position, aimTransform.forward);
+		handIK.UpdateIK(gunAnimationFacade.FindGunAnimation(gunTYPE), gunViewFacade.FindGunModelTransform(gunTYPE), handGunView, mineAnimation, sideArmAnimation, shotGunReloadAnimation, gunModelFacade.GunModelBase.IsReloadTimeActive, reloadAnimation.ReloadAnimationTime, spineAimRotation, spinePosition, aimRay);
 	}
 
 	/// <summary>
@@ -185,13 +191,12 @@ public class PlayerCharacterView : MonoBehaviour
 	/// 構えに合わせて、首・背骨・肩のボーンを曲げる
 	/// ※アニメーションの後に曲げるので、必ずLateUpdateで呼ぶ
 	/// </summary>
-	/// <param name="cameraTransform">カメラ（背骨をカメラの向きに曲げる）</param>
 	/// <param name="isAim">構えているか？</param>
-	public void UpdateAimBones(Transform cameraTransform, bool isAim)
+	public void UpdateAimBones(bool isAim)
 	{
 		Quaternion spineRotationBeforeAim = spine_03.rotation;
 		RotateBoneNeck01();
-		RotateBoneSpine03(cameraTransform);
+		RotateBoneSpine03(aimTransform);
 		RotateBoneUpperArmR(isAim);
 		RotateBoneUpperArmL(isAim);
 
@@ -218,14 +223,27 @@ public class PlayerCharacterView : MonoBehaviour
 	/// キャラクターの脊椎ボーンを曲げる
 	/// ※構えている割合に合わせて、アニメーションどおりの向きからカメラの向きへ混ぜる
 	///   （ダッシュなどで前に倒れている上半身が、構えた瞬間に一気に起き上がって、両手と銃が飛ばないようにする。構えをやめた時も同じように戻す）
+	/// ※上半身をひねっている時（ハンドガンを片手で狙う時）は、ひねる前の向きで曲げる量を求めてから、ひねった上半身に重ねる
+	///   （ひねった向きのまま角度を書き換えると、カメラの上下の向きに曲げる軸もひねった分だけ回ってしまい、
+	///     正面へ伸ばした右腕と軸がほぼ平行になるので、カメラを上下に向けても右腕と銃が上下に向かず、上半身が横に傾くだけになるため）
+	/// ※ハンドガンを片手で狙う時は、カメラの上下の向きの一部だけ上半身を曲げて、残りは伸ばした右腕で狙う（右腕はIKで狙う先へ向ける）
+	///   （ひねった上半身を全部曲げると、右肩が大きく上下して、上半身と頭が横に大きく傾くため）
 	/// </summary>
 	void RotateBoneSpine03(Transform cameraTransform)
 	{
 		const float aimAnimationRotX = 12.5f;
 		const float aimAnimationRotY = 12.5f;
+		const float fullPitchRate = 1.0f;
+		const float oneHandAimPitchRate = 0.5f;
+		const float levelPitch = 0.0f;
+		Quaternion untwistedRotation = Quaternion.Inverse(handIK.UpperBodyTwistRotation) * spine_03.rotation;
+		Vector3 untwistedAngles = untwistedRotation.eulerAngles;
+		float pitchRate = Mathf.Lerp(fullPitchRate, oneHandAimPitchRate, handIK.HandGunOneHandAimWeight);
+		float cameraPitch = Mathf.DeltaAngle(levelPitch, cameraTransform.localEulerAngles.x) * pitchRate;
 		//腰のボーンの角度をカメラの向きにする
-		Quaternion aimRotation = Quaternion.Euler(cameraTransform.localEulerAngles.x + aimAnimationRotX, spine_03.eulerAngles.y + aimAnimationRotY, spine_03.eulerAngles.z);
-		spine_03.rotation = Quaternion.Slerp(spine_03.rotation, aimRotation, animator.GetFloat(PlayerAnimatorParameter.Aim));
+		Quaternion aimRotation = Quaternion.Euler(cameraPitch + aimAnimationRotX, untwistedAngles.y + aimAnimationRotY, untwistedAngles.z);
+		Quaternion bendRotation = aimRotation * Quaternion.Inverse(untwistedRotation);
+		spine_03.rotation = Quaternion.Slerp(Quaternion.identity, bendRotation, animator.GetFloat(PlayerAnimatorParameter.Aim)) * spine_03.rotation;
 	}
 
 	/// <summary>

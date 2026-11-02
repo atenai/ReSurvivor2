@@ -52,6 +52,14 @@ public class HandIK
 	//↓ハンドガンの持ち方に使う↓//
 	[Tooltip("上半身のひねり（ハンドガンを片手で狙う時にひねる）")]
 	UpperBodyTwist upperBodyTwist;
+	/// <summary>
+	/// 今のフレームで、上半身をひねった分の回転（構えに合わせて背骨を曲げる時に、ひねる前の向きで曲げる量を求めるのに使う）
+	/// </summary>
+	public Quaternion UpperBodyTwistRotation => upperBodyTwist.GetTwistRotation();
+	/// <summary>
+	/// 今のフレームで、ハンドガンを片手で狙っている割合（構えに合わせて背骨を曲げる量を、片手で狙う時は減らすのに使う）
+	/// </summary>
+	public float HandGunOneHandAimWeight => handGunIK.OneHandAimWeight;
 	[Tooltip("ハンドガンの持ち方のIK")]
 	HandGunIK handGunIK;
 	//↓ハンドガンに持ち替える時に、左手を持ち替える前の位置から動かし始めるのに使う↓//
@@ -82,9 +90,12 @@ public class HandIK
 	/// <param name="shotGunReloadAnimation">ショットガンのリロードのアニメーション</param>
 	/// <param name="isReloadTimeActive">今持っている銃がリロード中か？</param>
 	/// <param name="reloadAnimationTime">リロードアニメーションの再生位置</param>
-	public void UpdateIK(GunAnimation gunAnimation, Transform gunModelTransform, HandGunView handGunView, MineAnimation mineAnimation, SideArmAnimation sideArmAnimation, ShotGunReloadAnimation shotGunReloadAnimation, bool isReloadTimeActive, float reloadAnimationTime)
+	/// <param name="spineAimRotation">前のフレームで、構えに合わせて脊椎ボーンを曲げた回転（ワールドの向き）</param>
+	/// <param name="spinePosition">前のフレームで、構えに合わせて曲げた脊椎ボーンの位置</param>
+	/// <param name="aimRay">弾の飛ぶ線（カメラの位置から正面へ）</param>
+	public void UpdateIK(GunAnimation gunAnimation, Transform gunModelTransform, HandGunView handGunView, MineAnimation mineAnimation, SideArmAnimation sideArmAnimation, ShotGunReloadAnimation shotGunReloadAnimation, bool isReloadTimeActive, float reloadAnimationTime, Quaternion spineAimRotation, Vector3 spinePosition, Ray aimRay)
 	{
-		UpdateHoldStyle(gunAnimation, gunModelTransform, handGunView);
+		UpdateHoldStyle(gunAnimation, gunModelTransform, handGunView, spineAimRotation, spinePosition, aimRay);
 		UpdateHoldStyleForPlaceMine(mineAnimation);
 		UpdateHoldStyleForSideArm(sideArmAnimation);
 		SetRightHandIK();
@@ -139,7 +150,10 @@ public class HandIK
 	/// <param name="gunAnimation">今持っている銃のアニメーションの設定（銃ごとに体から離す量が違う）</param>
 	/// <param name="gunModelTransform">今持っている銃のモデル（前向きが銃身、上向きが銃の上側）</param>
 	/// <param name="handGunView">ハンドガンを持っている時は、ハンドガンのビュー（ほかの銃の時はnull）</param>
-	void UpdateHoldStyle(GunAnimation gunAnimation, Transform gunModelTransform, HandGunView handGunView)
+	/// <param name="spineAimRotation">前のフレームで、構えに合わせて脊椎ボーンを曲げた回転（ワールドの向き）</param>
+	/// <param name="spinePosition">前のフレームで、構えに合わせて曲げた脊椎ボーンの位置</param>
+	/// <param name="aimRay">弾の飛ぶ線（カメラの位置から正面へ）</param>
+	void UpdateHoldStyle(GunAnimation gunAnimation, Transform gunModelTransform, HandGunView handGunView, Quaternion spineAimRotation, Vector3 spinePosition, Ray aimRay)
 	{
 		float relaxedLocomotionWeight = PlayerAnimatorParameter.GetStateWeight(animator, PlayerAnimatorParameter.LocomotionLayerIndex, PlayerAnimatorParameter.NormalIdleAndWalkStateHash);
 		float relaxedReloadWeight = FullIKWeight - animator.GetFloat(PlayerAnimatorParameter.Aim);
@@ -178,7 +192,7 @@ public class HandIK
 			return;
 		}
 
-		handGunIK.UpdateHoldStyle(handGunView, ref relaxedRotation, ref relaxedOffset);
+		handGunIK.UpdateHoldStyle(handGunView, spineAimRotation, spinePosition, aimRay, ref relaxedRotation, ref relaxedOffset);
 	}
 
 	/// <summary>
