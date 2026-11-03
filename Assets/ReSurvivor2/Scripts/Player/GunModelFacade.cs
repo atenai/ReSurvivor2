@@ -9,7 +9,7 @@ using UnityEngine.Events;
 /// 3つの銃を組み合わせた処理を担当する
 /// </summary>
 [System.Serializable]
-public class GunModelFacade : IPlayerGunState
+public class GunModelFacade : IReadOnlyGunModel
 {
 	[Tooltip("ハンドガン")]
 	[SerializeField] HandGunModel handGunModel = new HandGunModel();

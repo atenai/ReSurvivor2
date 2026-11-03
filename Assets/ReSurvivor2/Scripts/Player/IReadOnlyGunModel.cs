@@ -1,9 +1,9 @@
 /// <summary>
-/// プレイヤーの銃の状態を読むための窓口（読むだけで、銃の状態は変えない）
+/// プレイヤーの銃のモデルを、読むだけの窓口（銃の状態を読むだけで、変えない）
 /// ※銃（GunModelFacade）がこの窓口を用意し、アニメーション（PlayerCharacterViewとアニメーションのクラス）はこの窓口だけを見て動く。
 ///   銃の側はアニメーションの側を知らず、アニメーションの側は銃のクラスそのものを知らない
 /// </summary>
-public interface IPlayerGunState
+public interface IReadOnlyGunModel
 {
 	/// <summary>
 	/// 今持っている銃

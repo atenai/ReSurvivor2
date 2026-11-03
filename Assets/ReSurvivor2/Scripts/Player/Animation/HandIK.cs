@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// 手のIK（アニメーションどおりの手の位置・向きを、銃の持ち方に合わせて直す）
-/// ※PlayerCharacterViewが持ち、アニメーターのIKの処理（OnAnimatorIK）の中で、今持っている銃や地雷のアニメーションの設定を渡して動かす
+/// ※PlayerAnimationFacadeが持ち、アニメーターのIKの処理（OnAnimatorIK）の中で、今持っている銃や地雷のアニメーションの設定を渡して動かす
 /// ※アニメーターのIKパスは一番上のレイヤー（UpperBodyReload）だけにオンにしてある
 ///   （複数のレイヤーでオンにすると、IKの処理が何度も呼ばれ、前のレイヤーのIKの結果が「アニメーションどおりの左手」に混ざってしまうため）
 /// </summary>

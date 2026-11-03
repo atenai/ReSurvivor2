@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 銃ごとの、プレイヤーのアニメーションの設定
 /// （左手で銃を握る位置・リロード中のマガジンの動き・リロード中の左手のIK・構えていない時やダッシュの時の銃の持ち方）
-/// ※GunAnimationFacadeが銃ごとに持ち、PlayerCharacterViewとHandIKが銃の状態を見て使う（銃のクラスからは使わない）
+/// ※GunAnimationFacadeが銃ごとに持ち、銃のアニメーション（GunAnimationFacade）と手のIK（HandIK）が銃の状態を見て使う（銃のクラスからは使わない）
 /// </summary>
 [System.Serializable]
 public class GunAnimation

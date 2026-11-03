@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// 構えのアニメーション（構えている割合・ハンドガンの片手で狙う構え・近距離の構え）
-/// ※PlayerCharacterViewが持ち、プレイヤーの状態を受け取って動かす
+/// ※PlayerAnimationFacadeが持ち、プレイヤーの状態を受け取って動かす
 /// </summary>
 public class AimAnimation
 {

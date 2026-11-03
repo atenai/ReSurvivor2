@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// 移動のアニメーション（移動の入力・ダッシュ・持っている銃に合わせた移動のアニメーション）
-/// ※PlayerCharacterViewが持ち、プレイヤーの状態を受け取って動かす
+/// ※PlayerAnimationFacadeが持ち、プレイヤーの状態を受け取って動かす
 /// </summary>
 public class MoveAnimation
 {
