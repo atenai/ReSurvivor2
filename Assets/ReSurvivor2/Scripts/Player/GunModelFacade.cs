@@ -145,7 +145,7 @@ public class GunModelFacade : IPlayerGunState
 	/// </summary>
 	public float ReloadProgress => gunModelBase.ReloadProgress;
 
-	//※銃の見た目（手に持つ銃・体にしまう銃の見せ方、マズルフラッシュ、音）は、ここの知らせを受け取った側が出す
+	//※銃の見た目（手に持つ銃・体にしまう銃の見せ方、マズルフラッシュ、音、着弾のエフェクト、ヒットレティクル、武器のアイコン）は、ここの知らせを受け取った側が出す
 	/// <summary>
 	/// 今持っている銃が変わった時の知らせ（変わった後の銃）
 	/// </summary>
@@ -172,6 +172,21 @@ public class GunModelFacade : IPlayerGunState
 	public event UnityAction OnShotGunChambered;
 
 	/// <summary>
+	/// 敵・地雷・グレネードに弾が当たった時の知らせ
+	/// </summary>
+	public event UnityAction OnGunTargetHit;
+
+	/// <summary>
+	/// 弾が何かに当たった時の知らせ（当たった所）
+	/// </summary>
+	public event UnityAction<RaycastHit> OnGunImpact;
+
+	/// <summary>
+	/// 武器の切り替えボタンを押した時の知らせ
+	/// </summary>
+	public event UnityAction OnWeaponSelectPressed;
+
+	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	public GunModelFacade()
@@ -186,6 +201,8 @@ public class GunModelFacade : IPlayerGunState
 			EnumManager.GunTYPE gunType = gun.GetGunType;
 			gun.OnFired += () => OnGunFired?.Invoke(gunType);
 			gun.OnReloadStarted += () => OnGunReloadStarted?.Invoke(gunType);
+			gun.OnTargetHit += () => OnGunTargetHit?.Invoke();
+			gun.OnImpact += (hit) => OnGunImpact?.Invoke(hit);
 		}
 		shotGunModel.OnShellInserted += () => OnShotGunShellInserted?.Invoke();
 		shotGunModel.OnChambered += () => OnShotGunChambered?.Invoke();
@@ -281,8 +298,8 @@ public class GunModelFacade : IPlayerGunState
 	/// <param name="gunTYPE">持ち替える銃のタイプ</param>
 	void ChangeWeapon(EnumManager.GunTYPE gunTYPE)
 	{
-		//十字キーの武器アイコンと弾数を一時的に表示する
-		ScreenUIManagerPresenter.SingletonInstance.ShowWeaponQuickSelect();
+		//武器の切り替えボタンを押したことを知らせる（十字キーの武器アイコンと弾数は、知らせを受け取った見た目の側が一時的に表示する）
+		OnWeaponSelectPressed?.Invoke();
 
 		//ハンドガンに持ち替えている時は、持ち替えをやめて、すぐに選んだ銃を持つ（左手に持っていたメインの銃は、ビューが元の位置に戻す）
 		if (IsSideArmActive == true)

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1859192107321473125}
   - component: {fileID: 4094981230853522424}
   - component: {fileID: 9221019703623590627}
+  - component: {fileID: 8326780299026535826}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -99,8 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8035b9fea06e67409088c5beee94130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCharacterView: {fileID: 6227315758585164327}
-  playerUIView: {fileID: 3466684979332982630}
+  minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
   rb: {fileID: 1859192107321473125}
   cinemachineImpulseSource: {fileID: 9221019703623590627}
 --- !u!114 &9221019703623590627
@@ -156,6 +156,21 @@ MonoBehaviour:
     m_DissipationDistance: 100
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: 1, y: 1, z: 0}
+--- !u!114 &8326780299026535826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595592620044305908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae92ff2962524be48b86e89d1d32dea7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerManagerPresenter: {fileID: 4094981230853522424}
+  playerCharacterView: {fileID: 6227315758585164327}
+  playerUIView: {fileID: 3466684979332982630}
 --- !u!1001 &4959128775433945816
 PrefabInstance:
   m_ObjectHideFlags: 0

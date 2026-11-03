@@ -192,11 +192,8 @@ public class HandGunModel : GunModelBase
 					}
 				}
 
-				//ヒットレティクルを表示
-				ScreenUIManagerPresenter.SingletonInstance.ScreenUIModel.IsHitReticule = true;
-
-				//ヒット音を再生
-				SoundManager.SingletonInstance.HitSEPool.GetGameObject(PlayerCameraManager.SingletonInstance.transform);
+				//当たったことを知らせる（ヒットレティクルとヒット音は、知らせを受け取った見た目の側が出す）
+				NotifyTargetHit();
 
 				//追跡開始
 				EnemyManager.SingletonInstance.ChaseEvent.Invoke();
@@ -216,7 +213,8 @@ public class HandGunModel : GunModelBase
 				}
 			}
 
-			EffectManager.SingletonInstance.ImpactEffect(hit);
+			//着弾したことを知らせる（着弾のエフェクトは、知らせを受け取った見た目の側が出す）
+			NotifyImpact(hit);
 		}
 	}
 

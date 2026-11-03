@@ -72,7 +72,7 @@ public abstract class GunModelBase
 	/// </summary>
 	public bool IsAmmoLow => currentAmmo <= MagazineCapacity;
 
-	//※銃は、撃った・リロードを始めたことを知らせるだけで、マズルフラッシュや音などの見た目は、知らせを受け取った側が出す
+	//※銃は、撃った・リロードを始めた・弾が当たったことを知らせるだけで、マズルフラッシュや音などの見た目は、知らせを受け取った側が出す
 	//  （銃の側は、プレイヤーの見た目やアニメーションの側を知らない）
 	/// <summary>
 	/// 弾を撃った時の知らせ
@@ -83,6 +83,16 @@ public abstract class GunModelBase
 	/// リロードを始めた時の知らせ
 	/// </summary>
 	public event UnityAction OnReloadStarted;
+
+	/// <summary>
+	/// 敵・地雷・グレネードに弾が当たった時の知らせ
+	/// </summary>
+	public event UnityAction OnTargetHit;
+
+	/// <summary>
+	/// 弾が何かに当たった時の知らせ（当たった所）
+	/// </summary>
+	public event UnityAction<RaycastHit> OnImpact;
 
 	/// <summary>
 	/// 弾を撃ったことを知らせる
@@ -98,6 +108,23 @@ public abstract class GunModelBase
 	protected void NotifyReloadStarted()
 	{
 		OnReloadStarted?.Invoke();
+	}
+
+	/// <summary>
+	/// 敵・地雷・グレネードに弾が当たったことを知らせる
+	/// </summary>
+	protected void NotifyTargetHit()
+	{
+		OnTargetHit?.Invoke();
+	}
+
+	/// <summary>
+	/// 弾が何かに当たったことを知らせる
+	/// </summary>
+	/// <param name="hit">当たった所</param>
+	protected void NotifyImpact(RaycastHit hit)
+	{
+		OnImpact?.Invoke(hit);
 	}
 
 	/// <summary>

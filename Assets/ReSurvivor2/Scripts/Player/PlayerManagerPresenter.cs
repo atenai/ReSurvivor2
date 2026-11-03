@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Cinemachine;
 
 /// <summary>
 /// プレイヤーを管理するマネージャープレゼンタークラス
 /// MVPパターンのPresenter担当
+/// ※プレイヤーのロジック（移動・地雷・HP・スタミナ）を動かす。プレイヤーの見た目（キャラクターのアニメーション・銃の見た目と音・プレイヤーUI）は知らない。
+///   見た目の側（PlayerViewPresenter）は、ここの知らせと、プレイヤーの状態を見て動く（見た目の側を外しても、ゲームは動く）
 /// </summary>
 public class PlayerManagerPresenter : MonoBehaviour
 {
@@ -28,15 +31,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 	PlayerModel playerModel = new PlayerModel();
 	public PlayerModel PlayerModel => playerModel;
 
-	[Tooltip("プレイヤーキャラクタービュー")]
-	[SerializeField] PlayerCharacterView playerCharacterView;
-
-	[Tooltip("ガンビュープレゼンター（銃の知らせを受け取って、銃のビューに見た目と音を出させる）")]
-	readonly GunViewPresenter gunViewPresenter = new GunViewPresenter();
-
-	[Tooltip("プレイヤーUIビュー")]
-	[SerializeField] PlayerUIView playerUIView;
-	public PlayerUIView PlayerUIView => playerUIView;
+	[Tooltip("地雷のプレファブ")]
+	[SerializeField] GameObject minePrefab;
 
 	[Tooltip("リジッドボディ")]
 	[SerializeField] Rigidbody rb;
@@ -44,6 +40,26 @@ public class PlayerManagerPresenter : MonoBehaviour
 	[Tooltip("カメラの揺れ")]
 	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
 	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
+
+	/// <summary>
+	/// プレイヤーの更新処理が終わった時の知らせ（移動の入力・構え・地雷を置く動きの状態が決まった後）
+	/// </summary>
+	public event UnityAction OnAfterUpdate;
+
+	/// <summary>
+	/// 銃の更新処理が終わった時の知らせ
+	/// </summary>
+	public event UnityAction OnAfterGunUpdate;
+
+	/// <summary>
+	/// LateUpdateの知らせ（アニメーションで骨が動いた後。ボーンを曲げる時に使う）
+	/// </summary>
+	public event UnityAction OnLateUpdate;
+
+	/// <summary>
+	/// 移動の状態をリセットした時の知らせ（ロード中・コンピューターを使っている間・ステージを移る時）
+	/// </summary>
+	public event UnityAction OnMoveReset;
 
 	void Awake()
 	{
@@ -87,28 +103,9 @@ public class PlayerManagerPresenter : MonoBehaviour
 
 	void Start()
 	{
-		//プレイヤーのアニメーションは、銃の状態を見て動かすので、銃の状態を読むための窓口を渡しておく
-		playerCharacterView.Initialize(PlayerCameraManager.SingletonInstance.GunModelFacade, PlayerCameraManager.SingletonInstance.transform);
-		//銃の見せ方・マズルフラッシュ・音は、銃の知らせを受けて出す
-		gunViewPresenter.Bind(PlayerCameraManager.SingletonInstance.GunModelFacade, playerCharacterView.GunViewFacade);
-		InitHP();
-		InitStamina();
+		InitHPAndStamina();
 		InitMine();
 		InitRespawnPos();
-
-		playerUIView.InitHP(playerModel.HP.CurrentHp);
-		playerUIView.InitStamina(playerModel.Stamina.CurrentStamina);
-		playerUIView.StartTextArmorPlate(playerModel.CurrentArmorPlate);
-		playerUIView.StartTextFood(playerModel.CurrentFood);
-		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentMagazine, PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsMagazineLow);
-		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentAmmo, PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsAmmoLow);
-		playerUIView.UpdateUITransform(playerModel.IsAim);
-	}
-
-	void OnDestroy()
-	{
-		//破棄した後のビューに、銃の知らせが届かないようにする
-		gunViewPresenter.Unbind();
 	}
 
 	public void ResetMove()
@@ -119,27 +116,16 @@ public class PlayerManagerPresenter : MonoBehaviour
 		PlayerCameraManager.SingletonInstance.GunModelFacade.CancelSideArm();
 		//武器を切り替えている時は、切り替える先の銃を持っている状態にする（銃をしまう途中のまま次のステージに移らないようにする）
 		PlayerCameraManager.SingletonInstance.GunModelFacade.CancelWeaponSwitch();
-		playerCharacterView.ResetMoveAnimation();
-		playerUIView.SetMinePlacingFillAmount(0.0f);
+		OnMoveReset?.Invoke();
 	}
 
 	/// <summary>
-	/// HPの初期化処理
+	/// HPとスタミナの初期化処理
 	/// </summary>
-	void InitHP()
+	void InitHPAndStamina()
 	{
 		//シーン切り替え中は無敵にする（切り替え中に死亡してゲームオーバー画面が割り込まないようにする）
-		playerModel.HP.Initialize(DamageEffect, ChangeSceneManager.SingletonInstance.GameOver, () => playerModel.UseArmorPlate((armorPlate) => playerUIView.StartTextArmorPlate(armorPlate)), HealEffect, () => SceneLoadManager.IsChangingScene);
-		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", PlayerModel.HP.CurrentHp / HitPoint.Max_Hp);
-	}
-
-	/// <summary>
-	/// スタミナの初期化処理
-	/// </summary>
-	void InitStamina()
-	{
-		playerModel.Stamina.Initialize(ConsumeStaminaEffect, () => playerModel.UseFood((food) => playerUIView.SetTextFood(food)), RestoresStaminaEffect);
+		playerModel.InitializeHPAndStamina(ChangeSceneManager.SingletonInstance.GameOver, () => SceneLoadManager.IsChangingScene);
 	}
 
 	/// <summary>
@@ -148,7 +134,6 @@ public class PlayerManagerPresenter : MonoBehaviour
 	void InitMine()
 	{
 		playerModel.MineSpawnCount = 0.0f;
-		playerUIView.TextMine.text = playerModel.CurrentMine.ToString();
 	}
 
 	/// <summary>
@@ -176,37 +161,16 @@ public class PlayerManagerPresenter : MonoBehaviour
 
 		Mine();
 
-		NormalMoveAnimation();
-		playerUIView.UpdateUITransform(playerModel.IsAim);
-		playerUIView.UpdateImageReload(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsReloadTimeActive);
-		playerUIView.UpdateImageSideArm(PlayerCameraManager.SingletonInstance.GunModelFacade.IsSideArmDrawWindowOpen);
-		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentMagazine, PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsMagazineLow);
-		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentAmmo, PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsAmmoLow);
-	}
-
-
-	/// <summary>
-	/// 移動アニメーション（プレイヤーの状態を、プレイヤーキャラクタービューに渡す）
-	/// </summary>
-	void NormalMoveAnimation()
-	{
-		//移動のアニメーションには、移動の向きと速さの割合を渡す（移動スティックを少しだけ倒した時は、歩くアニメーションになる）
-		Vector2 move = playerModel.MoveInputDirection * playerModel.MoveRate;
-		playerCharacterView.UpdateMoveAnimation(move.x, move.y, playerModel.IsDash, playerModel.IsPlacingMine);
-		//※敵のマネージャーがないシーンでは、警戒体制の敵はいないことにする
-		bool isEnemyAlert = EnemyManager.SingletonInstance != null && EnemyManager.SingletonInstance.IsAnyEnemyAlert() == true;
-		playerCharacterView.UpdateAimAnimation(playerModel.IsAim, isEnemyAlert, PlayerCameraManager.SingletonInstance.IsEnemyClose);
-		//地雷を置く時は、ボタンを押している間しゃがんで左手を地面へ下ろし、置いた後（置くのをやめた後）に立ち上がる
-		playerCharacterView.UpdatePlaceMineAnimation(playerModel.MinePlacePhase, playerModel.MineSpawnCount / PlayerModel.Mine_Hold_Time, playerModel.MineStandUpCount / PlayerModel.Mine_Stand_Up_Time);
+		OnAfterUpdate?.Invoke();
 	}
 
 	/// <summary>
-	/// 銃を更新した後の処理（銃の状態に合わせて、プレイヤーのリロードのアニメーションを動かす）
+	/// 銃を更新した後の処理（銃の更新が終わったことを知らせる。見た目の側は、銃の状態に合わせてリロードのアニメーションを動かす）
 	/// ※InGameManagerが、銃の更新（PlayerCameraManager.AfterUpdate）の後に呼ぶ
 	/// </summary>
 	public void AfterGunUpdate()
 	{
-		playerCharacterView.UpdateReloadAnimation();
+		OnAfterGunUpdate?.Invoke();
 	}
 
 	/// <summary>
@@ -253,7 +217,6 @@ public class PlayerManagerPresenter : MonoBehaviour
 
 		playerModel.MinePlacePhase = EnumManager.MinePlacePhaseTYPE.Crouch;
 		playerModel.MineSpawnCount = playerModel.MineSpawnCount + Time.deltaTime;
-		playerUIView.SetMinePlacingFillAmount(playerModel.MineSpawnCount / PlayerModel.Mine_Hold_Time);
 		Debug.Log("押しているフレーム数 : " + playerModel.MineSpawnCount);
 	}
 
@@ -282,8 +245,6 @@ public class PlayerManagerPresenter : MonoBehaviour
 			//長押しの途中で離したので、地雷を置くのをやめて、しゃがんだ分だけ戻す（長押しした時間を、同じ速さで0まで戻す）
 			playerModel.MinePlacePhase = EnumManager.MinePlacePhaseTYPE.Cancel;
 		}
-
-		playerUIView.SetMinePlacingFillAmount(0.0f);
 	}
 
 	/// <summary>
@@ -300,7 +261,6 @@ public class PlayerManagerPresenter : MonoBehaviour
 				{
 					playerModel.MineSpawnCount = Mathf.Min(playerModel.MineSpawnCount, PlayerModel.Mine_Hold_Time);
 					playerModel.MinePlacePhase = EnumManager.MinePlacePhaseTYPE.Cancel;
-					playerUIView.SetMinePlacingFillAmount(0.0f);
 				}
 				break;
 			case EnumManager.MinePlacePhaseTYPE.StandUp:
@@ -326,32 +286,15 @@ public class PlayerManagerPresenter : MonoBehaviour
 	/// </summary>
 	void CreateMine()
 	{
-		if (playerModel.CurrentMine <= 0)
+		if (playerModel.UseMine() == false)
 		{
 			return;
 		}
-
-		playerModel.CurrentMine = playerModel.CurrentMine - 1;
-		playerUIView.TextMine.text = playerModel.CurrentMine.ToString();
 
 		Vector3 localPosition = new Vector3(this.transform.position.x, 0.0f, this.transform.position.z);
 		// キャラクターの前方にオブジェクトを生成
 		Vector3 spawnPosition = localPosition + (this.transform.forward * playerModel.MineSpawnDistance);
-		GameObject localGameObject = UnityEngine.Object.Instantiate(playerCharacterView.MinePrefab, spawnPosition, this.transform.rotation);
-	}
-
-	/// <summary>
-	/// 地雷を取得
-	/// </summary> 
-	public void AcquireMine()
-	{
-		if (playerModel.MaxMine <= playerModel.CurrentMine)
-		{
-			return;
-		}
-
-		playerModel.CurrentMine = playerModel.CurrentMine + 1;
-		playerUIView.TextMine.text = playerModel.CurrentMine.ToString();
+		GameObject localGameObject = UnityEngine.Object.Instantiate(minePrefab, spawnPosition, this.transform.rotation);
 	}
 
 	public void AfterFixedUpdate()
@@ -466,7 +409,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 	void LateUpdate()
 	{
 		//ボーンを曲げる際は必ずLateUpdateに書く必要がある！（これいつかメモする！）
-		playerCharacterView.UpdateAimBones(playerModel.IsAim);
+		//（見た目の側が、ここの知らせを受けて、構えに合わせて背骨を曲げる）
+		OnLateUpdate?.Invoke();
 	}
 
 	void OnCollisionEnter(Collision collision)
@@ -486,45 +430,6 @@ public class PlayerManagerPresenter : MonoBehaviour
 	void CameraShaker()
 	{
 		cinemachineImpulseSource.GenerateImpulse();
-	}
-
-	/// <summary>
-	/// ダメージエフェクト
-	/// </summary>
-	public void DamageEffect()
-	{
-		playerUIView.SliderHp.value = (float)playerModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
-		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", playerModel.HP.CurrentHp / HitPoint.Max_Hp);
-		playerModel.IsDamage = true;
-	}
-
-	/// <summary>
-	/// 回復エフェクト
-	/// </summary>
-	public void HealEffect()
-	{
-		playerUIView.SliderHp.value = (float)playerModel.HP.CurrentHp / (float)HitPoint.Max_Hp;
-		//シェーダーへ値を渡す（これだけでOK）
-		Shader.SetGlobalFloat("HP", playerModel.HP.CurrentHp / HitPoint.Max_Hp);
-		playerModel.IsHpHeal = true;
-	}
-
-	/// <summary>
-	/// スタミナを消費エフェクト
-	/// </summary> 
-	void ConsumeStaminaEffect()
-	{
-		playerUIView.SliderStamina.value = (float)playerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
-	}
-
-	/// <summary>
-	/// スタミナを回復エフェクト
-	/// </summary>
-	void RestoresStaminaEffect()
-	{
-		playerUIView.SliderStamina.value = (float)playerModel.Stamina.CurrentStamina / (float)Stamina.Max_Stamina;
-		playerModel.IsStaminaHeal = true;
 	}
 
 	void OnGUI()

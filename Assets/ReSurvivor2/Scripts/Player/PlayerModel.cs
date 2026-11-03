@@ -175,11 +175,7 @@ public class PlayerModel
 	}
 	[Tooltip("現在の地雷数")]
 	int currentMine = 3;
-	public int CurrentMine
-	{
-		get { return currentMine; }
-		set { currentMine = value; }
-	}
+	public int CurrentMine => currentMine;
 	[Tooltip("地雷の所持できる最大数")]
 	int maxMine = 3;
 	public int MaxMine => maxMine;
@@ -201,6 +197,43 @@ public class PlayerModel
 	}
 	/// <summary>地雷を置いているか？（しゃがんでいる間と立ち上がっている間は、移動・構え・ダッシュができない）</summary>
 	public bool IsPlacingMine => minePlacePhase != EnumManager.MinePlacePhaseTYPE.None;
+
+	//※プレイヤーの状態が変わったことを知らせるだけで、HPのゲージや数の表示などの見た目は、知らせを受け取った側が出す
+	//  （このクラスは、プレイヤーの見た目やUIの側を知らない）
+	/// <summary>
+	/// ダメージを受けてHPが減った時の知らせ
+	/// </summary>
+	public event UnityAction OnDamaged;
+
+	/// <summary>
+	/// HPを回復した時の知らせ
+	/// </summary>
+	public event UnityAction OnHealed;
+
+	/// <summary>
+	/// スタミナを使った時の知らせ
+	/// </summary>
+	public event UnityAction OnStaminaConsumed;
+
+	/// <summary>
+	/// スタミナを回復した時の知らせ
+	/// </summary>
+	public event UnityAction OnStaminaRestored;
+
+	/// <summary>
+	/// アーマープレートの数が変わった時の知らせ（変わった後の数）
+	/// </summary>
+	public event UnityAction<int> OnArmorPlateChanged;
+
+	/// <summary>
+	/// 食料の数が変わった時の知らせ（変わった後の数）
+	/// </summary>
+	public event UnityAction<int> OnFoodChanged;
+
+	/// <summary>
+	/// 地雷の数が変わった時の知らせ（変わった後の数）
+	/// </summary>
+	public event UnityAction<int> OnMineCountChanged;
 
 	/// <summary>
 	/// コンストラクタ
@@ -316,6 +349,52 @@ public class PlayerModel
 		respawnRotation = rot;
 	}
 
+	/// <summary>
+	/// HPとスタミナの初期化処理（HPを回復する時はアーマープレートを1つ、スタミナを回復する時は食料を1つ使う）
+	/// </summary>
+	/// <param name="dead">HPが0になった時の処理</param>
+	/// <param name="isInvincible">無敵判定（trueを返す間はダメージを受けない）</param>
+	public void InitializeHPAndStamina(UnityAction dead, Func<bool> isInvincible)
+	{
+		hp.Initialize(Damaged, dead, UseArmorPlate, Healed, isInvincible);
+		stamina.Initialize(StaminaConsumed, UseFood, StaminaRestored);
+	}
+
+	/// <summary>
+	/// ダメージを受けてHPが減った時の処理（ダメージ画像エフェクトを出して、知らせる）
+	/// </summary>
+	void Damaged()
+	{
+		isDamage = true;
+		OnDamaged?.Invoke();
+	}
+
+	/// <summary>
+	/// HPを回復した時の処理（HP回復画像エフェクトを出して、知らせる）
+	/// </summary>
+	void Healed()
+	{
+		isHpHeal = true;
+		OnHealed?.Invoke();
+	}
+
+	/// <summary>
+	/// スタミナを使った時の処理（知らせる）
+	/// </summary>
+	void StaminaConsumed()
+	{
+		OnStaminaConsumed?.Invoke();
+	}
+
+	/// <summary>
+	/// スタミナを回復した時の処理（スタミナ回復画像エフェクトを出して、知らせる）
+	/// </summary>
+	void StaminaRestored()
+	{
+		isStaminaHeal = true;
+		OnStaminaRestored?.Invoke();
+	}
+
 	public void AfterUpdate()
 	{
 		inputHorizontal = Input.GetAxisRaw("Horizontal");
@@ -398,7 +477,7 @@ public class PlayerModel
 	/// <summary>
 	/// アーマープレートを使用
 	/// </summary>
-	public void UseArmorPlate(UnityAction<int> unityAction)
+	void UseArmorPlate()
 	{
 		if (currentArmorPlate <= 0)
 		{
@@ -406,13 +485,13 @@ public class PlayerModel
 		}
 
 		currentArmorPlate = currentArmorPlate - 1;
-		unityAction?.Invoke(currentArmorPlate);
+		OnArmorPlateChanged?.Invoke(currentArmorPlate);
 	}
 
 	/// <summary>
 	/// アーマープレートを取得
 	/// </summary> 
-	public void AcquireArmorPlate(UnityAction<int> unityAction)
+	public void AcquireArmorPlate()
 	{
 		if (maxArmorPlate <= currentArmorPlate)
 		{
@@ -420,7 +499,7 @@ public class PlayerModel
 		}
 
 		currentArmorPlate = currentArmorPlate + 1;
-		unityAction?.Invoke(currentArmorPlate);
+		OnArmorPlateChanged?.Invoke(currentArmorPlate);
 	}
 
 	/// <summary>
@@ -439,7 +518,7 @@ public class PlayerModel
 	/// <summary>
 	/// 食料を使用
 	/// </summary>
-	public void UseFood(UnityAction<int> unityAction)
+	void UseFood()
 	{
 		if (currentFood <= 0)
 		{
@@ -447,13 +526,13 @@ public class PlayerModel
 		}
 
 		currentFood = currentFood - 1;
-		unityAction?.Invoke(currentFood);
+		OnFoodChanged?.Invoke(currentFood);
 	}
 
 	/// <summary>
 	/// 食料を取得
 	/// </summary> 
-	public void AcquireFood(UnityAction<int> unityAction)
+	public void AcquireFood()
 	{
 		if (maxFood <= currentFood)
 		{
@@ -461,7 +540,7 @@ public class PlayerModel
 		}
 
 		currentFood = currentFood + 1;
-		unityAction?.Invoke(currentFood);
+		OnFoodChanged?.Invoke(currentFood);
 	}
 
 	/// <summary>
@@ -475,5 +554,35 @@ public class PlayerModel
 		}
 
 		maxFood = maxFood + 1;
+	}
+
+	/// <summary>
+	/// 地雷を1つ使う
+	/// </summary>
+	/// <returns>使えたか？（地雷を持っていない時は使えない）</returns>
+	public bool UseMine()
+	{
+		if (currentMine <= 0)
+		{
+			return false;
+		}
+
+		currentMine = currentMine - 1;
+		OnMineCountChanged?.Invoke(currentMine);
+		return true;
+	}
+
+	/// <summary>
+	/// 地雷を取得
+	/// </summary> 
+	public void AcquireMine()
+	{
+		if (maxMine <= currentMine)
+		{
+			return;
+		}
+
+		currentMine = currentMine + 1;
+		OnMineCountChanged?.Invoke(currentMine);
 	}
 }

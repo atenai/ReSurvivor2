@@ -65,7 +65,7 @@ public partial class SROptions
 	[Sort(0)]
 	public void AcquireArmorPlate()
 	{
-		PlayerManagerPresenter.SingletonInstance.PlayerModel.AcquireArmorPlate((armorPlate) => PlayerManagerPresenter.SingletonInstance.PlayerUIView.StartTextArmorPlate(armorPlate));
+		PlayerManagerPresenter.SingletonInstance.PlayerModel.AcquireArmorPlate();
 	}
 
 	[Category("Player")]
@@ -81,7 +81,7 @@ public partial class SROptions
 	[Sort(2)]
 	public void AcquireFood()
 	{
-		PlayerManagerPresenter.SingletonInstance.PlayerModel.AcquireFood((food) => PlayerManagerPresenter.SingletonInstance.PlayerUIView.SetTextFood(food));
+		PlayerManagerPresenter.SingletonInstance.PlayerModel.AcquireFood();
 	}
 
 	[Category("Player")]
@@ -121,7 +121,7 @@ public partial class SROptions
 	[Sort(7)]
 	public void AcquireMine()
 	{
-		PlayerManagerPresenter.SingletonInstance.AcquireMine();
+		PlayerManagerPresenter.SingletonInstance.PlayerModel.AcquireMine();
 	}
 
 	#endregion
