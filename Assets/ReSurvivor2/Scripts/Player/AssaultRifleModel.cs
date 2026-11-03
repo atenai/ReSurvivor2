@@ -108,7 +108,7 @@ public class AssaultRifleModel : GunModelBase
 
 		if (reloadCountTimer == 0)
 		{
-			AssaultRifleReloadSE();
+			NotifyReloadStarted();
 		}
 
 		//リロード中画像
@@ -151,11 +151,8 @@ public class AssaultRifleModel : GunModelBase
 	/// </summary> 
 	protected override void Fire()
 	{
-		AssaultRifleBulletCasingSE();
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.AssaultRifleView.AssaultRifleMuzzleFlashAndShell();
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.AssaultRifleView.AssaultRifleSmoke();
-
-		AssaultRifleFireSE();
+		//撃ったことを知らせる（マズルフラッシュ・硝煙・射撃音・薬莢の音は、知らせを受け取った見た目の側が出す）
+		NotifyFired();
 
 		Vector3 direction = PlayerCameraManager.SingletonInstance.transform.forward;
 		direction = Quaternion.AngleAxis(UnityEngine.Random.Range(-assaultRifleRandomAngle, assaultRifleRandomAngle), PlayerCameraManager.SingletonInstance.transform.up) * direction;
@@ -213,30 +210,6 @@ public class AssaultRifleModel : GunModelBase
 
 		//追跡開始
 		EnemyManager.SingletonInstance.ChaseEvent.Invoke();
-	}
-
-	/// <summary>
-	/// アサルトライフルの射撃SE
-	/// </summary> 
-	void AssaultRifleFireSE()
-	{
-		SoundManager.SingletonInstance.AssaultRifleShootSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.AssaultRifleView.AssaultRifleMuzzleTransform);
-	}
-
-	/// <summary>
-	/// アサルトライフルのリロードSE
-	/// </summary> 
-	void AssaultRifleReloadSE()
-	{
-		SoundManager.SingletonInstance.AssaultRifleReloadSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.AssaultRifleView.AssaultRifleBulletCasingTransform);
-	}
-
-	/// <summary>
-	/// アサルトライフルの薬莢SE
-	/// </summary>
-	void AssaultRifleBulletCasingSE()
-	{
-		SoundManager.SingletonInstance.AssaultRifleBulletCasingSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.AssaultRifleView.AssaultRifleBulletCasingTransform);
 	}
 
 	/// <summary>

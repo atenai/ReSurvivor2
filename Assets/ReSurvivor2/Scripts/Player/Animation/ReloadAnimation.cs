@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// リロードのアニメーション（リロード中の銃のリロードアニメーションをオンにして、再生位置をリロードの進み具合に合わせる）
-/// ※PlayerCharacterViewが持ち、銃の状態を見て動かす（銃のクラスからは使わない）
+/// ※PlayerCharacterViewが持ち、銃の状態（IPlayerGunState）を見て動かす（銃のクラスからは使わない）
 /// </summary>
 [System.Serializable]
 public class ReloadAnimation
@@ -29,27 +29,26 @@ public class ReloadAnimation
 	/// ※リロードしていない時は再生位置を変えない（リロードが終わってアニメーションを抜ける間に、手が急に動かないようにする）
 	/// </summary>
 	/// <param name="animator">プレイヤーのアニメーター</param>
-	/// <param name="gunModelFacade">銃</param>
+	/// <param name="gunState">銃の状態を読むための窓口</param>
 	/// <param name="shotGunAnimation">ショットガンを持っている時のアニメーションの設定（弾を取るタイミング・込めるタイミングを使う）</param>
-	public void UpdateAnimation(Animator animator, GunModelFacade gunModelFacade, GunAnimation shotGunAnimation)
+	public void UpdateAnimation(Animator animator, IPlayerGunState gunState, GunAnimation shotGunAnimation)
 	{
-		animator.SetBool(PlayerAnimatorParameter.IsHandGunReload, gunModelFacade.FindGunBase(EnumManager.GunTYPE.HandGun).IsReloadTimeActive);
-		animator.SetBool(PlayerAnimatorParameter.IsAssaultRifleReload, gunModelFacade.FindGunBase(EnumManager.GunTYPE.AssaultRifle).IsReloadTimeActive);
-		animator.SetBool(PlayerAnimatorParameter.IsShotGunReload, gunModelFacade.FindGunBase(EnumManager.GunTYPE.ShotGun).IsReloadTimeActive);
+		animator.SetBool(PlayerAnimatorParameter.IsHandGunReload, gunState.IsGunReloadTimeActive(EnumManager.GunTYPE.HandGun));
+		animator.SetBool(PlayerAnimatorParameter.IsAssaultRifleReload, gunState.IsGunReloadTimeActive(EnumManager.GunTYPE.AssaultRifle));
+		animator.SetBool(PlayerAnimatorParameter.IsShotGunReload, gunState.IsGunReloadTimeActive(EnumManager.GunTYPE.ShotGun));
 
-		GunModelBase gunModelBase = gunModelFacade.GunModelBase;
-		if (gunModelBase.IsReloadTimeActive == false)
+		if (gunState.IsReloadTimeActive == false)
 		{
 			return;
 		}
 
-		if (gunModelFacade.GetGunTYPE == EnumManager.GunTYPE.ShotGun)
+		if (gunState.GetGunTYPE == EnumManager.GunTYPE.ShotGun)
 		{
-			UpdateShotGunReloadAnimationTime((ShotGunModel)gunModelBase, shotGunAnimation);
+			UpdateShotGunReloadAnimationTime(gunState, shotGunAnimation);
 		}
 		else
 		{
-			reloadAnimationTime = gunModelBase.ReloadProgress;
+			reloadAnimationTime = gunState.ReloadProgress;
 			isReloadAnimationForward = true;
 		}
 		animator.SetFloat(PlayerAnimatorParameter.ReloadAnimationTime, reloadAnimationTime);
@@ -59,12 +58,12 @@ public class ReloadAnimation
 	/// ショットガンのリロードアニメーションの再生位置を、今込めている弾に合わせて決める
 	/// （最初 → 込める弾の数だけ「ポーチ → 装填口」を繰り返す → 最後、の順に進める。装填口から次の弾を取りに戻る間は巻き戻す）
 	/// </summary>
-	/// <param name="shotGunModel">ショットガン</param>
+	/// <param name="gunState">銃の状態を読むための窓口</param>
 	/// <param name="shotGunAnimation">ショットガンを持っている時のアニメーションの設定</param>
-	void UpdateShotGunReloadAnimationTime(ShotGunModel shotGunModel, GunAnimation shotGunAnimation)
+	void UpdateShotGunReloadAnimationTime(IPlayerGunState gunState, GunAnimation shotGunAnimation)
 	{
 		float phaseProgress;
-		EnumManager.ShotGunReloadPhaseTYPE phase = shotGunModel.GetReloadPhase(out phaseProgress);
+		EnumManager.ShotGunReloadPhaseTYPE phase = gunState.GetShotGunReloadPhase(out phaseProgress);
 		isReloadAnimationForward = phase != EnumManager.ShotGunReloadPhaseTYPE.ShellReturn;
 		switch (phase)
 		{

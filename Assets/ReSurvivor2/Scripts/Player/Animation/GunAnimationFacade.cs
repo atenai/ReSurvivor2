@@ -50,14 +50,14 @@ public class GunAnimationFacade
 	/// 銃ごとに、リロード中のマガジンを動かす（抜き取る → 左手で持つ → 差し込む）
 	/// ※アニメーションで手が動いた後に動かす
 	/// </summary>
-	/// <param name="gunModelFacade">銃</param>
+	/// <param name="gunState">銃の状態を読むための窓口</param>
 	/// <param name="reloadAnimationTime">リロードアニメーションの再生位置</param>
 	/// <param name="isReloadAnimationForward">リロードアニメーションを前へ進めているか？</param>
 	/// <param name="leftHand">左手の骨</param>
-	public void UpdateReloadMagazines(GunModelFacade gunModelFacade, float reloadAnimationTime, bool isReloadAnimationForward, Transform leftHand)
+	public void UpdateReloadMagazines(IPlayerGunState gunState, float reloadAnimationTime, bool isReloadAnimationForward, Transform leftHand)
 	{
-		handGunAnimation.UpdateReloadMagazine(gunModelFacade.FindGunBase(EnumManager.GunTYPE.HandGun).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, leftHand);
-		assaultRifleAnimation.UpdateReloadMagazine(gunModelFacade.FindGunBase(EnumManager.GunTYPE.AssaultRifle).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, leftHand);
-		shotGunAnimation.UpdateReloadMagazine(gunModelFacade.FindGunBase(EnumManager.GunTYPE.ShotGun).IsReloadTimeActive, reloadAnimationTime, isReloadAnimationForward, leftHand);
+		handGunAnimation.UpdateReloadMagazine(gunState.IsGunReloadTimeActive(EnumManager.GunTYPE.HandGun), reloadAnimationTime, isReloadAnimationForward, leftHand);
+		assaultRifleAnimation.UpdateReloadMagazine(gunState.IsGunReloadTimeActive(EnumManager.GunTYPE.AssaultRifle), reloadAnimationTime, isReloadAnimationForward, leftHand);
+		shotGunAnimation.UpdateReloadMagazine(gunState.IsGunReloadTimeActive(EnumManager.GunTYPE.ShotGun), reloadAnimationTime, isReloadAnimationForward, leftHand);
 	}
 }

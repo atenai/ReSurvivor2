@@ -54,7 +54,7 @@ public class ShotGunModel : GunModelBase
 	[Tooltip("今回のリロードで込め終わった弾の数")]
 	int loadedShellCount = 0;
 
-	[Tooltip("リロードを始めた時に、銃に弾が1発も入っていなかったか？（入っていなかった時は、最後の弾を込めた後に弾を送り込む音を鳴らす）")]
+	[Tooltip("リロードを始めた時に、銃に弾が1発も入っていなかったか？（入っていなかった時は、最後の弾を込めた後に弾を送り込んだことを知らせる）")]
 	bool isEmptyAtReloadStart = false;
 
 	[Tooltip("1回で込める弾の数")]
@@ -62,6 +62,16 @@ public class ShotGunModel : GunModelBase
 
 	[Tooltip("弾が1発も入っていない時のマガジンの弾数")]
 	const int EmptyMagazineCount = 0;
+
+	/// <summary>
+	/// 弾を1発込めた時の知らせ
+	/// </summary>
+	public event UnityAction OnShellInserted;
+
+	/// <summary>
+	/// 空の銃に最後の弾まで込めて、弾を送り込んだ時の知らせ
+	/// </summary>
+	public event UnityAction OnChambered;
 
 	/// <summary>
 	/// リロードにかかる時間（秒）（込める弾の数で変わる）
@@ -169,12 +179,12 @@ public class ShotGunModel : GunModelBase
 		currentMagazine = currentMagazine + ShellCountPerLoad;
 		currentAmmo = currentAmmo - ShellCountPerLoad;
 		loadedShellCount = loadedShellCount + ShellCountPerLoad;
-		ShotGunShellInsertSE();
+		OnShellInserted?.Invoke();
 
-		//空の銃に最後の弾まで込めたら、弾を送り込む音を鳴らす
+		//空の銃に最後の弾まで込めたら、弾を送り込んだことを知らせる
 		if (loadedShellCount == shellCountToLoad && isEmptyAtReloadStart == true)
 		{
-			ShotGunReloadSE();
+			OnChambered?.Invoke();
 		}
 	}
 
@@ -257,11 +267,8 @@ public class ShotGunModel : GunModelBase
 	/// </summary> 
 	protected override void Fire()
 	{
-		ShotGunBulletCasingSE();
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.ShotGunView.ShotGunMuzzleFlashAndShell();
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.ShotGunView.ShotGunSmoke();
-
-		ShotGunFireSE();
+		//撃ったことを知らせる（マズルフラッシュ・硝煙・射撃音・薬莢の音は、知らせを受け取った見た目の側が出す）
+		NotifyFired();
 		bool isOnceShotGunHitSE = false;
 
 		for (int i = 0; i < shotGunBullet; i++)
@@ -327,38 +334,6 @@ public class ShotGunModel : GunModelBase
 
 		//追跡開始
 		EnemyManager.SingletonInstance.ChaseEvent.Invoke();
-	}
-
-	/// <summary>
-	/// ショットガンの射撃SE
-	/// </summary> 
-	void ShotGunFireSE()
-	{
-		SoundManager.SingletonInstance.ShotGunShootSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.ShotGunView.ShotGunMuzzleTransform);
-	}
-
-	/// <summary>
-	/// ショットガンのリロードSE（空の銃に弾を込め終わった時に、弾を送り込む音として鳴らす）
-	/// </summary>
-	void ShotGunReloadSE()
-	{
-		SoundManager.SingletonInstance.ShotGunReloadSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.ShotGunView.ShotGunBulletCasingTransform);
-	}
-
-	/// <summary>
-	/// ショットガンの弾込めSE（弾を1発込めるたびに鳴らす）
-	/// </summary>
-	void ShotGunShellInsertSE()
-	{
-		SoundManager.SingletonInstance.ShotGunShellInsertSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.ShotGunView.ShotGunBulletCasingTransform);
-	}
-
-	/// <summary>
-	/// ショットガンの薬莢SE
-	/// </summary>
-	void ShotGunBulletCasingSE()
-	{
-		SoundManager.SingletonInstance.ShotGunBulletCasingSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.ShotGunView.ShotGunBulletCasingTransform);
 	}
 
 	/// <summary>

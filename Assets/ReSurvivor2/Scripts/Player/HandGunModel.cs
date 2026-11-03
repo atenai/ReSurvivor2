@@ -120,7 +120,7 @@ public class HandGunModel : GunModelBase
 
 		if (reloadCountTimer == 0)
 		{
-			HandGunReloadSE();
+			NotifyReloadStarted();
 		}
 
 		//リロード中画像
@@ -163,11 +163,8 @@ public class HandGunModel : GunModelBase
 	/// </summary> 
 	protected override void Fire()
 	{
-		HandGunBulletCasingSE();
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.HandGunView.HandGunMuzzleFlashAndShell();
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.HandGunView.HandGunSmoke();
-
-		HandGunFireSE();
+		//撃ったことを知らせる（マズルフラッシュ・硝煙・射撃音・薬莢の音は、知らせを受け取った見た目の側が出す）
+		NotifyFired();
 
 		Ray ray = new Ray(PlayerCameraManager.SingletonInstance.transform.position, PlayerCameraManager.SingletonInstance.transform.forward);
 		Debug.DrawRay(ray.origin, ray.direction * PlayerCameraManager.SingletonInstance.RaycastRange, Color.red, 10.0f);
@@ -221,30 +218,6 @@ public class HandGunModel : GunModelBase
 
 			EffectManager.SingletonInstance.ImpactEffect(hit);
 		}
-	}
-
-	/// <summary>
-	/// ハンドガンの射撃SE
-	/// </summary> 
-	void HandGunFireSE()
-	{
-		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.HandGunView.HandGunMuzzleTransform);
-	}
-
-	/// <summary>
-	/// ハンドガンのリロードSE
-	/// </summary> 
-	void HandGunReloadSE()
-	{
-		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.HandGunView.HandGunBulletCasingTransform);
-	}
-
-	/// <summary>
-	/// ハンドガンの薬莢SE
-	/// </summary>
-	void HandGunBulletCasingSE()
-	{
-		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.HandGunView.HandGunBulletCasingTransform);
 	}
 
 	/// <summary>

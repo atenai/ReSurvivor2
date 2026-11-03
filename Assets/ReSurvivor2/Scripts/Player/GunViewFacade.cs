@@ -93,4 +93,42 @@ public class GunViewFacade
 				break;
 		}
 	}
+
+	/// <summary>
+	/// 撃った銃の、撃った時の見た目と音を出す
+	/// </summary>
+	/// <param name="gunTYPE">撃った銃の種類</param>
+	public void Fire(EnumManager.GunTYPE gunTYPE)
+	{
+		switch (gunTYPE)
+		{
+			case EnumManager.GunTYPE.HandGun:
+				handGunView.HandGunFire();
+				break;
+			case EnumManager.GunTYPE.AssaultRifle:
+				assaultRifleView.AssaultRifleFire();
+				break;
+			case EnumManager.GunTYPE.ShotGun:
+				shotGunView.ShotGunFire();
+				break;
+		}
+	}
+
+	/// <summary>
+	/// リロードを始めた銃の、リロードSEを鳴らす
+	/// （ショットガンは弾を1発ずつ込めるので、リロードを始めた時には鳴らさず、弾を込めるたび・弾を送り込んだ時に鳴らす）
+	/// </summary>
+	/// <param name="gunTYPE">リロードを始めた銃の種類</param>
+	public void ReloadStartSE(EnumManager.GunTYPE gunTYPE)
+	{
+		switch (gunTYPE)
+		{
+			case EnumManager.GunTYPE.HandGun:
+				handGunView.HandGunReloadSE();
+				break;
+			case EnumManager.GunTYPE.AssaultRifle:
+				assaultRifleView.AssaultRifleReloadSE();
+				break;
+		}
+	}
 }
