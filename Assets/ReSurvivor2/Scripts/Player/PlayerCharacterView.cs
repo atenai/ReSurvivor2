@@ -6,10 +6,8 @@ using UnityEngine;
 /// プレイヤーキャラクタービュー
 /// MVPパターンのView担当
 /// ※プレイヤーのアニメーションの窓口。Presenterからプレイヤーの状態を受け取り、アニメーションごとのクラスに渡して動かす
-///   （移動：MoveAnimation、構え：AimAnimation、リロード：ReloadAnimation、ショットガンのリロード：ShotGunReloadAnimation、地雷：MineAnimation、
-///     ハンドガンへの持ち替え：SideArmAnimation、武器の切り替え：WeaponSwitchAnimation、手のIK：HandIK、銃ごとの設定：GunAnimationFacade）
-/// ※銃の状態は、初期化の時に受け取った、銃の状態を読むための窓口（IPlayerGunState）から読む
-///   （このクラスは銃のクラスそのものを知らず、銃のクラスもこのクラスを知らない）
+/// 移動：MoveAnimation、構え：AimAnimation、リロード：ReloadAnimation、ショットガンのリロード：ShotGunReloadAnimation、地雷：MineAnimation、
+/// ハンドガンへの持ち替え：SideArmAnimation、武器の切り替え：WeaponSwitchAnimation、手のIK：HandIK、銃ごとの設定：GunAnimationFacade
 /// </summary>
 public class PlayerCharacterView : MonoBehaviour
 {
