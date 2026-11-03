@@ -31,9 +31,6 @@ public class PlayerManagerPresenter : MonoBehaviour
 	[Tooltip("プレイヤーキャラクタービュー")]
 	[SerializeField] PlayerCharacterView playerCharacterView;
 
-	[Tooltip("ガンビュープレゼンター（銃の知らせを受け取って、銃のビューに見た目と音を出させる）")]
-	readonly GunViewPresenter gunViewPresenter = new GunViewPresenter();
-
 	[Tooltip("プレイヤーUIビュー")]
 	[SerializeField] PlayerUIView playerUIView;
 	public PlayerUIView PlayerUIView => playerUIView;
@@ -43,7 +40,6 @@ public class PlayerManagerPresenter : MonoBehaviour
 
 	[Tooltip("カメラの揺れ")]
 	[SerializeField] CinemachineImpulseSource cinemachineImpulseSource;
-	public CinemachineImpulseSource CinemachineImpulseSource => cinemachineImpulseSource;
 
 	void Awake()
 	{
@@ -89,8 +85,9 @@ public class PlayerManagerPresenter : MonoBehaviour
 	{
 		//プレイヤーのアニメーションは、銃の状態を見て動かすので、銃の状態を読むための窓口を渡しておく
 		playerCharacterView.Initialize(PlayerCameraManager.SingletonInstance.GunModelFacade, PlayerCameraManager.SingletonInstance.transform);
-		//銃の見せ方・マズルフラッシュ・音は、銃の知らせを受けて出す
-		gunViewPresenter.Bind(PlayerCameraManager.SingletonInstance.GunModelFacade, playerCharacterView.GunViewFacade);
+
+		Bind();
+
 		InitHP();
 		InitStamina();
 		InitMine();
@@ -105,10 +102,35 @@ public class PlayerManagerPresenter : MonoBehaviour
 		playerUIView.UpdateUITransform(playerModel.IsAim);
 	}
 
+	/// <summary>
+	/// 銃のイベントをつなぐ
+	/// </summary>
+	void Bind()
+	{
+		PlayerCameraManager.SingletonInstance.GunModelFacade.OnGunTYPEChanged += playerCharacterView.GunViewFacade.SwitchWeaponModel;
+		PlayerCameraManager.SingletonInstance.GunModelFacade.OnGunFired += playerCharacterView.GunViewFacade.Fire;
+		PlayerCameraManager.SingletonInstance.GunModelFacade.OnGunReloadStarted += playerCharacterView.GunViewFacade.ReloadStartSE;
+		PlayerCameraManager.SingletonInstance.GunModelFacade.OnShotGunShellInserted += playerCharacterView.GunViewFacade.ShotGunView.ShotGunShellInsertSE;
+		PlayerCameraManager.SingletonInstance.GunModelFacade.OnShotGunChambered += playerCharacterView.GunViewFacade.ShotGunView.ShotGunReloadSE;
+		playerCharacterView.GunViewFacade.SwitchWeaponModel(PlayerCameraManager.SingletonInstance.GunModelFacade.GetGunTYPE);
+	}
+
+
 	void OnDestroy()
 	{
-		//破棄した後のビューに、銃の知らせが届かないようにする
-		gunViewPresenter.Unbind();
+		Unbind();
+	}
+
+	/// <summary>
+	/// 銃のイベントを外す
+	/// </summary>
+	void Unbind()
+	{
+		PlayerCameraManager.SingletonInstance.GunModelFacade.OnGunTYPEChanged -= playerCharacterView.GunViewFacade.SwitchWeaponModel;
+		PlayerCameraManager.SingletonInstance.GunModelFacade.OnGunFired -= playerCharacterView.GunViewFacade.Fire;
+		PlayerCameraManager.SingletonInstance.GunModelFacade.OnGunReloadStarted -= playerCharacterView.GunViewFacade.ReloadStartSE;
+		PlayerCameraManager.SingletonInstance.GunModelFacade.OnShotGunShellInserted -= playerCharacterView.GunViewFacade.ShotGunView.ShotGunShellInsertSE;
+		PlayerCameraManager.SingletonInstance.GunModelFacade.OnShotGunChambered -= playerCharacterView.GunViewFacade.ShotGunView.ShotGunReloadSE;
 	}
 
 	public void ResetMove()
