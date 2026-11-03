@@ -399,12 +399,14 @@ public class WeaponSwitchAnimation
 			return;
 		}
 
-		//途中の姿勢からしまう場所までは、銃の中心をまっすぐ動かす（右手の位置をまっすぐ動かすと、銃の中心が弧を描くため）
+		//途中の姿勢からしまう場所までは、銃の中心を動かす（右手の位置で動かすと、銃の中心が弧を描くため）
+		//（銃が体にめり込まないように、決めた量だけ体の外側へ膨らませる）
 		float straightRate = Mathf.InverseLerp(viaPoseRate, StowPathRate, rate);
 		handRotation = Quaternion.Slerp(viaHandRotation, stowHandRotation, straightRate);
 		Vector3 viaGunPosition = viaHandPosition + viaHandRotation * handToGunPosition;
 		Vector3 stowGunPosition = stowHandPosition + stowHandRotation * handToGunPosition;
-		handPosition = GetHandPosition(Vector3.Lerp(viaGunPosition, stowGunPosition, straightRate), handRotation);
+		Vector3 stowWaypoint = Vector3.Lerp(viaGunPosition, stowGunPosition, PathMiddleRate) + bodyRotation * gunAnimation.WeaponSwitchViaToStowBulge;
+		handPosition = GetHandPosition(GetPathPosition(viaGunPosition, stowWaypoint, stowGunPosition, straightRate), handRotation);
 	}
 
 	/// <summary>

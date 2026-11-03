@@ -926,7 +926,7 @@ Transform:
   m_GameObject: {fileID: 2729431798955514415}
   serializedVersion: 2
   m_LocalRotation: {x: 0.58054876, y: 0.12655813, z: -0.79905665, w: 0.09195019}
-  m_LocalPosition: {x: 0.05999975, y: 0.009999946, z: -0.19999981}
+  m_LocalPosition: {x: 0.09999974, y: 0.009999946, z: -0.19999981}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1449,6 +1449,7 @@ MonoBehaviour:
       weaponSwitchViaPoseRate: 1
       weaponSwitchViaHandPosition: {x: 0, y: 0, z: 0}
       weaponSwitchViaGunAngle: {x: 0, y: 0, z: 0}
+      weaponSwitchViaToStowBulge: {x: 0, y: 0, z: 0}
       weaponSwitchRightHandForendGripPos: {fileID: 0}
       weaponSwitchRightHandForendSlideDistance: 0
       weaponSwitchRightHandReleaseRate: 1
@@ -1486,6 +1487,7 @@ MonoBehaviour:
       weaponSwitchViaPoseRate: 1
       weaponSwitchViaHandPosition: {x: 0, y: 0, z: 0}
       weaponSwitchViaGunAngle: {x: 0, y: 0, z: 0}
+      weaponSwitchViaToStowBulge: {x: 0, y: 0, z: 0}
       weaponSwitchRightHandForendGripPos: {fileID: 0}
       weaponSwitchRightHandForendSlideDistance: 0
       weaponSwitchRightHandReleaseRate: 0.6
@@ -1517,8 +1519,9 @@ MonoBehaviour:
       weaponSwitchWaypointGunAngle: {x: 12, y: 0, z: 0}
       weaponSwitchWaypointGunAngleWeight: 1
       weaponSwitchViaPoseRate: 0.55
-      weaponSwitchViaHandPosition: {x: 0.08, y: -0.42, z: -0.14}
+      weaponSwitchViaHandPosition: {x: 0.15, y: -0.4, z: -0.1}
       weaponSwitchViaGunAngle: {x: 10, y: 5, z: 0}
+      weaponSwitchViaToStowBulge: {x: 0.2, y: 0.05, z: -0.3}
       weaponSwitchRightHandForendGripPos: {fileID: 3269371030026232435}
       weaponSwitchRightHandForendSlideDistance: 0.2
       weaponSwitchRightHandReleaseRate: 1
@@ -4019,15 +4022,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8912993347114468264, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.194
+      value: 0.228
       objectReference: {fileID: 0}
     - target: {fileID: 8912993347114468264, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.387
+      value: -0.413
       objectReference: {fileID: 0}
     - target: {fileID: 8912993347114468264, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.112
+      value: -0.154
       objectReference: {fileID: 0}
     - target: {fileID: 8912993347114468264, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       propertyPath: m_LocalRotation.w

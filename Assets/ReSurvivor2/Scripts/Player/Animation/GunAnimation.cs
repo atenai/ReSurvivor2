@@ -134,6 +134,9 @@ public class GunAnimation
 	[Tooltip("途中の姿勢の、銃の向き（度。キャラクターから見た向きで、銃口を正面に向けて水平にした向きから、xが銃口を下へ向ける角度、yが銃口を右へ向ける角度、zが銃身を軸に銃の上側を右へ倒す角度）")]
 	[SerializeField] Vector3 weaponSwitchViaGunAngle;
 	public Vector3 WeaponSwitchViaGunAngle => weaponSwitchViaGunAngle;
+	[Tooltip("途中の姿勢からしまう場所まで銃を動かす時に、銃の中心の通る線を膨らませる量（m。途中の姿勢としまう場所のちょうど間からのずれで、キャラクターから見た向き。xが右、yが上、zが前）（まっすぐ動かすと、銃が体にめり込むため、体の外側を通す）")]
+	[SerializeField] Vector3 weaponSwitchViaToStowBulge;
+	public Vector3 WeaponSwitchViaToStowBulge => weaponSwitchViaToStowBulge;
 	[Tooltip("銃をしまう・取り出す時に、右手で銃の前側を持つ位置・向き（銃の子に置いた目印。向きはIK用の手の向き）（空の時は、グリップを握ったまま動かす）（ショットガンは、右脇の下から右手で銃の前側を持って背中との間を動かし、前に出した所で左手に前側を持たせて、右手はグリップに持ち替える）")]
 	[SerializeField] Transform weaponSwitchRightHandForendGripPos;
 	public Transform WeaponSwitchRightHandForendGripPos => weaponSwitchRightHandForendGripPos;
