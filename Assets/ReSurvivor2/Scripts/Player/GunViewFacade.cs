@@ -44,6 +44,25 @@ public class GunViewFacade
 	}
 
 	/// <summary>
+	/// 銃の種類から、体のしまう場所に付けている銃のモデルを探す（ハンドガンは右太もものホルスター、アサルトライフルは左の腰、ショットガンは背中）
+	/// </summary>
+	/// <param name="gunTYPE">銃の種類</param>
+	/// <returns>しまってある銃のモデル（見つからなかった場合はnull）</returns>
+	public Transform FindGunModelBodyDecorationTransform(EnumManager.GunTYPE gunTYPE)
+	{
+		switch (gunTYPE)
+		{
+			case EnumManager.GunTYPE.HandGun:
+				return handGunView.GetHandGunModelBodyDecoration.transform;
+			case EnumManager.GunTYPE.AssaultRifle:
+				return assaultRifleView.GetAssaultRifleModelBodyDecoration.transform;
+			case EnumManager.GunTYPE.ShotGun:
+				return shotGunView.GetShotGunModelBodyDecoration.transform;
+		}
+		return null;
+	}
+
+	/// <summary>
 	/// 銃のモデルを切り替え
 	/// </summary>
 	public void SwitchWeaponModel(EnumManager.GunTYPE gunTYPE)

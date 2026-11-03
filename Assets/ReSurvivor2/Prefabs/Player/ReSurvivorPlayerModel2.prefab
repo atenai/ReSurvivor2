@@ -901,6 +901,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2121356204759452842}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2729431798955514415
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3269371030026232435}
+  m_Layer: 0
+  m_Name: RightHandForendGripPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3269371030026232435
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2729431798955514415}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.58054876, y: 0.12655813, z: -0.79905665, w: 0.09195019}
+  m_LocalPosition: {x: 0.05999975, y: 0.009999946, z: -0.19999981}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5094681170906548820}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2873845846740021018
 GameObject:
   m_ObjectHideFlags: 0
@@ -1412,6 +1443,18 @@ MonoBehaviour:
       sideArmCarryLeftHandOffset: {x: 0, y: 0, z: 0}
       sideArmCarryGunAngle: {x: 0, y: 0, z: 0}
       sideArmCarryFingerCurl: 1
+      weaponSwitchWaypoint: {x: 0.13, y: -0.27, z: 0.11}
+      weaponSwitchWaypointGunAngle: {x: 0, y: 0, z: 0}
+      weaponSwitchWaypointGunAngleWeight: 0
+      weaponSwitchViaPoseRate: 1
+      weaponSwitchViaHandPosition: {x: 0, y: 0, z: 0}
+      weaponSwitchViaGunAngle: {x: 0, y: 0, z: 0}
+      weaponSwitchRightHandForendGripPos: {fileID: 0}
+      weaponSwitchRightHandForendSlideDistance: 0
+      weaponSwitchRightHandReleaseRate: 1
+      weaponSwitchLeftHandCarryGripPos: {fileID: 0}
+      weaponSwitchRightElbowHintOffset: {x: 0, y: 0, z: 0}
+      weaponSwitchRightElbowHintWeight: 0
     assaultRifleAnimation:
       leftHandGripPos: {fileID: 9144816094143031579}
       magazineModels:
@@ -1437,6 +1480,18 @@ MonoBehaviour:
       sideArmCarryLeftHandOffset: {x: -0.1, y: 0, z: 0.1}
       sideArmCarryGunAngle: {x: 25, y: 0, z: 10}
       sideArmCarryFingerCurl: 0.35
+      weaponSwitchWaypoint: {x: -0.17, y: -0.42, z: 0.46}
+      weaponSwitchWaypointGunAngle: {x: 0, y: 0, z: 0}
+      weaponSwitchWaypointGunAngleWeight: 0
+      weaponSwitchViaPoseRate: 1
+      weaponSwitchViaHandPosition: {x: 0, y: 0, z: 0}
+      weaponSwitchViaGunAngle: {x: 0, y: 0, z: 0}
+      weaponSwitchRightHandForendGripPos: {fileID: 0}
+      weaponSwitchRightHandForendSlideDistance: 0
+      weaponSwitchRightHandReleaseRate: 0.6
+      weaponSwitchLeftHandCarryGripPos: {fileID: 7912956532960628541}
+      weaponSwitchRightElbowHintOffset: {x: 0, y: 0, z: 0}
+      weaponSwitchRightElbowHintWeight: 0
     shotGunAnimation:
       leftHandGripPos: {fileID: 8914865205819662291}
       magazineModels:
@@ -1458,6 +1513,18 @@ MonoBehaviour:
       sideArmCarryLeftHandOffset: {x: -0.3, y: 0.08, z: 0.1}
       sideArmCarryGunAngle: {x: 25, y: 0, z: 12}
       sideArmCarryFingerCurl: 0.2
+      weaponSwitchWaypoint: {x: 0.17, y: -0.34, z: 0.15}
+      weaponSwitchWaypointGunAngle: {x: 12, y: 0, z: 0}
+      weaponSwitchWaypointGunAngleWeight: 1
+      weaponSwitchViaPoseRate: 0.55
+      weaponSwitchViaHandPosition: {x: 0.08, y: -0.42, z: -0.14}
+      weaponSwitchViaGunAngle: {x: 10, y: 5, z: 0}
+      weaponSwitchRightHandForendGripPos: {fileID: 3269371030026232435}
+      weaponSwitchRightHandForendSlideDistance: 0.2
+      weaponSwitchRightHandReleaseRate: 1
+      weaponSwitchLeftHandCarryGripPos: {fileID: 0}
+      weaponSwitchRightElbowHintOffset: {x: 0.15, y: -0.15, z: -0.25}
+      weaponSwitchRightElbowHintWeight: 0.6
   minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
   shotGunReloadAnimation:
     leftHandHoldGripPos: {fileID: 5346429223549302403}
@@ -2527,6 +2594,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6764241680255446789}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7699496468735740464
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7912956532960628541}
+  m_Layer: 0
+  m_Name: LeftHandCarryGripPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7912956532960628541
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7699496468735740464}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.5, y: 0.5, z: -0.5, w: 0.5}
+  m_LocalPosition: {x: 0.05, y: 0.07, z: -0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2121356204759452808}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7875721941705408782
 GameObject:
   m_ObjectHideFlags: 0
@@ -3211,6 +3309,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1750075617723322681, guid: aaa1db87a95705f4889ef62f34b20bd0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3776364770366841824}
+    - targetCorrespondingSourceObject: {fileID: 1750075617723322681, guid: aaa1db87a95705f4889ef62f34b20bd0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7912956532960628541}
     - targetCorrespondingSourceObject: {fileID: 1750075617723322661, guid: aaa1db87a95705f4889ef62f34b20bd0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5137982704373457513}
@@ -3760,6 +3861,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8912993347114468264, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5346429223549302403}
+    - targetCorrespondingSourceObject: {fileID: 8912993347114468264, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3269371030026232435}
     - targetCorrespondingSourceObject: {fileID: 8912993347114468266, guid: 213b15e6832deeb4ba87bda81db238b9, type: 3}
       insertIndex: 1
       addedObject: {fileID: 1511341926666868225}

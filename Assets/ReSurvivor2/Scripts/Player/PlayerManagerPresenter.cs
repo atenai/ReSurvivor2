@@ -107,6 +107,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 		playerModel.ResetMove();
 		//ハンドガンに持ち替えている時は、メインの銃を持っている状態に戻す（持ち替えたまま次のステージに移らないようにする）
 		PlayerCameraManager.SingletonInstance.GunModelFacade.CancelSideArm();
+		//武器を切り替えている時は、切り替える先の銃を持っている状態にする（銃をしまう途中のまま次のステージに移らないようにする）
+		PlayerCameraManager.SingletonInstance.GunModelFacade.CancelWeaponSwitch();
 		playerCharacterView.ResetMoveAnimation();
 		playerUIView.SetMinePlacingFillAmount(0.0f);
 	}
@@ -228,12 +230,12 @@ public class PlayerManagerPresenter : MonoBehaviour
 			return;
 		}
 
-		//地雷を持っていない時と、リロード中と、ハンドガンに持ち替えている間は、地雷を置き始めない
-		//（リロードやハンドガンの持ち替えの上半身の動きと、しゃがむ動きが重ならないようにする）
+		//地雷を持っていない時と、リロード中と、ハンドガンに持ち替えている間と、武器を切り替えている間は、地雷を置き始めない
+		//（リロードやハンドガンの持ち替えや武器の切り替えの上半身の動きと、しゃがむ動きが重ならないようにする）
 		if (playerModel.MinePlacePhase == EnumManager.MinePlacePhaseTYPE.None)
 		{
 			GunModelFacade gunModelFacade = PlayerCameraManager.SingletonInstance.GunModelFacade;
-			if (playerModel.CurrentMine <= 0 || gunModelFacade.GunModelBase.IsReloadTimeActive == true || gunModelFacade.IsSideArmActive == true)
+			if (playerModel.CurrentMine <= 0 || gunModelFacade.GunModelBase.IsReloadTimeActive == true || gunModelFacade.IsSideArmActive == true || gunModelFacade.IsWeaponSwitching == true)
 			{
 				return;
 			}

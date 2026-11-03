@@ -61,6 +61,19 @@ public static class EnumManager
 	}
 
 	/// <summary>
+	/// 武器を切り替える動きの段階
+	/// </summary>
+	public enum WeaponSwitchPhaseTYPE
+	{
+		//武器を切り替えていない
+		None = 0,
+		//今持っている銃を、体のしまう場所（ハンドガンは右太もものホルスター、アサルトライフルは左の腰、ショットガンは背中）へしまう
+		PutAway = 1,
+		//切り替える先の銃を、体のしまう場所から取り出して持つ
+		TakeOut = 2,
+	}
+
+	/// <summary>
 	/// ステージのタイプ
 	/// </summary>
 	public enum StageTYPE
