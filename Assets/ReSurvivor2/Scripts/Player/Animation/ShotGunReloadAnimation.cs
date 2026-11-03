@@ -9,7 +9,7 @@ using UnityEngine;
 /// ※リロード中は、銃を左手の骨の子にして、左手と一緒に動かす
 /// ※両手と銃の位置・向きは、リロードアニメーションの再生位置から求める（リロードのステートのアニメーションは、上半身の立ち姿だけにしてある）
 ///   2発目以降は、リロードアニメーションの再生位置が「装填口 → ポーチ」と巻き戻るので、右手も装填口からポーチへ戻って次の弾を取る
-/// ※PlayerCharacterViewが持ち、HandIKはここで求めた手の位置・向きを使う（銃のクラスからは使わない）
+/// ※GunAnimationFacadeが持ち、HandIKはここで求めた手の位置・向きを使う（銃のクラスからは使わない）
 /// </summary>
 [System.Serializable]
 public class ShotGunReloadAnimation

@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 地雷を置く時の、プレイヤーのアニメーションの設定
 /// （地雷を置くアニメーションの進め方・地雷を置いている間の手の位置）
-/// ※PlayerCharacterViewが持ち、地雷を置く動きの段階を見て動かす（HandIKは、ここで求めた割合や手をずらす量を使う）
+/// ※PlayerAnimationFacadeが持ち、地雷を置く動きの段階を見て動かす（HandIKは、ここで求めた割合や手をずらす量を使う）
 /// </summary>
 [System.Serializable]
 public class MineAnimation

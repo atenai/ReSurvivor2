@@ -6,10 +6,10 @@ using UnityEngine.Events;
 /// <summary>
 /// ガンモデルファサード
 /// MVPパターンのModel担当
-/// ※銃の状態は、読むだけの窓口（IPlayerGunState）と、知らせ（イベント）で外に伝える（プレイヤーの見た目やアニメーションの側は知らない）
+/// 3つの銃を組み合わせた処理を担当する
 /// </summary>
 [System.Serializable]
-public class GunModelFacade : IPlayerGunState
+public class GunModelFacade : IReadOnlyGunModel
 {
 	[Tooltip("ハンドガン")]
 	[SerializeField] HandGunModel handGunModel = new HandGunModel();

@@ -8,7 +8,7 @@ using UnityEngine;
 ///   左手は腰の高さで、メインの銃の上側をカバンの取っ手のようにつかんで、銃口を前に向けて持つ（マックス・ペイン3の持ち方）。
 ///   銃は斜め（銃口が下、ストックが上）にして、指が銃にめり込まないように持つ。
 ///   しまう時は逆に、ハンドガンをホルスターに戻して、メインの銃を右手に持ち直す）
-/// ※PlayerCharacterViewが持ち、銃の状態（IPlayerGunState）の持ち替えの段階を見て動かす（HandIKは、ここで求めた割合や手の位置・向きを使う）
+/// ※GunAnimationFacadeが持ち、銃の状態（IReadOnlyGunModel）の持ち替えの段階を見て動かす（HandIKは、ここで求めた割合や手の位置・向きを使う）
 /// </summary>
 public class SideArmAnimation
 {
@@ -245,7 +245,7 @@ public class SideArmAnimation
 	/// <param name="gunState">銃の状態を読むための窓口</param>
 	/// <param name="gunViewFacade">ガンビュー ファサード</param>
 	/// <param name="hand_l">左手の骨</param>
-	public void UpdateModels(IPlayerGunState gunState, GunViewFacade gunViewFacade, Transform hand_l)
+	public void UpdateModels(IReadOnlyGunModel gunState, GunViewFacade gunViewFacade, Transform hand_l)
 	{
 		EnumManager.SideArmPhaseTYPE phase = gunState.SideArmPhase;
 		float progress = gunState.SideArmPhaseProgress;

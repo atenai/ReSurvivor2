@@ -1419,6 +1419,12 @@ MonoBehaviour:
     handGunView: {fileID: 3099343492085402758}
     assaultRifleView: {fileID: 3029799190864042039}
     shotGunView: {fileID: 7140144329826878951}
+  playerAnimationFacade:
+    mineAnimation:
+      rightHandOffset: {x: 0.18, y: 0, z: 0.1}
+    handIK:
+      leftHandAnimationPos: {fileID: 3998525445562687975}
+      rightHandAnimationPos: {fileID: 1252442480723866175}
   gunAnimationFacade:
     handGunAnimation:
       leftHandGripPos: {fileID: 8742357782916467534}
@@ -1528,29 +1534,24 @@ MonoBehaviour:
       weaponSwitchLeftHandCarryGripPos: {fileID: 0}
       weaponSwitchRightElbowHintOffset: {x: 0.15, y: -0.15, z: -0.25}
       weaponSwitchRightElbowHintWeight: 0.6
+    shotGunReloadAnimation:
+      leftHandHoldGripPos: {fileID: 5346429223549302403}
+      holdLeftHandPosition: {x: -0.24969378, y: -0.025412008, z: 0.3279703}
+      holdGunAngle: {x: 27.999279, y: -55.70825, z: -20}
+      gunSwingOffset: {x: 0.1, y: 0, z: 0.2}
+      regripClearance: 0.06
+      leftElbowHintOffset: {x: -0.4, y: -0.2, z: -0.05}
+      rightHandShellPouchPos: {fileID: 8747705449965996136}
+      rightHandShellInsertPos: {fileID: 4376169942655925315}
+      rightHandShellPushPos: {fileID: 7680050088618434728}
+      rightHandPathBulge: 0.08
+      rightElbowHintOffset: {x: 0.45, y: -0.4, z: 0.05}
+      gunHoldTime: 0.2
+      rightHandReleaseTime: 0.1
+      rightHandPushTime: 0.53
+      rightHandRegripTime: 0.8
+      gunReturnTime: 0.8
   minePrefab: {fileID: 5827164231276052070, guid: a219df6bb5c86184faebf781ba37be65, type: 3}
-  shotGunReloadAnimation:
-    leftHandHoldGripPos: {fileID: 5346429223549302403}
-    holdLeftHandPosition: {x: -0.24969378, y: -0.025412008, z: 0.3279703}
-    holdGunAngle: {x: 27.999279, y: -55.70825, z: -20}
-    gunSwingOffset: {x: 0.1, y: 0, z: 0.2}
-    regripClearance: 0.06
-    leftElbowHintOffset: {x: -0.4, y: -0.2, z: -0.05}
-    rightHandShellPouchPos: {fileID: 8747705449965996136}
-    rightHandShellInsertPos: {fileID: 4376169942655925315}
-    rightHandShellPushPos: {fileID: 7680050088618434728}
-    rightHandPathBulge: 0.08
-    rightElbowHintOffset: {x: 0.45, y: -0.4, z: 0.05}
-    gunHoldTime: 0.2
-    rightHandReleaseTime: 0.1
-    rightHandPushTime: 0.53
-    rightHandRegripTime: 0.8
-    gunReturnTime: 0.8
-  mineAnimation:
-    rightHandOffset: {x: 0.18, y: 0, z: 0.1}
-  handIK:
-    leftHandAnimationPos: {fileID: 3998525445562687975}
-    rightHandAnimationPos: {fileID: 1252442480723866175}
 --- !u!114 &3099343492085402758
 MonoBehaviour:
   m_ObjectHideFlags: 0
