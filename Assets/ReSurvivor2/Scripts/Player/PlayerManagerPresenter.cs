@@ -107,6 +107,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 		playerModel.ResetMove();
 		//ハンドガンに持ち替えている時は、メインの銃を持っている状態に戻す（持ち替えたまま次のステージに移らないようにする）
 		PlayerCameraManager.SingletonInstance.GunModelFacade.CancelSideArm();
+		//武器を切り替えている時は、切り替える先の銃を持っている状態にする（銃をしまう途中のまま次のステージに移らないようにする）
+		PlayerCameraManager.SingletonInstance.GunModelFacade.CancelWeaponSwitch();
 		playerCharacterView.ResetMoveAnimation();
 		playerUIView.SetMinePlacingFillAmount(0.0f);
 	}
@@ -178,7 +180,9 @@ public class PlayerManagerPresenter : MonoBehaviour
 	/// </summary>
 	void NormalMoveAnimation()
 	{
-		playerCharacterView.UpdateMoveAnimation(playerModel.InputHorizontal, playerModel.InputVertical, playerModel.IsDash, playerModel.IsPlacingMine);
+		//移動のアニメーションには、移動の向きと速さの割合を渡す（移動スティックを少しだけ倒した時は、歩くアニメーションになる）
+		Vector2 move = playerModel.MoveInputDirection * playerModel.MoveRate;
+		playerCharacterView.UpdateMoveAnimation(move.x, move.y, playerModel.IsDash, playerModel.IsPlacingMine);
 		//※敵のマネージャーがないシーンでは、警戒体制の敵はいないことにする
 		bool isEnemyAlert = EnemyManager.SingletonInstance != null && EnemyManager.SingletonInstance.IsAnyEnemyAlert() == true;
 		playerCharacterView.UpdateAimAnimation(playerModel.IsAim, isEnemyAlert, PlayerCameraManager.SingletonInstance.IsEnemyClose);
@@ -226,12 +230,12 @@ public class PlayerManagerPresenter : MonoBehaviour
 			return;
 		}
 
-		//地雷を持っていない時と、リロード中と、ハンドガンに持ち替えている間は、地雷を置き始めない
-		//（リロードやハンドガンの持ち替えの上半身の動きと、しゃがむ動きが重ならないようにする）
+		//地雷を持っていない時と、リロード中と、ハンドガンに持ち替えている間と、武器を切り替えている間は、地雷を置き始めない
+		//（リロードやハンドガンの持ち替えや武器の切り替えの上半身の動きと、しゃがむ動きが重ならないようにする）
 		if (playerModel.MinePlacePhase == EnumManager.MinePlacePhaseTYPE.None)
 		{
 			GunModelFacade gunModelFacade = PlayerCameraManager.SingletonInstance.GunModelFacade;
-			if (playerModel.CurrentMine <= 0 || gunModelFacade.GunModelBase.IsReloadTimeActive == true || gunModelFacade.IsSideArmActive == true)
+			if (playerModel.CurrentMine <= 0 || gunModelFacade.GunModelBase.IsReloadTimeActive == true || gunModelFacade.IsSideArmActive == true || gunModelFacade.IsWeaponSwitching == true)
 			{
 				return;
 			}
@@ -373,7 +377,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 		playerModel.MoveForward.Normalize();
 
 		//移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-		rb.velocity = playerModel.MoveForward * playerModel.NormalMoveSpeed + new Vector3(0, rb.velocity.y, 0);
+		//（移動スティックを少しだけ倒した時は、歩く速さにする）
+		rb.velocity = playerModel.MoveForward * playerModel.NormalMoveSpeed * playerModel.MoveRate + new Vector3(0, rb.velocity.y, 0);
 
 		//キャラクターの向きをキャラクターの進行方向にする
 		if (playerModel.MoveForward != Vector3.zero)//向きベクトルがある場合は中身を実行する
@@ -429,7 +434,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 		playerModel.MoveForward.Normalize();
 
 		//移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-		rb.velocity = playerModel.MoveForward * playerModel.WeaponMoveSpeed + new Vector3(0, rb.velocity.y, 0);
+		//（移動スティックを少しだけ倒した時は、歩く速さにする）
+		rb.velocity = playerModel.MoveForward * playerModel.WeaponMoveSpeed * playerModel.MoveRate + new Vector3(0, rb.velocity.y, 0);
 
 		//キャラクターの向きをカメラの前方にする
 		if (playerModel.CameraForward != Vector3.zero)//向きベクトルがある場合は中身を実行する

@@ -24,16 +24,17 @@ public class MoveAnimation
 	/// ※SetFloatの3つ目の引数（dampTime）を渡すと、値が一瞬で切り替わらず、その時間をかけてなめらかに近づく
 	/// </summary>
 	/// <param name="animator">プレイヤーのアニメーター</param>
-	/// <param name="inputHorizontal">移動の左右の入力</param>
-	/// <param name="inputVertical">移動の前後の入力</param>
+	/// <param name="moveX">移動の左右の値（移動の向き × 移動速度の割合。長さ1で走り、移動スティックを少しだけ倒した時は歩く速さの割合）</param>
+	/// <param name="moveY">移動の前後の値（移動の向き × 移動速度の割合）</param>
 	/// <param name="isDash">ダッシュしているか？</param>
 	/// <param name="isPlacingMine">地雷を置いている間か？</param>
 	/// <param name="isHandGun">ハンドガンを持っているか？</param>
-	public void UpdateAnimation(Animator animator, float inputHorizontal, float inputVertical, bool isDash, bool isPlacingMine, bool isHandGun)
+	public void UpdateAnimation(Animator animator, float moveX, float moveY, bool isDash, bool isPlacingMine, bool isHandGun)
 	{
+		//※アニメーターの移動のブレンドツリーは、真ん中が止まっている時、長さ1の円の上が走り、その内側の円の上が歩きのアニメーション
 		//地雷を置いている間は、その場で止まっているので、移動のアニメーションも止まっている時のアニメーションにする
-		animator.SetFloat(PlayerAnimatorParameter.MoveSpeedX, isPlacingMine == true ? NotMoveValue : inputHorizontal, MoveSpeedDampTime, Time.deltaTime);
-		animator.SetFloat(PlayerAnimatorParameter.MoveSpeedY, isPlacingMine == true ? NotMoveValue : inputVertical, MoveSpeedDampTime, Time.deltaTime);
+		animator.SetFloat(PlayerAnimatorParameter.MoveSpeedX, isPlacingMine == true ? NotMoveValue : moveX, MoveSpeedDampTime, Time.deltaTime);
+		animator.SetFloat(PlayerAnimatorParameter.MoveSpeedY, isPlacingMine == true ? NotMoveValue : moveY, MoveSpeedDampTime, Time.deltaTime);
 		//ダッシュしている時は、構えていない時の走りを、急いで走るダッシュのアニメーションに変える
 		animator.SetFloat(PlayerAnimatorParameter.Dash, isDash == true ? DashValue : NotDashValue, DashDampTime, Time.deltaTime);
 		//ハンドガンは、構えていない時に片手で持つので、構えていない時の移動のアニメーションをライフル・ショットガンと分ける

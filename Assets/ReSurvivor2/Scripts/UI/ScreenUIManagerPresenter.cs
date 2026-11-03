@@ -399,7 +399,8 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 	void UpdateWeaponQuickSelectGunSlot(WeaponQuickSelectSlot slot, GunModelFacade gunModelFacade, EnumManager.GunTYPE gunTYPE)
 	{
 		GunModelBase gunModelBase = gunModelFacade.FindGunBase(gunTYPE);
-		slot.SetSelected(gunModelFacade.GetGunTYPE == gunTYPE);
+		//※武器を切り替えている間は、切り替える先の銃を選択中にする
+		slot.SetSelected(gunModelFacade.SelectedGunTYPE == gunTYPE);
 		slot.SetAmmoText(gunModelBase.CurrentMagazine, gunModelBase.CurrentAmmo);
 	}
 

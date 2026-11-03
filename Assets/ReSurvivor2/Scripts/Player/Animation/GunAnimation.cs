@@ -110,6 +110,54 @@ public class GunAnimation
 	[SerializeField] float sideArmCarryFingerCurl = 1.0f;
 	public float SideArmCarryFingerCurl => sideArmCarryFingerCurl;
 
+	[Header("武器を切り替える時の、銃をしまう・取り出す動き")]
+	//※銃は、右手で持っている位置から、体のしまう場所（ハンドガンは右太もものホルスター、アサルトライフルは左の腰、ショットガンは背中）まで、
+	//  右手（銃を握る位置）が中継点の方へ膨らんだ曲線を通るように動かす（取り出す時は、同じ曲線を逆にたどる）。
+	//  途中で通る姿勢を決めた銃は、持っている位置から途中の姿勢までを曲線で動かし、途中の姿勢からしまう場所まではまっすぐ動かす
+	[Tooltip("銃をしまう・取り出す時に、右手（銃を握る位置）の通る曲線を膨らませる中継点（m。右肩からのずれで、キャラクターから見た向き。xが右、yが上、zが前）（銃や右手が体にめり込まないように、体の外側に置く。右肩からのずれなので、構えて上半身の向きが変わってもついていく）")]
+	[SerializeField] Vector3 weaponSwitchWaypoint;
+	public Vector3 WeaponSwitchWaypoint => weaponSwitchWaypoint;
+	[Tooltip("中継点での銃の向き（度。キャラクターから見た向きで、銃口を正面に向けて水平にした向きから、xが銃口を下へ向ける角度（マイナスで上）、yが銃口を右へ向ける角度、zが銃身を軸に銃の上側を右へ倒す角度）")]
+	[SerializeField] Vector3 weaponSwitchWaypointGunAngle;
+	public Vector3 WeaponSwitchWaypointGunAngle => weaponSwitchWaypointGunAngle;
+	[Tooltip("中継点で、銃を中継点での銃の向きにする割合（0で、持っている向きとしまう向きのちょうど間の向きのまま回す。1で、中継点での銃の向きを通るように回す）")]
+	[Range(0.0f, 1.0f)]
+	[SerializeField] float weaponSwitchWaypointGunAngleWeight;
+	public float WeaponSwitchWaypointGunAngleWeight => weaponSwitchWaypointGunAngleWeight;
+	[Tooltip("銃をしまう動き（持っている位置が0、しまう場所が1）のうち、途中の姿勢を通る所（1で、途中の姿勢を通らずに、しまう場所まで曲線で動かす）")]
+	[Range(0.0f, 1.0f)]
+	[SerializeField] float weaponSwitchViaPoseRate = 1.0f;
+	public float WeaponSwitchViaPoseRate => weaponSwitchViaPoseRate;
+	[Tooltip("途中の姿勢の、右手（銃を握る位置）の位置（m。右肩からのずれで、キャラクターから見た向き。xが右、yが上、zが前）")]
+	[SerializeField] Vector3 weaponSwitchViaHandPosition;
+	public Vector3 WeaponSwitchViaHandPosition => weaponSwitchViaHandPosition;
+	[Tooltip("途中の姿勢の、銃の向き（度。キャラクターから見た向きで、銃口を正面に向けて水平にした向きから、xが銃口を下へ向ける角度、yが銃口を右へ向ける角度、zが銃身を軸に銃の上側を右へ倒す角度）")]
+	[SerializeField] Vector3 weaponSwitchViaGunAngle;
+	public Vector3 WeaponSwitchViaGunAngle => weaponSwitchViaGunAngle;
+	[Tooltip("途中の姿勢からしまう場所まで銃を動かす時に、銃の中心の通る線を膨らませる量（m。途中の姿勢としまう場所のちょうど間からのずれで、キャラクターから見た向き。xが右、yが上、zが前）（まっすぐ動かすと、銃が体にめり込むため、体の外側を通す）")]
+	[SerializeField] Vector3 weaponSwitchViaToStowBulge;
+	public Vector3 WeaponSwitchViaToStowBulge => weaponSwitchViaToStowBulge;
+	[Tooltip("銃をしまう・取り出す時に、右手で銃の前側を持つ位置・向き（銃の子に置いた目印。向きはIK用の手の向き）（空の時は、グリップを握ったまま動かす）（ショットガンは、右脇の下から右手で銃の前側を持って背中との間を動かし、前に出した所で左手に前側を持たせて、右手はグリップに持ち替える）")]
+	[SerializeField] Transform weaponSwitchRightHandForendGripPos;
+	public Transform WeaponSwitchRightHandForendGripPos => weaponSwitchRightHandForendGripPos;
+	[Tooltip("右手で銃の前側を持って動かす間に、しまう場所へ近づくほど、右手を銃口の方へずらす距離（m）（持っている位置の近くでは、右手を体に近い所で持たせて腕が伸びきらないようにし、しまう場所では、右手を右腰の後ろにある銃の前側で持たせる）")]
+	[SerializeField] float weaponSwitchRightHandForendSlideDistance;
+	public float WeaponSwitchRightHandForendSlideDistance => weaponSwitchRightHandForendSlideDistance;
+	[Tooltip("銃をしまう動き（持っている位置が0、しまう場所が1）のうち、右手をグリップから離し終わる所（1で離さない）（1未満の銃は、左手で銃の前側を握ったまま、しまう場所まで左手で持っていく。アサルトライフルは、左の腰まで右手が届かず、右腕がお腹の上に伸びきって体に埋もれるため）")]
+	[Range(0.0f, 1.0f)]
+	[SerializeField] float weaponSwitchRightHandReleaseRate = 1.0f;
+	public float WeaponSwitchRightHandReleaseRate => weaponSwitchRightHandReleaseRate;
+	[Tooltip("左手でしまう場所まで持っていく時に、左手で銃を外側から持つ位置・向き（銃の子に置いた目印。向きはIK用の手の向き）（空の時は、銃の前側を下から握ったまま持っていく）（しまう時は、右手をグリップから離す前に左手を下から外側へ持ち替え、取り出す時は、右手でグリップを握ってから左手を下から握る持ち方へ戻す）")]
+	[SerializeField] Transform weaponSwitchLeftHandCarryGripPos;
+	public Transform WeaponSwitchLeftHandCarryGripPos => weaponSwitchLeftHandCarryGripPos;
+	[Tooltip("右手を体の外側や後ろへ伸ばす時に、右肘を向ける位置（m。右肩からのずれで、キャラクターから見た向き。xが右、yが上、zが前）")]
+	[SerializeField] Vector3 weaponSwitchRightElbowHintOffset;
+	public Vector3 WeaponSwitchRightElbowHintOffset => weaponSwitchRightElbowHintOffset;
+	[Tooltip("右肘の向きを決める効き具合の最大（しまう場所に近いほど強く効かせる。0で効かせない）")]
+	[Range(0.0f, 1.0f)]
+	[SerializeField] float weaponSwitchRightElbowHintWeight;
+	public float WeaponSwitchRightElbowHintWeight => weaponSwitchRightElbowHintWeight;
+
 	/// <summary>
 	/// マガジンを銃に付けている時の親・位置・向きを覚えておく（差し込む時に元に戻すため）
 	/// </summary>

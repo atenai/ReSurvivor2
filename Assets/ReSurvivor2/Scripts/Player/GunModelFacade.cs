@@ -70,6 +70,65 @@ public class GunModelFacade
 	/// </summary>
 	public bool IsSideArmActive => sideArmPhase != EnumManager.SideArmPhaseTYPE.None;
 
+	//※武器の切り替えボタンを押すと、今持っている銃を体のしまう場所へしまってから、切り替える先の銃を取り出して持つ。
+	//  しまい終わった時に、今持っている銃を切り替える先の銃にする（切り替えている間は、撃つこともリロードすることもできない）
+	[Tooltip("武器を切り替える動きの段階")]
+	EnumManager.WeaponSwitchPhaseTYPE weaponSwitchPhase = EnumManager.WeaponSwitchPhaseTYPE.None;
+	public EnumManager.WeaponSwitchPhaseTYPE WeaponSwitchPhase => weaponSwitchPhase;
+	[Tooltip("武器を切り替える動きの、今の段階になってからの時間（秒）")]
+	float weaponSwitchPhaseTimer = 0.0f;
+	[Tooltip("切り替える先の銃")]
+	EnumManager.GunTYPE weaponSwitchTargetGunTYPE;
+	[Tooltip("今持っている銃を、体のしまう場所へしまい終わるまでの時間（秒）（ハンドガン・アサルトライフル）")]
+	const float WeaponPutAwayTime = 0.35f;
+	[Tooltip("切り替える先の銃を、体のしまう場所から取り出して持ち終わるまでの時間（秒）（ハンドガン・アサルトライフル）")]
+	const float WeaponTakeOutTime = 0.45f;
+	//※ショットガンは背中にしまうので、右手で銃の前側に持ち替えて、右脇の下を通して背中との間を動かす分だけ、ほかの銃より長くかける
+	[Tooltip("ショットガンを、背中へしまい終わるまでの時間（秒）")]
+	const float ShotGunPutAwayTime = 0.5f;
+	[Tooltip("ショットガンを、背中から取り出して持ち終わるまでの時間（秒）")]
+	const float ShotGunTakeOutTime = 0.6f;
+	[Tooltip("銃をしまう動き・取り出す動きの、始まりの進み具合")]
+	const float WeaponSwitchStartProgress = 0.0f;
+
+	/// <summary>
+	/// 今持っている銃を、体のしまう場所へしまい終わるまでの時間（秒）（しまっている間は、今持っている銃がしまう銃）
+	/// </summary>
+	float CurrentWeaponPutAwayTime => gunTYPE == EnumManager.GunTYPE.ShotGun ? ShotGunPutAwayTime : WeaponPutAwayTime;
+
+	/// <summary>
+	/// 切り替える先の銃を、体のしまう場所から取り出して持ち終わるまでの時間（秒）（取り出している間は、今持っている銃が取り出す銃）
+	/// </summary>
+	float CurrentWeaponTakeOutTime => gunTYPE == EnumManager.GunTYPE.ShotGun ? ShotGunTakeOutTime : WeaponTakeOutTime;
+
+	/// <summary>
+	/// 銃をしまう動き・取り出す動きの進み具合（0が始まり、1が終わり。切り替えていない時は0）
+	/// </summary>
+	public float WeaponSwitchPhaseProgress
+	{
+		get
+		{
+			switch (weaponSwitchPhase)
+			{
+				case EnumManager.WeaponSwitchPhaseTYPE.PutAway:
+					return Mathf.Clamp01(weaponSwitchPhaseTimer / CurrentWeaponPutAwayTime);
+				case EnumManager.WeaponSwitchPhaseTYPE.TakeOut:
+					return Mathf.Clamp01(weaponSwitchPhaseTimer / CurrentWeaponTakeOutTime);
+			}
+			return WeaponSwitchStartProgress;
+		}
+	}
+
+	/// <summary>
+	/// 武器を切り替えている間か？（しまっている間・取り出している間）
+	/// </summary>
+	public bool IsWeaponSwitching => weaponSwitchPhase != EnumManager.WeaponSwitchPhaseTYPE.None;
+
+	/// <summary>
+	/// 選んでいる銃（武器を切り替えている間は、切り替える先の銃。十字キーの武器アイコンで選択中にする銃）
+	/// </summary>
+	public EnumManager.GunTYPE SelectedGunTYPE => IsWeaponSwitching == true ? weaponSwitchTargetGunTYPE : gunTYPE;
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -90,8 +149,8 @@ public class GunModelFacade
 		{
 			gun.Save();
 		}
-		//ハンドガンに持ち替えている間は、持ち替える前のメインの銃を、今持っている銃として残す
-		ES3.Save<EnumManager.GunTYPE>("CurrentGunType", IsSideArmActive == true ? this.sideArmMainGunTYPE : this.gunTYPE);
+		//ハンドガンに持ち替えている間は、持ち替える前のメインの銃を、武器を切り替えている間は、切り替える先の銃を、今持っている銃として残す
+		ES3.Save<EnumManager.GunTYPE>("CurrentGunType", IsSideArmActive == true ? this.sideArmMainGunTYPE : SelectedGunTYPE);
 	}
 
 	/// <summary>
@@ -121,6 +180,13 @@ public class GunModelFacade
 		}
 
 		SwitchWeaponTrigger();
+		//武器を切り替えている間は、撃つこともリロードすることもできない
+		if (IsWeaponSwitching == true)
+		{
+			UpdateWeaponSwitch();
+			return;
+		}
+
 		if (CanDrawSideArm(isAim) == true)
 		{
 			StartSideArmDraw();
@@ -134,7 +200,8 @@ public class GunModelFacade
 	/// </summary>
 	void SwitchWeaponTrigger()
 	{
-		if (gunModelBase.IsReloadTimeActive == true)
+		//リロード中と、地雷を置いている間は、武器を切り替えない（地雷を置くしゃがむ動きと、銃をしまう動きが重ならないようにする）
+		if (gunModelBase.IsReloadTimeActive == true || PlayerManagerPresenter.SingletonInstance.PlayerModel.MinePlacePhase != EnumManager.MinePlacePhaseTYPE.None)
 		{
 			return;
 		}
@@ -162,14 +229,93 @@ public class GunModelFacade
 	/// <param name="gunTYPE">持ち替える銃のタイプ</param>
 	void ChangeWeapon(EnumManager.GunTYPE gunTYPE)
 	{
-		//ハンドガンに持ち替えている時は、持ち替えをやめる（左手に持っていたメインの銃は、ビューが元の位置に戻す）
-		sideArmPhase = EnumManager.SideArmPhaseTYPE.None;
-		sideArmPhaseTimer = 0.0f;
-		this.gunTYPE = gunTYPE;
-		SwitchWeapon(this.gunTYPE);
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(this.gunTYPE);
 		//十字キーの武器アイコンと弾数を一時的に表示する
 		ScreenUIManagerPresenter.SingletonInstance.ShowWeaponQuickSelect();
+
+		//ハンドガンに持ち替えている時は、持ち替えをやめて、すぐに選んだ銃を持つ（左手に持っていたメインの銃は、ビューが元の位置に戻す）
+		if (IsSideArmActive == true)
+		{
+			ChangeSideArmPhase(EnumManager.SideArmPhaseTYPE.None);
+			this.gunTYPE = gunTYPE;
+			SwitchWeapon(this.gunTYPE);
+			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(this.gunTYPE);
+			return;
+		}
+
+		switch (weaponSwitchPhase)
+		{
+			case EnumManager.WeaponSwitchPhaseTYPE.None:
+				//今持っている銃を選んだ時は、切り替えない
+				if (gunTYPE == this.gunTYPE)
+				{
+					return;
+				}
+
+				weaponSwitchTargetGunTYPE = gunTYPE;
+				ChangeWeaponSwitchPhase(EnumManager.WeaponSwitchPhaseTYPE.PutAway);
+				break;
+			case EnumManager.WeaponSwitchPhaseTYPE.PutAway:
+				//しまっている間に別の銃を選んだ時は、取り出す銃だけを変える
+				weaponSwitchTargetGunTYPE = gunTYPE;
+				break;
+			case EnumManager.WeaponSwitchPhaseTYPE.TakeOut:
+				//取り出している間は、選び直せない（取り出し終わってから、もう一度選ぶ）
+				break;
+		}
+	}
+
+	/// <summary>
+	/// 武器を切り替えている間の処理（今持っている銃をしまう → 切り替える先の銃を取り出す）
+	/// </summary>
+	void UpdateWeaponSwitch()
+	{
+		weaponSwitchPhaseTimer = weaponSwitchPhaseTimer + Time.deltaTime;
+		switch (weaponSwitchPhase)
+		{
+			case EnumManager.WeaponSwitchPhaseTYPE.PutAway:
+				//しまい終わったら、今持っている銃を切り替える先の銃にして、取り出し始める
+				//（しまった銃は体のしまう場所に見せて、取り出す銃は手に持つ方を見せる。取り出す銃の位置・向きは、ビューがしまう場所から動かす）
+				if (CurrentWeaponPutAwayTime <= weaponSwitchPhaseTimer)
+				{
+					gunTYPE = weaponSwitchTargetGunTYPE;
+					SwitchWeapon(gunTYPE);
+					PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(gunTYPE);
+					ChangeWeaponSwitchPhase(EnumManager.WeaponSwitchPhaseTYPE.TakeOut);
+				}
+				break;
+			case EnumManager.WeaponSwitchPhaseTYPE.TakeOut:
+				if (CurrentWeaponTakeOutTime <= weaponSwitchPhaseTimer)
+				{
+					ChangeWeaponSwitchPhase(EnumManager.WeaponSwitchPhaseTYPE.None);
+				}
+				break;
+		}
+	}
+
+	/// <summary>
+	/// 武器を切り替える動きの段階を変える
+	/// </summary>
+	/// <param name="phase">次の段階</param>
+	void ChangeWeaponSwitchPhase(EnumManager.WeaponSwitchPhaseTYPE phase)
+	{
+		weaponSwitchPhase = phase;
+		weaponSwitchPhaseTimer = 0.0f;
+	}
+
+	/// <summary>
+	/// 武器の切り替えをすぐに終わらせて、切り替える先の銃を持っている状態にする（ステージを移る時などに呼ぶ）
+	/// </summary>
+	public void CancelWeaponSwitch()
+	{
+		if (IsWeaponSwitching == false)
+		{
+			return;
+		}
+
+		ChangeWeaponSwitchPhase(EnumManager.WeaponSwitchPhaseTYPE.None);
+		gunTYPE = weaponSwitchTargetGunTYPE;
+		SwitchWeapon(gunTYPE);
+		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(gunTYPE);
 	}
 
 	/// <summary>
@@ -196,7 +342,8 @@ public class GunModelFacade
 	{
 		get
 		{
-			if (gunTYPE == EnumManager.GunTYPE.HandGun)
+			//武器を切り替えている間は、持ち替えない
+			if (gunTYPE == EnumManager.GunTYPE.HandGun || IsWeaponSwitching == true)
 			{
 				return false;
 			}

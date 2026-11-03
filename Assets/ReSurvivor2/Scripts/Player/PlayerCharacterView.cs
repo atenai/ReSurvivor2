@@ -7,7 +7,7 @@ using UnityEngine;
 /// MVPパターンのView担当
 /// ※プレイヤーのアニメーションの窓口。Presenterからプレイヤーの状態を受け取り、アニメーションごとのクラスに渡して動かす
 ///   （移動：MoveAnimation、構え：AimAnimation、リロード：ReloadAnimation、ショットガンのリロード：ShotGunReloadAnimation、地雷：MineAnimation、
-///     ハンドガンへの持ち替え：SideArmAnimation、手のIK：HandIK、銃ごとの設定：GunAnimationFacade）
+///     ハンドガンへの持ち替え：SideArmAnimation、武器の切り替え：WeaponSwitchAnimation、手のIK：HandIK、銃ごとの設定：GunAnimationFacade）
 /// ※銃の状態は、初期化の時に受け取った銃（GunModelFacade）から読む（銃のクラスからはこのクラスを使わない）
 /// </summary>
 public class PlayerCharacterView : MonoBehaviour
@@ -60,6 +60,8 @@ public class PlayerCharacterView : MonoBehaviour
 	readonly AimAnimation aimAnimation = new AimAnimation();
 	[Tooltip("ハンドガンへの持ち替えのアニメーション")]
 	readonly SideArmAnimation sideArmAnimation = new SideArmAnimation();
+	[Tooltip("武器を切り替える時のアニメーション（今持っている銃を体にしまってから、切り替える先の銃を取り出す）")]
+	readonly WeaponSwitchAnimation weaponSwitchAnimation = new WeaponSwitchAnimation();
 	[Tooltip("銃（銃の状態を見て、リロードのアニメーション・リロード中のマガジン・手のIKを動かす）。初期化される前はnull")]
 	GunModelFacade gunModelFacade;
 	[Tooltip("狙う向き（カメラ。弾はこの位置から正面へ飛ぶ）（構えた時に、背骨をこの上下の向きに曲げ、ハンドガンを片手で狙う時は、右腕と銃口をこの正面の先へ向ける）")]
@@ -82,6 +84,7 @@ public class PlayerCharacterView : MonoBehaviour
 		gunAnimationFacade.Initialize();
 		handIK.Initialize(animator);
 		sideArmAnimation.Initialize(gunViewFacade.HandGunView, handIK.LeftHandAnimationPos, animator);
+		weaponSwitchAnimation.Initialize(spine_03, animator.transform, upperarm_r);
 		shotGunReloadAnimation.Initialize(gunViewFacade.ShotGunView.GetShotGunModel.transform, gunAnimationFacade.FindGunAnimation(EnumManager.GunTYPE.ShotGun), handIK.RightHandAnimationPos, handIK.LeftHandAnimationPos);
 	}
 
@@ -128,21 +131,25 @@ public class PlayerCharacterView : MonoBehaviour
 		GunAnimation sideArmMainGunAnimation = gunModelFacade.IsSideArmActive == true ? gunAnimationFacade.FindGunAnimation(gunModelFacade.SideArmMainGunTYPE) : null;
 		sideArmAnimation.UpdateWeights(gunModelFacade.SideArmPhase, gunModelFacade.SideArmPhaseProgress, spineAimRotation, spinePosition, sideArmMainGunAnimation);
 		shotGunReloadAnimation.UpdateWeights(IsShotGunReloading, reloadAnimation.ReloadAnimationTime, spineAimRotation, spinePosition);
+		//※武器を切り替えている間は、今持っている銃（しまう時はしまう銃、取り出す時は取り出す銃）を動かす（前のフレームで動かした銃は、ここで右手で持つ位置に戻す）
+		GunAnimation gunAnimation = gunAnimationFacade.FindGunAnimation(gunTYPE);
+		Transform gunModelTransform = gunViewFacade.FindGunModelTransform(gunTYPE);
+		weaponSwitchAnimation.UpdateWeights(gunModelFacade.WeaponSwitchPhase, gunModelFacade.WeaponSwitchPhaseProgress, gunAnimation, gunModelTransform, gunViewFacade.FindGunModelBodyDecorationTransform(gunTYPE), spineAimRotation, spinePosition);
 		//※ハンドガンを片手で狙う時は、右腕と銃口を、弾の飛ぶ線（カメラの正面）の先へ向ける
 		Ray aimRay = new Ray(aimTransform.position, aimTransform.forward);
-		handIK.UpdateIK(gunAnimationFacade.FindGunAnimation(gunTYPE), gunViewFacade.FindGunModelTransform(gunTYPE), handGunView, mineAnimation, sideArmAnimation, shotGunReloadAnimation, gunModelFacade.GunModelBase.IsReloadTimeActive, reloadAnimation.ReloadAnimationTime, spineAimRotation, spinePosition, aimRay);
+		handIK.UpdateIK(gunAnimation, gunModelTransform, handGunView, mineAnimation, sideArmAnimation, weaponSwitchAnimation, shotGunReloadAnimation, gunModelFacade.GunModelBase.IsReloadTimeActive, reloadAnimation.ReloadAnimationTime, spineAimRotation, spinePosition, aimRay);
 	}
 
 	/// <summary>
 	/// 移動のアニメーションを動かす
 	/// </summary>
-	/// <param name="inputHorizontal">移動の左右の入力</param>
-	/// <param name="inputVertical">移動の前後の入力</param>
+	/// <param name="moveX">移動の左右の値（移動の向き × 移動速度の割合。長さ1で走り、移動スティックを少しだけ倒した時は歩く速さの割合）</param>
+	/// <param name="moveY">移動の前後の値（移動の向き × 移動速度の割合）</param>
 	/// <param name="isDash">ダッシュしているか？</param>
 	/// <param name="isPlacingMine">地雷を置いている間か？（その場で止まっているアニメーションにする）</param>
-	public void UpdateMoveAnimation(float inputHorizontal, float inputVertical, bool isDash, bool isPlacingMine)
+	public void UpdateMoveAnimation(float moveX, float moveY, bool isDash, bool isPlacingMine)
 	{
-		moveAnimation.UpdateAnimation(animator, inputHorizontal, inputVertical, isDash, isPlacingMine, gunModelFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun);
+		moveAnimation.UpdateAnimation(animator, moveX, moveY, isDash, isPlacingMine, gunModelFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun);
 	}
 
 	/// <summary>
@@ -205,6 +212,9 @@ public class PlayerCharacterView : MonoBehaviour
 		Quaternion characterRotation = animator.transform.rotation;
 		spineAimLocalRotation = Quaternion.Inverse(characterRotation) * spine_03.rotation * Quaternion.Inverse(spineRotationBeforeAim) * characterRotation;
 		spineAimLocalPosition = Quaternion.Inverse(characterRotation) * (spine_03.position - animator.transform.position);
+
+		//武器を切り替えている間は、背骨を曲げた後に、銃をしまう・取り出す動きの位置・向きへ動かす（体のしまう場所にぴったり重ねるため）
+		weaponSwitchAnimation.UpdateGunModel(spine_03.rotation * Quaternion.Inverse(spineRotationBeforeAim), spine_03.position);
 	}
 
 	/// <summary>
