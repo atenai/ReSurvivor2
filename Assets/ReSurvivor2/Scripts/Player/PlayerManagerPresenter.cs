@@ -30,7 +30,9 @@ public class PlayerManagerPresenter : MonoBehaviour
 
 	[Tooltip("プレイヤーキャラクタービュー")]
 	[SerializeField] PlayerCharacterView playerCharacterView;
-	public PlayerCharacterView PlayerCharacterView => playerCharacterView;
+
+	[Tooltip("ガンビュープレゼンター（銃の知らせを受け取って、銃のビューに見た目と音を出させる）")]
+	readonly GunViewPresenter gunViewPresenter = new GunViewPresenter();
 
 	[Tooltip("プレイヤーUIビュー")]
 	[SerializeField] PlayerUIView playerUIView;
@@ -85,8 +87,10 @@ public class PlayerManagerPresenter : MonoBehaviour
 
 	void Start()
 	{
-		//プレイヤーのアニメーションは、銃の状態を見て動かすので、銃を渡しておく
+		//プレイヤーのアニメーションは、銃の状態を見て動かすので、銃の状態を読むための窓口を渡しておく
 		playerCharacterView.Initialize(PlayerCameraManager.SingletonInstance.GunModelFacade, PlayerCameraManager.SingletonInstance.transform);
+		//銃の見せ方・マズルフラッシュ・音は、銃の知らせを受けて出す
+		gunViewPresenter.Bind(PlayerCameraManager.SingletonInstance.GunModelFacade, playerCharacterView.GunViewFacade);
 		InitHP();
 		InitStamina();
 		InitMine();
@@ -99,6 +103,12 @@ public class PlayerManagerPresenter : MonoBehaviour
 		playerUIView.SetTextMagazine(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentMagazine, PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsMagazineLow);
 		playerUIView.SetTextAmmo(PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.CurrentAmmo, PlayerCameraManager.SingletonInstance.GunModelFacade.GunModelBase.IsAmmoLow);
 		playerUIView.UpdateUITransform(playerModel.IsAim);
+	}
+
+	void OnDestroy()
+	{
+		//破棄した後のビューに、銃の知らせが届かないようにする
+		gunViewPresenter.Unbind();
 	}
 
 	public void ResetMove()

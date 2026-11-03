@@ -8,7 +8,8 @@ using UnityEngine;
 /// ※プレイヤーのアニメーションの窓口。Presenterからプレイヤーの状態を受け取り、アニメーションごとのクラスに渡して動かす
 ///   （移動：MoveAnimation、構え：AimAnimation、リロード：ReloadAnimation、ショットガンのリロード：ShotGunReloadAnimation、地雷：MineAnimation、
 ///     ハンドガンへの持ち替え：SideArmAnimation、武器の切り替え：WeaponSwitchAnimation、手のIK：HandIK、銃ごとの設定：GunAnimationFacade）
-/// ※銃の状態は、初期化の時に受け取った銃（GunModelFacade）から読む（銃のクラスからはこのクラスを使わない）
+/// ※銃の状態は、初期化の時に受け取った、銃の状態を読むための窓口（IPlayerGunState）から読む
+///   （このクラスは銃のクラスそのものを知らず、銃のクラスもこのクラスを知らない）
 /// </summary>
 public class PlayerCharacterView : MonoBehaviour
 {
@@ -62,8 +63,8 @@ public class PlayerCharacterView : MonoBehaviour
 	readonly SideArmAnimation sideArmAnimation = new SideArmAnimation();
 	[Tooltip("武器を切り替える時のアニメーション（今持っている銃を体にしまってから、切り替える先の銃を取り出す）")]
 	readonly WeaponSwitchAnimation weaponSwitchAnimation = new WeaponSwitchAnimation();
-	[Tooltip("銃（銃の状態を見て、リロードのアニメーション・リロード中のマガジン・手のIKを動かす）。初期化される前はnull")]
-	GunModelFacade gunModelFacade;
+	[Tooltip("銃の状態を読むための窓口（銃の状態を見て、リロードのアニメーション・リロード中のマガジン・手のIKを動かす）。初期化される前はnull")]
+	IPlayerGunState gunState;
 	[Tooltip("狙う向き（カメラ。弾はこの位置から正面へ飛ぶ）（構えた時に、背骨をこの上下の向きに曲げ、ハンドガンを片手で狙う時は、右腕と銃口をこの正面の先へ向ける）")]
 	Transform aimTransform;
 	[Tooltip("前のフレームで、構えに合わせて脊椎ボーンを曲げた回転（キャラクターから見た向き）")]
@@ -74,11 +75,11 @@ public class PlayerCharacterView : MonoBehaviour
 	/// <summary>
 	/// 初期化（Presenterが最初に呼ぶ）
 	/// </summary>
-	/// <param name="gunModelFacade">銃</param>
+	/// <param name="gunState">銃の状態を読むための窓口</param>
 	/// <param name="aimTransform">狙う向き（カメラ）</param>
-	public void Initialize(GunModelFacade gunModelFacade, Transform aimTransform)
+	public void Initialize(IPlayerGunState gunState, Transform aimTransform)
 	{
-		this.gunModelFacade = gunModelFacade;
+		this.gunState = gunState;
 		this.aimTransform = aimTransform;
 		ResetMoveAnimation();
 		gunAnimationFacade.Initialize();
@@ -91,22 +92,22 @@ public class PlayerCharacterView : MonoBehaviour
 	/// <summary>
 	/// ショットガンを持っていて、リロード中か？
 	/// </summary>
-	bool IsShotGunReloading => gunModelFacade.GetGunTYPE == EnumManager.GunTYPE.ShotGun && gunModelFacade.GunModelBase.IsReloadTimeActive == true;
+	bool IsShotGunReloading => gunState.GetGunTYPE == EnumManager.GunTYPE.ShotGun && gunState.IsReloadTimeActive == true;
 
 	void LateUpdate()
 	{
 		//※ステージを移る時に作られてすぐに消える、2つ目のプレイヤーは、初期化されないので動かさない
-		if (gunModelFacade == null)
+		if (gunState == null)
 		{
 			return;
 		}
 
 		//リロード中のマガジンを動かす（アニメーションで手が動いた後に動かす）
-		gunAnimationFacade.UpdateReloadMagazines(gunModelFacade, reloadAnimation.ReloadAnimationTime, reloadAnimation.IsReloadAnimationForward, animator.GetBoneTransform(HumanBodyBones.LeftHand));
+		gunAnimationFacade.UpdateReloadMagazines(gunState, reloadAnimation.ReloadAnimationTime, reloadAnimation.IsReloadAnimationForward, animator.GetBoneTransform(HumanBodyBones.LeftHand));
 		//ハンドガンに持ち替える時の、銃のモデルを持ち替える（アニメーションで手が動いた後に動かす）
-		sideArmAnimation.UpdateModels(gunModelFacade, gunViewFacade, animator.GetBoneTransform(HumanBodyBones.LeftHand));
+		sideArmAnimation.UpdateModels(gunState, gunViewFacade, animator.GetBoneTransform(HumanBodyBones.LeftHand));
 		//ショットガンのリロード中は、銃を左手に持ち替える（アニメーションで手が動いた後に動かす）
-		shotGunReloadAnimation.UpdateModel(gunModelFacade.GetGunTYPE == EnumManager.GunTYPE.ShotGun, IsShotGunReloading, animator.GetBoneTransform(HumanBodyBones.LeftHand));
+		shotGunReloadAnimation.UpdateModel(gunState.GetGunTYPE == EnumManager.GunTYPE.ShotGun, IsShotGunReloading, animator.GetBoneTransform(HumanBodyBones.LeftHand));
 	}
 
 	/// <summary>
@@ -115,29 +116,29 @@ public class PlayerCharacterView : MonoBehaviour
 	void OnAnimatorIK()
 	{
 		//※ステージを移る時に作られてすぐに消える、2つ目のプレイヤーは、初期化されないので動かさない
-		if (gunModelFacade == null)
+		if (gunState == null)
 		{
 			return;
 		}
 
-		EnumManager.GunTYPE gunTYPE = gunModelFacade.GetGunTYPE;
+		EnumManager.GunTYPE gunTYPE = gunState.GetGunTYPE;
 		//※ハンドガンに持ち替えている間は、しまう途中でメインの銃に戻した後も、ハンドガンの持ち方を使う
 		//  （ハンドガンの持ち方は、ハンドガンのアニメーションが混ざっている割合で効くので、アニメーションと一緒になめらかに0へ戻る）
-		HandGunView handGunView = gunTYPE == EnumManager.GunTYPE.HandGun || gunModelFacade.IsSideArmActive == true ? gunViewFacade.HandGunView : null;
+		HandGunView handGunView = gunTYPE == EnumManager.GunTYPE.HandGun || gunState.IsSideArmActive == true ? gunViewFacade.HandGunView : null;
 		//※背骨は、IKの後（LateUpdate）で構えに合わせて曲げるので、前のフレームで曲げた回転と位置を渡す
 		Quaternion characterRotation = animator.transform.rotation;
 		Quaternion spineAimRotation = characterRotation * spineAimLocalRotation * Quaternion.Inverse(characterRotation);
 		Vector3 spinePosition = animator.transform.position + characterRotation * spineAimLocalPosition;
-		GunAnimation sideArmMainGunAnimation = gunModelFacade.IsSideArmActive == true ? gunAnimationFacade.FindGunAnimation(gunModelFacade.SideArmMainGunTYPE) : null;
-		sideArmAnimation.UpdateWeights(gunModelFacade.SideArmPhase, gunModelFacade.SideArmPhaseProgress, spineAimRotation, spinePosition, sideArmMainGunAnimation);
+		GunAnimation sideArmMainGunAnimation = gunState.IsSideArmActive == true ? gunAnimationFacade.FindGunAnimation(gunState.SideArmMainGunTYPE) : null;
+		sideArmAnimation.UpdateWeights(gunState.SideArmPhase, gunState.SideArmPhaseProgress, gunState.SideArmHolsterReachRate, spineAimRotation, spinePosition, sideArmMainGunAnimation);
 		shotGunReloadAnimation.UpdateWeights(IsShotGunReloading, reloadAnimation.ReloadAnimationTime, spineAimRotation, spinePosition);
 		//※武器を切り替えている間は、今持っている銃（しまう時はしまう銃、取り出す時は取り出す銃）を動かす（前のフレームで動かした銃は、ここで右手で持つ位置に戻す）
 		GunAnimation gunAnimation = gunAnimationFacade.FindGunAnimation(gunTYPE);
 		Transform gunModelTransform = gunViewFacade.FindGunModelTransform(gunTYPE);
-		weaponSwitchAnimation.UpdateWeights(gunModelFacade.WeaponSwitchPhase, gunModelFacade.WeaponSwitchPhaseProgress, gunAnimation, gunModelTransform, gunViewFacade.FindGunModelBodyDecorationTransform(gunTYPE), spineAimRotation, spinePosition);
+		weaponSwitchAnimation.UpdateWeights(gunState.WeaponSwitchPhase, gunState.WeaponSwitchPhaseProgress, gunAnimation, gunModelTransform, gunViewFacade.FindGunModelBodyDecorationTransform(gunTYPE), spineAimRotation, spinePosition);
 		//※ハンドガンを片手で狙う時は、右腕と銃口を、弾の飛ぶ線（カメラの正面）の先へ向ける
 		Ray aimRay = new Ray(aimTransform.position, aimTransform.forward);
-		handIK.UpdateIK(gunAnimation, gunModelTransform, handGunView, mineAnimation, sideArmAnimation, weaponSwitchAnimation, shotGunReloadAnimation, gunModelFacade.GunModelBase.IsReloadTimeActive, reloadAnimation.ReloadAnimationTime, spineAimRotation, spinePosition, aimRay);
+		handIK.UpdateIK(gunAnimation, gunModelTransform, handGunView, mineAnimation, sideArmAnimation, weaponSwitchAnimation, shotGunReloadAnimation, gunState.IsReloadTimeActive, reloadAnimation.ReloadAnimationTime, spineAimRotation, spinePosition, aimRay);
 	}
 
 	/// <summary>
@@ -149,7 +150,7 @@ public class PlayerCharacterView : MonoBehaviour
 	/// <param name="isPlacingMine">地雷を置いている間か？（その場で止まっているアニメーションにする）</param>
 	public void UpdateMoveAnimation(float moveX, float moveY, bool isDash, bool isPlacingMine)
 	{
-		moveAnimation.UpdateAnimation(animator, moveX, moveY, isDash, isPlacingMine, gunModelFacade.GetGunTYPE == EnumManager.GunTYPE.HandGun);
+		moveAnimation.UpdateAnimation(animator, moveX, moveY, isDash, isPlacingMine, gunState.GetGunTYPE == EnumManager.GunTYPE.HandGun);
 	}
 
 	/// <summary>
@@ -160,7 +161,7 @@ public class PlayerCharacterView : MonoBehaviour
 	/// <param name="isEnemyClose">狙っている方向に近い敵がいるか？（いる時は、ハンドガンを近距離の構えにする）</param>
 	public void UpdateAimAnimation(bool isAim, bool isEnemyAlert, bool isEnemyClose)
 	{
-		aimAnimation.UpdateAnimation(animator, isAim, isEnemyAlert, isEnemyClose, gunModelFacade.IsSideArmActive);
+		aimAnimation.UpdateAnimation(animator, isAim, isEnemyAlert, isEnemyClose, gunState.IsSideArmActive);
 	}
 
 	/// <summary>
@@ -168,7 +169,7 @@ public class PlayerCharacterView : MonoBehaviour
 	/// </summary>
 	public void UpdateReloadAnimation()
 	{
-		reloadAnimation.UpdateAnimation(animator, gunModelFacade, gunAnimationFacade.FindGunAnimation(EnumManager.GunTYPE.ShotGun));
+		reloadAnimation.UpdateAnimation(animator, gunState, gunAnimationFacade.FindGunAnimation(EnumManager.GunTYPE.ShotGun));
 	}
 
 	/// <summary>

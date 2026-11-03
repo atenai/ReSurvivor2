@@ -6,9 +6,10 @@ using UnityEngine.Events;
 /// <summary>
 /// ガンモデルファサード
 /// MVPパターンのModel担当
+/// ※銃の状態は、読むだけの窓口（IPlayerGunState）と、知らせ（イベント）で外に伝える（プレイヤーの見た目やアニメーションの側は知らない）
 /// </summary>
 [System.Serializable]
-public class GunModelFacade
+public class GunModelFacade : IPlayerGunState
 {
 	[Tooltip("ハンドガン")]
 	[SerializeField] HandGunModel handGunModel = new HandGunModel();
@@ -43,9 +44,14 @@ public class GunModelFacade
 	[Tooltip("ハンドガンをしまって、メインの銃を右手に持ち直し終わるまでの時間（秒）")]
 	const float SideArmHolsterTime = 0.5f;
 	[Tooltip("ハンドガンを抜く動き・しまう動きのうち、右手がホルスターに着く割合（0〜1）（ここでハンドガンを手に持つ・ホルスターに戻す。しまう時は、ここから今持っている銃をメインの銃に戻す）")]
-	public const float SideArmHolsterReachRate = 0.5f;
+	const float SideArmHolsterReachRateDefine = 0.5f;
 	[Tooltip("ハンドガンを抜く動き・しまう動きの、始まりの進み具合")]
 	const float SideArmStartProgress = 0.0f;
+
+	/// <summary>
+	/// ハンドガンを抜く動き・しまう動きのうち、右手がホルスターに着く割合（ここでハンドガンを手に持つ・ホルスターに戻す）
+	/// </summary>
+	public float SideArmHolsterReachRate => SideArmHolsterReachRateDefine;
 
 	/// <summary>
 	/// ハンドガンを抜く動き・しまう動きの進み具合（0が始まり、1が終わり。それ以外の段階では0）
@@ -130,6 +136,42 @@ public class GunModelFacade
 	public EnumManager.GunTYPE SelectedGunTYPE => IsWeaponSwitching == true ? weaponSwitchTargetGunTYPE : gunTYPE;
 
 	/// <summary>
+	/// 今持っている銃がリロード中か？
+	/// </summary>
+	public bool IsReloadTimeActive => gunModelBase.IsReloadTimeActive;
+
+	/// <summary>
+	/// 今持っている銃のリロードの進み具合（0がリロードの始まり、1が終わり）
+	/// </summary>
+	public float ReloadProgress => gunModelBase.ReloadProgress;
+
+	//※銃の見た目（手に持つ銃・体にしまう銃の見せ方、マズルフラッシュ、音）は、ここの知らせを受け取った側が出す
+	/// <summary>
+	/// 今持っている銃が変わった時の知らせ（変わった後の銃）
+	/// </summary>
+	public event UnityAction<EnumManager.GunTYPE> OnGunTYPEChanged;
+
+	/// <summary>
+	/// 弾を撃った時の知らせ（撃った銃）
+	/// </summary>
+	public event UnityAction<EnumManager.GunTYPE> OnGunFired;
+
+	/// <summary>
+	/// リロードを始めた時の知らせ（リロードを始めた銃）
+	/// </summary>
+	public event UnityAction<EnumManager.GunTYPE> OnGunReloadStarted;
+
+	/// <summary>
+	/// ショットガンに弾を1発込めた時の知らせ
+	/// </summary>
+	public event UnityAction OnShotGunShellInserted;
+
+	/// <summary>
+	/// 空のショットガンに最後の弾まで込めて、弾を送り込んだ時の知らせ
+	/// </summary>
+	public event UnityAction OnShotGunChambered;
+
+	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	public GunModelFacade()
@@ -137,6 +179,16 @@ public class GunModelFacade
 		gunModelBaseList.Add(handGunModel);
 		gunModelBaseList.Add(assaultRifleModel);
 		gunModelBaseList.Add(shotGunModel);
+
+		//それぞれの銃の知らせを、どの銃の知らせかを付けて伝える
+		foreach (GunModelBase gun in gunModelBaseList)
+		{
+			EnumManager.GunTYPE gunType = gun.GetGunType;
+			gun.OnFired += () => OnGunFired?.Invoke(gunType);
+			gun.OnReloadStarted += () => OnGunReloadStarted?.Invoke(gunType);
+		}
+		shotGunModel.OnShellInserted += () => OnShotGunShellInserted?.Invoke();
+		shotGunModel.OnChambered += () => OnShotGunChambered?.Invoke();
 	}
 
 	/// <summary>
@@ -165,7 +217,7 @@ public class GunModelFacade
 		}
 		this.gunTYPE = ES3.Load<EnumManager.GunTYPE>("CurrentGunType", EnumManager.GunTYPE.HandGun);
 		SwitchWeapon(this.gunTYPE);
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(this.gunTYPE);
+		OnGunTYPEChanged?.Invoke(this.gunTYPE);
 	}
 
 	/// <summary>
@@ -238,7 +290,7 @@ public class GunModelFacade
 			ChangeSideArmPhase(EnumManager.SideArmPhaseTYPE.None);
 			this.gunTYPE = gunTYPE;
 			SwitchWeapon(this.gunTYPE);
-			PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(this.gunTYPE);
+			OnGunTYPEChanged?.Invoke(this.gunTYPE);
 			return;
 		}
 
@@ -279,7 +331,7 @@ public class GunModelFacade
 				{
 					gunTYPE = weaponSwitchTargetGunTYPE;
 					SwitchWeapon(gunTYPE);
-					PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(gunTYPE);
+					OnGunTYPEChanged?.Invoke(gunTYPE);
 					ChangeWeaponSwitchPhase(EnumManager.WeaponSwitchPhaseTYPE.TakeOut);
 				}
 				break;
@@ -315,7 +367,7 @@ public class GunModelFacade
 		ChangeWeaponSwitchPhase(EnumManager.WeaponSwitchPhaseTYPE.None);
 		gunTYPE = weaponSwitchTargetGunTYPE;
 		SwitchWeapon(gunTYPE);
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(gunTYPE);
+		OnGunTYPEChanged?.Invoke(gunTYPE);
 	}
 
 	/// <summary>
@@ -463,7 +515,7 @@ public class GunModelFacade
 		ChangeSideArmPhase(EnumManager.SideArmPhaseTYPE.None);
 		gunTYPE = sideArmMainGunTYPE;
 		SwitchWeapon(gunTYPE);
-		PlayerManagerPresenter.SingletonInstance.PlayerCharacterView.GunViewFacade.SwitchWeaponModel(gunTYPE);
+		OnGunTYPEChanged?.Invoke(gunTYPE);
 	}
 
 	/// <summary>
@@ -481,6 +533,26 @@ public class GunModelFacade
 			}
 		}
 		return null;
+	}
+
+	/// <summary>
+	/// 指定した銃がリロード中か？
+	/// </summary>
+	/// <param name="gunTYPE">銃のタイプ</param>
+	/// <returns>リロード中か？</returns>
+	public bool IsGunReloadTimeActive(EnumManager.GunTYPE gunTYPE)
+	{
+		return FindGunBase(gunTYPE).IsReloadTimeActive;
+	}
+
+	/// <summary>
+	/// ショットガンのリロードの、今の段階と、その段階の進み具合を求める
+	/// </summary>
+	/// <param name="phaseProgress">今の段階の進み具合（0が始まり、1が終わり）</param>
+	/// <returns>今の段階</returns>
+	public EnumManager.ShotGunReloadPhaseTYPE GetShotGunReloadPhase(out float phaseProgress)
+	{
+		return shotGunModel.GetReloadPhase(out phaseProgress);
 	}
 
 	/// <summary>

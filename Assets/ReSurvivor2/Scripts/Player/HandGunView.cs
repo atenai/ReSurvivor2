@@ -21,7 +21,6 @@ public class HandGunView : MonoBehaviour
 	public Transform HandGunMuzzleTransform => handGunMuzzleTransform;
 	[Tooltip("ハンドガンの薬莢の生成座標位置")]
 	[SerializeField] Transform handGunBulletCasingTransform;
-	public Transform HandGunBulletCasingTransform => handGunBulletCasingTransform;
 	[Tooltip("ハンドガンの硝煙の生成座標位置")]
 	[SerializeField] Transform handGunAfterFireSmokeTransform;
 	public Transform HandGunAfterFireSmokeTransform => handGunAfterFireSmokeTransform;
@@ -33,9 +32,20 @@ public class HandGunView : MonoBehaviour
 	//↑アセットストアのプログラム↑//
 
 	/// <summary>
+	/// 撃った時の見た目と音を出す（薬莢の音 → マズルフラッシュと薬莢 → 硝煙 → 射撃音の順）
+	/// </summary>
+	public void HandGunFire()
+	{
+		HandGunBulletCasingSE();
+		HandGunMuzzleFlashAndShell();
+		HandGunSmoke();
+		HandGunFireSE();
+	}
+
+	/// <summary>
 	/// マズルフラッシュのエフェクトと薬莢を出す（アセットストアで買ったコードをそのままもってきている）
 	/// </summary>
-	public void HandGunMuzzleFlashAndShell()
+	void HandGunMuzzleFlashAndShell()
 	{
 		if (handGunShotEmitters != null)
 		{
@@ -49,11 +59,35 @@ public class HandGunView : MonoBehaviour
 	/// <summary>
 	/// 硝煙のエフェクトを出す（アセットストアで買ったコードをそのままもってきている）
 	/// </summary>
-	public void HandGunSmoke()
+	void HandGunSmoke()
 	{
 		if (handGunAfterFireSmoke != null)
 		{
 			handGunAfterFireSmoke.Play();
 		}
+	}
+
+	/// <summary>
+	/// ハンドガンの射撃SE
+	/// </summary>
+	void HandGunFireSE()
+	{
+		SoundManager.SingletonInstance.HandGunShootSEPool.GetGameObject(handGunMuzzleTransform);
+	}
+
+	/// <summary>
+	/// ハンドガンのリロードSE（リロードを始めた時に鳴らす）
+	/// </summary>
+	public void HandGunReloadSE()
+	{
+		SoundManager.SingletonInstance.HandGunReloadSEPool.GetGameObject(handGunBulletCasingTransform);
+	}
+
+	/// <summary>
+	/// ハンドガンの薬莢SE
+	/// </summary>
+	void HandGunBulletCasingSE()
+	{
+		SoundManager.SingletonInstance.HandGunBulletCasingSEPool.GetGameObject(handGunBulletCasingTransform);
 	}
 }

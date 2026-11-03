@@ -8,7 +8,7 @@ using UnityEngine;
 ///   左手は腰の高さで、メインの銃の上側をカバンの取っ手のようにつかんで、銃口を前に向けて持つ（マックス・ペイン3の持ち方）。
 ///   銃は斜め（銃口が下、ストックが上）にして、指が銃にめり込まないように持つ。
 ///   しまう時は逆に、ハンドガンをホルスターに戻して、メインの銃を右手に持ち直す）
-/// ※PlayerCharacterViewが持ち、銃（GunModelFacade）の持ち替えの段階を見て動かす（HandIKは、ここで求めた割合や手の位置・向きを使う）
+/// ※PlayerCharacterViewが持ち、銃の状態（IPlayerGunState）の持ち替えの段階を見て動かす（HandIKは、ここで求めた割合や手の位置・向きを使う）
 /// </summary>
 public class SideArmAnimation
 {
@@ -119,10 +119,11 @@ public class SideArmAnimation
 	/// </summary>
 	/// <param name="phase">ハンドガンに持ち替える動きの段階</param>
 	/// <param name="progress">ハンドガンを抜く動き・しまう動きの進み具合（0が始まり、1が終わり）</param>
+	/// <param name="holsterReachRate">ハンドガンを抜く動き・しまう動きのうち、右手がホルスターに着く割合</param>
 	/// <param name="spineAimRotation">背骨を構えに合わせて曲げる回転（IKの後のLateUpdateで曲げる分。ワールドの向き）</param>
 	/// <param name="spinePosition">構えに合わせて曲げる背骨の骨の位置</param>
 	/// <param name="mainGunAnimation">左手に持っている（持ち替える）メインの銃のアニメーションの設定（ハンドガンに持ち替えていない時はnull）</param>
-	public void UpdateWeights(EnumManager.SideArmPhaseTYPE phase, float progress, Quaternion spineAimRotation, Vector3 spinePosition, GunAnimation mainGunAnimation)
+	public void UpdateWeights(EnumManager.SideArmPhaseTYPE phase, float progress, float holsterReachRate, Quaternion spineAimRotation, Vector3 spinePosition, GunAnimation mainGunAnimation)
 	{
 		this.mainGunAnimation = mainGunAnimation;
 		rightHandHolsterWeight = NoWeight;
@@ -131,7 +132,7 @@ public class SideArmAnimation
 		switch (phase)
 		{
 			case EnumManager.SideArmPhaseTYPE.Draw:
-				rightHandHolsterWeight = GetHolsterWeight(progress);
+				rightHandHolsterWeight = GetHolsterWeight(progress, holsterReachRate);
 				leftHandCarryWeight = Mathf.SmoothStep(NoWeight, FullWeight, progress);
 				isDrawing = true;
 				break;
@@ -139,8 +140,8 @@ public class SideArmAnimation
 				leftHandCarryWeight = FullWeight;
 				break;
 			case EnumManager.SideArmPhaseTYPE.Holster:
-				rightHandHolsterWeight = GetHolsterWeight(progress);
-				leftHandCarryWeight = Mathf.SmoothStep(FullWeight, NoWeight, Mathf.InverseLerp(GunModelFacade.SideArmHolsterReachRate, EndProgress, progress));
+				rightHandHolsterWeight = GetHolsterWeight(progress, holsterReachRate);
+				leftHandCarryWeight = Mathf.SmoothStep(FullWeight, NoWeight, Mathf.InverseLerp(holsterReachRate, EndProgress, progress));
 				break;
 			case EnumManager.SideArmPhaseTYPE.None:
 				break;
@@ -158,15 +159,16 @@ public class SideArmAnimation
 	/// 右手をホルスターへ動かす割合を求める（抜く動き・しまう動きの真ん中で、ちょうどホルスターに着く）
 	/// </summary>
 	/// <param name="progress">ハンドガンを抜く動き・しまう動きの進み具合</param>
+	/// <param name="holsterReachRate">ハンドガンを抜く動き・しまう動きのうち、右手がホルスターに着く割合</param>
 	/// <returns>右手をホルスターへ動かす割合</returns>
-	float GetHolsterWeight(float progress)
+	float GetHolsterWeight(float progress, float holsterReachRate)
 	{
-		if (progress < GunModelFacade.SideArmHolsterReachRate)
+		if (progress < holsterReachRate)
 		{
-			return Mathf.SmoothStep(NoWeight, FullWeight, progress / GunModelFacade.SideArmHolsterReachRate);
+			return Mathf.SmoothStep(NoWeight, FullWeight, progress / holsterReachRate);
 		}
 
-		return Mathf.SmoothStep(FullWeight, NoWeight, Mathf.InverseLerp(GunModelFacade.SideArmHolsterReachRate, EndProgress, progress));
+		return Mathf.SmoothStep(FullWeight, NoWeight, Mathf.InverseLerp(holsterReachRate, EndProgress, progress));
 	}
 
 	/// <summary>
@@ -240,14 +242,14 @@ public class SideArmAnimation
 	/// ・ハンドガン：右手がホルスターに着いた時に、ホルスターのハンドガンと右手のハンドガンを入れ替える
 	/// ・メインの銃：抜き始めに左手に持ち替えて、抜く間に銃の前側から銃の上側へ持ち直す。しまう時に右手がホルスターに着いたら、右手に戻して元の位置・向きへ動かす
 	/// </summary>
-	/// <param name="gunModelFacade">銃</param>
+	/// <param name="gunState">銃の状態を読むための窓口</param>
 	/// <param name="gunViewFacade">ガンビュー ファサード</param>
 	/// <param name="hand_l">左手の骨</param>
-	public void UpdateModels(GunModelFacade gunModelFacade, GunViewFacade gunViewFacade, Transform hand_l)
+	public void UpdateModels(IPlayerGunState gunState, GunViewFacade gunViewFacade, Transform hand_l)
 	{
-		EnumManager.SideArmPhaseTYPE phase = gunModelFacade.SideArmPhase;
-		float progress = gunModelFacade.SideArmPhaseProgress;
-		bool isPastHolster = GunModelFacade.SideArmHolsterReachRate <= progress;
+		EnumManager.SideArmPhaseTYPE phase = gunState.SideArmPhase;
+		float progress = gunState.SideArmPhaseProgress;
+		bool isPastHolster = gunState.SideArmHolsterReachRate <= progress;
 		bool isHandGunInHand = phase == EnumManager.SideArmPhaseTYPE.Aim || (phase == EnumManager.SideArmPhaseTYPE.Draw && isPastHolster == true) || (phase == EnumManager.SideArmPhaseTYPE.Holster && isPastHolster == false);
 		bool isMainGunCarried = phase == EnumManager.SideArmPhaseTYPE.Draw || phase == EnumManager.SideArmPhaseTYPE.Aim || (phase == EnumManager.SideArmPhaseTYPE.Holster && isPastHolster == false);
 
@@ -261,14 +263,14 @@ public class SideArmAnimation
 		{
 			//持ち替える前は、両手で持っている銃の、左手から見た位置・向きを覚えておく
 			//（抜き始めのフレームでは、アニメーションが切り替わって右手（と銃）が先に動いてしまうため、1つ前のフレームの位置・向きで左手に持たせる）
-			Transform gunModel = gunViewFacade.FindGunModelTransform(gunModelFacade.GetGunTYPE);
+			Transform gunModel = gunViewFacade.FindGunModelTransform(gunState.GetGunTYPE);
 			mainGunGripLocalPosition = hand_l.InverseTransformPoint(gunModel.position);
 			mainGunGripLocalRotation = Quaternion.Inverse(hand_l.rotation) * gunModel.rotation;
 		}
 
 		if (isMainGunCarried == true && isMainGunInLeftHand == false)
 		{
-			HoldMainGunInLeftHand(gunViewFacade.FindGunModelTransform(gunModelFacade.SideArmMainGunTYPE), hand_l);
+			HoldMainGunInLeftHand(gunViewFacade.FindGunModelTransform(gunState.SideArmMainGunTYPE), hand_l);
 		}
 		else if (isMainGunCarried == false && isMainGunInLeftHand == true)
 		{
@@ -288,7 +290,7 @@ public class SideArmAnimation
 		float returnRate = EndProgress;
 		if (phase == EnumManager.SideArmPhaseTYPE.Holster)
 		{
-			returnRate = Mathf.InverseLerp(GunModelFacade.SideArmHolsterReachRate, EndProgress, progress);
+			returnRate = Mathf.InverseLerp(gunState.SideArmHolsterReachRate, EndProgress, progress);
 		}
 		MoveMainGunToRightHand(returnRate);
 	}

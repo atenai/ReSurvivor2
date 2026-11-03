@@ -72,6 +72,34 @@ public abstract class GunModelBase
 	/// </summary>
 	public bool IsAmmoLow => currentAmmo <= MagazineCapacity;
 
+	//※銃は、撃った・リロードを始めたことを知らせるだけで、マズルフラッシュや音などの見た目は、知らせを受け取った側が出す
+	//  （銃の側は、プレイヤーの見た目やアニメーションの側を知らない）
+	/// <summary>
+	/// 弾を撃った時の知らせ
+	/// </summary>
+	public event UnityAction OnFired;
+
+	/// <summary>
+	/// リロードを始めた時の知らせ
+	/// </summary>
+	public event UnityAction OnReloadStarted;
+
+	/// <summary>
+	/// 弾を撃ったことを知らせる
+	/// </summary>
+	protected void NotifyFired()
+	{
+		OnFired?.Invoke();
+	}
+
+	/// <summary>
+	/// リロードを始めたことを知らせる
+	/// </summary>
+	protected void NotifyReloadStarted()
+	{
+		OnReloadStarted?.Invoke();
+	}
+
 	/// <summary>
 	/// セーブ
 	/// </summary>
