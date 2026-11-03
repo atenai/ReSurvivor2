@@ -180,10 +180,14 @@ public class PlayerUIView : MonoBehaviour
 	/// </summary> 
 	public void UpdateUITransform(bool isAim)
 	{
+		//※キャンバスの向きは、描画するカメラ（Camera.main）ではなく、カメラを回している土台（PlayerCameraManager）から取る
+		//  （描画するカメラは、Cinemachineがフレームの最後に土台の向きを写すので、ここではまだ回す前の向きのまま。
+		//    それに合わせると、カメラを回している間、UIが描画するカメラより遅れたり追いついたりして、ガクガクする）
+		Quaternion cameraRotation = PlayerCameraManager.SingletonInstance.transform.rotation;
 		if (isAim == false)
 		{
-			//常にキャンバスをメインカメラの方を向かせる
-			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
+			//常にキャンバスをカメラの方を向かせる
+			canvasPlayer.transform.rotation = cameraRotation;
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
 			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManagerPresenter.SingletonInstance.transform.position.x, PlayerManagerPresenter.SingletonInstance.transform.position.y + PlayerCameraManager.SingletonInstance.NormalUpPos, PlayerManagerPresenter.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
@@ -197,8 +201,8 @@ public class PlayerUIView : MonoBehaviour
 		}
 		else if (isAim == true)
 		{
-			//常にキャンバスをメインカメラの方を向かせる
-			canvasPlayer.transform.rotation = Camera.main.transform.rotation;
+			//常にキャンバスをカメラの方を向かせる
+			canvasPlayer.transform.rotation = cameraRotation;
 			//キャンバスの高さとカメラの高さを合わせる（これをしないとプレイヤーUIの奥行がおかしくなる）
 			canvasPlayer.gameObject.GetComponent<RectTransform>().position = new Vector3(PlayerManagerPresenter.SingletonInstance.transform.position.x, PlayerManagerPresenter.SingletonInstance.transform.position.y + PlayerCameraManager.SingletonInstance.AimUpPos, PlayerManagerPresenter.SingletonInstance.transform.position.z);
 			//SRT(スケール→トランスフォーム→ローテーション)
