@@ -16,7 +16,7 @@ public class Food : MonoBehaviour
 				return;
 			}
 
-			PlayerManagerPresenter.SingletonInstance.PlayerModel.AcquireFood((food) => PlayerManagerPresenter.SingletonInstance.PlayerUIView.SetTextFood(food));
+			PlayerManagerPresenter.SingletonInstance.PlayerModel.AcquireFood();
 
 			ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.ItemOutPutLog.OutputLog("+Food");
 			Destroy(this.gameObject);//このオブジェクトを削除            

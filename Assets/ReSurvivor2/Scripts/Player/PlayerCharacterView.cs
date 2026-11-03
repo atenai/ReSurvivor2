@@ -42,10 +42,6 @@ public class PlayerCharacterView : MonoBehaviour
 	[Tooltip("ガンアニメーション ファサード（銃ごとのアニメーションの設定）")]
 	[SerializeField] GunAnimationFacade gunAnimationFacade = new GunAnimationFacade();
 
-	[Tooltip("地雷のプレファブ")]
-	[SerializeField] GameObject minePrefab;
-	public GameObject MinePrefab => minePrefab;
-
 	[Header("アニメーション")]
 	[Tooltip("リロードのアニメーション")]
 	[SerializeField] ReloadAnimation reloadAnimation = new ReloadAnimation();

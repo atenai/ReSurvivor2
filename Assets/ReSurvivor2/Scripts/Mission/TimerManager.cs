@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// ミッションの制限時間を管理するマネージャークラス
@@ -33,6 +34,26 @@ public class TimerManager : MonoBehaviour
 	[Tooltip("ミッションの残り時間が少ないとみなす秒数（この秒数以下になると、プレイヤーUIのタイマーの文字を赤くする）")]
 	const float LowTimeSeconds = 60.0f;
 
+	[Tooltip("ミッションの制限時間を数えているか？（ミッション中か？）")]
+	bool isTimerActive = false;
+	public bool IsTimerActive => isTimerActive;
+
+	/// <summary>
+	/// ミッションの残り時間が少ないか？
+	/// </summary>
+	public bool IsTimeLow => totalTime <= LowTimeSeconds;
+
+	/// <summary>
+	/// ミッションの制限時間が切れたか？
+	/// </summary>
+	public bool IsTimeUp => minute <= 0 && seconds <= 0.0f;
+
+	//※制限時間を数えたことを知らせるだけで、タイマーの表示は、知らせを受け取った見た目の側が出す
+	/// <summary>
+	/// 制限時間を数えた時の知らせ（毎フレーム）
+	/// </summary>
+	public event UnityAction OnTimerUpdated;
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -59,29 +80,24 @@ public class TimerManager : MonoBehaviour
 	{
 		if (MissionManager.SingletonInstance.IsMissionActive == false)
 		{
-			PlayerManagerPresenter.SingletonInstance.PlayerUIView.TextTimer.text = "--" + ":" + "--";
-			PlayerManagerPresenter.SingletonInstance.PlayerUIView.SetTextTimerColor(false);
+			isTimerActive = false;
+			OnTimerUpdated?.Invoke();
 			return;
 		}
 
+		isTimerActive = true;
 		totalTime = (minute * 60) + seconds;
 		totalTime = totalTime - Time.deltaTime;
 
 		minute = (int)totalTime / 60;
 		seconds = totalTime - (minute * 60);
 
-		//残り時間が少なくなったら、タイマーの文字を赤くする
-		PlayerManagerPresenter.SingletonInstance.PlayerUIView.SetTextTimerColor(totalTime <= LowTimeSeconds);
+		OnTimerUpdated?.Invoke();
 
-		if (minute <= 0 && seconds <= 0.0f)
+		if (IsTimeUp == true)
 		{
 			//ゲームオーバー処理
-			PlayerManagerPresenter.SingletonInstance.PlayerUIView.TextTimer.text = "00" + ":" + "00";
 			ChangeSceneManager.SingletonInstance.GameOver();
-		}
-		else
-		{
-			PlayerManagerPresenter.SingletonInstance.PlayerUIView.TextTimer.text = minute.ToString("00") + ":" + ((int)seconds).ToString("00");
 		}
 	}
 }

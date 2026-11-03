@@ -269,7 +269,8 @@ public class ShotGunModel : GunModelBase
 	{
 		//撃ったことを知らせる（マズルフラッシュ・硝煙・射撃音・薬莢の音は、知らせを受け取った見た目の側が出す）
 		NotifyFired();
-		bool isOnceShotGunHitSE = false;
+		//※1回撃って、何発の弾が当たっても、当たったことは1回だけ知らせる（ヒット音は1回だけ鳴らす）
+		bool isTargetHitNotified = false;
 
 		for (int i = 0; i < shotGunBullet; i++)
 		{
@@ -303,14 +304,11 @@ public class ShotGunModel : GunModelBase
 						}
 					}
 
-					//ヒットレティクルを表示
-					ScreenUIManagerPresenter.SingletonInstance.ScreenUIModel.IsHitReticule = true;
-
-					if (isOnceShotGunHitSE == false)
+					//当たったことを知らせる（ヒットレティクルとヒット音は、知らせを受け取った見た目の側が出す）
+					if (isTargetHitNotified == false)
 					{
-						isOnceShotGunHitSE = true;
-						//ヒット音を再生
-						SoundManager.SingletonInstance.HitSEPool.GetGameObject(PlayerCameraManager.SingletonInstance.transform);
+						isTargetHitNotified = true;
+						NotifyTargetHit();
 					}
 
 					//地雷を爆破
@@ -328,7 +326,8 @@ public class ShotGunModel : GunModelBase
 					}
 				}
 
-				EffectManager.SingletonInstance.ImpactEffect(hit);
+				//着弾したことを知らせる（着弾のエフェクトは、知らせを受け取った見た目の側が出す）
+				NotifyImpact(hit);
 			}
 		}
 
