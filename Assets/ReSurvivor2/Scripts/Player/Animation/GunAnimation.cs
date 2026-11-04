@@ -158,11 +158,22 @@ public class GunAnimation
 	[SerializeField] float weaponSwitchRightElbowHintWeight;
 	public float WeaponSwitchRightElbowHintWeight => weaponSwitchRightElbowHintWeight;
 
+	[Header("しまってある銃（左の腰のアサルトライフル・右の腰のハンドガン）")]
+	//※しまってある銃は骨盤の子にして、移動する時も地雷を置くためにしゃがむ時も、足の動きで銃が回らないように、骨盤に合わせて固定する（メタルギアソリッドVの、腰の銃のような動き）。
+	//  アサルトライフルは、しゃがむ時に上がった太ももが銃にめり込むので、向きは変えずに、しゃがんだ割合だけ太ももの外側へずらす。
+	//  ハンドガンは、しゃがんでも太ももに当たらない位置・向き（銃口を少し後ろへ傾ける）に置いてあるので、ずらさない
+	[Tooltip("地雷を置くためにしゃがみきった時に、しまってある銃を太ももの外側へずらす量（m。骨盤から見た向き。ハンドガン・背中のショットガンは0）")]
+	[SerializeField] Vector3 stowedCrouchOffset;
+	[Tooltip("しまってある銃の、骨盤に合わせて固定した位置（骨盤から見た位置。プレハブで置いた位置を、初期化の時に覚えておく）")]
+	Vector3 stowedLocalPosition;
+
 	/// <summary>
-	/// マガジンを銃に付けている時の親・位置・向きを覚えておく（差し込む時に元に戻すため）
+	/// マガジンを銃に付けている時の親・位置・向きと、しまってある銃を骨盤に合わせて固定する位置を覚えておく（元に戻すため）
 	/// </summary>
-	public void Initialize()
+	/// <param name="stowedModel">しまってある銃のモデル</param>
+	public void Initialize(Transform stowedModel)
 	{
+		stowedLocalPosition = stowedModel.localPosition;
 		magazineParents = new Transform[magazineModels.Length];
 		magazineLocalPositions = new Vector3[magazineModels.Length];
 		magazineLocalRotations = new Quaternion[magazineModels.Length];
@@ -172,6 +183,17 @@ public class GunAnimation
 			magazineLocalPositions[i] = magazineModels[i].localPosition;
 			magazineLocalRotations[i] = magazineModels[i].localRotation;
 		}
+	}
+
+	/// <summary>
+	/// しまってある銃を動かす（骨盤に合わせて固定したまま、地雷を置くためにしゃがんだ割合だけ、太ももの外側へずらす。向きは変えない）
+	/// ※アニメーションで骨が動いた後に呼ぶ
+	/// </summary>
+	/// <param name="stowedModel">しまってある銃のモデル（骨盤の子）</param>
+	/// <param name="crouchWeight">地雷を置くためにしゃがんでいる割合（地雷を置くアニメーションが混ざっている割合。0で骨盤に合わせて固定した位置、1でしゃがみきった時のずらした位置）</param>
+	public void UpdateStowedModel(Transform stowedModel, float crouchWeight)
+	{
+		stowedModel.localPosition = stowedLocalPosition + stowedCrouchOffset * crouchWeight;
 	}
 
 	/// <summary>

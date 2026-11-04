@@ -41,6 +41,11 @@ public class PlayerAnimationFacade
 	public float HandGunOneHandAimWeight => handIK.HandGunOneHandAimWeight;
 
 	/// <summary>
+	/// 今のフレームで、地雷を置くためにしゃがんでいる割合（地雷を置くアニメーションが混ざっている割合。しまってある銃を太ももの外側へずらす割合に使う）
+	/// </summary>
+	public float PlaceMineWeight => mineAnimation.Weight;
+
+	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="animator">プレイヤーのアニメーター</param>
