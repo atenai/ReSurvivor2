@@ -21,6 +21,10 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 	ScreenUIModel screenUIModel = new ScreenUIModel();
 	public ScreenUIModel ScreenUIModel => screenUIModel;
 
+	/// <summary>コンピューターメニューのプレゼンター（コンピューターメニューの処理は全部ここ）</summary>
+	ComputerMenuPresenter computerMenuPresenter;
+	public ComputerMenuPresenter ComputerMenuPresenter => computerMenuPresenter;
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -33,11 +37,18 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 		{
 			Destroy(this.gameObject);//中身がすでに入っていた場合、自身のインスタンスがくっついているゲームオブジェクトを破棄します。
 		}
+
+		//コンピューターメニューを作る（使うUIは、ScreenUIViewにインスペクターで設定してあるものを渡す）
+		//※CurrentStageManagerのStart()でミッションを渡されるので、それより先のAwake()で作っておく
+		computerMenuPresenter = new ComputerMenuPresenter(
+			new MailListView(screenUIView.PanelComputerMenu, screenUIView.MailListContent, screenUIView.MailPrefab, screenUIView.MailTitleMessage, screenUIView.MailMainMessage),
+			new YesNoDialogView(screenUIView.YesNoDialogImage, screenUIView.YesNoButtonImages),
+			new MissionResultView(screenUIView.ResultImage));
 	}
 
 	void Start()
 	{
-		HideYesNoDialog();
+		computerMenuPresenter.Close();
 		FadeOut();
 	}
 
@@ -81,20 +92,6 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 	public void BeforeUpdate1()
 	{
 		UpdatePauseMenuSystem();
-	}
-
-	public void BeforeUpdate2()
-	{
-		UpdateComputerMenuSystem();
-		if (screenUIModel.SkipYesNoDialogInput == true)
-		{
-			// 表示直後のフレームは入力を消費して無視する
-			screenUIModel.SkipYesNoDialogInput = false;
-		}
-		else
-		{
-			UpdateYesNoDialog();
-		}
 	}
 
 	public void AfterUpdate()
@@ -402,310 +399,6 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 		//※武器を切り替えている間は、切り替える先の銃を選択中にする
 		slot.SetSelected(gunModelFacade.SelectedGunTYPE == gunTYPE);
 		slot.SetAmmoText(gunModelBase.CurrentMagazine, gunModelBase.CurrentAmmo);
-	}
-
-	/// <summary>
-	/// コンピューターメニューのミッションリストの初期化
-	/// </summary>
-	/// <param name="missionList">ミッションリスト</param>
-	public void InitComputerMenuMissionList(List<MasterMissionEntity> missionList)
-	{
-		screenUIModel.MissionList.Clear();
-		screenUIModel.MissionList.AddRange(missionList);
-	}
-
-	/// <summary>
-	/// メールリストの全ての子オブジェクトコンテンツを破棄
-	/// </summary>
-	public void DestroyAllMailListContent()
-	{
-		foreach (Transform mailContent in screenUIView.MailListContent.transform)
-		{
-			UnityEngine.Object.Destroy(mailContent.gameObject);
-		}
-		screenUIModel.MailListContentList.Clear();
-	}
-
-	/// <summary>
-	/// メールリストに子オブジェクトコンテンツを追加
-	/// </summary>
-	public void AddMailListContent()
-	{
-		for (int i = 0; i < screenUIModel.MissionList.Count; i++)
-		{
-			//プレハブをInstantiateしてContentの子オブジェクトに配置
-			Mail mailGameObject = UnityEngine.Object.Instantiate(screenUIView.MailPrefab, new Vector3(0, 0, 0), Quaternion.identity, screenUIView.MailListContent.transform).GetComponent<Mail>();
-			mailGameObject.Initialize(screenUIModel.MissionList[i].MissionID, screenUIModel.MissionList[i].MissionName);
-			screenUIModel.MailListContentList.Add(mailGameObject);
-		}
-	}
-
-	/// <summary>
-	/// コンピューターメニューの表示
-	/// </summary>
-	public void ShowComputerMenu()
-	{
-		screenUIModel.CurrentMailListSelectedIndex = 0;
-		ChangeColorMailListContentImage();
-
-		if (screenUIModel.MissionList.Count != 0)
-		{
-			//メールメッセージ
-			screenUIView.MailTitleMessage.text = screenUIModel.MissionList[screenUIModel.CurrentMailListSelectedIndex].MailTitleMessage;
-			screenUIView.MailMainMessage.text = screenUIModel.MissionList[screenUIModel.CurrentMailListSelectedIndex].MailMainMessage;
-		}
-		else
-		{
-			screenUIView.MailTitleMessage.text = "-----";
-			screenUIView.MailMainMessage.text = "-----";
-		}
-
-		screenUIModel.IsComputerMenuActive = true;
-		screenUIView.PanelComputerMenu.gameObject.SetActive(true);
-	}
-
-	/// <summary>
-	/// コンピューターメニューの非表示
-	/// </summary>
-	public void HideComputerMenu()
-	{
-		HideYesNoDialog();
-		screenUIModel.IsComputerMenuActive = false;
-		screenUIView.PanelComputerMenu.gameObject.SetActive(false);
-	}
-
-	/// <summary>
-	/// コンピューターメニュー画面の更新
-	/// </summary> 
-	public void UpdateComputerMenuSystem()
-	{
-		if (Input.GetKeyDown(KeyCode.B) || Input.GetButtonDown("XInput B"))
-		{
-			//コンピューターメニューを閉じる
-			if (screenUIModel.IsComputerMenuActive == true)
-			{
-				HideComputerMenu();
-				return;
-			}
-		}
-
-		if (screenUIModel.MissionList.Count == 0)
-		{
-			return;
-		}
-
-		if (screenUIModel.IsComputerMenuActive == false)
-		{
-			return;
-		}
-
-		if (screenUIView.YesNoDialogImage.gameObject.activeSelf == true)
-		{
-			return;
-		}
-
-		//上下の矢印キーで選択を変更
-		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || XInputManager.SingletonInstance.XInputDPadHandler.UpDown)
-		{
-			screenUIModel.CurrentMailListSelectedIndex--;
-			if (screenUIModel.CurrentMailListSelectedIndex < 0)
-			{
-				screenUIModel.CurrentMailListSelectedIndex = screenUIModel.MissionList.Count - 1;
-			}
-			ChangeColorMailListContentImage();
-			screenUIView.MailTitleMessage.text = screenUIModel.MissionList[screenUIModel.CurrentMailListSelectedIndex].MailTitleMessage;
-			screenUIView.MailMainMessage.text = screenUIModel.MissionList[screenUIModel.CurrentMailListSelectedIndex].MailMainMessage;
-		}
-		else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || XInputManager.SingletonInstance.XInputDPadHandler.DownDown)
-		{
-			screenUIModel.CurrentMailListSelectedIndex++;
-			if (screenUIModel.MissionList.Count <= screenUIModel.CurrentMailListSelectedIndex)
-			{
-				screenUIModel.CurrentMailListSelectedIndex = 0;
-			}
-			ChangeColorMailListContentImage();
-			screenUIView.MailTitleMessage.text = screenUIModel.MissionList[screenUIModel.CurrentMailListSelectedIndex].MailTitleMessage;
-			screenUIView.MailMainMessage.text = screenUIModel.MissionList[screenUIModel.CurrentMailListSelectedIndex].MailMainMessage;
-		}
-
-		//Enterキーで選択を確定
-		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
-		{
-			ShowYesNoDialog();
-		}
-	}
-
-	/// <summary>
-	/// YesNoダイアログを表示する
-	/// </summary>
-	void ShowYesNoDialog()
-	{
-		screenUIModel.CurrentYesNoDialogSelectedIndex = 0;
-		screenUIView.YesNoDialogImage.gameObject.SetActive(true);
-		// ダイアログ表示直後のフレームでの決定入力を無視する
-		screenUIModel.SkipYesNoDialogInput = true;
-	}
-
-	/// <summary>
-	/// YesNoダイアログを非表示にする
-	/// </summary>
-	void HideYesNoDialog()
-	{
-		screenUIModel.CurrentYesNoDialogSelectedIndex = 0;
-		screenUIView.YesNoDialogImage.gameObject.SetActive(false);
-	}
-
-	/// <summary>
-	/// YesNoダイアログの更新
-	/// </summary>
-	public void UpdateYesNoDialog()
-	{
-		if (screenUIView.YesNoDialogImage.gameObject.activeSelf == false)
-		{
-			return;
-		}
-
-		//左右の矢印キーで選択を変更
-		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || XInputManager.SingletonInstance.XInputDPadHandler.LeftDown)
-		{
-			screenUIModel.CurrentYesNoDialogSelectedIndex--;
-			if (screenUIModel.CurrentYesNoDialogSelectedIndex < 0)
-			{
-				screenUIModel.CurrentYesNoDialogSelectedIndex = screenUIView.YesNoButtonImages.Length - 1;
-			}
-		}
-		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || XInputManager.SingletonInstance.XInputDPadHandler.RightDown)
-		{
-			screenUIModel.CurrentYesNoDialogSelectedIndex++;
-			if (screenUIView.YesNoButtonImages.Length <= screenUIModel.CurrentYesNoDialogSelectedIndex)
-			{
-				screenUIModel.CurrentYesNoDialogSelectedIndex = 0;
-			}
-		}
-		ChangeYesNoDialogButton();
-
-		//Enterキーで選択を確定
-		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
-		{
-			ExecuteYesNoDialogAction();
-		}
-	}
-
-	/// <summary>
-	/// YesNoDialogのボタンの色を変える
-	/// </summary> 
-	void ChangeYesNoDialogButton()
-	{
-		//メニューの見た目を更新
-		for (int i = 0; i < screenUIView.YesNoButtonImages.Length; i++)
-		{
-			if (i == screenUIModel.CurrentYesNoDialogSelectedIndex)
-			{
-				//選択中の項目の色を変更
-				screenUIView.YesNoButtonImages[i].color = new Color(screenUIView.YesNoButtonImages[i].color.r, screenUIView.YesNoButtonImages[i].color.g, screenUIView.YesNoButtonImages[i].color.b, 0.5f);
-			}
-			else
-			{
-				screenUIView.YesNoButtonImages[i].color = new Color(screenUIView.YesNoButtonImages[i].color.r, screenUIView.YesNoButtonImages[i].color.g, screenUIView.YesNoButtonImages[i].color.b, 0.0f);
-			}
-		}
-	}
-
-	/// <summary>
-	/// YesNoダイアログの決定
-	/// </summary>
-	void ExecuteYesNoDialogAction()
-	{
-		switch (screenUIModel.CurrentYesNoDialogSelectedIndex)
-		{
-			case 0:
-				//No
-				HideYesNoDialog();
-				break;
-			case 1:
-				//Yes
-				ExecuteComputerMenuAction();
-				HideYesNoDialog();
-				break;
-		}
-	}
-
-	/// <summary>
-	/// メールリストの色変更
-	/// </summary> 
-	void ChangeColorMailListContentImage()
-	{
-		//メニューの見た目を更新
-		for (int i = 0; i < screenUIModel.MissionList.Count; i++)
-		{
-			if (i == screenUIModel.CurrentMailListSelectedIndex)
-			{
-				//選択中の項目の色を変更
-				screenUIModel.MailListContentList[i].ImageMailBG.color = new Color32(0, 100, 255, 120);
-			}
-			else
-			{
-				//選択中でない項目の色を変更
-				screenUIModel.MailListContentList[i].ImageMailBG.color = new Color32(100, 100, 100, 120);
-			}
-		}
-	}
-
-	/// <summary>
-	/// コンピューターメニューアクションの実行
-	/// </summary>
-	void ExecuteComputerMenuAction()
-	{
-		ExecuteMission();
-		HideComputerMenu();
-	}
-
-	/// <summary>
-	/// ミッション実行
-	/// </summary>
-	void ExecuteMission()
-	{
-		//↓ここをミッションごとに変えるようにする必要がある
-		//各ComputerTYPEに紐づいたミッションリストを取得して、そこから選択されたミッション内容を↓に反映すればいい
-		MasterMissionEntity result = screenUIModel.MissionList[screenUIModel.CurrentMailListSelectedIndex];
-		//ミッション開始
-		if (result != null)
-		{
-			Debug.Log("<color=red>ミッション開始</color>");
-			MissionManager.SingletonInstance.IsMissionActive = true;
-			MissionManager.SingletonInstance.CurrentMissionID = result.MissionID;
-			MissionManager.SingletonInstance.EndComputerStageNumber = result.EndComputerStageNumber;
-			TimerManager.SingletonInstance.Minute = result.Minute;
-			TimerManager.SingletonInstance.Seconds = result.Seconds;
-			screenUIView.MapUI.SetEndComputerStageNumber((int)result.EndComputerStageNumber);
-		}
-	}
-
-	/// <summary>
-	/// リザルト画面を表示する
-	/// </summary>
-	public void ShowResult(float staySeconds = 1f, float fadeDuration = 0.5f)
-	{
-		screenUIModel.IsComputerMenuActive = true;
-
-		// 既存のTweenを停止
-		screenUIView.ResultImage.DOKill();
-
-		// 有効化して透明から開始
-		screenUIView.ResultImage.gameObject.SetActive(true);
-		screenUIView.ResultImage.color = new Color(screenUIView.ResultImage.color.r, screenUIView.ResultImage.color.g, screenUIView.ResultImage.color.b, 0f);
-
-		// シーケンス: フェードイン -> 指定秒数待機 -> フェードアウト -> 非表示 + コンピュータメニュー表示
-		Sequence seq = DOTween.Sequence();
-		seq.Append(screenUIView.ResultImage.DOFade(0.2f, fadeDuration));
-		seq.AppendInterval(staySeconds);
-		seq.Append(screenUIView.ResultImage.DOFade(0f, fadeDuration));
-		seq.OnComplete(() =>
-		{
-			screenUIView.ResultImage.gameObject.SetActive(false);
-			ShowComputerMenu();
-		});
-		seq.Play();
 	}
 
 	/// <summary>

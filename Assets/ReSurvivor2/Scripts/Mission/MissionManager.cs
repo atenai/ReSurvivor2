@@ -30,44 +30,19 @@ public class MissionManager : MonoBehaviour
     /// </summary>
     public MasterMission MasterMission => masterMission;
 
-    List<MasterMissionEntity> cachedMissionList = new List<MasterMissionEntity>();
-    /// <summary>
-    /// マスターデータのミッション情報をキャッシュするリスト
-    /// MissionSerchList()でマスターデータのミッション情報を検索して取得する際に、
-    /// 毎回マスターデータから検索するのではなく、
-    /// 一度検索して取得したミッション情報をこのリストにキャッシュしておいて、
-    /// 次回以降の検索でこのリストから取得するようにすることで、パフォーマンスの向上を図ることができる。
-    /// </summary>
-    public List<MasterMissionEntity> CachedMissionList
-    {
-        get { return cachedMissionList; }
-        set { cachedMissionList = value; }
-    }
-
+    //※ミッションの状態（↓の3つ）は、StartMission()とMissionReset()の中でだけ変える
     [Tooltip("ミッションがアクティブか？どうか")]
     bool isMissionActive = false;
-    public bool IsMissionActive
-    {
-        get { return isMissionActive; }
-        set { isMissionActive = value; }
-    }
+    public bool IsMissionActive => isMissionActive;
 
     /// <summary>ミッションエンドのコンピューター名</summary>
     EnumManager.StageTYPE endComputerStageNumber;
     /// <summary>ミッションエンドのコンピューター名のプロパティ </summary>
-    public EnumManager.StageTYPE EndComputerStageNumber
-    {
-        get { return endComputerStageNumber; }
-        set { endComputerStageNumber = value; }
-    }
+    public EnumManager.StageTYPE EndComputerStageNumber => endComputerStageNumber;
 
     [Tooltip("現在のミッションID")]
     [SerializeField] int currentMissionID = -1;
-    public int CurrentMissionID
-    {
-        get { return currentMissionID; }
-        set { currentMissionID = value; }
-    }
+    public int CurrentMissionID => currentMissionID;
 
     [Tooltip("ミッションID0のクリア状況")]
     [SerializeField] bool missionID0 = false;
@@ -180,8 +155,26 @@ public class MissionManager : MonoBehaviour
         else if (isMissionActive == false)//ミッション中でない場合
         {
             SaveAndLoadDataManager.SingletonInstance.AllManagerSave();
-            ScreenUIManagerPresenter.SingletonInstance.ShowComputerMenu();
+            //コンピューターメニューのメール一覧を開いて、受けるミッションを選んでもらう（選んだらStartMission()が呼ばれる）
+            ScreenUIManagerPresenter.SingletonInstance.ComputerMenuPresenter.Open();
         }
+    }
+
+    /// <summary>
+    /// ミッション開始（コンピューターメニューで選んだミッションを始める）
+    /// </summary>
+    /// <param name="mission">始めるミッション</param>
+    public void StartMission(MasterMissionEntity mission)
+    {
+        Debug.Log("<color=red>ミッション開始</color>");
+        isMissionActive = true;
+        currentMissionID = mission.MissionID;
+        endComputerStageNumber = mission.EndComputerStageNumber;
+        //制限時間を設定する
+        TimerManager.SingletonInstance.Minute = mission.Minute;
+        TimerManager.SingletonInstance.Seconds = mission.Seconds;
+        //マップに、ゴールのコンピューターがあるステージを表示する
+        ScreenUIManagerPresenter.SingletonInstance.ScreenUIView.MapUI.SetEndComputerStageNumber((int)mission.EndComputerStageNumber);
     }
 
     /// <summary>
@@ -189,7 +182,8 @@ public class MissionManager : MonoBehaviour
     /// </summary>
     void MissionResult()
     {
-        ScreenUIManagerPresenter.SingletonInstance.ShowResult();
+        //リザルト画面を表示して、消えたらコンピューターメニューのメール一覧を開く
+        ScreenUIManagerPresenter.SingletonInstance.ComputerMenuPresenter.ShowMissionResult();
     }
 
     /// <summary>
