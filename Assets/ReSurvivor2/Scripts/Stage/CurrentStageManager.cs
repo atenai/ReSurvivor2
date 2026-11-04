@@ -41,16 +41,15 @@ public class CurrentStageManager : MonoBehaviour
 
 	void CreateMission()
 	{
-		//ミッションの作成
-		MissionManager.SingletonInstance.CachedMissionList = MissionManager.SingletonInstance.MissionSerchList(currentStage);
-		foreach (MasterMissionEntity mission in MissionManager.SingletonInstance.CachedMissionList)
+		//このステージのコンピューターで受けられるミッションを探す
+		List<MasterMissionEntity> missionList = MissionManager.SingletonInstance.MissionSerchList(currentStage);
+		foreach (MasterMissionEntity mission in missionList)
 		{
 			UnityEngine.Debug.Log("<color=cyan>ミッション名：" + mission.MissionName + "</color>");
 		}
 
-		ScreenUIManagerPresenter.SingletonInstance.InitComputerMenuMissionList(MissionManager.SingletonInstance.CachedMissionList);
-		ScreenUIManagerPresenter.SingletonInstance.DestroyAllMailListContent();
-		ScreenUIManagerPresenter.SingletonInstance.AddMailListContent();
+		//コンピューターメニューに渡して、ミッションのメールを並べる
+		ScreenUIManagerPresenter.SingletonInstance.ComputerMenuPresenter.SetMissionList(missionList);
 	}
 
 	void Update()

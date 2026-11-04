@@ -210,7 +210,7 @@ public class ChangeSceneManager : MonoBehaviour
         if (MissionManager.SingletonInstance.MissionID0 == true && MissionManager.SingletonInstance.MissionID1 == true && MissionManager.SingletonInstance.MissionID2 == true)
         {
             Debug.Log("<color=blue>ゲームクリアー</color>");
-            ScreenUIManagerPresenter.SingletonInstance.HideComputerMenu();
+            ScreenUIManagerPresenter.SingletonInstance.ComputerMenuPresenter.Close();
             InGameManager.IsFirstLoad = true;
             ChangeSceneManager.IsFirstLoad = true;
             MissionManager.IsFirstLoad = true;
