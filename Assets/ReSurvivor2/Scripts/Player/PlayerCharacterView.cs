@@ -78,8 +78,8 @@ public class PlayerCharacterView : MonoBehaviour
 			return;
 		}
 
-		//しまってある銃・リロード中のマガジン・ハンドガンに持ち替える時の銃のモデル・ショットガンのリロード中の銃を動かす（アニメーションで手が動いた後に動かす）
-		gunAnimationFacade.UpdateModels(gunState, gunViewFacade, animator.GetBoneTransform(HumanBodyBones.LeftHand), playerAnimationFacade.PlaceMineWeight);
+		//リロード中のマガジン・ハンドガンに持ち替える時の銃のモデル・ショットガンのリロード中の銃を動かす（アニメーションで手が動いた後に動かす）
+		gunAnimationFacade.UpdateModels(gunState, gunViewFacade, animator.GetBoneTransform(HumanBodyBones.LeftHand));
 	}
 
 	/// <summary>

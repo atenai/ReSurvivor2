@@ -35,7 +35,7 @@ public class GunAnimationFacade
 	public float ReloadAnimationTime => reloadAnimation.ReloadAnimationTime;
 
 	/// <summary>
-	/// 初期化（マガジンを銃に付けている時の親・位置・向きと、しまってある銃の位置を覚えておき、ハンドガンへの持ち替え・武器の切り替え・ショットガンのリロードの準備をする）
+	/// 初期化（マガジンを銃に付けている時の親・位置・向きを覚えておき、ハンドガンへの持ち替え・武器の切り替え・ショットガンのリロードの準備をする）
 	/// </summary>
 	/// <param name="animator">プレイヤーのアニメーター</param>
 	/// <param name="gunViewFacade">ガンビューファサード</param>
@@ -45,9 +45,9 @@ public class GunAnimationFacade
 	/// <param name="rightHandAnimationPos">アニメーションどおりの右手の位置・向きをIK用の向きで取り出すための目印</param>
 	public void Initialize(Animator animator, GunViewFacade gunViewFacade, Transform spine, Transform rightUpperArm, Transform leftHandAnimationPos, Transform rightHandAnimationPos)
 	{
-		handGunAnimation.Initialize(gunViewFacade.FindGunModelBodyDecorationTransform(EnumManager.GunTYPE.HandGun));
-		assaultRifleAnimation.Initialize(gunViewFacade.FindGunModelBodyDecorationTransform(EnumManager.GunTYPE.AssaultRifle));
-		shotGunAnimation.Initialize(gunViewFacade.FindGunModelBodyDecorationTransform(EnumManager.GunTYPE.ShotGun));
+		handGunAnimation.Initialize();
+		assaultRifleAnimation.Initialize();
+		shotGunAnimation.Initialize();
 		sideArmAnimation.Initialize(gunViewFacade.HandGunView, leftHandAnimationPos, animator);
 		weaponSwitchAnimation.Initialize(spine, animator.transform, rightUpperArm);
 		shotGunReloadAnimation.Initialize(gunViewFacade.ShotGunView.GetShotGunModel.transform, shotGunAnimation, rightHandAnimationPos, leftHandAnimationPos);
@@ -110,18 +110,13 @@ public class GunAnimationFacade
 	}
 
 	/// <summary>
-	/// しまってある銃・リロード中のマガジン・ハンドガンに持ち替える時の銃のモデル・ショットガンのリロード中の銃を動かす（アニメーションで手が動いた後に呼ぶ）
+	/// リロード中のマガジン・ハンドガンに持ち替える時の銃のモデル・ショットガンのリロード中の銃を動かす（アニメーションで手が動いた後に呼ぶ）
 	/// </summary>
 	/// <param name="gunState">銃の状態を読むための窓口</param>
 	/// <param name="gunViewFacade">ガンビューファサード</param>
 	/// <param name="leftHand">左手の骨</param>
-	/// <param name="crouchWeight">地雷を置くためにしゃがんでいる割合（しまってある銃を、この割合だけ太ももの外側へずらす）</param>
-	public void UpdateModels(IReadOnlyGunModel gunState, GunViewFacade gunViewFacade, Transform leftHand, float crouchWeight)
+	public void UpdateModels(IReadOnlyGunModel gunState, GunViewFacade gunViewFacade, Transform leftHand)
 	{
-		//しまってある銃は、骨盤に合わせて固定したまま（向きは変えない）、しゃがむ時だけ太ももの外側へずらす
-		handGunAnimation.UpdateStowedModel(gunViewFacade.FindGunModelBodyDecorationTransform(EnumManager.GunTYPE.HandGun), crouchWeight);
-		assaultRifleAnimation.UpdateStowedModel(gunViewFacade.FindGunModelBodyDecorationTransform(EnumManager.GunTYPE.AssaultRifle), crouchWeight);
-		shotGunAnimation.UpdateStowedModel(gunViewFacade.FindGunModelBodyDecorationTransform(EnumManager.GunTYPE.ShotGun), crouchWeight);
 		//リロード中のマガジンを、銃ごとに動かす（抜き取る → 左手で持つ → 差し込む）
 		float reloadAnimationTime = reloadAnimation.ReloadAnimationTime;
 		bool isReloadAnimationForward = reloadAnimation.IsReloadAnimationForward;
