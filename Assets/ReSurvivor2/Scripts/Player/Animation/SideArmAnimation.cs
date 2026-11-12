@@ -41,17 +41,9 @@ public class SideArmAnimation
 	Quaternion inverseSpineAimRotation = Quaternion.identity;
 
 	//↓メインの銃を持つ左手の指を開くのに使う↓//
-	[Tooltip("メインの銃を持つ時に開く、左手の指の骨（5本の、付け根・中・先の骨）")]
-	static readonly HumanBodyBones[] LeftFingerBones =
-	{
-		HumanBodyBones.LeftThumbProximal, HumanBodyBones.LeftThumbIntermediate, HumanBodyBones.LeftThumbDistal,
-		HumanBodyBones.LeftIndexProximal, HumanBodyBones.LeftIndexIntermediate, HumanBodyBones.LeftIndexDistal,
-		HumanBodyBones.LeftMiddleProximal, HumanBodyBones.LeftMiddleIntermediate, HumanBodyBones.LeftMiddleDistal,
-		HumanBodyBones.LeftRingProximal, HumanBodyBones.LeftRingIntermediate, HumanBodyBones.LeftRingDistal,
-		HumanBodyBones.LeftLittleProximal, HumanBodyBones.LeftLittleIntermediate, HumanBodyBones.LeftLittleDistal,
-	};
-	[Tooltip("左手の指の骨の、まっすぐ伸ばした時（Tポーズ）の向き（親の骨から見た向き）")]
-	Quaternion[] leftFingerStraightLocalRotations;
+	//※指をまっすぐ伸ばしたアニメーションクリップ（SideArmOpenLeftFingers）を、左手の指だけのレイヤーで混ぜて開く
+	[Tooltip("プレイヤーのアニメーター（左手の指を開くレイヤーの重みを変える）")]
+	Animator animator;
 
 	//↓銃のモデルの持ち替えに使う↓//
 	[Tooltip("ハンドガンのビュー（手に持つハンドガンと、ホルスターのハンドガン）")]
@@ -90,26 +82,12 @@ public class SideArmAnimation
 	/// </summary>
 	/// <param name="handGunView">ハンドガンのビュー</param>
 	/// <param name="leftHandAnimationPos">アニメーションどおりの左手の位置・向きをIK用の向きで取り出すための目印</param>
-	/// <param name="animator">プレイヤーのアニメーター（左手の指の骨の、まっすぐ伸ばした時の向きを覚えておく）</param>
+	/// <param name="animator">プレイヤーのアニメーター（左手の指を開くレイヤーの重みを変える）</param>
 	public void Initialize(HandGunView handGunView, Transform leftHandAnimationPos, Animator animator)
 	{
 		this.handGunView = handGunView;
 		this.leftHandAnimationPos = leftHandAnimationPos;
-
-		//アバターに入っているTポーズの骨の向きから、指をまっすぐ伸ばした時の向きを探す
-		SkeletonBone[] skeleton = animator.avatar.humanDescription.skeleton;
-		leftFingerStraightLocalRotations = new Quaternion[LeftFingerBones.Length];
-		for (int i = 0; i < LeftFingerBones.Length; i++)
-		{
-			string boneName = animator.GetBoneTransform(LeftFingerBones[i]).name;
-			foreach (SkeletonBone skeletonBone in skeleton)
-			{
-				if (skeletonBone.name == boneName)
-				{
-					leftFingerStraightLocalRotations[i] = skeletonBone.rotation;
-				}
-			}
-		}
+		this.animator = animator;
 	}
 
 	/// <summary>
@@ -146,6 +124,7 @@ public class SideArmAnimation
 			case EnumManager.SideArmPhaseTYPE.None:
 				break;
 		}
+		OpenLeftHandFingers();
 
 		//※背骨は、IKの後（LateUpdate）で構えに合わせて曲げるため、そのままホルスターを目標にすると、曲げた後の右手がホルスターからずれる。
 		//  そのため、曲げる分を戻した位置・向きを目標にする（曲げた後に、ちょうどホルスターに来る）
@@ -217,24 +196,18 @@ public class SideArmAnimation
 	}
 
 	/// <summary>
-	/// メインの銃を左手で持っている時に、左手の指を銃の太さに合わせて開く（手のIKの処理の中で呼ぶ）
-	/// （アニメーションどおりの握りこぶしのままだと、太い銃に指がめり込むため、指の骨をまっすぐ伸ばした向きへ近づける）
+	/// メインの銃を左手で持っている時に、左手の指を銃の太さに合わせて開く
+	/// （アニメーションどおりの握りこぶしのままだと、太い銃に指がめり込むため、指をまっすぐ伸ばしたアニメーションのレイヤーを混ぜる）
+	/// ※左手をメインの銃を持つ位置・向きへ動かしている割合だけ、銃ごとの指の曲げ具合まで開く
 	/// </summary>
-	/// <param name="animator">プレイヤーのアニメーター</param>
-	public void OpenLeftHandFingers(Animator animator)
+	void OpenLeftHandFingers()
 	{
-		if (leftHandCarryWeight <= NoWeight)
+		float openWeight = NoWeight;
+		if (mainGunAnimation != null)
 		{
-			return;
+			openWeight = leftHandCarryWeight * (FullWeight - mainGunAnimation.SideArmCarryFingerCurl);
 		}
-
-		//左手をメインの銃を持つ位置・向きへ動かしている割合だけ、指を開く
-		float curl = Mathf.Lerp(FullWeight, mainGunAnimation.SideArmCarryFingerCurl, leftHandCarryWeight);
-		for (int i = 0; i < LeftFingerBones.Length; i++)
-		{
-			Transform bone = animator.GetBoneTransform(LeftFingerBones[i]);
-			animator.SetBoneLocalRotation(LeftFingerBones[i], Quaternion.Slerp(leftFingerStraightLocalRotations[i], bone.localRotation, curl));
-		}
+		animator.SetLayerWeight(PlayerAnimatorParameter.SideArmLeftFingersLayerIndex, openWeight);
 	}
 
 	/// <summary>

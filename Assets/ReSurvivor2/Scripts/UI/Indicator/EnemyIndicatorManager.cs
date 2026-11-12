@@ -16,6 +16,10 @@ public class EnemyIndicatorManager : MonoBehaviour
 	[SerializeField] GameObject indicatorPrefab;
 	Dictionary<IEnemy, GameObject> indicatorDic = new Dictionary<IEnemy, GameObject>();
 
+	[Tooltip("プレイヤーを最初に発見した敵の方向表示マーカー用プレハブ")]
+	[SerializeField] GameObject alertIndicatorPrefab;
+	Dictionary<IEnemy, GameObject> alertIndicatorDic = new Dictionary<IEnemy, GameObject>();
+
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -47,6 +51,12 @@ public class EnemyIndicatorManager : MonoBehaviour
 			gameObject.transform.SetParent(this.transform);
 			indicatorDic.Add(enemy, gameObject);
 			gameObject.GetComponent<Indicator>().Init(enemy.GetEnemyGameObject());
+
+			//プレイヤーを最初に発見した時の方向表示マーカーも一緒に作る（発見するまでは表示しない）
+			//（親を指定してInstantiateすると、プレハブの位置・大きさのまま親の中に作られる）
+			GameObject alertIndicator = Instantiate(alertIndicatorPrefab, this.transform);
+			alertIndicatorDic.Add(enemy, alertIndicator);
+			alertIndicator.GetComponent<EnemyAlertIndicator>().Init(enemy.GetEnemyGameObject());
 		}
 		else
 		{
@@ -66,6 +76,13 @@ public class EnemyIndicatorManager : MonoBehaviour
 			Destroy(gameObject);
 			indicatorDic.Remove(enemy);
 		}
+
+		//プレイヤーを最初に発見した時の方向表示マーカーも一緒に削除する
+		if (alertIndicatorDic.ContainsKey(enemy))
+		{
+			Destroy(alertIndicatorDic[enemy]);
+			alertIndicatorDic.Remove(enemy);
+		}
 	}
 
 	/// <summary>
@@ -78,6 +95,18 @@ public class EnemyIndicatorManager : MonoBehaviour
 		{
 			GameObject gameObject = indicatorDic[enemy];
 			gameObject.GetComponent<Indicator>().Show();
+		}
+	}
+
+	/// <summary>
+	/// プレイヤーを最初に発見した敵の方向表示マーカーを表示する
+	/// </summary>
+	/// <param name="enemy">プレイヤーを最初に発見した敵</param>
+	public void ShowAlertIndicator(IEnemy enemy)
+	{
+		if (alertIndicatorDic.ContainsKey(enemy))
+		{
+			alertIndicatorDic[enemy].GetComponent<EnemyAlertIndicator>().Show();
 		}
 	}
 }

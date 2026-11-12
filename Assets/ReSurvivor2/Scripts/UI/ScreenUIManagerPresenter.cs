@@ -25,6 +25,11 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 	ComputerMenuPresenter computerMenuPresenter;
 	public ComputerMenuPresenter ComputerMenuPresenter => computerMenuPresenter;
 
+	[Tooltip("ポーズメニューの選択を上へ動かす時の向き")]
+	const int PauseMenuUp = -1;
+	[Tooltip("ポーズメニューの選択を下へ動かす時の向き")]
+	const int PauseMenuDown = 1;
+
 	void Awake()
 	{
 		//staticな変数instanceはメモリ領域は確保されていますが、初回では中身が入っていないので、中身を入れます。
@@ -198,75 +203,68 @@ public class ScreenUIManagerPresenter : MonoBehaviour
 
 	public void ShowPauseMenu()
 	{
-		screenUIView.PanelPauseMenu.gameObject.SetActive(true);
+		screenUIView.PauseMenuView.gameObject.SetActive(true);
 		Time.timeScale = 0f;
 
 		//各種パラメーターの初期化処理
 		screenUIModel.CurrentPauseMenuSelectedIndex = 0;
-		ChangeColorPauseMenuImage();
+		screenUIView.PauseMenuView.Open(screenUIModel.CurrentPauseMenuSelectedIndex);
 	}
 
 	public void HidePauseMenu()
 	{
-		screenUIView.PanelPauseMenu.gameObject.SetActive(false);
+		screenUIView.PauseMenuView.gameObject.SetActive(false);
 		Time.timeScale = 1f;
 	}
 
 	/// <summary>
 	/// ポーズメニュー画面の更新
-	/// </summary> 
+	/// </summary>
 	public void UpdatePauseMenuSystem()
 	{
-		if (screenUIView.PanelPauseMenu.gameObject.activeSelf == false)
+		if (screenUIView.PauseMenuView.gameObject.activeSelf == false)
 		{
 			return;
 		}
 
-		//左右の矢印キーで選択を変更
-		if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A) || XInputManager.SingletonInstance.XInputDPadHandler.LeftDown)
+		//上下の矢印キーで選択を変更（項目は縦に並んでいる）
+		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || XInputManager.SingletonInstance.XInputDPadHandler.UpDown)
 		{
-			screenUIModel.CurrentPauseMenuSelectedIndex--;
-			if (screenUIModel.CurrentPauseMenuSelectedIndex < 0)
-			{
-				screenUIModel.CurrentPauseMenuSelectedIndex = screenUIView.PauseMenuOptions.Length - 1;
-			}
-			ChangeColorPauseMenuImage();
+			MovePauseMenuSelection(PauseMenuUp);
 		}
-		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D) || XInputManager.SingletonInstance.XInputDPadHandler.RightDown)
+		else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S) || XInputManager.SingletonInstance.XInputDPadHandler.DownDown)
 		{
-			screenUIModel.CurrentPauseMenuSelectedIndex++;
-			if (screenUIView.PauseMenuOptions.Length <= screenUIModel.CurrentPauseMenuSelectedIndex)
-			{
-				screenUIModel.CurrentPauseMenuSelectedIndex = 0;
-			}
-			ChangeColorPauseMenuImage();
+			MovePauseMenuSelection(PauseMenuDown);
 		}
 
 		//Enterキーで選択を確定
 		if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("XInput A"))
 		{
 			ExecutePauseMenuAction();
+			return;
 		}
+
+		//Bボタンでもゲームに戻る
+		if (Input.GetButtonDown("XInput B"))
+		{
+			ReturnToGamePlay();
+			return;
+		}
+
+		//ポーズ中はTime.timeScaleが0で、Time.deltaTimeも0になるので、ポーズ中も進む時間（Time.unscaledDeltaTime）で見た目を動かす
+		screenUIView.PauseMenuView.UpdateView(Time.unscaledDeltaTime);
 	}
 
 	/// <summary>
-	/// ポーズメニュー
-	/// </summary> 
-	void ChangeColorPauseMenuImage()
+	/// ポーズメニューの選択を上下に動かす（端まで行ったら反対の端に戻る）
+	/// </summary>
+	/// <param name="direction">動かす向き（PauseMenuUpで上、PauseMenuDownで下）</param>
+	public void MovePauseMenuSelection(int direction)
 	{
-		//メニューの見た目を更新
-		for (int i = 0; i < screenUIView.PauseMenuOptions.Length; i++)
-		{
-			if (i == screenUIModel.CurrentPauseMenuSelectedIndex)
-			{
-				//選択中の項目の色を変更
-				screenUIView.PauseMenuOptions[i].color = new Color(screenUIView.PauseMenuOptions[i].color.r, screenUIView.PauseMenuOptions[i].color.g, screenUIView.PauseMenuOptions[i].color.b, 0.5f);
-			}
-			else
-			{
-				screenUIView.PauseMenuOptions[i].color = new Color(screenUIView.PauseMenuOptions[i].color.r, screenUIView.PauseMenuOptions[i].color.g, screenUIView.PauseMenuOptions[i].color.b, 0.0f);
-			}
-		}
+		int itemCount = screenUIView.PauseMenuView.ItemCount;
+		//「%」は割り算の余り。項目の数を足してから余りを取ると、一番上から上へ動かした時は一番下に、一番下から下へ動かした時は一番上に戻る
+		screenUIModel.CurrentPauseMenuSelectedIndex = (screenUIModel.CurrentPauseMenuSelectedIndex + direction + itemCount) % itemCount;
+		screenUIView.PauseMenuView.SetSelectedIndex(screenUIModel.CurrentPauseMenuSelectedIndex);
 	}
 
 	/// <summary>

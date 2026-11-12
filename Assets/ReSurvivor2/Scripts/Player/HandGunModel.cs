@@ -198,8 +198,8 @@ public class HandGunModel : GunModelBase
 				//ヒット音を再生
 				SoundManager.SingletonInstance.HitSEPool.GetGameObject(PlayerCameraManager.SingletonInstance.transform);
 
-				//追跡開始
-				EnemyManager.SingletonInstance.ChaseEvent.Invoke();
+				//追跡開始（銃声で敵全員に気づかれる）
+				EnemyManager.SingletonInstance.ChaseByGunshot();
 
 				//地雷を爆破
 				Mine mine = hit.transform.GetComponent<Mine>();

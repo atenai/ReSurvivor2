@@ -229,6 +229,12 @@ public class FlyingEnemyPresenter : MonoBehaviour, IEnemy
 		if (flyingEnemyModel.Eyesight(flyingEnemyCharacterView.Head.transform.position, -flyingEnemyCharacterView.Head.transform.forward, flyingEnemyCharacterView.Head.transform.right) == true)
 		{
 			//Debug.Log("<color=red>プレイヤーを発見!</color>");
+			//まだ警戒体制の敵が1体もいない時に見つけた ＝ この敵がプレイヤーを最初に発見したので、この敵の方向に発見マーカーを表示する
+			//（ChaseEventで全員が警戒体制になるので、ChaseEventより先に調べる。自分が警戒体制の時は、他の敵を調べるまでもなく最初の発見ではない）
+			if (flyingEnemyModel.IsAlert == false && EnemyManager.SingletonInstance.IsAnyEnemyAlert() == false)
+			{
+				EnemyIndicatorManager.SingletonInstance.ShowAlertIndicator(this);
+			}
 			EnemyManager.SingletonInstance.ChaseEvent.Invoke();
 		}
 		Alert();

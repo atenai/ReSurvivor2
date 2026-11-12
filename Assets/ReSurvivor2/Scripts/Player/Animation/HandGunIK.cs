@@ -82,11 +82,13 @@ public class HandGunIK
 	/// それぞれの持ち方が、今どれだけ混ざっているかを求める
 	/// ※ハンドガン以外を持っている時は、ハンドガンのステートが混ざっていないので、どれも0になる
 	/// </summary>
-	/// <param name="noReloadWeight">リロードしていない割合（リロード中はハンドガンの持ち方をやめる）</param>
+	/// <param name="noReloadWeight">リロード・武器の切り替えをしていない割合（構えている時の持ち方は、リロード中・武器の切り替え中はやめる）</param>
 	public void UpdateWeights(float noReloadWeight)
 	{
 		//構えていない時は、片手（右手）だけで持つ
-		oneHandLocomotionWeight = PlayerAnimatorParameter.GetStateWeight(animator, PlayerAnimatorParameter.LocomotionLayerIndex, PlayerAnimatorParameter.HandGunNormalIdleAndWalkStateHash) * noReloadWeight;
+		//（リロード・武器の切り替えの、焼き込んだアニメーションの間も片手で持つので、焼き込んだアニメーションへ切り替わる途中も左手は銃を握らない。
+		//  銃口を下げる回転は、銃口が上を向きすぎている時だけ直すので、焼き込んだアニメーションと混ざっていても、そのまま効かせてよい）
+		oneHandLocomotionWeight = PlayerAnimatorParameter.GetStateWeight(animator, PlayerAnimatorParameter.LocomotionLayerIndex, PlayerAnimatorParameter.HandGunNormalIdleAndWalkStateHash);
 		//構えて狙っている敵が近い時は、近距離の構えにする
 		aimWeight = PlayerAnimatorParameter.GetStateWeight(animator, PlayerAnimatorParameter.LocomotionLayerIndex, PlayerAnimatorParameter.HandGunAimIdleAndWalkStateHash) * noReloadWeight;
 		float closeQuarterAim = animator.GetFloat(PlayerAnimatorParameter.CloseQuarterAim);
