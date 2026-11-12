@@ -332,8 +332,8 @@ public class ShotGunModel : GunModelBase
 			}
 		}
 
-		//追跡開始
-		EnemyManager.SingletonInstance.ChaseEvent.Invoke();
+		//追跡開始（銃声で敵全員に気づかれる）
+		EnemyManager.SingletonInstance.ChaseByGunshot();
 	}
 
 	/// <summary>
