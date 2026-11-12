@@ -11,10 +11,10 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerAnimationFacade
 {
-	[Tooltip("地雷を置く時のアニメーション")]
-	[SerializeField] MineAnimation mineAnimation = new MineAnimation();
 	[Tooltip("手のIK")]
 	[SerializeField] HandIK handIK = new HandIK();
+	[Tooltip("地雷を置く時のアニメーション")]
+	readonly MineAnimation mineAnimation = new MineAnimation();
 	[Tooltip("移動のアニメーション")]
 	readonly MoveAnimation moveAnimation = new MoveAnimation();
 	[Tooltip("構えのアニメーション")]
@@ -24,11 +24,6 @@ public class PlayerAnimationFacade
 	/// アニメーションどおりの左手の位置・向きをIK用の向きで取り出すための目印（左手の骨の子）
 	/// </summary>
 	public Transform LeftHandAnimationPos => handIK.LeftHandAnimationPos;
-
-	/// <summary>
-	/// アニメーションどおりの右手の位置・向きをIK用の向きで取り出すための目印（右手の骨の子）
-	/// </summary>
-	public Transform RightHandAnimationPos => handIK.RightHandAnimationPos;
 
 	/// <summary>
 	/// 今のフレームで、上半身をひねった分の回転（構えに合わせて背骨を曲げる時に、ひねる前の向きで曲げる量を求めるのに使う）
@@ -102,16 +97,15 @@ public class PlayerAnimationFacade
 	/// <summary>
 	/// 手のIKを動かす（アニメーターのIKの処理（OnAnimatorIK）の中で、銃のアニメーションの割合を求めた後に呼ぶ）
 	/// </summary>
-	/// <param name="gunAnimationFacade">銃のアニメーションの窓口（ハンドガンへの持ち替え・武器の切り替え・ショットガンのリロードの手の位置・向きを使う）</param>
+	/// <param name="gunAnimationFacade">銃のアニメーションの窓口（ハンドガンへの持ち替えの手の位置・向きを使う）</param>
 	/// <param name="gunAnimation">今持っている銃のアニメーションの設定</param>
 	/// <param name="gunModelTransform">今持っている銃のモデル（前向きが銃身、上向きが銃の上側）</param>
 	/// <param name="handGunView">ハンドガンを持っている時は、ハンドガンのビュー（ほかの銃の時はnull）</param>
-	/// <param name="isReloadTimeActive">今持っている銃がリロード中か？</param>
 	/// <param name="spineAimRotation">前のフレームで、構えに合わせて脊椎ボーンを曲げた回転（ワールドの向き）</param>
 	/// <param name="spinePosition">前のフレームで、構えに合わせて曲げた脊椎ボーンの位置</param>
 	/// <param name="aimRay">弾の飛ぶ線（カメラの位置から正面へ）</param>
-	public void UpdateIK(GunAnimationFacade gunAnimationFacade, GunAnimation gunAnimation, Transform gunModelTransform, HandGunView handGunView, bool isReloadTimeActive, Quaternion spineAimRotation, Vector3 spinePosition, Ray aimRay)
+	public void UpdateIK(GunAnimationFacade gunAnimationFacade, GunAnimation gunAnimation, Transform gunModelTransform, HandGunView handGunView, Quaternion spineAimRotation, Vector3 spinePosition, Ray aimRay)
 	{
-		handIK.UpdateIK(gunAnimation, gunModelTransform, handGunView, mineAnimation, gunAnimationFacade.SideArmAnimation, gunAnimationFacade.WeaponSwitchAnimation, gunAnimationFacade.ShotGunReloadAnimation, isReloadTimeActive, gunAnimationFacade.ReloadAnimationTime, spineAimRotation, spinePosition, aimRay);
+		handIK.UpdateIK(gunAnimation, gunModelTransform, handGunView, gunAnimationFacade.SideArmAnimation, spineAimRotation, spinePosition, aimRay);
 	}
 }
