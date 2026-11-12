@@ -72,12 +72,9 @@ public class ScreenUIView : MonoBehaviour
     public Image ImageFade => imageFade;
 
     [Header("ポーズUI")]
-    [Tooltip("ポーズメニューパネル")]
-    [SerializeField] Image panelPauseMenu;
-    public Image PanelPauseMenu => panelPauseMenu;
-    [Tooltip("ポーズメニューオプションのイメージリスト")]
-    [SerializeField] Image[] pauseMenuOptions;
-    public Image[] PauseMenuOptions => pauseMenuOptions;
+    [Tooltip("ポーズメニュー")]
+    [SerializeField] PauseMenuView pauseMenuView;
+    public PauseMenuView PauseMenuView => pauseMenuView;
 
     [Header("マップUI")]
     [Tooltip("マップイメージ")]
