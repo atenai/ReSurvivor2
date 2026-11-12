@@ -6,7 +6,7 @@ using UnityEngine;
 /// コンピューター
 /// </summary>
 /// <remarks>
-/// Computer.cs ⇒ InGameManager.cs ⇒ UI.cs
+/// Computer.cs（Fキー） ⇒ MissionManager.cs（Mission） ⇒ ComputerMenuPresenter.cs（メール一覧かリザルト画面を開く）
 /// </remarks>
 public class Computer : MonoBehaviour
 {
@@ -58,7 +58,7 @@ public class Computer : MonoBehaviour
 		}
 
 		//コンピュータを使用中は切り上げる
-		if (ScreenUIManagerPresenter.SingletonInstance.ScreenUIModel.IsComputerMenuActive == true)
+		if (ScreenUIManagerPresenter.SingletonInstance.ComputerMenuPresenter.IsOpen == true)
 		{
 			return;
 		}
