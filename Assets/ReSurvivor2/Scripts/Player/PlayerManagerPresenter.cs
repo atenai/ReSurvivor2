@@ -223,12 +223,12 @@ public class PlayerManagerPresenter : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 銃を更新した後の処理（銃の状態に合わせて、プレイヤーのリロードのアニメーションを動かす）
+	/// 銃を更新した後の処理（銃の状態に合わせて、プレイヤーのリロード・武器の切り替えのアニメーションを動かす）
 	/// ※InGameManagerが、銃の更新（PlayerCameraManager.AfterUpdate）の後に呼ぶ
 	/// </summary>
 	public void AfterGunUpdate()
 	{
-		playerCharacterView.UpdateReloadAnimation();
+		playerCharacterView.UpdateGunAnimation();
 	}
 
 	/// <summary>

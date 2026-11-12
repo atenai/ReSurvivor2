@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ShotGunShellPinchRightFingers
+  m_Name: SideArmOpenLeftFingers
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -23,7 +23,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: -0.78502524
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -32,7 +32,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: -0.78502524
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -42,7 +42,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Thumb.1 Stretched
+    attribute: LeftHand.Thumb.1 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -53,7 +53,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.5
+        value: 0.4200094
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -62,7 +62,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.5
+        value: 0.4200094
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -72,7 +72,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Thumb.Spread
+    attribute: LeftHand.Thumb.Spread
     path: 
     classID: 95
     script: {fileID: 0}
@@ -83,7 +83,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.61902136
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -92,7 +92,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.61902136
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -102,7 +102,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Thumb.2 Stretched
+    attribute: LeftHand.Thumb.2 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -113,7 +113,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.6190219
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -122,7 +122,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.6190219
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -132,7 +132,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Thumb.3 Stretched
+    attribute: LeftHand.Thumb.3 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -143,7 +143,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.4
+        value: 0.6686742
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -152,7 +152,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.4
+        value: 0.6686742
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -162,7 +162,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Index.1 Stretched
+    attribute: LeftHand.Index.1 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -173,7 +173,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.5
+        value: -0.44878417
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -182,7 +182,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.5
+        value: -0.44878417
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -192,7 +192,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Index.Spread
+    attribute: LeftHand.Index.Spread
     path: 
     classID: 95
     script: {fileID: 0}
@@ -203,7 +203,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.81119925
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -212,7 +212,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.81119925
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -222,7 +222,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Index.2 Stretched
+    attribute: LeftHand.Index.2 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -233,7 +233,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.81119955
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -242,7 +242,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.81119955
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -252,7 +252,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Index.3 Stretched
+    attribute: LeftHand.Index.3 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -263,7 +263,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.4
+        value: 0.66709983
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -272,7 +272,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.4
+        value: 0.66709983
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -282,7 +282,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Middle.1 Stretched
+    attribute: LeftHand.Middle.1 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -293,7 +293,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.5
+        value: -0.6357167
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -302,7 +302,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0.5
+        value: -0.6357167
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -312,7 +312,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Middle.Spread
+    attribute: LeftHand.Middle.Spread
     path: 
     classID: 95
     script: {fileID: 0}
@@ -323,7 +323,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.8116354
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -332,7 +332,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.8116354
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -342,7 +342,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Middle.2 Stretched
+    attribute: LeftHand.Middle.2 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -353,7 +353,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.81163514
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -362,7 +362,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.81163514
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -372,7 +372,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Middle.3 Stretched
+    attribute: LeftHand.Middle.3 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -383,7 +383,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.66794777
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -392,7 +392,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.66794777
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -402,7 +402,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Ring.1 Stretched
+    attribute: LeftHand.Ring.1 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -413,7 +413,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: -0.6090401
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -422,7 +422,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: -0.6090401
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -432,7 +432,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Ring.Spread
+    attribute: LeftHand.Ring.Spread
     path: 
     classID: 95
     script: {fileID: 0}
@@ -443,7 +443,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.81130356
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -452,7 +452,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.81130356
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -462,7 +462,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Ring.2 Stretched
+    attribute: LeftHand.Ring.2 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -473,7 +473,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.8113042
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -482,7 +482,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.8113042
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -492,7 +492,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Ring.3 Stretched
+    attribute: LeftHand.Ring.3 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -503,7 +503,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.6689064
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -512,7 +512,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.6689064
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -522,7 +522,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Little.1 Stretched
+    attribute: LeftHand.Little.1 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -533,7 +533,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: -0.44777325
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -542,7 +542,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: -0.44777325
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -552,7 +552,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Little.Spread
+    attribute: LeftHand.Little.Spread
     path: 
     classID: 95
     script: {fileID: 0}
@@ -563,7 +563,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.810261
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -572,7 +572,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.810261
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -582,7 +582,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Little.2 Stretched
+    attribute: LeftHand.Little.2 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -593,7 +593,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.810261
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -602,7 +602,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.810261
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -612,13 +612,13 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Little.3 Stretched
+    attribute: LeftHand.Little.3 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
     flags: 16
   m_PPtrCurves: []
-  m_SampleRate: 60
+  m_SampleRate: 30
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -627,7 +627,7 @@ AnimationClip:
     genericBindings:
     - serializedVersion: 2
       path: 0
-      attribute: 117
+      attribute: 97
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -636,7 +636,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 118
+      attribute: 98
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -645,7 +645,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 119
+      attribute: 99
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -654,7 +654,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 120
+      attribute: 100
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -663,7 +663,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 121
+      attribute: 101
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -672,7 +672,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 122
+      attribute: 102
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -681,7 +681,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 123
+      attribute: 103
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -690,7 +690,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 124
+      attribute: 104
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -699,7 +699,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 125
+      attribute: 105
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -708,7 +708,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 126
+      attribute: 106
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -717,7 +717,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 127
+      attribute: 107
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -726,7 +726,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 128
+      attribute: 108
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -735,7 +735,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 129
+      attribute: 109
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -744,7 +744,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 130
+      attribute: 110
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -753,7 +753,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 131
+      attribute: 111
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -762,7 +762,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 132
+      attribute: 112
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -771,7 +771,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 133
+      attribute: 113
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -780,7 +780,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 134
+      attribute: 114
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -789,7 +789,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 135
+      attribute: 115
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -798,7 +798,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 136
+      attribute: 116
       script: {fileID: 0}
       typeID: 95
       customType: 8
@@ -816,7 +816,7 @@ AnimationClip:
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 0
+    m_LoopTime: 1
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
@@ -833,7 +833,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: -0.78502524
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -842,7 +842,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: -0.78502524
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -852,7 +852,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Thumb.1 Stretched
+    attribute: LeftHand.Thumb.1 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -863,7 +863,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.5
+        value: 0.4200094
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -872,7 +872,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.5
+        value: 0.4200094
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -882,7 +882,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Thumb.Spread
+    attribute: LeftHand.Thumb.Spread
     path: 
     classID: 95
     script: {fileID: 0}
@@ -893,7 +893,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.61902136
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -902,7 +902,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.61902136
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -912,7 +912,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Thumb.2 Stretched
+    attribute: LeftHand.Thumb.2 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -923,7 +923,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.6190219
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -932,7 +932,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.6190219
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -942,7 +942,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Thumb.3 Stretched
+    attribute: LeftHand.Thumb.3 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -953,7 +953,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.4
+        value: 0.6686742
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -962,7 +962,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.4
+        value: 0.6686742
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -972,7 +972,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Index.1 Stretched
+    attribute: LeftHand.Index.1 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -983,7 +983,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.5
+        value: -0.44878417
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -992,7 +992,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.5
+        value: -0.44878417
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1002,7 +1002,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Index.Spread
+    attribute: LeftHand.Index.Spread
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1013,7 +1013,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.81119925
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1022,7 +1022,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.81119925
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1032,7 +1032,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Index.2 Stretched
+    attribute: LeftHand.Index.2 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1043,7 +1043,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.81119955
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1052,7 +1052,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.81119955
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1062,7 +1062,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Index.3 Stretched
+    attribute: LeftHand.Index.3 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1073,7 +1073,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.4
+        value: 0.66709983
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1082,7 +1082,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.4
+        value: 0.66709983
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1092,7 +1092,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Middle.1 Stretched
+    attribute: LeftHand.Middle.1 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1103,7 +1103,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.5
+        value: -0.6357167
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1112,7 +1112,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0.5
+        value: -0.6357167
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1122,7 +1122,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Middle.Spread
+    attribute: LeftHand.Middle.Spread
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1133,7 +1133,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.8116354
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1142,7 +1142,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.8116354
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1152,7 +1152,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Middle.2 Stretched
+    attribute: LeftHand.Middle.2 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1163,7 +1163,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 0.81163514
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1172,7 +1172,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 0.81163514
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1182,7 +1182,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Middle.3 Stretched
+    attribute: LeftHand.Middle.3 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1193,7 +1193,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.66794777
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1202,7 +1202,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.66794777
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1212,7 +1212,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Ring.1 Stretched
+    attribute: LeftHand.Ring.1 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1223,7 +1223,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: -0.6090401
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1232,7 +1232,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: -0.6090401
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1242,7 +1242,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Ring.Spread
+    attribute: LeftHand.Ring.Spread
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1253,7 +1253,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.81130356
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1262,7 +1262,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.81130356
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1272,7 +1272,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Ring.2 Stretched
+    attribute: LeftHand.Ring.2 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1283,7 +1283,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.8113042
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1292,7 +1292,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.8113042
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1302,7 +1302,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Ring.3 Stretched
+    attribute: LeftHand.Ring.3 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1313,7 +1313,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.6689064
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1322,7 +1322,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.6689064
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1332,7 +1332,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Little.1 Stretched
+    attribute: LeftHand.Little.1 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1343,7 +1343,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: -0.44777325
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1352,7 +1352,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: -0.44777325
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1362,7 +1362,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Little.Spread
+    attribute: LeftHand.Little.Spread
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1373,7 +1373,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.810261
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1382,7 +1382,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.810261
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1392,7 +1392,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Little.2 Stretched
+    attribute: LeftHand.Little.2 Stretched
     path: 
     classID: 95
     script: {fileID: 0}
@@ -1403,7 +1403,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -0.6
+        value: 0.810261
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1412,7 +1412,7 @@ AnimationClip:
         outWeight: 0
       - serializedVersion: 3
         time: 1
-        value: -0.6
+        value: 0.810261
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -1422,7 +1422,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: RightHand.Little.3 Stretched
+    attribute: LeftHand.Little.3 Stretched
     path: 
     classID: 95
     script: {fileID: 0}

@@ -18,10 +18,12 @@ public static class PlayerAnimatorParameter
 	public const string Dash = "f_dash";
 	[Tooltip("構えているか？")]
 	public const string IsAim = "b_isAim";
-	[Tooltip("構えている割合（0で構えていない、1で構えている。構えの切り替えに合わせて、なめらかに変わる。リロードのアニメーションで「構えていない時の動き」と「構えている時の動き」を混ぜる割合にも使う）")]
+	[Tooltip("構えている割合（0で構えていない、1で構えている。構えの切り替えに合わせて、なめらかに変わる。リロード・武器の切り替えのアニメーションで「構えていない時の動き」と「構えている時の動き」を混ぜる割合にも使う）")]
 	public const string Aim = "f_aim";
 	[Tooltip("ハンドガンを持っているか？（ハンドガンは構えていない時に片手で持つので、移動のアニメーションをライフル・ショットガンと分ける）")]
 	public const string IsHandGun = "b_isHandGun";
+	[Tooltip("今持っている銃の種類の番号（EnumManager.GunTYPEの値。ハンドガン1・アサルトライフル2・ショットガン3）（地雷を置く・武器を切り替えるアニメーションで、銃ごとのアニメーションクリップを選ぶ）")]
+	public const string GunType = "f_gunType";
 	[Tooltip("ハンドガンを片手で狙っている割合（1で片手、0で両手）")]
 	public const string OneHandAim = "f_oneHandAim";
 	[Tooltip("ハンドガンを近距離の構え（C.A.R.システムのような構え）にしている割合（1で近距離の構え、0で普通の構え）")]
@@ -36,6 +38,14 @@ public static class PlayerAnimatorParameter
 	public const string IsShotGunReload = "b_isShotGunReload";
 	[Tooltip("地雷を置くアニメーションの再生位置（0がアニメーションの始まり、1が終わり）")]
 	public const string PlaceMineTime = "f_placeMineTime";
+	[Tooltip("今持っている銃をしまうアニメーションをオンにするか？（武器を切り替える時）")]
+	public const string IsWeaponPutAway = "b_isWeaponPutAway";
+	[Tooltip("切り替える先の銃を取り出すアニメーションをオンにするか？（武器を切り替える時）")]
+	public const string IsWeaponTakeOut = "b_isWeaponTakeOut";
+	[Tooltip("銃をしまう・取り出すアニメーションの再生位置（0がアニメーションの始まり、1が終わり）")]
+	public const string WeaponSwitchTime = "f_weaponSwitchTime";
+	[Tooltip("武器を切り替える時に、しまった銃の種類の番号（EnumManager.GunTYPEの値）（取り出すアニメーションクリップを、しまった銃と取り出す銃の組み合わせで選ぶ）")]
+	public const string PreviousGunType = "f_previousGunType";
 
 	//↓レイヤーの番号（アニメーターコントローラーのレイヤーの並び）↓//
 	//※IKパスは一番上のレイヤー（UpperBodyReload）だけにオンにしてある（複数のレイヤーでオンにすると、IKの処理が何度も呼ばれるため）
@@ -47,10 +57,10 @@ public static class PlayerAnimatorParameter
 	public const int DashRightArmLayerIndex = 2;
 	[Tooltip("地雷を置くアニメーションのレイヤーの番号（全身）")]
 	public const int PlaceMineLayerIndex = 3;
-	[Tooltip("上半身のリロードのレイヤーの番号")]
-	public const int UpperBodyReloadLayerIndex = 4;
-	[Tooltip("ショットガンの弾を右手で持っている間だけ、右手の指を弾をつまむ形（親指と人差し指で弾の根元をつまむ、指だけのアニメーション）にしておくレイヤーの番号")]
-	public const int ShotGunShellRightFingersLayerIndex = 5;
+	[Tooltip("ハンドガンに持ち替えている間だけ、メインの銃を持つ左手の指を開いておくレイヤーの番号")]
+	public const int SideArmLeftFingersLayerIndex = 4;
+	[Tooltip("上半身のリロードのレイヤーの番号（リロード・武器の切り替え）")]
+	public const int UpperBodyReloadLayerIndex = 5;
 
 	//↓ステートの番号（ステート名から作った番号）↓//
 	[Tooltip("構えていない時の移動のステート（アサルトライフル・ショットガン）")]
@@ -59,10 +69,8 @@ public static class PlayerAnimatorParameter
 	public static readonly int HandGunNormalIdleAndWalkStateHash = Animator.StringToHash("HandGunNormalIdleAndWalk");
 	[Tooltip("ハンドガンを構えている時の移動のステート")]
 	public static readonly int HandGunAimIdleAndWalkStateHash = Animator.StringToHash("HandGunAimIdleAndWalk");
-	[Tooltip("リロードしていない時のステート（上半身のリロードのレイヤー）")]
+	[Tooltip("リロードも武器の切り替えもしていない時のステート（上半身のリロードのレイヤー。ほかのステートは、手の動きを焼き込んだアニメーションクリップ）")]
 	public static readonly int NoReloadStateHash = Animator.StringToHash("NoReload");
-	[Tooltip("ハンドガンのリロードのステート（上半身のリロードのレイヤー）")]
-	public static readonly int HandGunReloadStateHash = Animator.StringToHash("HandGunReload");
 	[Tooltip("ステートのアニメーションが全く混ざっていない時の割合")]
 	const float NoStateWeight = 0.0f;
 	[Tooltip("そのステートのアニメーションだけの時の割合")]
@@ -86,5 +94,22 @@ public static class PlayerAnimatorParameter
 
 		float nextStateWeight = animator.GetNextAnimatorStateInfo(layerIndex).shortNameHash == stateHash ? FullStateWeight : NoStateWeight;
 		return Mathf.Lerp(currentStateWeight, nextStateWeight, animator.GetAnimatorTransitionInfo(layerIndex).normalizedTime);
+	}
+
+	/// <summary>
+	/// レイヤーが、指定したステートにいるか、指定したステートへ切り替わっている途中か？
+	/// </summary>
+	/// <param name="animator">プレイヤーのアニメーター</param>
+	/// <param name="layerIndex">アニメーターのレイヤーの番号</param>
+	/// <param name="stateHash">ステート（ステート名から作った番号）</param>
+	/// <returns>指定したステートにいるか、指定したステートへ切り替わっている途中ならtrue</returns>
+	public static bool IsGoingToState(Animator animator, int layerIndex, int stateHash)
+	{
+		if (animator.IsInTransition(layerIndex) == true)
+		{
+			return animator.GetNextAnimatorStateInfo(layerIndex).shortNameHash == stateHash;
+		}
+
+		return animator.GetCurrentAnimatorStateInfo(layerIndex).shortNameHash == stateHash;
 	}
 }
