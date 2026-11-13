@@ -161,7 +161,7 @@ public class PlayerCharacterView : MonoBehaviour
 	}
 
 	/// <summary>
-	/// 構えに合わせて、首・背骨・肩のボーンを曲げる
+	/// 構えに合わせて、首・背骨・肩のボーンを曲げる（ハンドガンを構えている時は、顔を狙う先へ向ける）
 	/// ※アニメーションの後に曲げるので、必ずLateUpdateで呼ぶ
 	/// </summary>
 	/// <param name="isAim">構えているか？</param>
@@ -170,6 +170,8 @@ public class PlayerCharacterView : MonoBehaviour
 		Quaternion spineRotationBeforeAim = spine_03.rotation;
 		RotateBoneNeck01();
 		RotateBoneSpine03(aimTransform);
+		//※顔の向きは、背骨を曲げた後の向きで合わせる（背骨を曲げると、首と頭も一緒に回るため）
+		RotateHeadToAimPoint(aimTransform);
 		RotateBoneUpperArmR(isAim);
 		RotateBoneUpperArmL(isAim);
 
@@ -217,6 +219,36 @@ public class PlayerCharacterView : MonoBehaviour
 		Quaternion aimRotation = Quaternion.Euler(cameraPitch + aimAnimationRotX, untwistedAngles.y + aimAnimationRotY, untwistedAngles.z);
 		Quaternion bendRotation = aimRotation * Quaternion.Inverse(untwistedRotation);
 		spine_03.rotation = Quaternion.Slerp(Quaternion.identity, bendRotation, animator.GetFloat(PlayerAnimatorParameter.Aim)) * spine_03.rotation;
+	}
+
+	/// <summary>
+	/// ハンドガンを構えている時に、顔が狙う先（弾の飛ぶ線の先の点）を向くように、首と頭のボーンを左右に回す
+	/// ※ハンドガンの構えのアニメーションは、上半身が正面を向いているので、アサルトライフル・ショットガンの構えに合わせて首を左へ回すと、顔が狙う先より左を向いてしまう
+	///   （構えて歩く時は、歩く向きによっても、顔の左右の向きが大きく変わる）
+	///   そのため、顔の左右の向きと、頭から狙う先への左右の向きの差を求めて、その分だけ回す（顔の上下の向き・頭の傾きは、アニメーションのまま）
+	/// ※ハンドガンの構えのステートが混ざっている割合だけ回す（構えた瞬間・構えをやめた瞬間に、頭が一気に回らないようにする）
+	/// </summary>
+	/// <param name="cameraTransform">狙う向き（カメラ。弾はこの位置から正面へ飛ぶ）</param>
+	void RotateHeadToAimPoint(Transform cameraTransform)
+	{
+		const float noWeight = 0.0f;
+		const float aimPointDistance = 20.0f;
+		//首と頭で半分ずつ回す（首だけで回すと、首がねじれて見えるため）
+		const float neckAndHeadRatio = 0.5f;
+		float weight = PlayerAnimatorParameter.GetStateWeight(animator, PlayerAnimatorParameter.LocomotionLayerIndex, PlayerAnimatorParameter.HandGunAimIdleAndWalkStateHash);
+		if (weight <= noWeight)
+		{
+			return;
+		}
+
+		//頭のボーンは、前向きが顔の正面
+		Transform head = animator.GetBoneTransform(HumanBodyBones.Head);
+		Vector3 up = animator.transform.up;
+		Vector3 aimPoint = cameraTransform.position + cameraTransform.forward * aimPointDistance;
+		float angle = Vector3.SignedAngle(Vector3.ProjectOnPlane(head.forward, up), Vector3.ProjectOnPlane(aimPoint - head.position, up), up);
+		Quaternion halfRotation = Quaternion.AngleAxis(angle * weight * neckAndHeadRatio, up);
+		neck_01.rotation = halfRotation * neck_01.rotation;
+		head.rotation = halfRotation * head.rotation;
 	}
 
 	/// <summary>
