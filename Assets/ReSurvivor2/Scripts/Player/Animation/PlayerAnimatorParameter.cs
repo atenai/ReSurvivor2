@@ -49,18 +49,20 @@ public static class PlayerAnimatorParameter
 
 	//↓レイヤーの番号（アニメーターコントローラーのレイヤーの並び）↓//
 	//※IKパスは一番上のレイヤー（UpperBodyReload）だけにオンにしてある（複数のレイヤーでオンにすると、IKの処理が何度も呼ばれるため）
+	//※1番のレイヤー（RifleIdle）は、アサルトライフル・ショットガンを持って立ち止まっている時に、待機のアニメーションの小さな動き（呼吸や体の揺れ）を足すレイヤー
+	//  （加算のレイヤーで、移動の速さ・構えているか・ハンドガンを持っているかを見て、アニメーターコントローラーの中だけで切り替えるので、コードからは使わない）
 	[Tooltip("移動のレイヤーの番号")]
 	public const int LocomotionLayerIndex = 0;
 	[Tooltip("ハンドガンを片手で構えている間だけ、左腕を下ろしておくレイヤーの番号")]
-	public const int HandGunOneHandAimLeftArmLayerIndex = 1;
+	public const int HandGunOneHandAimLeftArmLayerIndex = 2;
 	[Tooltip("ダッシュしている間だけ、右腕と右手の指を走りのアニメーション（銃を持つ腕）にしておくレイヤーの番号")]
-	public const int DashRightArmLayerIndex = 2;
+	public const int DashRightArmLayerIndex = 3;
 	[Tooltip("地雷を置くアニメーションのレイヤーの番号（全身）")]
-	public const int PlaceMineLayerIndex = 3;
+	public const int PlaceMineLayerIndex = 4;
 	[Tooltip("ハンドガンに持ち替えている間だけ、メインの銃を持つ左手の指を開いておくレイヤーの番号")]
-	public const int SideArmLeftFingersLayerIndex = 4;
+	public const int SideArmLeftFingersLayerIndex = 5;
 	[Tooltip("上半身のリロードのレイヤーの番号（リロード・武器の切り替え）")]
-	public const int UpperBodyReloadLayerIndex = 5;
+	public const int UpperBodyReloadLayerIndex = 6;
 
 	//↓ステートの番号（ステート名から作った番号）↓//
 	[Tooltip("構えていない時の移動のステート（アサルトライフル・ショットガン）")]
