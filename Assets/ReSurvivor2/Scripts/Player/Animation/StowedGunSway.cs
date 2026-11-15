@@ -15,29 +15,36 @@ public class StowedGunSway
 	[SerializeField] Vector3 pivotLocalPosition = Vector3.zero;
 	[Tooltip("銃の重心の位置（しまっている銃から見た位置。体の速さが変わると、この位置に慣性の力がかかる）")]
 	[SerializeField] Vector3 centerOfMassLocalPosition = Vector3.zero;
-	[Tooltip("揺れの速さ（1秒に揺れる回数）")]
+	[Tooltip("揺れの速さ（1秒に揺れる回数）（歩く・走る足のリズム（1秒に2.5〜3回）と同じにすると、揺れがどんどん大きくなるので、それより速くする）")]
 	[SerializeField] float frequency = 4.0f;
 	[Tooltip("揺れの収まりやすさ（0で揺れ続け、1で揺り返さずに元の向きへ戻る）")]
 	[SerializeField] float dampingRatio = 0.5f;
 	[Tooltip("揺れの大きさの倍率（体の速さの変わり方から受ける力の倍率）")]
-	[SerializeField] float swayScale = 0.5f;
+	[SerializeField] float swayScale = 1.0f;
 	[Tooltip("揺れる角度の上限（度）")]
-	[SerializeField] float maxAngle = 6.0f;
+	[SerializeField] float maxAngle = 10.0f;
 
 	[Tooltip("武器を切り替え始めてから、揺れを0にするまでの時間（秒）（切り替え終わった後も、同じ時間で揺れを戻す）")]
 	const float SwitchFadeTime = 0.15f;
 	[Tooltip("1回の計算で進める時間の上限（秒）（フレームの時間が長い時は、何回かに分けて計算する。揺れの計算が暴れないようにするため）")]
 	const float MaxStepTime = 1.0f / 60.0f;
-	[Tooltip("留め具がこの速さ（m/秒）より速く動いた時は、ステージを移った時などの瞬間移動とみなして、揺れを止めて計算し直す")]
+	[Tooltip("留め具がキャラクターから見てこの速さ（m/秒）より速く動いた時は、アニメーションが切り替わった時などの瞬間移動とみなして、揺れを止めて計算し直す")]
 	const float TeleportSpeed = 20.0f;
-	[Tooltip("体の速さの変わり方（加速度。m/秒²）の上限（ぶつかった時などの急な動きで、銃が大きく揺れないようにする）")]
-	const float MaxAcceleration = 40.0f;
+	[Tooltip("キャラクターの移動の速さをならす時間（秒）（移動は物理の更新ごとに速さが変わるので、ならしてから速さの変わり方を求める）")]
+	const float CharacterVelocitySmoothTime = 0.1f;
+	[Tooltip("ならす割合の最大（1で、ならさずに今の速さにする）")]
+	const float FullSmoothRate = 1.0f;
+	[Tooltip("体の速さの変わり方（加速度。m/秒²）の上限（人の体の動きとして自然な、重力の2倍くらいまでにする）"
+		+ "（移動の向きを急に変えてアニメーションの形が一気に変わった時や、走って足が着いた時の急な動きで、銃が大きく揺れないようにする）")]
+	const float MaxAcceleration = 20.0f;
 	[Tooltip("揺らしていない時の重み")]
 	const float NoSwayWeight = 0.0f;
 	[Tooltip("揺らしている時の重み")]
 	const float FullSwayWeight = 1.0f;
 	[Tooltip("揺れていない時の角度")]
 	const float NoAngle = 0.0f;
+	[Tooltip("揺れが止まっている時の角速度")]
+	const float NoAngularSpeed = 0.0f;
 	[Tooltip("フレームの時間が0の時（一時停止中）は計算しない")]
 	const float NoDeltaTime = 0.0f;
 	[Tooltip("ばねの戻る力に使う、揺れの速さ（1秒に揺れる回数）から角速度への倍率（2π）")]
@@ -51,10 +58,12 @@ public class StowedGunSway
 	Vector3 restLocalPosition = Vector3.zero;
 	[Tooltip("しまっている銃の、揺れていない時の向き（付けている骨から見た向き）")]
 	Quaternion restLocalRotation = Quaternion.identity;
-	[Tooltip("前のフレームの留め具の位置（ワールド）")]
+	[Tooltip("前のフレームの留め具の位置（キャラクターから見た位置）")]
 	Vector3 previousPivotPosition = Vector3.zero;
-	[Tooltip("前のフレームの留め具の速さ（ワールド。m/秒）")]
+	[Tooltip("前のフレームの留め具の速さ（キャラクターから見た速さ。m/秒）")]
 	Vector3 previousPivotVelocity = Vector3.zero;
+	[Tooltip("ならしたキャラクターの移動の速さ（ワールド。m/秒）")]
+	Vector3 smoothedCharacterVelocity = Vector3.zero;
 	[Tooltip("前のフレームの留め具の位置が入っているか？（初めのフレーム・銃を表示した最初のフレームは、速さが分からないので揺らさない）")]
 	bool hasPreviousPivot = false;
 	[Tooltip("今の揺れの角度（付けている骨から見た回転軸の向き × 角度。ラジアン）")]
@@ -89,10 +98,16 @@ public class StowedGunSway
 
 	/// <summary>
 	/// しまっている銃を揺らす（アニメーションで体が動いた後に、毎フレーム呼ぶ）
+	/// ※体の動きは、2つに分けて求める（キャラクターの位置・向きは物理の更新ごとにしか変わらないので、
+	///   描画のフレームごとの位置の差から求めると、動かないフレームと2回分動くフレームが混ざり、銃が細かく震えるため）
+	///   ・アニメーションによる体の動き（歩く時の上下の揺れなど）：キャラクターから見た留め具の位置の変わり方
+	///   ・キャラクターの移動（走り出し・止まる時など）：キャラクターの移動の速さ（物理の速さ）をならしてから、その変わり方
 	/// </summary>
 	/// <param name="isSwayEnabled">揺らすか？（武器を切り替えている間はfalse）</param>
 	/// <param name="deltaTime">前のフレームからの時間（秒）</param>
-	public void UpdateSway(bool isSwayEnabled, float deltaTime)
+	/// <param name="characterTransform">キャラクター（アニメーターのゲームオブジェクト。体の動きは、ここから見た位置で求める）</param>
+	/// <param name="characterVelocity">キャラクターの移動の速さ（ワールド。m/秒）</param>
+	public void UpdateSway(bool isSwayEnabled, float deltaTime, Transform characterTransform, Vector3 characterVelocity)
 	{
 		if (stowTransform == null || deltaTime <= NoDeltaTime)
 		{
@@ -112,7 +127,11 @@ public class StowedGunSway
 
 		Transform parent = stowTransform.parent;
 		Vector3 pivotParentPosition = GetPivotParentPosition();
-		Vector3 pivotPosition = parent.TransformPoint(pivotParentPosition);
+		//アニメーションによる体の動き：キャラクターから見た留め具の位置
+		Vector3 pivotPosition = characterTransform.InverseTransformPoint(parent.TransformPoint(pivotParentPosition));
+		//キャラクターの移動：移動の速さをならす（物理の更新ごとに変わる速さを、少しずつ追いかける）
+		Vector3 previousSmoothedCharacterVelocity = smoothedCharacterVelocity;
+		smoothedCharacterVelocity = Vector3.Lerp(smoothedCharacterVelocity, characterVelocity, FullSmoothRate - Mathf.Exp(-deltaTime / CharacterVelocitySmoothTime));
 		if (hasPreviousPivot == false)
 		{
 			previousPivotPosition = pivotPosition;
@@ -123,7 +142,7 @@ public class StowedGunSway
 		}
 
 		Vector3 pivotVelocity = (pivotPosition - previousPivotPosition) / deltaTime;
-		//ステージを移った時などの瞬間移動では、揺れを止めて計算し直す
+		//アニメーションが切り替わった時などの瞬間移動では、揺れを止めて計算し直す
 		if (TeleportSpeed < pivotVelocity.magnitude)
 		{
 			ResetSway();
@@ -133,7 +152,10 @@ public class StowedGunSway
 			return;
 		}
 
-		Vector3 pivotAcceleration = Vector3.ClampMagnitude((pivotVelocity - previousPivotVelocity) / deltaTime, MaxAcceleration);
+		//体の加速度 = アニメーションによる体の動きの加速度（キャラクターの向きでワールドへ） + キャラクターの移動の加速度
+		Vector3 animationAcceleration = characterTransform.rotation * ((pivotVelocity - previousPivotVelocity) / deltaTime);
+		Vector3 characterAcceleration = (smoothedCharacterVelocity - previousSmoothedCharacterVelocity) / deltaTime;
+		Vector3 pivotAcceleration = Vector3.ClampMagnitude(animationAcceleration + characterAcceleration, MaxAcceleration);
 		previousPivotPosition = pivotPosition;
 		previousPivotVelocity = pivotVelocity;
 
@@ -151,11 +173,35 @@ public class StowedGunSway
 			Vector3 angularAcceleration = inertiaAngularAcceleration - angularFrequency * angularFrequency * swayAngle - DampingFactor * dampingRatio * angularFrequency * swayAngularVelocity;
 			swayAngularVelocity += angularAcceleration * stepTime;
 			swayAngle += swayAngularVelocity * stepTime;
+			LimitSwayAngle();
 			remainingTime -= stepTime;
 		}
-		swayAngle = Vector3.ClampMagnitude(swayAngle, maxAngle * Mathf.Deg2Rad);
 
 		ApplySway();
+	}
+
+	/// <summary>
+	/// 揺れる角度を上限までにする（上限に着いた時は、外へ揺れる角速度をなくす）
+	/// ※角度だけを止めて角速度を残すと、上限に張り付いて止まった後に急に戻り始めるので、
+	///   銃を留めているベルトが伸び切って止まったように、外へ揺れる動きだけを止めて、すぐに戻り始めるようにする
+	/// </summary>
+	void LimitSwayAngle()
+	{
+		float maxAngleRadian = maxAngle * Mathf.Deg2Rad;
+		float angle = swayAngle.magnitude;
+		if (angle <= maxAngleRadian)
+		{
+			return;
+		}
+
+		Vector3 outwardDirection = swayAngle / angle;
+		swayAngle = outwardDirection * maxAngleRadian;
+		float outwardAngularSpeed = Vector3.Dot(swayAngularVelocity, outwardDirection);
+		if (outwardAngularSpeed <= NoAngularSpeed)
+		{
+			return;
+		}
+		swayAngularVelocity -= outwardDirection * outwardAngularSpeed;
 	}
 
 	/// <summary>
@@ -166,6 +212,7 @@ public class StowedGunSway
 		swayAngle = Vector3.zero;
 		swayAngularVelocity = Vector3.zero;
 		previousPivotVelocity = Vector3.zero;
+		smoothedCharacterVelocity = Vector3.zero;
 		hasPreviousPivot = false;
 	}
 

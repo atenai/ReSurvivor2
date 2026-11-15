@@ -489,6 +489,8 @@ public class PlayerManagerPresenter : MonoBehaviour
 	{
 		//ボーンを曲げる際は必ずLateUpdateに書く必要がある！（これいつかメモする！）
 		playerCharacterView.UpdateAimBones(playerModel.IsAim);
+		//体にしまっている銃の揺れは、構えに合わせて背骨を曲げた後の体の動き（見えている体の動き）で求める
+		playerCharacterView.UpdateStowedGunSway();
 	}
 
 	void OnCollisionEnter(Collision collision)

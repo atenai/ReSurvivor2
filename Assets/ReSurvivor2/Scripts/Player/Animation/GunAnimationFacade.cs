@@ -101,7 +101,7 @@ public class GunAnimationFacade
 	}
 
 	/// <summary>
-	/// リロード中のマガジン・ハンドガンに持ち替える時の銃のモデル・体にしまっている銃の揺れを動かす（アニメーションで手と体が動いた後に呼ぶ）
+	/// リロード中のマガジン・ハンドガンに持ち替える時の銃のモデルを動かす（アニメーションで手が動いた後に呼ぶ）
 	/// </summary>
 	/// <param name="gunState">銃の状態を読むための窓口</param>
 	/// <param name="gunViewFacade">ガンビューファサード</param>
@@ -116,10 +116,19 @@ public class GunAnimationFacade
 		shotGunAnimation.UpdateReloadMagazine(gunState.IsGunReloadTimeActive(EnumManager.GunTYPE.ShotGun), reloadAnimationTime, isReloadAnimationForward, leftHand);
 		//ハンドガンに持ち替える時の、銃のモデルを持ち替える
 		sideArmAnimation.UpdateModels(gunState, gunViewFacade, leftHand);
-		//体にしまっている銃（腰のアサルトライフル・背中のショットガン）を、移動に合わせて少しだけ揺らす
+	}
+
+	/// <summary>
+	/// 体にしまっている銃（腰のアサルトライフル・背中のショットガン）を、体の動きに合わせて少しだけ揺らす（構えに合わせて背骨を曲げた後に呼ぶ）
+	/// </summary>
+	/// <param name="gunState">銃の状態を読むための窓口</param>
+	/// <param name="characterTransform">キャラクター（アニメーターのゲームオブジェクト。体にしまっている銃を揺らす体の動きは、ここから見た位置で求める）</param>
+	/// <param name="characterVelocity">キャラクターの移動の速さ（ワールド。m/秒）</param>
+	public void UpdateStowedGunSway(IReadOnlyGunModel gunState, Transform characterTransform, Vector3 characterVelocity)
+	{
 		//※武器を切り替えている間は揺らさない（しまい終わった時・取り出し始めた時に、手の銃としまってある銃がぴったり重なるようにするため）
 		bool isStowSwayEnabled = gunState.WeaponSwitchPhase == EnumManager.WeaponSwitchPhaseTYPE.None;
-		assaultRifleStowSway.UpdateSway(isStowSwayEnabled, Time.deltaTime);
-		shotGunStowSway.UpdateSway(isStowSwayEnabled, Time.deltaTime);
+		assaultRifleStowSway.UpdateSway(isStowSwayEnabled, Time.deltaTime, characterTransform, characterVelocity);
+		shotGunStowSway.UpdateSway(isStowSwayEnabled, Time.deltaTime, characterTransform, characterVelocity);
 	}
 }

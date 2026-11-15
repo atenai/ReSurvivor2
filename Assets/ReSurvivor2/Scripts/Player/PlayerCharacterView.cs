@@ -55,6 +55,8 @@ public class PlayerCharacterView : MonoBehaviour
 	Quaternion spineAimLocalRotation = Quaternion.identity;
 	[Tooltip("前のフレームで、構えに合わせて曲げた脊椎ボーンの位置（キャラクターから見た位置）")]
 	Vector3 spineAimLocalPosition = Vector3.zero;
+	[Tooltip("プレイヤーを動かすリジッドボディ（親のゲームオブジェクトに付いている。移動の速さを、体にしまっている銃の揺れに使う）。見つからない時はnull")]
+	Rigidbody characterRigidbody;
 
 	/// <summary>
 	/// 初期化（Presenterが最初に呼ぶ）
@@ -65,6 +67,7 @@ public class PlayerCharacterView : MonoBehaviour
 	{
 		this.gunState = gunState;
 		this.aimTransform = aimTransform;
+		characterRigidbody = GetComponentInParent<Rigidbody>();
 		ResetMoveAnimation();
 		playerAnimationFacade.Initialize(animator);
 		gunAnimationFacade.Initialize(animator, gunViewFacade, playerAnimationFacade.LeftHandAnimationPos);
@@ -180,6 +183,23 @@ public class PlayerCharacterView : MonoBehaviour
 		Quaternion characterRotation = animator.transform.rotation;
 		spineAimLocalRotation = Quaternion.Inverse(characterRotation) * spine_03.rotation * Quaternion.Inverse(spineRotationBeforeAim) * characterRotation;
 		spineAimLocalPosition = Quaternion.Inverse(characterRotation) * (spine_03.position - animator.transform.position);
+	}
+
+	/// <summary>
+	/// 体にしまっている銃（腰のアサルトライフル・背中のショットガン）を、体の動きに合わせて少しだけ揺らす（構えに合わせて背骨を曲げた後に、LateUpdateで呼ぶ）
+	/// ※背骨を曲げる前の体の動きで揺らすと、構えている時に、見えている上半身はカメラの向きのまま動いていないのに、
+	///   アニメーションどおりの上半身の揺れ（曲げて消した揺れ）で、背中の銃だけが大きく揺れてしまう
+	/// </summary>
+	public void UpdateStowedGunSway()
+	{
+		//※ステージを移る時に作られてすぐに消える、2つ目のプレイヤーは、初期化されないので動かさない
+		if (gunState == null)
+		{
+			return;
+		}
+
+		Vector3 characterVelocity = characterRigidbody != null ? characterRigidbody.velocity : Vector3.zero;
+		gunAnimationFacade.UpdateStowedGunSway(gunState, animator.transform, characterVelocity);
 	}
 
 	/// <summary>
