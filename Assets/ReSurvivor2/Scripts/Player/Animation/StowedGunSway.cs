@@ -30,8 +30,14 @@ public class StowedGunSway
 	const float MaxStepTime = 1.0f / 60.0f;
 	[Tooltip("留め具がキャラクターから見てこの速さ（m/秒）より速く動いた時は、アニメーションが切り替わった時などの瞬間移動とみなして、揺れを止めて計算し直す")]
 	const float TeleportSpeed = 20.0f;
-	[Tooltip("キャラクターの移動の速さをならす時間（秒）（移動は物理の更新ごとに速さが変わるので、ならしてから速さの変わり方を求める）")]
+	[Tooltip("キャラクターの移動・回る速さをならす時間（秒）（移動・回転は物理の更新ごとに速さが変わるので、ならしてから速さの変わり方を求める）")]
 	const float CharacterVelocitySmoothTime = 0.1f;
+	[Tooltip("キャラクターがこの速さ（ラジアン/秒）より速く回った時は、向きを一瞬で変えた時（移動の向きを急に変えた時・ステージを移った時など）とみなして、回る速さに入れない")]
+	const float MaxCharacterAngularSpeed = 20.0f;
+	[Tooltip("四元数の半分の角度から、回る角度への倍率")]
+	const float HalfAngleToAngle = 2.0f;
+	[Tooltip("四元数の成分の0（wが0より小さい四元数は、回る角度が180°より大きい方の表し方。軸の成分の長さが0の時は回っていない）")]
+	const float ZeroQuaternionComponent = 0.0f;
 	[Tooltip("ならす割合の最大（1で、ならさずに今の速さにする）")]
 	const float FullSmoothRate = 1.0f;
 	[Tooltip("体の速さの変わり方（加速度。m/秒²）の上限（人の体の動きとして自然な、重力の2倍くらいまでにする）"
@@ -64,6 +70,16 @@ public class StowedGunSway
 	Vector3 previousPivotVelocity = Vector3.zero;
 	[Tooltip("ならしたキャラクターの移動の速さ（ワールド。m/秒）")]
 	Vector3 smoothedCharacterVelocity = Vector3.zero;
+	[Tooltip("前の物理の更新の時のキャラクターの向き（ワールド）")]
+	Quaternion previousCharacterRotation = Quaternion.identity;
+	[Tooltip("前の物理の更新の時間（秒）")]
+	float previousPhysicsTime = 0.0f;
+	[Tooltip("前の物理の更新の時のキャラクターの向きが入っているか？")]
+	bool hasPreviousCharacterRotation = false;
+	[Tooltip("キャラクターの回る速さ（ワールドの回転軸の向き × 角速度。ラジアン/秒）（物理の更新がなかったフレームは、前の速さのまま）")]
+	Vector3 characterAngularVelocity = Vector3.zero;
+	[Tooltip("ならしたキャラクターの回る速さ（ワールドの回転軸の向き × 角速度。ラジアン/秒）")]
+	Vector3 smoothedCharacterAngularVelocity = Vector3.zero;
 	[Tooltip("前のフレームの留め具の位置が入っているか？（初めのフレーム・銃を表示した最初のフレームは、速さが分からないので揺らさない）")]
 	bool hasPreviousPivot = false;
 	[Tooltip("今の揺れの角度（付けている骨から見た回転軸の向き × 角度。ラジアン）")]
@@ -102,12 +118,15 @@ public class StowedGunSway
 	///   描画のフレームごとの位置の差から求めると、動かないフレームと2回分動くフレームが混ざり、銃が細かく震えるため）
 	///   ・アニメーションによる体の動き（歩く時の上下の揺れなど）：キャラクターから見た留め具の位置の変わり方
 	///   ・キャラクターの移動（走り出し・止まる時など）：キャラクターの移動の速さ（物理の速さ）をならしてから、その変わり方
+	///   ・キャラクターの回転（構えてカメラを回した時など）：物理の更新ごとの向きの変わり方から回る速さを求め、ならしてから、
+	///     回り始め・回り終わりに留め具が後ろへ残る力と、回っている間に外へ振られる力
 	/// </summary>
 	/// <param name="isSwayEnabled">揺らすか？（武器を切り替えている間はfalse）</param>
 	/// <param name="deltaTime">前のフレームからの時間（秒）</param>
+	/// <param name="physicsTime">最後の物理の更新の時間（秒）（キャラクターの向きは物理の更新ごとに変わるので、回る速さをこの時間の差で求める）</param>
 	/// <param name="characterTransform">キャラクター（アニメーターのゲームオブジェクト。体の動きは、ここから見た位置で求める）</param>
 	/// <param name="characterVelocity">キャラクターの移動の速さ（ワールド。m/秒）</param>
-	public void UpdateSway(bool isSwayEnabled, float deltaTime, Transform characterTransform, Vector3 characterVelocity)
+	public void UpdateSway(bool isSwayEnabled, float deltaTime, float physicsTime, Transform characterTransform, Vector3 characterVelocity)
 	{
 		if (stowTransform == null || deltaTime <= NoDeltaTime)
 		{
@@ -126,12 +145,16 @@ public class StowedGunSway
 		swayWeight = Mathf.MoveTowards(swayWeight, targetWeight, deltaTime / SwitchFadeTime);
 
 		Transform parent = stowTransform.parent;
-		Vector3 pivotParentPosition = GetPivotParentPosition();
+		Vector3 pivotWorldPosition = parent.TransformPoint(GetPivotParentPosition());
 		//アニメーションによる体の動き：キャラクターから見た留め具の位置
-		Vector3 pivotPosition = characterTransform.InverseTransformPoint(parent.TransformPoint(pivotParentPosition));
-		//キャラクターの移動：移動の速さをならす（物理の更新ごとに変わる速さを、少しずつ追いかける）
+		Vector3 pivotPosition = characterTransform.InverseTransformPoint(pivotWorldPosition);
+		//キャラクターの移動・回転：移動の速さ・回る速さをならす（物理の更新ごとに変わる速さを、少しずつ追いかける）
+		float smoothRate = FullSmoothRate - Mathf.Exp(-deltaTime / CharacterVelocitySmoothTime);
 		Vector3 previousSmoothedCharacterVelocity = smoothedCharacterVelocity;
-		smoothedCharacterVelocity = Vector3.Lerp(smoothedCharacterVelocity, characterVelocity, FullSmoothRate - Mathf.Exp(-deltaTime / CharacterVelocitySmoothTime));
+		smoothedCharacterVelocity = Vector3.Lerp(smoothedCharacterVelocity, characterVelocity, smoothRate);
+		UpdateCharacterAngularVelocity(characterTransform.rotation, physicsTime);
+		Vector3 previousSmoothedCharacterAngularVelocity = smoothedCharacterAngularVelocity;
+		smoothedCharacterAngularVelocity = Vector3.Lerp(smoothedCharacterAngularVelocity, characterAngularVelocity, smoothRate);
 		if (hasPreviousPivot == false)
 		{
 			previousPivotPosition = pivotPosition;
@@ -152,10 +175,15 @@ public class StowedGunSway
 			return;
 		}
 
-		//体の加速度 = アニメーションによる体の動きの加速度（キャラクターの向きでワールドへ） + キャラクターの移動の加速度
+		//体の加速度 = アニメーションによる体の動きの加速度（キャラクターの向きでワールドへ） + キャラクターの移動の加速度 + キャラクターの回転による加速度
 		Vector3 animationAcceleration = characterTransform.rotation * ((pivotVelocity - previousPivotVelocity) / deltaTime);
 		Vector3 characterAcceleration = (smoothedCharacterVelocity - previousSmoothedCharacterVelocity) / deltaTime;
-		Vector3 pivotAcceleration = Vector3.ClampMagnitude(animationAcceleration + characterAcceleration, MaxAcceleration);
+		//回転による加速度 = 回る速さの変わり方 × 回る中心からの位置（回り始め・回り終わり） + 回っている間に外へ振られる力（遠心力の向き）
+		Vector3 characterAngularAcceleration = (smoothedCharacterAngularVelocity - previousSmoothedCharacterAngularVelocity) / deltaTime;
+		Vector3 pivotFromCharacter = pivotWorldPosition - characterTransform.position;
+		Vector3 rotationAcceleration = Vector3.Cross(characterAngularAcceleration, pivotFromCharacter)
+			+ Vector3.Cross(smoothedCharacterAngularVelocity, Vector3.Cross(smoothedCharacterAngularVelocity, pivotFromCharacter));
+		Vector3 pivotAcceleration = Vector3.ClampMagnitude(animationAcceleration + characterAcceleration + rotationAcceleration, MaxAcceleration);
 		previousPivotPosition = pivotPosition;
 		previousPivotVelocity = pivotVelocity;
 
@@ -213,7 +241,63 @@ public class StowedGunSway
 		swayAngularVelocity = Vector3.zero;
 		previousPivotVelocity = Vector3.zero;
 		smoothedCharacterVelocity = Vector3.zero;
+		characterAngularVelocity = Vector3.zero;
+		smoothedCharacterAngularVelocity = Vector3.zero;
+		hasPreviousCharacterRotation = false;
 		hasPreviousPivot = false;
+	}
+
+	/// <summary>
+	/// キャラクターの回る速さを求める（物理の更新があった時だけ、前の物理の更新からの向きの変わり方を、その時間で割る）
+	/// ※キャラクターの向きは物理の更新ごとにしか変わらないので、描画のフレームごとの向きの差から求めると、
+	///   回らないフレームと2回分回るフレームが混ざり、銃が細かく震えるため
+	/// </summary>
+	/// <param name="characterRotation">今のキャラクターの向き（ワールド）</param>
+	/// <param name="physicsTime">最後の物理の更新の時間（秒）</param>
+	void UpdateCharacterAngularVelocity(Quaternion characterRotation, float physicsTime)
+	{
+		if (hasPreviousCharacterRotation == false)
+		{
+			previousCharacterRotation = characterRotation;
+			previousPhysicsTime = physicsTime;
+			characterAngularVelocity = Vector3.zero;
+			hasPreviousCharacterRotation = true;
+			return;
+		}
+
+		//物理の更新がなかったフレームは、前の回る速さのままにする
+		float physicsDeltaTime = physicsTime - previousPhysicsTime;
+		if (physicsDeltaTime <= NoDeltaTime)
+		{
+			return;
+		}
+
+		characterAngularVelocity = ToRotationVector(characterRotation * Quaternion.Inverse(previousCharacterRotation)) / physicsDeltaTime;
+		//向きを一瞬で変えた時（移動の向きを急に変えた時・ステージを移った時など）は、回る速さに入れない
+		if (MaxCharacterAngularSpeed < characterAngularVelocity.magnitude)
+		{
+			characterAngularVelocity = Vector3.zero;
+		}
+		previousCharacterRotation = characterRotation;
+		previousPhysicsTime = physicsTime;
+	}
+
+	/// <summary>
+	/// 回転を、回転軸の向き × 回る角度（ラジアン）にする（同じ回転を表す2つの四元数のうち、回る角度が小さい方で求める）
+	/// </summary>
+	/// <param name="rotation">回転</param>
+	/// <returns>回転軸の向き × 回る角度（ラジアン）（回っていない時は0）</returns>
+	static Vector3 ToRotationVector(Quaternion rotation)
+	{
+		Quaternion shortRotation = rotation.w < ZeroQuaternionComponent ? new Quaternion(-rotation.x, -rotation.y, -rotation.z, -rotation.w) : rotation;
+		Vector3 axis = new Vector3(shortRotation.x, shortRotation.y, shortRotation.z);
+		float sinHalfAngle = axis.magnitude;
+		if (sinHalfAngle <= ZeroQuaternionComponent)
+		{
+			return Vector3.zero;
+		}
+		float angle = HalfAngleToAngle * Mathf.Atan2(sinHalfAngle, shortRotation.w);
+		return axis / sinHalfAngle * angle;
 	}
 
 	/// <summary>

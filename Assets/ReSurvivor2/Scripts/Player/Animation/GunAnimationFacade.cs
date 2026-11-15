@@ -128,7 +128,7 @@ public class GunAnimationFacade
 	{
 		//※武器を切り替えている間は揺らさない（しまい終わった時・取り出し始めた時に、手の銃としまってある銃がぴったり重なるようにするため）
 		bool isStowSwayEnabled = gunState.WeaponSwitchPhase == EnumManager.WeaponSwitchPhaseTYPE.None;
-		assaultRifleStowSway.UpdateSway(isStowSwayEnabled, Time.deltaTime, characterTransform, characterVelocity);
-		shotGunStowSway.UpdateSway(isStowSwayEnabled, Time.deltaTime, characterTransform, characterVelocity);
+		assaultRifleStowSway.UpdateSway(isStowSwayEnabled, Time.deltaTime, Time.fixedTime, characterTransform, characterVelocity);
+		shotGunStowSway.UpdateSway(isStowSwayEnabled, Time.deltaTime, Time.fixedTime, characterTransform, characterVelocity);
 	}
 }
