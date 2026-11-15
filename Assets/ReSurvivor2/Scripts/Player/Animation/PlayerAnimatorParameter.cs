@@ -18,7 +18,7 @@ public static class PlayerAnimatorParameter
 	public const string Dash = "f_dash";
 	[Tooltip("構えているか？")]
 	public const string IsAim = "b_isAim";
-	[Tooltip("構えている割合（0で構えていない、1で構えている。構えの切り替えに合わせて、なめらかに変わる。リロード・武器の切り替えのアニメーションで「構えていない時の動き」と「構えている時の動き」を混ぜる割合にも使う）")]
+	[Tooltip("構えている割合（0で構えていない、1で構えている。構えの切り替えに合わせて、なめらかに変わる。リロードのアニメーションで「構えていない時の動き」と「構えている時の動き」を混ぜる割合にも使う）")]
 	public const string Aim = "f_aim";
 	[Tooltip("ハンドガンを持っているか？（ハンドガンは構えていない時に片手で持つので、移動のアニメーションをライフル・ショットガンと分ける）")]
 	public const string IsHandGun = "b_isHandGun";
@@ -44,6 +44,8 @@ public static class PlayerAnimatorParameter
 	public const string IsWeaponTakeOut = "b_isWeaponTakeOut";
 	[Tooltip("銃をしまう・取り出すアニメーションの再生位置（0がアニメーションの始まり、1が終わり）")]
 	public const string WeaponSwitchTime = "f_weaponSwitchTime";
+	[Tooltip("武器を切り替える時に、構えていない時の動き（0）と構えている時の動き（1）のどちらを使うか（切り替え始めた時の構えで決めて、切り替え終わるまで変えない）")]
+	public const string WeaponSwitchAim = "f_weaponSwitchAim";
 	[Tooltip("武器を切り替える時に、しまった銃の種類の番号（EnumManager.GunTYPEの値）（取り出すアニメーションクリップを、しまった銃と取り出す銃の組み合わせで選ぶ）")]
 	public const string PreviousGunType = "f_previousGunType";
 
