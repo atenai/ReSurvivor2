@@ -27,8 +27,21 @@ public class GunAnimationFacade
 	readonly SideArmAnimation sideArmAnimation = new SideArmAnimation();
 	public SideArmAnimation SideArmAnimation => sideArmAnimation;
 
+	[Tooltip("腰にしまっているアサルトライフルの留め具の位置（しまっている銃から見た位置。上側になる銃床寄りの機関部で、銃口側が揺れる）")]
+	static readonly Vector3 AssaultRifleStowPivot = new Vector3(0.0f, 0.0f, -0.38f);
+	[Tooltip("腰にしまっているアサルトライフルの重心の位置（しまっている銃から見た位置）")]
+	static readonly Vector3 AssaultRifleStowCenterOfMass = new Vector3(0.0f, -0.03f, -0.18f);
+	[Tooltip("背中にしまっているショットガンの留め具の位置（しまっている銃から見た位置。上側になる銃床寄りで、銃口側が揺れる）")]
+	static readonly Vector3 ShotGunStowPivot = new Vector3(0.0f, 0.0f, -0.45f);
+	[Tooltip("背中にしまっているショットガンの重心の位置（しまっている銃から見た位置）")]
+	static readonly Vector3 ShotGunStowCenterOfMass = new Vector3(0.0f, 0.0f, -0.15f);
+	[Tooltip("腰にしまっているアサルトライフルを、移動した時に少しだけ揺らす")]
+	[SerializeField] StowedGunSway assaultRifleStowSway = new StowedGunSway(AssaultRifleStowPivot, AssaultRifleStowCenterOfMass);
+	[Tooltip("背中にしまっているショットガンを、移動した時に少しだけ揺らす")]
+	[SerializeField] StowedGunSway shotGunStowSway = new StowedGunSway(ShotGunStowPivot, ShotGunStowCenterOfMass);
+
 	/// <summary>
-	/// 初期化（マガジンを銃に付けている時の親・位置・向きを覚えておき、ハンドガンへの持ち替えの準備をする）
+	/// 初期化（マガジンを銃に付けている時の親・位置・向きと、体にしまっている銃の揺れていない時の位置・向きを覚えておき、ハンドガンへの持ち替えの準備をする）
 	/// </summary>
 	/// <param name="animator">プレイヤーのアニメーター</param>
 	/// <param name="gunViewFacade">ガンビューファサード</param>
@@ -39,6 +52,8 @@ public class GunAnimationFacade
 		assaultRifleAnimation.Initialize();
 		shotGunAnimation.Initialize();
 		sideArmAnimation.Initialize(gunViewFacade.HandGunView, leftHandAnimationPos, animator);
+		assaultRifleStowSway.Initialize(gunViewFacade.FindGunModelBodyDecorationTransform(EnumManager.GunTYPE.AssaultRifle));
+		shotGunStowSway.Initialize(gunViewFacade.FindGunModelBodyDecorationTransform(EnumManager.GunTYPE.ShotGun));
 	}
 
 	/// <summary>
@@ -86,7 +101,7 @@ public class GunAnimationFacade
 	}
 
 	/// <summary>
-	/// リロード中のマガジン・ハンドガンに持ち替える時の銃のモデルを動かす（アニメーションで手が動いた後に呼ぶ）
+	/// リロード中のマガジン・ハンドガンに持ち替える時の銃のモデル・体にしまっている銃の揺れを動かす（アニメーションで手と体が動いた後に呼ぶ）
 	/// </summary>
 	/// <param name="gunState">銃の状態を読むための窓口</param>
 	/// <param name="gunViewFacade">ガンビューファサード</param>
@@ -101,5 +116,10 @@ public class GunAnimationFacade
 		shotGunAnimation.UpdateReloadMagazine(gunState.IsGunReloadTimeActive(EnumManager.GunTYPE.ShotGun), reloadAnimationTime, isReloadAnimationForward, leftHand);
 		//ハンドガンに持ち替える時の、銃のモデルを持ち替える
 		sideArmAnimation.UpdateModels(gunState, gunViewFacade, leftHand);
+		//体にしまっている銃（腰のアサルトライフル・背中のショットガン）を、移動に合わせて少しだけ揺らす
+		//※武器を切り替えている間は揺らさない（しまい終わった時・取り出し始めた時に、手の銃としまってある銃がぴったり重なるようにするため）
+		bool isStowSwayEnabled = gunState.WeaponSwitchPhase == EnumManager.WeaponSwitchPhaseTYPE.None;
+		assaultRifleStowSway.UpdateSway(isStowSwayEnabled, Time.deltaTime);
+		shotGunStowSway.UpdateSway(isStowSwayEnabled, Time.deltaTime);
 	}
 }
