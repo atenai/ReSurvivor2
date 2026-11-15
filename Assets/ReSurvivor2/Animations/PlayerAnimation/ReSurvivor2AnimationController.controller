@@ -360,7 +360,7 @@ BlendTree:
   m_Name: AimIdleAndWalk
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: b81378b8261fd9945b3e1bc18a0d8167, type: 3}
+    m_Motion: {fileID: 7400000, guid: 71e58688292ee1f429d0f7993a758a9c, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -822,7 +822,7 @@ BlendTree:
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 2536a6b77a1ed8b40bb5db4642d064d3, type: 3}
+    m_Motion: {fileID: 7400000, guid: 003a9e9487260cb4a851efa1fe145415, type: 2}
     m_Threshold: 0.5
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -1984,7 +1984,7 @@ BlendTree:
     m_DirectBlendParameter: f_normalMoveSpeed
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 2536a6b77a1ed8b40bb5db4642d064d3, type: 3}
+    m_Motion: {fileID: 7400000, guid: 003a9e9487260cb4a851efa1fe145415, type: 2}
     m_Threshold: 0.25
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
