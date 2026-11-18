@@ -48,26 +48,26 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SoilNormal:
-        m_Texture: {fileID: 2800000, guid: abc00000000002678905120287274202, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5f5f3a0b727e2494d9c2d24712ba372d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SoilTex:
-        m_Texture: {fileID: 2800000, guid: abc00000000013194139027294083179, type: 3}
+        m_Texture: {fileID: 2800000, guid: e3506a7d218f4e84b9c8887e13f1cfcb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _BlendSharpness: 0.2
     - _HeightBlend: 0.6
-    - _NormalStrength: 1
+    - _NormalStrength: 1.1
     - _WetDarken: 0.78
     - _WetHeight: 0.25
     - _WetSmoothness: 0.4
     m_Colors:
     - _GrassTint: {r: 0.95, g: 0.78, b: 0.45, a: 1}
-    - _LayerSmoothness: {r: 0.06, g: 0.04, b: 0.18, a: 0.04}
+    - _LayerSmoothness: {r: 0.1, g: 0.04, b: 0.18, a: 0.04}
     - _LayerTiling: {r: 1, g: 1, b: 1, a: 1}
     - _LitterTint: {r: 0.72, g: 0.62, b: 0.5, a: 1}
     - _MudTint: {r: 0.34, g: 0.28, b: 0.24, a: 1}
-    - _SoilTint: {r: 0.8, g: 0.74, b: 0.68, a: 1}
+    - _SoilTint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
