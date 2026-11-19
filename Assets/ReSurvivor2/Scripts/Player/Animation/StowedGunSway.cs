@@ -16,11 +16,11 @@ public class StowedGunSway
 	[Tooltip("銃の重心の位置（しまっている銃から見た位置。体の速さが変わると、この位置に慣性の力がかかる）")]
 	[SerializeField] Vector3 centerOfMassLocalPosition = Vector3.zero;
 	[Tooltip("揺れの速さ（1秒に揺れる回数）")]
-	[SerializeField] float frequency = 4.0f;
+	[SerializeField] float frequency = 2.5f;
 	[Tooltip("揺れの収まりやすさ（0で揺れ続け、1で揺り返さずに元の向きへ戻る）")]
-	[SerializeField] float dampingRatio = 0.5f;
+	[SerializeField] float dampingRatio = 0.35f;
 	[Tooltip("揺れの大きさの倍率（体の速さの変わり方から受ける力の倍率）")]
-	[SerializeField] float swayScale = 0.5f;
+	[SerializeField] float swayScale = 1.0f;
 	[Tooltip("揺れる角度の上限（度）")]
 	[SerializeField] float maxAngle = 6.0f;
 
