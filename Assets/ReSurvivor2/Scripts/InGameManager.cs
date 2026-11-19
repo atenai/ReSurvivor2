@@ -123,10 +123,11 @@ public class InGameManager : MonoBehaviour
 			return;
 		}
 
-		ScreenUIManagerPresenter.SingletonInstance.BeforeUpdate2();
+		//コンピューターメニューの入力を処理する
+		ScreenUIManagerPresenter.SingletonInstance.ComputerMenuPresenter.UpdateMenu();
 
 		//コンピュータを使用中は切り上げる
-		if (ScreenUIManagerPresenter.SingletonInstance.ScreenUIModel.IsComputerMenuActive == true)
+		if (ScreenUIManagerPresenter.SingletonInstance.ComputerMenuPresenter.IsOpen == true)
 		{
 			PlayerManagerPresenter.SingletonInstance.ResetMove();
 			return;

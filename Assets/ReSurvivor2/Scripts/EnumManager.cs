@@ -74,6 +74,21 @@ public static class EnumManager
 	}
 
 	/// <summary>
+	/// コンピューターメニューの今の画面
+	/// </summary>
+	public enum ComputerMenuStateTYPE
+	{
+		//閉じている
+		Closed = 0,
+		//ミッションのリザルト画面を表示している（消えたらメール一覧を開く）
+		MissionResult = 1,
+		//メール一覧で、受けるミッションを選んでいる
+		MailList = 2,
+		//「このミッションを始めますか？」のYes/Noダイアログで、はい・いいえを選んでいる
+		YesNoDialog = 3,
+	}
+
+	/// <summary>
 	/// ステージのタイプ
 	/// </summary>
 	public enum StageTYPE
