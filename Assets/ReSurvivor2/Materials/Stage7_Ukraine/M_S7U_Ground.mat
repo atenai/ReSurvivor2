@@ -32,27 +32,31 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LitterNormal:
-        m_Texture: {fileID: 2800000, guid: d893b2784d764c646863b9828c3f6304, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3f677c2274fab5e49b7a690e8eb64f5d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LitterTex:
-        m_Texture: {fileID: 2800000, guid: de9bee425585147449c6b119fe38ce16, type: 3}
+        m_Texture: {fileID: 2800000, guid: dd4f8c1f9396197489402f2c4cb2360e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MudNormal:
-        m_Texture: {fileID: 2800000, guid: 29628c26d7017c64eb5e86f4bcc10898, type: 3}
+        m_Texture: {fileID: 2800000, guid: 507ffa13fb5e0b44a8390f3c6c6d208b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MudTex:
-        m_Texture: {fileID: 2800000, guid: 238354e18c6d2aa44a1baca676e0bb5f, type: 3}
+        m_Texture: {fileID: 2800000, guid: fdf73a7cd9997dd449a774dc7280da54, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SoilMask:
+        m_Texture: {fileID: 2800000, guid: b34c75a51f81cc44eb6e18ffa79c49dc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SoilNormal:
-        m_Texture: {fileID: 2800000, guid: 5f5f3a0b727e2494d9c2d24712ba372d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 88cd749691bf8534ebf5dfd91575d172, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SoilTex:
-        m_Texture: {fileID: 2800000, guid: e3506a7d218f4e84b9c8887e13f1cfcb, type: 3}
+        m_Texture: {fileID: 2800000, guid: 94f6fb0f3e99e3042bfc8f359b97feeb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -60,14 +64,19 @@ Material:
     - _BlendSharpness: 0.2
     - _HeightBlend: 0.6
     - _NormalStrength: 1.1
+    - _OcclusionStrength: 1
+    - _SoilMaskStrength: 1
     - _WetDarken: 0.78
     - _WetHeight: 0.25
     - _WetSmoothness: 0.4
+    - _WorldUV: 0
     m_Colors:
+    - _BandTint: {r: 0.45, g: 0.4, b: 0.37, a: 1}
     - _GrassTint: {r: 0.95, g: 0.78, b: 0.45, a: 1}
     - _LayerSmoothness: {r: 0.1, g: 0.04, b: 0.18, a: 0.04}
-    - _LayerTiling: {r: 1, g: 1, b: 1, a: 1}
-    - _LitterTint: {r: 0.72, g: 0.62, b: 0.5, a: 1}
-    - _MudTint: {r: 0.34, g: 0.28, b: 0.24, a: 1}
+    - _LayerTiling: {r: 2, g: 1.7021277, b: 3.0769231, a: 1}
+    - _LitterTint: {r: 1, g: 1, b: 1, a: 1}
+    - _MudTint: {r: 0.72, g: 0.66, b: 0.6, a: 1}
     - _SoilTint: {r: 1, g: 1, b: 1, a: 1}
+    - _TopBlend: {r: 0.5, g: 0.8, b: 0, a: 0}
   m_BuildTextureStacks: []
