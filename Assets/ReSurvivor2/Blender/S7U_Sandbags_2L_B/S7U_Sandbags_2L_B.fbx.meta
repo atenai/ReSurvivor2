@@ -9,6 +9,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: S7U_Sandbag
     second: {fileID: 2100000, guid: 140a1c2a70e8351816e7b4aa2a4f1c93, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: S7U_SandbagDry
+    second: {fileID: 2100000, guid: 736f0661e4d06064d9211a91249047c4, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
