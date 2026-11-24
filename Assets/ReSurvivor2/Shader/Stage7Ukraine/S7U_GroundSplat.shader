@@ -5,6 +5,7 @@
 // world space and by world height, the rim top by world XZ, so neighbouring modules of a straight run continue the
 // texture without a seam. _LayerTiling is then "tiles per metre". In this mode every layer has its height in alpha.
 // Renderers using it must not be static batched (the module axis comes from the object matrix).
+// The modules' end caps carry vertex alpha 0; in the world mode they are mapped along the module's depth axis.
 Shader "ReSurvivor2/Stage7Ukraine/GroundSplat"
 {
     Properties
@@ -70,6 +71,9 @@ Shader "ReSurvivor2/Stage7Ukraine/GroundSplat"
         {
             Name "ForwardLit"
             Tags { "LightMode" = "UniversalForward" }
+            // two-sided: where a bank or wall module ends open (sawtooth corners, trench junctions) its inside is seen
+            // from the trench; with back faces culled the sky showed through the ground above the trench
+            Cull Off
 
             HLSLPROGRAM
             #pragma target 3.5
@@ -207,10 +211,15 @@ Shader "ReSurvivor2/Stage7Ukraine/GroundSplat"
                 return normalize(nTS.x * t + nTS.y * bt + nTS.z * n);
             }
 
-            half4 Frag(Varyings input) : SV_Target
+            half4 Frag(Varyings input, bool isFrontFace : SV_IsFrontFace) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+                // back face (the inside of an open module end): shade it as earth facing the viewer
+                if (!isFrontFace)
+                {
+                    input.normalWS = -input.normalWS;
+                }
 
                 half3 m = saturate(input.color.rgb);
                 half4 w = half4(saturate(1.0h - m.r - m.g - m.b), m.r, m.g, m.b);
@@ -228,6 +237,11 @@ Shader "ReSurvivor2/Stage7Ukraine/GroundSplat"
             #if defined(_S7U_WORLDUV)
                 // wall face: along the module axis and up; rim top: world XZ
                 float3 ax = normalize(float3(input.axisWS.x, 0.0, input.axisWS.z) + float3(1e-5, 0.0, 0.0));
+                // end caps (vertex alpha 0) face along the module axis: map them along the module's depth instead
+                if (input.color.a < 0.5h)
+                {
+                    ax = float3(-ax.z, 0.0, ax.x);
+                }
                 half topW = smoothstep(_TopBlend.x, _TopBlend.y, n.y);
                 LayerMix wallMix = (LayerMix)0;
                 LayerMix topMix = (LayerMix)0;
@@ -355,7 +369,7 @@ Shader "ReSurvivor2/Stage7Ukraine/GroundSplat"
             Tags { "LightMode" = "DepthOnly" }
             ZWrite On
             ColorMask R
-            Cull Back
+            Cull Off
 
             HLSLPROGRAM
             #pragma target 3.5
