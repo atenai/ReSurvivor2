@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2708506955667005384}
-  - component: {fileID: 3487939759338590410}
   m_Layer: 0
   m_Name: S1U_RubblePile_S
   m_TagString: Untagged
@@ -31,15 +30,48 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5046823510924952337}
+  - {fileID: 3641323808407455817}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3487939759338590410
-BoxCollider:
+--- !u!1 &8907345719613871896
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8562007689192274157}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3641323808407455817}
+  - component: {fileID: 161633888672627938}
+  m_Layer: 0
+  m_Name: Col_T0_0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 28
+  m_IsActive: 1
+--- !u!4 &3641323808407455817
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8907345719613871896}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2708506955667005384}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &161633888672627938
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8907345719613871896}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -51,9 +83,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2, y: 0.7, z: 1.6}
-  m_Center: {x: 0, y: 0.35, z: 0}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 4de37eecb4284064884273cb2aa67ef6, type: 2}
 --- !u!1001 &4720707282306393338
 PrefabInstance:
   m_ObjectHideFlags: 0
