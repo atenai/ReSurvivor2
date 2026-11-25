@@ -15556,6 +15556,8 @@ GameObject:
   - component: {fileID: 8521639481524710840}
   - component: {fileID: 8206079514333182546}
   - component: {fileID: 3134650877578906285}
+  - component: {fileID: 1014836770063851649}
+  - component: {fileID: 6279778958413730118}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -15688,6 +15690,41 @@ MonoBehaviour:
   mapUI: {fileID: 3770923355916117509}
   itemOutPutLog: {fileID: 579379826004049369}
   saveNowText: {fileID: 9089699277171372974}
+  panelComputerMenu: {fileID: 2057885696943741514}
+  mailListContent: {fileID: 4341652292273595601}
+  mailPrefab: {fileID: 537799973998357700, guid: 2f9636613900a55459b9baf17b2b221b, type: 3}
+  mailTitleMessage: {fileID: 4136626102778892445}
+  mailMainMessage: {fileID: 3534506178113484624}
+  yesnoDialogImage: {fileID: 9081801605599361911}
+  yesnoButtonImages:
+  - {fileID: 6296641389101323477}
+  - {fileID: 2754253937410363405}
+  resultImage: {fileID: 6589498087107883989}
+--- !u!114 &1014836770063851649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723265548184136445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fa6179e14eb07d4187bf80ac9e06c85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  view: {fileID: 6279778958413730118}
+--- !u!114 &6279778958413730118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3723265548184136445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cb79a94b0c5e6b458c12c0b4d2d1938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   panelComputerMenu: {fileID: 2057885696943741514}
   mailListContent: {fileID: 4341652292273595601}
   mailPrefab: {fileID: 537799973998357700, guid: 2f9636613900a55459b9baf17b2b221b, type: 3}
